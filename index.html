@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Калькулятор неустойки</title>
+    <link rel="stylesheet" href="css/style.css">
+  </head>
+  <body>
+    <form class="form" action="index.html" method="post">
+      <div class="form_grup">
+        <label class="form_label" placeholder=" ">Дата обращения к ФУ</label>
+        <input id="fu" class = "form_input" type="date" name="fu" value="" size="10">
+      </div>
+      <div class="form_grup">
+        <label class="form_label" placeholder=" ">Заявление о страховом возмещении</label>
+        <input id="date_sv" class = "form_input" type="date" name="sv" value="" size="10">
+        <span id="date_sv_last_day"></span>
+        <span id="date_sv_penalty_day"></span>
+      </div>
+      <div class="form_grup">
+        <label class="form_label" placeholder=" ">Заявление о выплате УТС</label>
+        <input id="date_uts" class = "form_input" type="date" name="uts" value="" size="10">
+        <span id="date_uts_last_day"></span>
+        <span id="date_uts_penalty_day"></span>
+      </div>
+      <div class="form_grup">
+        <label class="form_label" placeholder=" ">Заявление о выплате расходов на эвакуатор</label>
+        <input id="date_ev" class = "form_input" type="date" name="ev" value="" size="10">
+        <span id="date_ev_last_day"></span>
+        <span id="date_ev_penalty_day"></span>
+      </div>
+      <div class="form_grup">
+        <label class="form_label" placeholder=" ">Заявление о выплате расходов на хранение</label>
+        <input id="date_stor" class = "form_input" type="date" name="hr" value="" size="10">
+        <span id="date_stor_last_day"></span>
+        <span id="date_stor_penalty_day"></span>
+      </div>
+      <div class="form_grup">
+        <label class="form_label" placeholder=" ">Суд взыскал неустойку с</label>
+        <input class = "form_input" type="date" name="hr" value="" size="10">
+      </div>
+      <div class="form_grup">
+        <label class="form_label" placeholder=" ">Суд взыскал неустойку по</label>
+        <input class = "form_input" type="date" name="hr" value="" size="10">
+      </div>
+
+      <div class="form_grup">
+        <select id="pay1" class="" name="">
+          <option value="">Страховое возмещение</option>
+          <option value="">УТС</option>
+          <option value="">Эвакуатор</option>
+          <option value="">Хранение</option>
+        </select>
+        <input id="pay1_date" class = "form_input" type="date" name="pay1" value="" size="10">
+        <input id="pay1_text" class = "form_input" type="text" name="hr" value="" size="10">
+        <span id="pay1_count"></span>
+        <span id="pay1_summ"></span>
+      </div>
+      <div class="form_grup">
+        <select id="pay2" class="" name="">
+          <option value="">Страховое возмещение</option>
+          <option value="">УТС</option>
+          <option value="">Эвакуатор</option>
+          <option value="">Хранение</option>
+        </select>
+        <input id="pay2_date" class = "form_input" type="date" name="pay1" value="" size="10">
+        <input id="pay2_text" class = "form_input" type="text" name="hr" value="" size="10">
+        <span id="pay2_count"></span>
+        <span id="pay2_summ"></span>
+      </div>
+      <div class="form_grup">
+        <select id="pay3" class="" name="">
+          <option value="">Страховое возмещение</option>
+          <option value="">УТС</option>
+          <option value="">Эвакуатор</option>
+          <option value="">Хранение</option>
+        </select>
+        <input id="pay3_date" class = "form_input" type="date" name="pay1" value="" size="10">
+        <input id="pay3_text" class = "form_input" type="text" name="hr" value="" size="10">
+        <span id="pay3_count"></span>
+        <span id="pay3_summ"></span>
+      </div>
+      <div class="form_grup">
+        <select id="pay4" class="" name="">
+          <option value="">Страховое возмещение</option>
+          <option value="">УТС</option>
+          <option value="">Эвакуатор</option>
+          <option value="">Хранение</option>
+        </select>
+        <input id="pay4_date" class = "form_input" type="date" name="pay1" value="" size="10">
+        <input id="pay4_text" class = "form_input" type="text" name="hr" value="" size="10">
+        <span id="pay4_count"></span>
+        <span id="pay4_summ"></span>
+      </div>
+      <div class="form_grup">
+        <select id="pay5" class="" name="">
+          <option value="">Страховое возмещение</option>
+          <option value="">УТС</option>
+          <option value="">Эвакуатор</option>
+          <option value="">Хранение</option>
+        </select>
+        <input id="pay5_date" class = "form_input" type="date" name="pay1" value="" size="10">
+        <input id="pay5_text" class = "form_input" type="text" name="hr" value="" size="10">
+        <span id="pay5_count"></span>
+        <span id="pay5_summ"></span>
+      </div>
+
+      <div class="form_grup">
+        <hr>
+        <label class="form_label" placeholder=" ">Общий размер неустойки: </label>
+        <span id="total_count"></span>
+      </div>
+      <br>
+
+
+      <button type="button" name="button">Push</button>
+
+    </form>
+
+    <script type="text/javascript" src="js/script.js">
+
+    </script>
+  </body>
+</html>
