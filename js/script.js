@@ -29,14 +29,22 @@ document.querySelector('button').onclick = function(){
   date_stor_penalty_day = date_stor_last_day + day;
 
   //выведение значений 20го дня на экран
-  document.querySelector('#date_sv_last_day').innerHTML = formatDate(new Date(date_sv_last_day));
-  document.querySelector('#date_sv_penalty_day').innerHTML = formatDate(new Date(date_sv_penalty_day));
-  document.querySelector('#date_uts_last_day').innerHTML = formatDate(new Date(date_uts_last_day));
-  document.querySelector('#date_uts_penalty_day').innerHTML = formatDate(new Date(date_uts_penalty_day));
-  document.querySelector('#date_ev_last_day').innerHTML = formatDate(new Date(date_ev_last_day));
-  document.querySelector('#date_ev_penalty_day').innerHTML = formatDate(new Date(date_ev_penalty_day));
-  document.querySelector('#date_stor_last_day').innerHTML = formatDate(new Date(date_stor_last_day));
-  document.querySelector('#date_stor_penalty_day').innerHTML = formatDate(new Date(date_stor_penalty_day));
+  if (!isNaN(date_sv_last_day)) {
+    document.querySelector('#date_sv_last_day').innerHTML = '20й день: ' + formatDate(new Date(date_sv_last_day));
+    document.querySelector('#date_sv_penalty_day').innerHTML = 'Начало неустойки: ' + formatDate(new Date(date_sv_penalty_day));
+  }
+  if (!isNaN(date_uts_last_day)) {
+    document.querySelector('#date_uts_last_day').innerHTML = formatDate(new Date(date_uts_last_day));
+    document.querySelector('#date_uts_penalty_day').innerHTML = formatDate(new Date(date_uts_penalty_day));
+  }
+  if (!isNaN(date_ev_last_day)) {
+    document.querySelector('#date_ev_last_day').innerHTML = formatDate(new Date(date_ev_last_day));
+    document.querySelector('#date_ev_penalty_day').innerHTML = formatDate(new Date(date_ev_penalty_day));
+  }
+  if (!isNaN(date_stor_last_day)) {
+    document.querySelector('#date_stor_last_day').innerHTML = formatDate(new Date(date_stor_last_day));
+    document.querySelector('#date_stor_penalty_day').innerHTML = formatDate(new Date(date_stor_penalty_day));
+  }
 
 
   let pay = [];
@@ -68,13 +76,26 @@ document.querySelector('button').onclick = function(){
     if (pay_count[i] < 0) {
       pay_count[i] = 0;
     }
-    document.querySelector('#pay' + i + '_count').innerHTML = pay_count[i] / day + ' DAYS / ';
+
     pay_text[i] = document.querySelector('#pay' + i + '_text').value;
     pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
-    document.querySelector('#pay' + i + '_summ').innerHTML = pay_summ[i] + ' RUB';
+
+    if (!isNaN(pay_count[i])) {
+      document.querySelector('#pay' + i + '_count').innerHTML = pay_count[i] / day + ' DAYS / ';
+      document.querySelector('#pay' + i + '_summ').innerHTML = pay_summ[i] + ' RUB';
+    }
+    if (isNaN(pay_count[i])) {
+      pay_count[i] =0;
+    }
+    if (isNaN(pay_summ[i])) {
+      pay_summ[i] =0;
+    }
+
     total_count = total_count + pay_summ[i];
+
   }
-  document.querySelector('#total_count').innerHTML = total_count + ' RUB';
+    document.querySelector('#total_count').innerHTML = total_count + ' RUB';
+    total_count = 0;
 }
 
 
