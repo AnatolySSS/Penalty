@@ -9,6 +9,18 @@
          margin-bottom: 32px;# Внешний отступ снизу элемента
 }
 
+.table_of_payments{
+  overflow-x: auto;
+}
+
+.table {
+  border-collapse: collapse;
+  border-width: thin;
+}
+
+thead {
+  align-content: center;
+}
 
 /* body {
          display: flex;

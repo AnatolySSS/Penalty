@@ -10,6 +10,13 @@
       <div class="form_grup">
         <label class="form_label" placeholder=" ">Дата обращения к ФУ</label>
         <input id="fu" class = "form_input" type="date" name="fu" value="" size="10">
+        <label class="form_label" placeholder=" ">Наименование ФО</label>
+        <select id="fo_name" class="" name="">
+          <option value="">АО "СОГАЗ"</option>
+          <option value="">ПАО "СК "Росгосстрах"</option>
+          <option value="">АО "АльфаСтрахование"</option>
+          <option value="">САО "РЕСО_Гарантия"</option>
+        </select>
       </div>
       <br>
       <div class="form_grup">
@@ -39,90 +46,246 @@
       <br>
       <div class="form_grup">
         <label class="form_label" placeholder=" ">Суд взыскал неустойку с</label>
-        <input class = "form_input" type="date" name="hr" value="" size="10">
+        <input id="date_court_from" class = "form_input" type="date" name="hr" value="" size="10">
       </div>
       <div class="form_grup">
         <label class="form_label" placeholder=" ">Суд взыскал неустойку по</label>
-        <input class = "form_input" type="date" name="hr" value="" size="10">
+        <input id="date_court_to" class = "form_input" type="date" name="hr" value="" size="10">
       </div>
 
       <br>
-
-      <div class="form_grup">
-        <select id="pay1" class="" name="">
-          <option value="">Страховое возмещение</option>
-          <option value="">УТС</option>
-          <option value="">Эвакуатор</option>
-          <option value="">Хранение</option>
-        </select>
-        <input id="pay1_date" class = "form_input" type="date" name="pay1" value="" size="10">
-        <input id="pay1_text" class = "form_input" type="text" name="hr" value="" size="10">
-        <span id="pay1_count"></span>
-        <span id="pay1_summ"></span>
+      <div class="table_of_payments">
+        <table class="table">
+          <thead align = "center">
+            <tr>
+              <td>Вид выплаты</td>
+              <td>Дата выплаты</td>
+              <td>Сумма выплаты</td>
+              <td><span id="COLUMN_NAME_4"></span></td>
+              <td><span id="COLUMN_NAME_5"></span></td>
+              <td><span id="COLUMN_NAME_6"></span></td>
+              <td><span id="COLUMN_NAME_7"></span></td>
+              <td><span id="COLUMN_NAME_8"></span></td>
+              <td><span id="COLUMN_NAME_9"></span></td>
+              <td><span id="COLUMN_NAME_10"></span></td>
+              <td><span id="COLUMN_NAME_11"></span></td>
+            </tr>
+          </thead>
+          <tbody align = "center">
+            <tr>
+              <td>
+                <select id="pay1" class="" name="">
+                  <option value="">Страховое возмещение</option>
+                  <option value="">УТС</option>
+                  <option value="">Эвакуатор</option>
+                  <option value="">Хранение</option>
+                </select>
+              </td>
+              <td>
+                <input id="pay1_date" class = "form_input" type="date" name="pay1" value="" size="10">
+              </td>
+              <td>
+                <input id="pay1_text" class = "form_input" type="text" name="hr" value="" size="10">
+              </td>
+              <td>
+                <span id="date_penalty_day_1"></span>
+              </td>
+              <td>
+                <span id="date_court_from_out_1"></span>
+              </td>
+              <td>
+                <span id="pay1_count"></span>
+              </td>
+              <td>
+                <span id="pay1_summ"></span>
+              </td>
+              <td>
+                <span id="date_court_to_out_1"></span>
+              </td>
+              <td>
+                <span id="pay_date_out_1"></span>
+              </td>
+              <td>
+                <span id="court_period_after_1"></span>
+              </td>
+              <td>
+                <span id="court_summ_after_1"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <select id="pay2" class="" name="">
+                  <option value="">Страховое возмещение</option>
+                  <option value="">УТС</option>
+                  <option value="">Эвакуатор</option>
+                  <option value="">Хранение</option>
+                </select>
+              </td>
+              <td>
+                <input id="pay2_date" class = "form_input" type="date" name="pay1" value="" size="10">
+              </td>
+              <td>
+                <input id="pay2_text" class = "form_input" type="text" name="hr" value="" size="10">
+              </td>
+              <td>
+                <span id="date_penalty_day_2"></span>
+              </td>
+              <td>
+                <span id="date_court_from_out_2"></span>
+              </td>
+              <td>
+                <span id="pay2_count"></span>
+              </td>
+              <td>
+                <span id="pay2_summ"></span>
+              </td>
+              <td>
+                <span id="date_court_to_out_2"></span>
+              </td>
+              <td>
+                <span id="pay_date_out_2"></span>
+              </td>
+              <td>
+                <span id="court_period_after_2"></span>
+              </td>
+              <td>
+                <span id="court_summ_after_2"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <select id="pay3" class="" name="">
+                  <option value="">Страховое возмещение</option>
+                  <option value="">УТС</option>
+                  <option value="">Эвакуатор</option>
+                  <option value="">Хранение</option>
+                </select>
+              </td>
+              <td>
+                <input id="pay3_date" class = "form_input" type="date" name="pay1" value="" size="10">
+              </td>
+              <td>
+                <input id="pay3_text" class = "form_input" type="text" name="hr" value="" size="10">
+              </td>
+              <td>
+                <span id="date_penalty_day_3"></span>
+              </td>
+              <td>
+                <span id="date_court_from_out_3"></span>
+              </td>
+              <td>
+                <span id="pay3_count"></span>
+              </td>
+              <td>
+                <span id="pay3_summ"></span>
+              </td>
+              <td>
+                <span id="date_court_to_out_3"></span>
+              </td>
+              <td>
+                <span id="pay_date_out_3"></span>
+              </td>
+              <td>
+                <span id="court_period_after_3"></span>
+              </td>
+              <td>
+                <span id="court_summ_after_3"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <select id="pay4" class="" name="">
+                  <option value="">Страховое возмещение</option>
+                  <option value="">УТС</option>
+                  <option value="">Эвакуатор</option>
+                  <option value="">Хранение</option>
+                </select>
+              </td>
+              <td>
+                <input id="pay4_date" class = "form_input" type="date" name="pay1" value="" size="10">
+              </td>
+              <td>
+                <input id="pay4_text" class = "form_input" type="text" name="hr" value="" size="10">
+              </td>
+              <td>
+                <span id="date_penalty_day_4"></span>
+              </td>
+              <td>
+                <span id="date_court_from_out_4"></span>
+              </td>
+              <td>
+                <span id="pay4_count"></span>
+              </td>
+              <td>
+                <span id="pay4_summ"></span>
+              </td>
+              <td>
+                <span id="date_court_to_out_4"></span>
+              </td>
+              <td>
+                <span id="pay_date_out_4"></span>
+              </td>
+              <td>
+                <span id="court_period_after_4"></span>
+              </td>
+              <td>
+                <span id="court_summ_after_4"></span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <select id="pay5" class="" name="">
+                  <option value="">Страховое возмещение</option>
+                  <option value="">УТС</option>
+                  <option value="">Эвакуатор</option>
+                  <option value="">Хранение</option>
+                </select>
+              </td>
+              <td>
+                <input id="pay5_date" class = "form_input" type="date" name="pay1" value="" size="10">
+              </td>
+              <td>
+                <input id="pay5_text" class = "form_input" type="text" name="hr" value="" size="10">
+              </td>
+              <td>
+                <span id="date_penalty_day_5"></span>
+              </td>
+              <td>
+                <span id="date_court_from_out_5"></span>
+              </td>
+              <td>
+                <span id="pay5_count"></span>
+              </td>
+              <td>
+                <span id="pay5_summ"></span>
+              </td>
+              <td>
+                <span id="date_court_to_out_5"></span>
+              </td>
+              <td>
+                <span id="pay_date_out_5"></span>
+              </td>
+              <td>
+                <span id="court_period_after_5"></span>
+              </td>
+              <td>
+                <span id="court_summ_after_5"></span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
       </div>
+      <br>
       <div class="form_grup">
-        <select id="pay2" class="" name="">
-          <option value="">Страховое возмещение</option>
-          <option value="">УТС</option>
-          <option value="">Эвакуатор</option>
-          <option value="">Хранение</option>
-        </select>
-        <input id="pay2_date" class = "form_input" type="date" name="pay1" value="" size="10">
-        <input id="pay2_text" class = "form_input" type="text" name="hr" value="" size="10">
-        <span id="pay2_count"></span>
-        <span id="pay2_summ"></span>
-      </div>
-      <div class="form_grup">
-        <select id="pay3" class="" name="">
-          <option value="">Страховое возмещение</option>
-          <option value="">УТС</option>
-          <option value="">Эвакуатор</option>
-          <option value="">Хранение</option>
-        </select>
-        <input id="pay3_date" class = "form_input" type="date" name="pay1" value="" size="10">
-        <input id="pay3_text" class = "form_input" type="text" name="hr" value="" size="10">
-        <span id="pay3_count"></span>
-        <span id="pay3_summ"></span>
-      </div>
-      <div class="form_grup">
-        <select id="pay4" class="" name="">
-          <option value="">Страховое возмещение</option>
-          <option value="">УТС</option>
-          <option value="">Эвакуатор</option>
-          <option value="">Хранение</option>
-        </select>
-        <input id="pay4_date" class = "form_input" type="date" name="pay1" value="" size="10">
-        <input id="pay4_text" class = "form_input" type="text" name="hr" value="" size="10">
-        <span id="pay4_count"></span>
-        <span id="pay4_summ"></span>
-      </div>
-      <div class="form_grup">
-        <select id="pay5" class="" name="">
-          <option value="">Страховое возмещение</option>
-          <option value="">УТС</option>
-          <option value="">Эвакуатор</option>
-          <option value="">Хранение</option>
-        </select>
-        <input id="pay5_date" class = "form_input" type="date" name="pay1" value="" size="10">
-        <input id="pay5_text" class = "form_input" type="text" name="hr" value="" size="10">
-        <span id="pay5_count"></span>
-        <span id="pay5_summ"></span>
-      </div>
-
-      <div class="form_grup">
-        <hr>
         <label class="form_label" placeholder=" ">Общий размер неустойки: </label>
         <span id="total_count"></span>
       </div>
       <br>
-
-
       <button type="button" name="button">Push</button>
-
+      <br><br>
+      <span id="decision">Тут будет текст решения</span>
     </form>
-
     <script type="text/javascript" src="js/script.js">
-
     </script>
   </body>
 </html>
