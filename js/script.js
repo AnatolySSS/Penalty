@@ -16,6 +16,7 @@ let pay = [];
 let date_penalty_day = [];
 let pay_date = [];
 let pay_text = [];
+let payment_order = [];
 let pay_count = [];
 let pay_summ = [];
 
@@ -30,6 +31,10 @@ let date_ev, date_ev_last_day, date_ev_penalty_day;
 let date_stor, date_stor_last_day, date_stor_penalty_day;
 let date_court_from, date_court_to;
 let total_count = 0;
+
+let days_string = [];
+let rub_string = [];
+let kop_string = [];
 
 let holly, standart_motivation, first_paragraf, summary_paragraf;
 let analize_period_paragraf = [], payment_paragraf = [];
@@ -98,7 +103,8 @@ document.querySelector('button').onclick = function(){
   }
 
   //Получение значения наименования ФО
-  fo_name = document.getElementById("fo_name").options[document.getElementById("fo_name").options.selectedIndex].text;
+  //fo_name = document.getElementById("fo_name").options[document.getElementById("fo_name").options.selectedIndex].text;
+  fo_name = document.querySelector("#fo_name").value;
 
   first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name + ' неустойки '+
   'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
@@ -106,30 +112,37 @@ document.querySelector('button').onclick = function(){
 
   //Получение значений даты обращений с требованиями и исчисление 20го дня
   date_sv = document.querySelector('#date_sv').value;
+  date_sv = changeDateType(date_sv);
   date_sv = Date.parse(date_sv);
   date_sv_last_day = findLastDay(date_sv);
   date_sv_penalty_day = date_sv_last_day + day;
 
   date_uts = document.querySelector('#date_uts').value;
+  date_uts = changeDateType(date_uts);
   date_uts = Date.parse(date_uts);
   date_uts_last_day = findLastDay(date_uts);
   date_uts_penalty_day = date_uts_last_day + day;
 
   date_ev = document.querySelector('#date_ev').value;
+  date_ev = changeDateType(date_ev);
   date_ev = Date.parse(date_ev);
   date_ev_last_day = findLastDay(date_ev);
   date_ev_penalty_day = date_ev_last_day + day;
 
   date_stor = document.querySelector('#date_stor').value;
+  date_stor = changeDateType(date_stor);
   date_stor = Date.parse(date_stor);
   date_stor_last_day = findLastDay(date_stor);
   date_stor_penalty_day = date_stor_last_day + day;
 
   //Получение значения даты судебного взыскания неустойки
-  date_court_from = document.querySelector('#date_court_from').value;
-  date_court_from = Date.parse(date_court_from);
-  date_court_to = document.querySelector('#date_court_to').value;
-  date_court_to = Date.parse(date_court_to);
+    // date_court_from = document.querySelector('#date_court_from').value;
+    // date_court_from = changeDateType(date_court_from);
+    // date_court_from = Date.parse(date_court_from);
+    // date_court_to = document.querySelector('#date_court_to').value;
+    // date_court_to = changeDateType(date_court_to);
+    // date_court_to = Date.parse(date_court_to);
+
 
   //выведение значений 20го дня на экран
   if (!isNaN(date_sv_last_day)) {
@@ -152,8 +165,10 @@ document.querySelector('button').onclick = function(){
   for (var i = 1; i <= 5; i++) {
     pay[i] = document.getElementById("pay" + i ).options.selectedIndex;
     pay_date[i] = document.querySelector('#pay' + i + '_date').value;
+    pay_date[i] = changeDateType(pay_date[i]);
     pay_date[i] = Date.parse(pay_date[i]);
     pay_text[i] = document.querySelector('#pay' + i + '_text').value;
+    payment_order[i] = document.querySelector('#payment_order_' + i).value;
 
     switch (pay[i]) {
       case 0:
@@ -188,10 +203,10 @@ document.querySelector('button').onclick = function(){
           analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о наступлении страхового случая '+
           formatDate(new Date(date_sv)) + ', следовательно, последним днем срока осуществления '+
           'выплаты является ' + formatDate(new Date(date_sv_last_day)) + ', а неустойка подлежит начислению с '+
-          formatDate(new Date(date_sv_penalty_day)) +'<br>'
+          formatDate(new Date(date_sv_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату страхового возмещения в размере '+
-          pay_text[i] + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ________.'+'<br>'
+          makeRubText(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
           break;
         case 1:
           pay_count[i] = pay_date[i] - date_uts_last_day;
@@ -200,10 +215,10 @@ document.querySelector('button').onclick = function(){
           analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате УТС '+
           formatDate(new Date(date_uts)) + ', следовательно, последним днем срока осуществления '+
           'выплаты УТС является ' + formatDate(new Date(date_uts_last_day)) + ', а неустойка подлежит начислению с '+
-          formatDate(new Date(date_uts_penalty_day)) +'<br>'
+          formatDate(new Date(date_uts_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату УТС в размере '+
-          pay_text[i] + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ________.'+'<br>'
+          makeRubText(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
           break;
         case 2:
           pay_count[i] = pay_date[i] - date_ev_last_day;
@@ -212,10 +227,10 @@ document.querySelector('button').onclick = function(){
           analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на эвакуацию Транспортного средства '+
           formatDate(new Date(date_ev)) + ', следовательно, последним днем срока осуществления '+
           'выплаты расходов на эвакуацию Транспортного средства является ' + formatDate(new Date(date_ev_last_day)) + ', а неустойка подлежит начислению с '+
-          formatDate(new Date(date_ev_penalty_day)) +'<br>'
+          formatDate(new Date(date_ev_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату расходов на эвакуацию Транспортного средства в размере '+
-          pay_text[i] + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ________.'+'<br>'
+          makeRubText(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
           break;
         case 3:
           pay_count[i] = pay_date[i] - date_stor_last_day;
@@ -223,11 +238,11 @@ document.querySelector('button').onclick = function(){
           //TODO добавить в analize_period_paragraf мотивировку про хранение
           analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на хранение Транспортного средства '+
           formatDate(new Date(date_stor)) + ', следовательно, последним днем срока осуществления '+
-          'выплаты расходов на хранение Транспортного средства является ' + formatDate(new Date(date_stoe_last_day)) + ', а неустойка подлежит начислению с '+
-          formatDate(new Date(date_stor_penalty_day)) +'<br>'
+          'выплаты расходов на хранение Транспортного средства является ' + formatDate(new Date(date_stor_last_day)) + ', а неустойка подлежит начислению с '+
+          formatDate(new Date(date_stor_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату расходов на хранение Транспортного средства в размере '+
-          pay_text[i] + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ________.'+'<br>'
+          makeRubText(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
           break;
       }
 
@@ -244,11 +259,26 @@ document.querySelector('button').onclick = function(){
 
       pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
 
+      days_string[i] = pay_count[i] / day;
+
+      switch (String(days_string[i]).charAt(days_string[i].length - 1)) {
+        case "1":
+          days_string[i] = " день";
+          break;
+        case "2":
+        case "3":
+        case "4":
+          days_string[i] = " дня";
+          break;
+        default:
+          days_string[i] = " дней";
+      }
+
       if (!isNaN(pay_count[i]) && pay_date[i] >= date_penalty_day[i]) {
         document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
         document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(pay_date[i]));
-        document.querySelector('#pay' + i + '_count').innerHTML = pay_count[i] / day + ' DAYS';
-        document.querySelector('#pay' + i + '_summ').innerHTML = pay_summ[i] + ' RUB';
+        document.querySelector('#pay' + i + '_count').innerHTML = pay_count[i] / day + days_string[i];
+        document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText(pay_summ[i]);
       }
       if (isNaN(pay_count[i])) {
         pay_count[i] = 0;
@@ -259,16 +289,16 @@ document.querySelector('button').onclick = function(){
       total_count = total_count + pay_summ[i];
 
       if (pay_date[i] < date_penalty_day[i]) {
-        payment_in_time_paragraf[i] = 'Таким образом, выплата в размере ' + pay_text[i] + ' произведена в установленный '+
+        payment_in_time_paragraf[i] = 'Таким образом, выплата в размере ' + makeRubText(pay_text[i]) + ' произведена в установленный '+
         'Законом № 40-ФЗ срок, в силу чего неустойка на указанную сумму не начисляется.'+'<br>';
         payment_not_in_time_paragraf[i] = "";
       } else {
         payment_in_time_paragraf[i] = "";
-        payment_not_in_time_paragraf[i] = 'Таким образом, неустойка на сумму ' + pay_text[i] + ' подлежит расчету за период с ' +
+        payment_not_in_time_paragraf[i] = 'Таким образом, неустойка на сумму ' + makeRubText(pay_text[i]) + ' подлежит расчету за период с ' +
         formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + pay_count[i] / day + ' дней).' + '<br>' +
         'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, '+
         'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(pay_date[i])) +
-        ' составляет ' + pay_summ[i] + ' (' + pay_text[i] + ' × ' + pay_count[i] / day + ' дней × 1%).' + '<br>';
+        ' составляет ' + makeRubText(pay_summ[i]) + ' (' + makeRubText(pay_text[i]) + ' × ' + pay_count[i] / day + ' дней × 1%).' + '<br>';
       }
 
       if (isNaN(pay_date[i])) {
@@ -286,7 +316,7 @@ document.querySelector('button').onclick = function(){
     if (total_count > 0) {
       summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
       'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
-      total_count + '.' + '<br>';
+      makeRubText(total_count) + '.' + '<br>';
     } else {
       summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
       'неустойки за несоблюдение срока выплаты страхового возмещения не подлежит удовлетворению.' + '<br>';
@@ -404,7 +434,7 @@ document.querySelector('button').onclick = function(){
 
   }
 
-    document.querySelector('#total_count').innerHTML = total_count + ' RUB';
+    document.querySelector('#total_count').innerHTML = makeRubText(total_count);
     total_count = 0;
 
     if (!isNaN(pay_date[1])) {
@@ -517,3 +547,45 @@ function formatDate(date) {
 
   return dd + '.' + mm + '.' + yyyy;
 }
+
+//Change date type from 01.02.2019 to 2019-02-01
+function changeDateType(date){
+  date = date.slice(6, 10) + "-" + date.slice(3, 5) + "-" + date.slice(0, 2);
+  return date;
+}
+
+function makeRubText(sum){
+  let sumText;
+  let rub, kop;
+
+  rub = Math.floor(sum);
+  kop = sum - rub;
+  kop = Math.round(kop * 100);
+  if (kop == 0) {
+    kop = "00";
+  } else if (kop < 10) {
+    kop = "0" + kop;
+  }
+
+  // sumText = sum.toFixed(2);
+  // rub = sumText.slice(0, indexOf("."));
+  // kop = sumText.slice(indexOf(".") + 1, sum.length);
+
+  sumText = new Intl.NumberFormat('ru-RU').format(rub) + " рублей " + kop + " копеек";
+
+  return sumText;
+}
+
+function selectText(containerid) {
+		if (document.selection) { // IE
+			var range = document.body.createTextRange();
+			range.moveToElementText(document.getElementById(containerid));
+			range.select();
+		} else if (window.getSelection) {
+			var range = document.createRange();
+			range.selectNode(document.getElementById(containerid));
+			window.getSelection().removeAllRanges();
+			window.getSelection().addRange(range);
+		}
+    document.execCommand('copy')
+	}
