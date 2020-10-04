@@ -33,7 +33,8 @@ let date_court_from, date_court_to;
 let total_count = 0;
 
 let days_string = [];
-let rub_string = [];
+let rub_string_payment = [];
+let rub_string_penalty = [];
 let kop_string = [];
 
 let holly, standart_motivation, first_paragraf, summary_paragraf;
@@ -206,7 +207,7 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_sv_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату страхового возмещения в размере '+
-          makeRubText(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
           break;
         case 1:
           pay_count[i] = pay_date[i] - date_uts_last_day;
@@ -218,7 +219,7 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_uts_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату УТС в размере '+
-          makeRubText(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
           break;
         case 2:
           pay_count[i] = pay_date[i] - date_ev_last_day;
@@ -230,7 +231,7 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_ev_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату расходов на эвакуацию Транспортного средства в размере '+
-          makeRubText(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
           break;
         case 3:
           pay_count[i] = pay_date[i] - date_stor_last_day;
@@ -242,7 +243,7 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_stor_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату расходов на хранение Транспортного средства в размере '+
-          makeRubText(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
           break;
       }
 
@@ -259,9 +260,12 @@ document.querySelector('button').onclick = function(){
 
       pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
 
+      //Склонение дней/день/дня
       days_string[i] = pay_count[i] / day;
+      let m = String(days_string[i]).length - 1;
+      m = String(days_string[i]).charAt(m);
 
-      switch (String(days_string[i]).charAt(days_string[i].length - 1)) {
+      switch (m) {
         case "1":
           days_string[i] = " день";
           break;
@@ -278,7 +282,7 @@ document.querySelector('button').onclick = function(){
         document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
         document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(pay_date[i]));
         document.querySelector('#pay' + i + '_count').innerHTML = pay_count[i] / day + days_string[i];
-        document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText(pay_summ[i]);
+        document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(pay_summ[i]);
       }
       if (isNaN(pay_count[i])) {
         pay_count[i] = 0;
@@ -289,16 +293,16 @@ document.querySelector('button').onclick = function(){
       total_count = total_count + pay_summ[i];
 
       if (pay_date[i] < date_penalty_day[i]) {
-        payment_in_time_paragraf[i] = 'Таким образом, выплата в размере ' + makeRubText(pay_text[i]) + ' произведена в установленный '+
+        payment_in_time_paragraf[i] = 'Таким образом, выплата в размере ' + makeRubText_1(pay_text[i]) + ' произведена в установленный '+
         'Законом № 40-ФЗ срок, в силу чего неустойка на указанную сумму не начисляется.'+'<br>';
         payment_not_in_time_paragraf[i] = "";
       } else {
         payment_in_time_paragraf[i] = "";
-        payment_not_in_time_paragraf[i] = 'Таким образом, неустойка на сумму ' + makeRubText(pay_text[i]) + ' подлежит расчету за период с ' +
-        formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + pay_count[i] / day + ' дней).' + '<br>' +
+        payment_not_in_time_paragraf[i] = 'Таким образом, неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' подлежит расчету за период с ' +
+        formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + pay_count[i] / day + days_string[i] + ').' + '<br>' +
         'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, '+
         'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(pay_date[i])) +
-        ' составляет ' + makeRubText(pay_summ[i]) + ' (' + makeRubText(pay_text[i]) + ' × ' + pay_count[i] / day + ' дней × 1%).' + '<br>';
+        ' составляет ' + makeRubText_2(pay_summ[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + pay_count[i] / day + days_string[i] +' × 1%).' + '<br>';
       }
 
       if (isNaN(pay_date[i])) {
@@ -316,7 +320,7 @@ document.querySelector('button').onclick = function(){
     if (total_count > 0) {
       summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
       'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
-      makeRubText(total_count) + '.' + '<br>';
+      makeRubText_1(total_count) + '.' + '<br>';
     } else {
       summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
       'неустойки за несоблюдение срока выплаты страхового возмещения не подлежит удовлетворению.' + '<br>';
@@ -434,7 +438,7 @@ document.querySelector('button').onclick = function(){
 
   }
 
-    document.querySelector('#total_count').innerHTML = makeRubText(total_count);
+    document.querySelector('#total_count').innerHTML = makeRubText_2(total_count);
     total_count = 0;
 
     if (!isNaN(pay_date[1])) {
@@ -554,9 +558,10 @@ function changeDateType(date){
   return date;
 }
 
-function makeRubText(sum){
+function makeRubText_1(sum){
   let sumText;
   let rub, kop;
+  let rub_string_payment, kop_string_payment;
 
   rub = Math.floor(sum);
   kop = sum - rub;
@@ -567,11 +572,102 @@ function makeRubText(sum){
     kop = "0" + kop;
   }
 
-  // sumText = sum.toFixed(2);
-  // rub = sumText.slice(0, indexOf("."));
-  // kop = sumText.slice(indexOf(".") + 1, sum.length);
+  //Склонение рублей/рубля
+  let m = String(rub).length;
+  m = String(rub).slice(m - 2, m);
+  if (m  == "11") {
+    rub_string_payment = " рублей ";
+  } else {
+    let m = String(rub).length - 1;
+    m = String(rub).charAt(m);
+    switch (m) {
+      case "1":
+        rub_string_payment = " рубля ";
+        break;
+      default:
+        rub_string_payment = " рублей ";
+    }
+  }
 
-  sumText = new Intl.NumberFormat('ru-RU').format(rub) + " рублей " + kop + " копеек";
+
+  //Склонение рублей/рубля
+  if (kop == "11") {
+    kop_string_payment = " копеек";
+  } else {
+    m = String(kop).length - 1;
+    m = String(kop).charAt(m);
+    switch (m) {
+      case "1":
+        kop_string_payment = " копейки";
+        break;
+      default:
+        kop_string_payment = " копеек";
+    }
+  }
+
+  sumText = new Intl.NumberFormat('ru-RU').format(rub) + rub_string_payment + kop + kop_string_payment;
+
+  return sumText;
+}
+
+function makeRubText_2(sum){
+  let sumText;
+  let rub, kop;
+  let rub_string_payment, kop_string_payment;
+
+  rub = Math.floor(sum);
+  kop = sum - rub;
+  kop = Math.round(kop * 100);
+  if (kop == 0) {
+    kop = "00";
+  } else if (kop < 10) {
+    kop = "0" + kop;
+  }
+
+  //Склонение рублей/рубль
+  let m = String(rub).length;
+  m = String(rub).slice(m - 2, m);
+  if (Number(m) >= 11 && Number(m) <= 19) {
+    rub_string_payment = " рублей ";
+  } else {
+    let m = String(rub).length - 1;
+    m = String(rub).charAt(m);
+    switch (m) {
+      case "1":
+        rub_string_payment = " рубль ";
+        break;
+      case "2":
+      case "3":
+      case "4":
+        rub_string_payment = " рубля ";
+        break;
+      default:
+        rub_string_payment = " рублей  ";
+    }
+  }
+
+
+  //Склонение копеек/копейка/копейки
+  if (Number(kop) >= 11 && Number(kop) <= 19) {
+    kop_string_payment = " копеек";
+  } else {
+    m = String(kop).length - 1;
+    m = String(kop).charAt(m);
+    switch (m) {
+      case "1":
+        kop_string_payment = " копейка";
+        break;
+      case "2":
+      case "3":
+      case "4":
+        kop_string_payment = " копейки";
+        break;
+      default:
+        kop_string_payment = " копеек";
+    }
+  }
+
+  sumText = new Intl.NumberFormat('ru-RU').format(rub) + rub_string_payment + kop + kop_string_payment;
 
   return sumText;
 }
