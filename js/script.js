@@ -105,7 +105,7 @@ document.querySelector('button').onclick = function(){
 
   //Получение значения наименования ФО
   //fo_name = document.getElementById("fo_name").options[document.getElementById("fo_name").options.selectedIndex].text;
-  fo_name = document.querySelector("#fo_name").value;
+  //fo_name = document.querySelector("#fo_name").value;
 
   first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name + ' неустойки '+
   'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
@@ -683,5 +683,35 @@ function selectText(containerid) {
 			window.getSelection().removeAllRanges();
 			window.getSelection().addRange(range);
 		}
-    document.execCommand('copy')
+    document.execCommand('copy');
+
+    iziToast.show({
+        //title: 'Hey',
+        message: 'Текст скопирован  '
+    });
 	}
+
+iziToast.info({
+   timeout: 20000,
+   close: false,
+   overlay: true,
+   displayMode: 'once',
+   id: 'inputs',
+   zindex: 999,
+   //title: 'Введите наименование финансовой организации',
+   message: 'Введите наименование финансовой организации',
+   position: 'center',
+   inputs:[
+     ['<input type="text">', 'keyup', function (instance, toast, input, e) {
+           autocomplete(input, fo);
+           fo_name = input.value;
+       }, true],
+   ],
+   buttons: [
+       ['<button><b>OK</b></button>', function (instance, toast) {
+
+           instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+   
+       }],
+   ]
+});
