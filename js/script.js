@@ -686,6 +686,7 @@ function selectText(containerid) {
     document.execCommand('copy');
 
     iziToast.show({
+        timeout: 2000,
         //title: 'Hey',
         message: 'Текст скопирован  '
     });
@@ -702,15 +703,16 @@ iziToast.info({
    message: 'Введите наименование финансовой организации',
    position: 'center',
    inputs:[
-     ['<input type="text">', 'keyup', function (instance, toast, input, e) {
+     ['<input id="fo_name_input" type="text">', 'keyup', function (instance, toast, input, e) {
            autocomplete(input, fo);
-           fo_name = input.value;
-       }, true],
+
+       }, true]
    ],
    buttons: [
        ['<button><b>OK</b></button>', function (instance, toast) {
-
-           instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+           instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+           fo_name = document.querySelector("#fo_name_input").value;
+           document.querySelector('#fo_name').innerHTML = fo_name;
    
        }],
    ]
