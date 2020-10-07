@@ -105,7 +105,7 @@ document.querySelector('button').onclick = function(){
 
   //Получение значения наименования ФО
   //fo_name = document.getElementById("fo_name").options[document.getElementById("fo_name").options.selectedIndex].text;
-  //fo_name = document.querySelector("#fo_name").value;
+  fo_name = document.querySelector("#fo_name").value;
 
   first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name + ' неустойки '+
   'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
@@ -147,8 +147,8 @@ document.querySelector('button').onclick = function(){
 
   //выведение значений 20го дня на экран
   if (!isNaN(date_sv_last_day)) {
-    document.querySelector('#date_sv_last_day').innerHTML = '20й день: ' + formatDate(new Date(date_sv_last_day));
-    document.querySelector('#date_sv_penalty_day').innerHTML = 'Начало неустойки: ' + formatDate(new Date(date_sv_penalty_day));
+    document.querySelector('#date_sv_last_day').innerHTML = formatDate(new Date(date_sv_last_day));
+    document.querySelector('#date_sv_penalty_day').innerHTML = formatDate(new Date(date_sv_penalty_day));
   }
   if (!isNaN(date_uts_last_day)) {
     document.querySelector('#date_uts_last_day').innerHTML = formatDate(new Date(date_uts_last_day));
@@ -224,8 +224,16 @@ document.querySelector('button').onclick = function(){
         case 2:
           pay_count[i] = pay_date[i] - date_ev_last_day;
 
-          //TODO добавить в analize_period_paragraf мотивировку про эвакуатор
-          analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на эвакуацию Транспортного средства '+
+          analize_period_paragraf[i] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+          'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+          'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+          'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+          'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+          'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+          'приходит к выводу о том, что расходы на эвакуацию Транспортного средства относятся '+
+          'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты расходов '+
+          'на эвакуацию Транспортного средства подлежит взысканию.'+ '<br>'+
+          'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на эвакуацию Транспортного средства '+
           formatDate(new Date(date_ev)) + ', следовательно, последним днем срока осуществления '+
           'выплаты расходов на эвакуацию Транспортного средства является ' + formatDate(new Date(date_ev_last_day)) + ', а неустойка подлежит начислению с '+
           formatDate(new Date(date_ev_penalty_day)) +'.<br>'
@@ -262,21 +270,28 @@ document.querySelector('button').onclick = function(){
 
       //Склонение дней/день/дня
       days_string[i] = pay_count[i] / day;
-      let m = String(days_string[i]).length - 1;
-      m = String(days_string[i]).charAt(m);
+      let m = String(days_string[i]).length;
+      m = String(days_string[i]).slice(m - 2, m);
 
-      switch (m) {
-        case "1":
-          days_string[i] = " день";
-          break;
-        case "2":
-        case "3":
-        case "4":
-          days_string[i] = " дня";
-          break;
-        default:
-          days_string[i] = " дней";
+      if (Number(m) >= 11 && Number(m) <= 19) {
+        days_string[i] = " дней";
+      } else {
+        let m = String(days_string[i]).length - 1;
+        m = String(days_string[i]).charAt(m);
+        switch (m) {
+          case "1":
+            days_string[i] = " день";
+            break;
+          case "2":
+          case "3":
+          case "4":
+            days_string[i] = " дня";
+            break;
+          default:
+            days_string[i] = " дней";
+        }
       }
+
 
       if (!isNaN(pay_count[i]) && pay_date[i] >= date_penalty_day[i]) {
         document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
@@ -487,7 +502,77 @@ function findLastDay(date) {
 
   while (j != 20) {
     misteryDays++;
-     if (date + day * misteryDays != Date.parse(new Date(2020, 0, 1, 3)) &&
+     if (date + day * misteryDays != Date.parse(new Date(2015, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 0, 1, 3)) &&
         date + day * misteryDays != Date.parse(new Date(2020, 0, 2, 3)) &&
         date + day * misteryDays != Date.parse(new Date(2020, 0, 3, 3)) &&
         date + day * misteryDays != Date.parse(new Date(2020, 0, 4, 3)) &&
@@ -516,7 +601,42 @@ switch (new Date(date).getDay()) {
   default:
 }
 
-while (date == Date.parse(new Date(2020, 0, 1, 3)) ||
+while (date == Date.parse(new Date(2018, 0, 1, 3)) ||
+   date == Date.parse(new Date(2018, 0, 2, 3)) ||
+   date == Date.parse(new Date(2018, 0, 3, 3)) ||
+   date == Date.parse(new Date(2018, 0, 4, 3)) ||
+   date == Date.parse(new Date(2018, 0, 5, 3)) ||
+   date == Date.parse(new Date(2018, 0, 6, 3)) ||
+   date == Date.parse(new Date(2018, 0, 7, 3)) ||
+   date == Date.parse(new Date(2018, 0, 8, 3)) ||
+   date == Date.parse(new Date(2018, 1, 23, 3)) ||
+   date == Date.parse(new Date(2018, 2, 8, 3)) ||
+   date == Date.parse(new Date(2018, 2, 9, 3)) ||
+   date == Date.parse(new Date(2018, 3, 30, 3)) ||
+   date == Date.parse(new Date(2018, 4, 1, 3)) ||
+   date == Date.parse(new Date(2018, 4, 2, 3)) ||
+   date == Date.parse(new Date(2018, 4, 9, 3)) ||
+   date == Date.parse(new Date(2018, 5, 11, 3)) ||
+   date == Date.parse(new Date(2018, 5, 12, 3)) ||
+   date == Date.parse(new Date(2018, 10, 5, 3)) ||
+   date == Date.parse(new Date(2018, 11, 31, 3)) ||
+   date == Date.parse(new Date(2019, 0, 1, 3)) ||
+   date == Date.parse(new Date(2019, 0, 2, 3)) ||
+   date == Date.parse(new Date(2019, 0, 3, 3)) ||
+   date == Date.parse(new Date(2019, 0, 4, 3)) ||
+   date == Date.parse(new Date(2019, 0, 5, 3)) ||
+   date == Date.parse(new Date(2019, 0, 6, 3)) ||
+   date == Date.parse(new Date(2019, 0, 7, 3)) ||
+   date == Date.parse(new Date(2019, 0, 8, 3)) ||
+   date == Date.parse(new Date(2019, 2, 8, 3)) ||
+   date == Date.parse(new Date(2019, 4, 1, 3)) ||
+   date == Date.parse(new Date(2019, 4, 2, 3)) ||
+   date == Date.parse(new Date(2019, 4, 3, 3)) ||
+   date == Date.parse(new Date(2019, 4, 9, 3)) ||
+   date == Date.parse(new Date(2019, 4, 10, 3)) ||
+   date == Date.parse(new Date(2019, 5, 12, 3)) ||
+   date == Date.parse(new Date(2019, 10, 4, 3)) ||
+   date == Date.parse(new Date(2020, 0, 1, 3)) ||
    date == Date.parse(new Date(2020, 0, 2, 3)) ||
    date == Date.parse(new Date(2020, 0, 3, 3)) ||
    date == Date.parse(new Date(2020, 0, 4, 3)) ||
@@ -524,10 +644,12 @@ while (date == Date.parse(new Date(2020, 0, 1, 3)) ||
    date == Date.parse(new Date(2020, 0, 6, 3)) ||
    date == Date.parse(new Date(2020, 0, 7, 3)) ||
    date == Date.parse(new Date(2020, 0, 8, 3)) ||
-   date == Date.parse(new Date(2020, 1, 23, 3)) ||
-   date == Date.parse(new Date(2020, 2, 8, 3)) ||
+   date == Date.parse(new Date(2020, 1, 24, 3)) ||
+   date == Date.parse(new Date(2020, 2, 9, 3)) ||
    date == Date.parse(new Date(2020, 4, 1, 3)) ||
-   date == Date.parse(new Date(2020, 4, 9, 3)) ||
+   date == Date.parse(new Date(2020, 4, 4, 3)) ||
+   date == Date.parse(new Date(2020, 4, 5, 3)) ||
+   date == Date.parse(new Date(2020, 4, 11, 3)) ||
    date == Date.parse(new Date(2020, 5, 12, 3)) ||
    date == Date.parse(new Date(2020, 10, 4, 3))) {
      date = date + day;
@@ -692,28 +814,28 @@ function selectText(containerid) {
     });
 	}
 
-iziToast.info({
-   timeout: 20000,
-   close: false,
-   overlay: true,
-   displayMode: 'once',
-   id: 'inputs',
-   zindex: 999,
-   //title: 'Введите наименование финансовой организации',
-   message: 'Введите наименование финансовой организации',
-   position: 'center',
-   inputs:[
-     ['<input id="fo_name_input" type="text">', 'keyup', function (instance, toast, input, e) {
-           autocomplete(input, fo);
-
-       }, true]
-   ],
-   buttons: [
-       ['<button><b>OK</b></button>', function (instance, toast) {
-           instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-           fo_name = document.querySelector("#fo_name_input").value;
-           document.querySelector('#fo_name').innerHTML = fo_name;
-   
-       }],
-   ]
-});
+// iziToast.info({
+//    timeout: 20000,
+//    close: false,
+//    overlay: true,
+//    displayMode: 'once',
+//    id: 'inputs',
+//    zindex: 999,
+//    //title: 'Введите наименование финансовой организации',
+//    message: 'Введите наименование финансовой организации',
+//    position: 'center',
+//    inputs:[
+//      ['<input id="fo_name_input" type="text">', 'keyup', function (instance, toast, input, e) {
+//            autocomplete(input, fo);
+//
+//        }, true]
+//    ],
+//    buttons: [
+//        ['<button><b>OK</b></button>', function (instance, toast) {
+//            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
+//            fo_name = document.querySelector("#fo_name_input").value;
+//            document.querySelector('#fo_name').innerHTML = fo_name;
+//
+//        }],
+//    ]
+// });

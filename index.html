@@ -22,8 +22,7 @@
           <option value="">АО "АльфаСтрахование"</option>
           <option value="">САО "РЕСО-Гарантия"</option>
         </select> -->
-        <!-- <input id="fo_name" type="text" placeholder="Введите наименование ФО" size="40"> -->
-        <span id="fo_name"></span>
+        <input id="fo_name" type="text" placeholder="Введите наименование ФО" size="40">
       </div>
       <br>
       <!-- <div class="form_grup">
@@ -32,7 +31,44 @@
         <span id="date_sv_last_day"></span>
         <span id="date_sv_penalty_day"></span>
       </div> -->
-      <div class="form_grup">
+      <table class="table_1">
+        <thead align = "center">
+          <tr>
+            <td>Заявление</td>
+            <td>Дата обращения</td>
+            <td>20-й день (последний день выплаты)</td>
+            <td>21-й день (первый день неустойки)</td>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>о страховом возмещении</td>
+            <td align = "center"><input id="date_sv" class = "datepicker-here" type="text" size="8"></td>
+            <td align = "center"><span id="date_sv_last_day"></span></td>
+            <td align = "center"><span id="date_sv_penalty_day"></span></td>
+          </tr>
+          <tr>
+            <td>о выплате УТС</td>
+            <td align = "center"><input id="date_uts" class = "datepicker-here" type="text" size="8"></td>
+            <td align = "center"><span id="date_uts_last_day"></span></td>
+            <td align = "center"><span id="date_uts_penalty_day"></span></td>
+          </tr>
+          <tr>
+            <td>о выплате расходов на эвакуатор</td>
+            <td align = "center"><input id="date_ev" class = "datepicker-here" type="text" size="8"></td>
+            <td align = "center"><span id="date_ev_last_day"></span></td>
+            <td align = "center"><span id="date_ev_penalty_day"></span></td>
+          </tr>
+          <tr>
+            <td>о выплате расходов на хранение</td>
+            <td align = "center"><input id="date_stor" class = "datepicker-here" type="text" size="8"></td>
+            <td align = "center"><span id="date_stor_last_day"></span></td>
+            <td align = "center"><span id="date_stor_penalty_day"></span></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- <div class="form_grup">
         <label class="form_label" placeholder=" ">Заявление о страховом возмещении</label>
         <input id="date_sv" class = "datepicker-here" type="text" size="8">
         <span id="date_sv_last_day"></span>
@@ -55,7 +91,7 @@
         <input id="date_stor" class = "datepicker-here" type="text" size="8">
         <span id="date_stor_last_day"></span>
         <span id="date_stor_penalty_day"></span>
-      </div>
+      </div> -->
       <br>
       <!-- <div class="form_grup">
         <label class="form_label" placeholder=" ">Суд взыскал неустойку с</label>

@@ -61,3 +61,7 @@ thead {
   background-color: DodgerBlue !important;
   color: #ffffff;
 }
+
+.table_1 > tr {
+  border: 1px solid black;
+}
