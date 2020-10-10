@@ -9,6 +9,11 @@
          margin-bottom: 32px;# Внешний отступ снизу элемента
 }
 
+select, input, button, #total_count, .form_label {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
+  color: #595b5e;
+}
+
 input {
   text-align-last: center;
 }

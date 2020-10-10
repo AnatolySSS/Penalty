@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>Калькулятор неустойки</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/tables.css">
     <link href="css/datapicker/datepicker.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/izitoast/iziToast.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -32,42 +33,44 @@
         <span id="date_sv_last_day"></span>
         <span id="date_sv_penalty_day"></span>
       </div> -->
-      <table class="table_1">
-        <thead align = "center">
-          <tr>
-            <td>Заявление</td>
-            <td>Дата обращения</td>
-            <td class="td_main">20-й день (последний день выплаты)</td>
-            <td class="td_main">21-й день (первый день неустойки)</td>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>о страховом возмещении</td>
-            <td align = "center"><input id="date_sv" class = "datepicker-here" type="text" size="8"></td>
-            <td align = "center"><span id="date_sv_last_day"></span></td>
-            <td align = "center"><span id="date_sv_penalty_day"></span></td>
-          </tr>
-          <tr>
-            <td>о выплате УТС</td>
-            <td align = "center"><input id="date_uts" class = "datepicker-here" type="text" size="8"></td>
-            <td align = "center"><span id="date_uts_last_day"></span></td>
-            <td align = "center"><span id="date_uts_penalty_day"></span></td>
-          </tr>
-          <tr>
-            <td>о выплате расходов на эвакуатор</td>
-            <td align = "center"><input id="date_ev" class = "datepicker-here" type="text" size="8"></td>
-            <td align = "center"><span id="date_ev_last_day"></span></td>
-            <td align = "center"><span id="date_ev_penalty_day"></span></td>
-          </tr>
-          <tr>
-            <td>о выплате расходов на хранение</td>
-            <td align = "center"><input id="date_stor" class = "datepicker-here" type="text" size="8"></td>
-            <td align = "center"><span id="date_stor_last_day"></span></td>
-            <td align = "center"><span id="date_stor_penalty_day"></span></td>
-          </tr>
-        </tbody>
-      </table>
+      <div class="container">
+        <table class="table_1">
+          <thead align = "center">
+            <tr>
+              <td>Заявление</td>
+              <td>Дата обращения</td>
+              <td class="td_main">20-й день (последний день выплаты)</td>
+              <td class="td_main">21-й день (первый день неустойки)</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>о страховом возмещении</td>
+              <td align = "center"><input id="date_sv" class = "datepicker-here" type="text" size="8"></td>
+              <td align = "center"><span id="date_sv_last_day"></span></td>
+              <td align = "center"><span id="date_sv_penalty_day"></span></td>
+            </tr>
+            <tr>
+              <td>о выплате УТС</td>
+              <td align = "center"><input id="date_uts" class = "datepicker-here" type="text" size="8"></td>
+              <td align = "center"><span id="date_uts_last_day"></span></td>
+              <td align = "center"><span id="date_uts_penalty_day"></span></td>
+            </tr>
+            <tr>
+              <td>о выплате расходов на эвакуатор</td>
+              <td align = "center"><input id="date_ev" class = "datepicker-here" type="text" size="8"></td>
+              <td align = "center"><span id="date_ev_last_day"></span></td>
+              <td align = "center"><span id="date_ev_penalty_day"></span></td>
+            </tr>
+            <tr>
+              <td>о выплате расходов на хранение</td>
+              <td align = "center"><input id="date_stor" class = "datepicker-here" type="text" size="8"></td>
+              <td align = "center"><span id="date_stor_last_day"></span></td>
+              <td align = "center"><span id="date_stor_penalty_day"></span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
       <!-- <div class="form_grup">
         <label class="form_label" placeholder=" ">Заявление о страховом возмещении</label>
@@ -125,7 +128,7 @@
           <tbody align = "center">
             <tr>
               <td>
-                <select id="pay1" class="" name="">
+                <select id="pay1">
                   <option value="">Страховое возмещение</option>
                   <option value="">УТС</option>
                   <option value="">Эвакуатор</option>
@@ -343,11 +346,11 @@
       </div>
       <br>
       <div class="form_grup">
-        <label class="form_label" placeholder=" ">Общий размер неустойки: </label>
+        <label class="form_label">Общий размер неустойки: </label>
         <span id="total_count"></span>
       </div>
       <br>
-      <button type="button" name="button">Push</button>
+      <button type="button" name="button">Рассчитать</button>
       <br><br>
       <span id="decision" onclick="selectText('decision')">Тут будет текст решения</span>
     </form>

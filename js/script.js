@@ -37,7 +37,7 @@ let rub_string_payment = [];
 let rub_string_penalty = [];
 let kop_string = [];
 
-let holly, standart_motivation, first_paragraf, summary_paragraf;
+let holly, holly_boolen, standart_motivation, first_paragraf, summary_paragraf;
 let analize_period_paragraf = [], payment_paragraf = [];
 let payment_in_time_paragraf = [];
 let payment_not_in_time_paragraf = [];
@@ -81,6 +81,7 @@ standart_motivation = 'Согласно статье 12 ГК РФ '+
 document.querySelector('button').onclick = function(){
 
   holly = "";
+  holly_boolen = false;
 
   //Стирание всех значений в таблице
   document.querySelector('#COLUMN_NAME_4').innerHTML = "";
@@ -102,6 +103,11 @@ document.querySelector('button').onclick = function(){
     document.querySelector('#court_summ_after_' + i).innerHTML = "";
   }
 
+  document.querySelector('#date_sv_last_day').style.color = '#595b5e';
+  document.querySelector('#date_uts_last_day').style.color = '#595b5e';
+  document.querySelector('#date_ev_last_day').style.color = '#595b5e';
+  document.querySelector('#date_stor_last_day').style.color = '#595b5e';
+
   //Получение значения наименования ФО
   //fo_name = document.getElementById("fo_name").options[document.getElementById("fo_name").options.selectedIndex].text;
   fo_name = document.querySelector("#fo_name").value;
@@ -115,24 +121,36 @@ document.querySelector('button').onclick = function(){
   date_sv = changeDateType(date_sv);
   date_sv = Date.parse(date_sv);
   date_sv_last_day = findLastDay(date_sv);
+  if (holly_boolen) {
+    document.querySelector('#date_sv_last_day').style.color = 'red';
+  }
   date_sv_penalty_day = date_sv_last_day + day;
 
   date_uts = document.querySelector('#date_uts').value;
   date_uts = changeDateType(date_uts);
   date_uts = Date.parse(date_uts);
   date_uts_last_day = findLastDay(date_uts);
+  if (holly_boolen) {
+    document.querySelector('#date_uts_last_day').style.color = 'red';
+  }
   date_uts_penalty_day = date_uts_last_day + day;
 
   date_ev = document.querySelector('#date_ev').value;
   date_ev = changeDateType(date_ev);
   date_ev = Date.parse(date_ev);
   date_ev_last_day = findLastDay(date_ev);
+  if (holly_boolen) {
+    document.querySelector('#date_ev_last_day').style.color = 'red';
+  }
   date_ev_penalty_day = date_ev_last_day + day;
 
   date_stor = document.querySelector('#date_stor').value;
   date_stor = changeDateType(date_stor);
   date_stor = Date.parse(date_stor);
   date_stor_last_day = findLastDay(date_stor);
+  if (holly_boolen) {
+    document.querySelector('#date_stor_last_day').style.color = 'red';
+  }
   date_stor_penalty_day = date_stor_last_day + day;
 
   //Получение значения даты судебного взыскания неустойки
@@ -168,6 +186,7 @@ document.querySelector('button').onclick = function(){
     pay_date[i] = changeDateType(pay_date[i]);
     pay_date[i] = Date.parse(pay_date[i]);
     pay_text[i] = document.querySelector('#pay' + i + '_text').value;
+    pay_text[i] = pay_text[i].replace(/\s+/g, '');
     payment_order[i] = document.querySelector('#payment_order_' + i).value;
 
     switch (pay[i]) {
@@ -259,7 +278,6 @@ document.querySelector('button').onclick = function(){
             analize_period_paragraf[i] = "";
         }
       }
-
 
       if (pay_count[i] < 0) {
         pay_count[i] = 0;
@@ -459,7 +477,6 @@ document.querySelector('button').onclick = function(){
       document.querySelector('#decision').innerHTML = decision;
     }
 
-
     //Удаление всех значений
 
     for (var i = 0; i < 5; i++) {
@@ -499,6 +516,7 @@ document.querySelector('button').onclick = function(){
 function findLastDay(date) {
   let j = 0;
   let misteryDays = 0;
+  holly_boolen = false;
 
   while (j != 20) {
     misteryDays++;
@@ -600,6 +618,7 @@ switch (new Date(date).getDay()) {
       date = date + day * 2;
       holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
       'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
+      holly_boolen = true;
       break;
     }
     break;
@@ -607,6 +626,7 @@ switch (new Date(date).getDay()) {
     date = date + day;
     holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
     'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
+    holly_boolen = true;
     break;
   default:
 }
@@ -714,6 +734,7 @@ while (date == Date.parse(new Date(2015, 0, 1, 3)) ||
      date = date + day;
      holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
      'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
+     holly_boolen = true;
 }
   j = 0;
   misteryDays = 0;
@@ -888,34 +909,9 @@ $('.datepicker-here').toArray().forEach(function(field){
 $('.input-numeral').toArray().forEach(function(field){
   new Cleave(field, {
       numeral: true,
-      numeralThousandsGroupStyle: 'none',
+      delimiter: ' ',
+      //numeralThousandsGroupStyle: 'none',
       numeralPositiveOnly: true,
       numeralIntegerScale: 8
   })
 });
-
-// iziToast.info({
-//    timeout: 20000,
-//    close: false,
-//    overlay: true,
-//    displayMode: 'once',
-//    id: 'inputs',
-//    zindex: 999,
-//    //title: 'Введите наименование финансовой организации',
-//    message: 'Введите наименование финансовой организации',
-//    position: 'center',
-//    inputs:[
-//      ['<input id="fo_name_input" type="text">', 'keyup', function (instance, toast, input, e) {
-//            autocomplete(input, fo);
-//
-//        }, true]
-//    ],
-//    buttons: [
-//        ['<button><b>OK</b></button>', function (instance, toast) {
-//            instance.hide({ transitionOut: 'fadeOut' }, toast, 'button');
-//            fo_name = document.querySelector("#fo_name_input").value;
-//            document.querySelector('#fo_name').innerHTML = fo_name;
-//
-//        }],
-//    ]
-// });
