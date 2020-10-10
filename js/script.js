@@ -43,9 +43,6 @@ let payment_in_time_paragraf = [];
 let payment_not_in_time_paragraf = [];
 let total_analize_paragraf = "";
 
-holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
-'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
-
 standart_motivation = 'Согласно статье 12 ГК РФ '+
 'взыскание неустойки является одним из способов защиты нарушенного гражданского права.'+'<br>'+
 'По смыслу статьи 330 ГК РФ неустойкой (штрафом, пеней) признается определенная '+
@@ -82,6 +79,8 @@ standart_motivation = 'Согласно статье 12 ГК РФ '+
 'которыми определено его начало.'+'<br>';
 
 document.querySelector('button').onclick = function(){
+
+  holly = "";
 
   //Стирание всех значений в таблице
   document.querySelector('#COLUMN_NAME_4').innerHTML = "";
@@ -492,6 +491,7 @@ document.querySelector('button').onclick = function(){
     date_court_to = undefined;
 
     total_analize_paragraf = "";
+    holly = "";
 
 }
 
@@ -593,10 +593,20 @@ function findLastDay(date) {
 
 switch (new Date(date).getDay()) {
   case 6:
-    date = date + day * 2;
+    if (date != Date.parse(new Date(2016, 1, 20, 3)) &&
+        date != Date.parse(new Date(2018, 3, 28, 3)) &&
+        date != Date.parse(new Date(2018, 5, 9, 3)) &&
+        date != Date.parse(new Date(2018, 11  , 29, 3))) {
+      date = date + day * 2;
+      holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
+      'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
+      break;
+    }
     break;
   case 0:
     date = date + day;
+    holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
+    'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
     break;
   default:
 }
@@ -702,6 +712,8 @@ while (date == Date.parse(new Date(2015, 0, 1, 3)) ||
    date == Date.parse(new Date(2020, 5, 12, 3)) ||
    date == Date.parse(new Date(2020, 10, 4, 3))) {
      date = date + day;
+     holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
+     'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
 }
   j = 0;
   misteryDays = 0;
