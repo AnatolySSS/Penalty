@@ -5,7 +5,7 @@ let decision;
 let COLUMN_NAME_4 = "Начало периода";
 let COLUMN_NAME_5 = "Конец периода";
 let COLUMN_NAME_6 = "Количество дней";
-let COLUMN_NAME_7 = "Сумма";
+let COLUMN_NAME_7 = "Неустойка";
 
 let COLUMN_NAME_8 = "Начало неустойки до суда";
 let COLUMN_NAME_9 = "Конец неустойки до суда";
@@ -601,7 +601,56 @@ switch (new Date(date).getDay()) {
   default:
 }
 
-while (date == Date.parse(new Date(2018, 0, 1, 3)) ||
+while (date == Date.parse(new Date(2015, 0, 1, 3)) ||
+   date == Date.parse(new Date(2015, 0, 2, 3)) ||
+   date == Date.parse(new Date(2015, 0, 3, 3)) ||
+   date == Date.parse(new Date(2015, 0, 4, 3)) ||
+   date == Date.parse(new Date(2015, 0, 5, 3)) ||
+   date == Date.parse(new Date(2015, 0, 6, 3)) ||
+   date == Date.parse(new Date(2015, 0, 7, 3)) ||
+   date == Date.parse(new Date(2015, 0, 8, 3)) ||
+   date == Date.parse(new Date(2015, 0, 9, 3)) ||
+   date == Date.parse(new Date(2015, 1, 23, 3)) ||
+   date == Date.parse(new Date(2015, 2, 9, 3)) ||
+   date == Date.parse(new Date(2015, 4, 1, 3)) ||
+   date == Date.parse(new Date(2015, 4, 4, 3)) ||
+   date == Date.parse(new Date(2015, 4, 11, 3)) ||
+   date == Date.parse(new Date(2015, 5, 12, 3)) ||
+   date == Date.parse(new Date(2015, 10, 4, 3)) ||
+   date == Date.parse(new Date(2016, 0, 1, 3)) ||
+   date == Date.parse(new Date(2016, 0, 2, 3)) ||
+   date == Date.parse(new Date(2016, 0, 3, 3)) ||
+   date == Date.parse(new Date(2016, 0, 4, 3)) ||
+   date == Date.parse(new Date(2016, 0, 5, 3)) ||
+   date == Date.parse(new Date(2016, 0, 6, 3)) ||
+   date == Date.parse(new Date(2016, 0, 7, 3)) ||
+   date == Date.parse(new Date(2016, 0, 8, 3)) ||
+   date == Date.parse(new Date(2016, 1, 22, 3)) ||
+   date == Date.parse(new Date(2016, 1, 23, 3)) ||
+   date == Date.parse(new Date(2016, 2, 7, 3)) ||
+   date == Date.parse(new Date(2016, 2, 8, 3)) ||
+   date == Date.parse(new Date(2016, 4, 2, 3)) ||
+   date == Date.parse(new Date(2016, 4, 3, 3)) ||
+   date == Date.parse(new Date(2016, 4, 9, 3)) ||
+   date == Date.parse(new Date(2016, 5, 13, 3)) ||
+   date == Date.parse(new Date(2016, 10, 4, 3)) ||
+   date == Date.parse(new Date(2017, 0, 1, 3)) ||
+   date == Date.parse(new Date(2017, 0, 2, 3)) ||
+   date == Date.parse(new Date(2017, 0, 3, 3)) ||
+   date == Date.parse(new Date(2017, 0, 4, 3)) ||
+   date == Date.parse(new Date(2017, 0, 5, 3)) ||
+   date == Date.parse(new Date(2017, 0, 6, 3)) ||
+   date == Date.parse(new Date(2017, 0, 7, 3)) ||
+   date == Date.parse(new Date(2017, 0, 8, 3)) ||
+   date == Date.parse(new Date(2017, 1, 23, 3)) ||
+   date == Date.parse(new Date(2017, 1, 24, 3)) ||
+   date == Date.parse(new Date(2017, 2, 8, 3)) ||
+   date == Date.parse(new Date(2017, 4, 1, 3)) ||
+   date == Date.parse(new Date(2017, 4, 8, 3)) ||
+   date == Date.parse(new Date(2017, 4, 9, 3)) ||
+   date == Date.parse(new Date(2017, 5, 12, 3)) ||
+   date == Date.parse(new Date(2017, 10, 6, 3)) ||
+   date == Date.parse(new Date(2018, 0, 1, 3)) ||
    date == Date.parse(new Date(2018, 0, 2, 3)) ||
    date == Date.parse(new Date(2018, 0, 3, 3)) ||
    date == Date.parse(new Date(2018, 0, 4, 3)) ||
@@ -813,6 +862,25 @@ function selectText(containerid) {
         message: 'Текст скопирован  '
     });
 	}
+
+//Форматирование даты
+$('.datepicker-here').toArray().forEach(function(field){
+  new Cleave(field, {
+    date: true,
+    delimiter: '.',
+    datePattern: ['d', 'm', 'Y']
+  })
+});
+
+//Форматирование суммы
+$('.input-numeral').toArray().forEach(function(field){
+  new Cleave(field, {
+      numeral: true,
+      numeralThousandsGroupStyle: 'none',
+      numeralPositiveOnly: true,
+      numeralIntegerScale: 8
+  })
+});
 
 // iziToast.info({
 //    timeout: 20000,
