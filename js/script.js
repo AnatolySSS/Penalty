@@ -20,6 +20,8 @@ let payment_order = [];
 let pay_count = [];
 let pay_summ = [];
 
+let off_days = [];
+
 let court_period_before = [];
 let court_period_after = [];
 let court_summ_before = [];
@@ -80,8 +82,16 @@ standart_motivation = 'Согласно статье 12 ГК РФ '+
 
 document.querySelector('button').onclick = function(){
 
+  document.querySelector('#test_span').innerHTML = "";
   holly = "";
   holly_boolen = false;
+  var q = 1;
+
+  //Удаление всплывающей подсказки 193 ГК РФ
+  document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
+  document.querySelector('#date_uts_last_day').removeAttribute('tooltip');
+  document.querySelector('#date_ev_last_day').removeAttribute('tooltip');
+  document.querySelector('#date_stor_last_day').removeAttribute('tooltip');
 
   //Стирание всех значений в таблице
   document.querySelector('#COLUMN_NAME_4').innerHTML = "";
@@ -122,7 +132,8 @@ document.querySelector('button').onclick = function(){
   date_sv = Date.parse(date_sv);
   date_sv_last_day = findLastDay(date_sv);
   if (holly_boolen) {
-    document.querySelector('#date_sv_last_day').style.color = 'red';
+    document.querySelector('#date_sv_last_day').style.color = '#b00000';
+    document.querySelector('#date_sv_last_day').setAttribute('tooltip', '193 ГК РФ');
   }
   date_sv_penalty_day = date_sv_last_day + day;
 
@@ -131,7 +142,8 @@ document.querySelector('button').onclick = function(){
   date_uts = Date.parse(date_uts);
   date_uts_last_day = findLastDay(date_uts);
   if (holly_boolen) {
-    document.querySelector('#date_uts_last_day').style.color = 'red';
+    document.querySelector('#date_uts_last_day').style.color = '#b00000';
+    document.querySelector('#date_uts_last_day').setAttribute('tooltip', '193 ГК РФ');
   }
   date_uts_penalty_day = date_uts_last_day + day;
 
@@ -140,7 +152,8 @@ document.querySelector('button').onclick = function(){
   date_ev = Date.parse(date_ev);
   date_ev_last_day = findLastDay(date_ev);
   if (holly_boolen) {
-    document.querySelector('#date_ev_last_day').style.color = 'red';
+    document.querySelector('#date_ev_last_day').style.color = '#b00000';
+    document.querySelector('#date_ev_last_day').setAttribute('tooltip', '193 ГК РФ');
   }
   date_ev_penalty_day = date_ev_last_day + day;
 
@@ -149,7 +162,8 @@ document.querySelector('button').onclick = function(){
   date_stor = Date.parse(date_stor);
   date_stor_last_day = findLastDay(date_stor);
   if (holly_boolen) {
-    document.querySelector('#date_stor_last_day').style.color = 'red';
+    document.querySelector('#date_stor_last_day').style.color = '#b00000';
+    document.querySelector('#date_stor_last_day').setAttribute('tooltip', '193 ГК РФ');
   }
   date_stor_penalty_day = date_stor_last_day + day;
 
@@ -187,7 +201,7 @@ document.querySelector('button').onclick = function(){
     pay_date[i] = Date.parse(pay_date[i]);
     pay_text[i] = document.querySelector('#pay' + i + '_text').value;
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
-    payment_order[i] = document.querySelector('#payment_order_' + i).value;
+    // payment_order[i] = document.querySelector('#payment_order_' + i).value;
 
     switch (pay[i]) {
       case 0:
@@ -225,7 +239,9 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_sv_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату страхового возмещения в размере '+
-          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) +
+          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
           break;
         case 1:
           pay_count[i] = pay_date[i] - date_uts_last_day;
@@ -237,7 +253,9 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_uts_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату УТС в размере '+
-          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) +
+          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
           break;
         case 2:
           pay_count[i] = pay_date[i] - date_ev_last_day;
@@ -257,7 +275,9 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_ev_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату расходов на эвакуацию Транспортного средства в размере '+
-          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) +
+          //', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
           break;
         case 3:
           pay_count[i] = pay_date[i] - date_stor_last_day;
@@ -269,7 +289,9 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_stor_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату расходов на хранение Транспортного средства в размере '+
-          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) +
+          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
           break;
       }
 
@@ -475,6 +497,7 @@ document.querySelector('button').onclick = function(){
 
     if (!isNaN(pay_date[1])) {
       document.querySelector('#decision').innerHTML = decision;
+      selectText('decision');
     }
 
     //Удаление всех значений
@@ -509,12 +532,13 @@ document.querySelector('button').onclick = function(){
 
     total_analize_paragraf = "";
     holly = "";
-
 }
 
 //Function for find 20th day from start day without hollidays (14 days from 112 labor code article)
 function findLastDay(date) {
+  off_days.length = 0;
   let j = 0;
+  let k = 0;
   let misteryDays = 0;
   holly_boolen = false;
 
@@ -605,6 +629,9 @@ function findLastDay(date) {
         date + day * misteryDays != Date.parse(new Date(2020, 5, 12, 3)) &&
         date + day * misteryDays != Date.parse(new Date(2020, 10, 4, 3))) {
           j++;
+    } else {
+      off_days[k] = date + day * misteryDays;
+      k++;
     }
   }
   date = date + day * misteryDays;
@@ -615,6 +642,12 @@ switch (new Date(date).getDay()) {
         date != Date.parse(new Date(2018, 3, 28, 3)) &&
         date != Date.parse(new Date(2018, 5, 9, 3)) &&
         date != Date.parse(new Date(2018, 11  , 29, 3))) {
+
+      off_days[k] = date;
+      k++;
+      off_days[k] = date + day;
+      k++;
+
       date = date + day * 2;
       holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
       'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
@@ -623,6 +656,9 @@ switch (new Date(date).getDay()) {
     }
     break;
   case 0:
+    off_days[k] = date;
+    k++;
+
     date = date + day;
     holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
     'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
@@ -731,6 +767,8 @@ while (date == Date.parse(new Date(2015, 0, 1, 3)) ||
    date == Date.parse(new Date(2020, 4, 11, 3)) ||
    date == Date.parse(new Date(2020, 5, 12, 3)) ||
    date == Date.parse(new Date(2020, 10, 4, 3))) {
+     off_days[k] = date;
+     k++;
      date = date + day;
      holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
      'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
@@ -889,10 +927,17 @@ function selectText(containerid) {
 		}
     document.execCommand('copy');
 
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+    } else { // старый IE
+      document.selection.empty();
+    }
+
     iziToast.show({
-        timeout: 2000,
+        timeout: 3000,
+        color: '#F5E1A6',
         //title: 'Hey',
-        message: 'Текст скопирован  '
+        message: 'Текст решения скопирован',
     });
 	}
 

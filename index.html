@@ -5,6 +5,8 @@
     <title>Калькулятор неустойки</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/tables.css">
+    <link rel="stylesheet" href="css/button.css">
+    <link rel="stylesheet" href="css/193.css">
     <link href="css/datapicker/datepicker.min.css" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="css/izitoast/iziToast.min.css">
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
@@ -13,7 +15,7 @@
     <script src="js/cleave/cleave.min.js"></script>
   </head>
   <body>
-    <form class="form" action="index.html" method="post">
+    <form class="form" action="index.html" method="get">
       <div class="autocomplete">
         <!-- <label class="form_label" placeholder=" ">Дата обращения к ФУ</label>
         <input id="fu" class = "form_input" type="date" name="fu" value="" size="10"> -->
@@ -46,27 +48,27 @@
           <tbody>
             <tr>
               <td>о страховом возмещении</td>
-              <td align = "center"><input id="date_sv" class = "datepicker-here" type="text" size="8"></td>
-              <td align = "center"><span id="date_sv_last_day"></span></td>
-              <td align = "center"><span id="date_sv_penalty_day"></span></td>
+              <td align = "center"><input id = "date_sv" class = "datepicker-here" type="text" size="8"></td>
+              <td align = "center"><span id = "date_sv_last_day"></span></td>
+              <td align = "center"><span id = "date_sv_penalty_day"></span></td>
             </tr>
             <tr>
               <td>о выплате УТС</td>
-              <td align = "center"><input id="date_uts" class = "datepicker-here" type="text" size="8"></td>
-              <td align = "center"><span id="date_uts_last_day"></span></td>
-              <td align = "center"><span id="date_uts_penalty_day"></span></td>
+              <td align = "center"><input id = "date_uts" class = "datepicker-here" type="text" size="8"></td>
+              <td align = "center"><span id = "date_uts_last_day"></span></td>
+              <td align = "center"><span id = "date_uts_penalty_day"></span></td>
             </tr>
             <tr>
               <td>о выплате расходов на эвакуатор</td>
-              <td align = "center"><input id="date_ev" class = "datepicker-here" type="text" size="8"></td>
-              <td align = "center"><span id="date_ev_last_day"></span></td>
-              <td align = "center"><span id="date_ev_penalty_day"></span></td>
+              <td align = "center"><input id = "date_ev" class = "datepicker-here" type="text" size="8"></td>
+              <td align = "center"><span id = "date_ev_last_day"></span></td>
+              <td align = "center"><span id = "date_ev_penalty_day"></span></td>
             </tr>
             <tr>
               <td>о выплате расходов на хранение</td>
-              <td align = "center"><input id="date_stor" class = "datepicker-here" type="text" size="8"></td>
-              <td align = "center"><span id="date_stor_last_day"></span></td>
-              <td align = "center"><span id="date_stor_penalty_day"></span></td>
+              <td align = "center"><input id = "date_stor" class = "datepicker-here" type="text" size="8"></td>
+              <td align = "center"><span id = "date_stor_last_day"></span></td>
+              <td align = "center"><span id = "date_stor_penalty_day"></span></td>
             </tr>
           </tbody>
         </table>
@@ -114,7 +116,7 @@
               <td>Вид выплаты</td>
               <td>Дата выплаты</td>
               <td>Сумма выплаты</td>
-              <td>№ ПП</td>
+              <!-- <td>№ ПП</td> -->
               <td class="td_main"><span id="COLUMN_NAME_4"></span></td>
               <td class="td_main"><span id="COLUMN_NAME_5"></span></td>
               <td class="td_main"><span id="COLUMN_NAME_6"></span></td>
@@ -141,9 +143,9 @@
               <td>
                 <input id="pay1_text" class = "input-numeral" type="text" size="10">
               </td>
-              <td>
+              <!-- <td>
                 <input id="payment_order_1" class = "form_input" type="text" size="10">
-              </td>
+              </td> -->
               <td>
                 <span id="date_penalty_day_1"></span>
               </td>
@@ -184,9 +186,9 @@
               <td>
                 <input id="pay2_text" class = "input-numeral" type="text" size="10">
               </td>
-              <td>
+              <!-- <td>
                 <input id="payment_order_2" class = "form_input" type="text" size="10">
-              </td>
+              </td> -->
               <td>
                 <span id="date_penalty_day_2"></span>
               </td>
@@ -227,9 +229,9 @@
               <td>
                 <input id="pay3_text" class = "input-numeral" type="text" size="10">
               </td>
-              <td>
+              <!-- <td>
                 <input id="payment_order_3" class = "form_input" type="text" size="10">
-              </td>
+              </td> -->
               <td>
                 <span id="date_penalty_day_3"></span>
               </td>
@@ -270,9 +272,9 @@
               <td>
                 <input id="pay4_text" class = "input-numeral" type="text" size="10">
               </td>
-              <td>
+              <!-- <td>
                 <input id="payment_order_4" class = "form_input" type="text" size="10">
-              </td>
+              </td> -->
               <td>
                 <span id="date_penalty_day_4"></span>
               </td>
@@ -313,9 +315,9 @@
               <td>
                 <input id="pay5_text" class = "input-numeral" type="text" size="10">
               </td>
-              <td>
+              <!-- <td>
                 <input id="payment_order_5" class = "form_input" type="text" size="10">
-              </td>
+              </td> -->
               <td>
                 <span id="date_penalty_day_5"></span>
               </td>
@@ -350,12 +352,15 @@
         <span id="total_count"></span>
       </div>
       <br>
-      <button type="button" name="button">Рассчитать</button>
+      <button class = "button" anim="ripple" type="button" name="button">Рассчитать</button>
       <br><br>
-      <span id="decision" onclick="selectText('decision')">Тут будет текст решения</span>
+      <span id="test_span"></span>
+      <span id="decision"></span>
+      <!-- onclick="selectText('decision')" -->
     </form>
     <div class="toast">
     <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/button.js"></script>
     <script type="text/javascript" src="js/autocomplete.js"></script>
   </body>
 </html>
