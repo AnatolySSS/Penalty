@@ -5,7 +5,7 @@ let decision;
 let COLUMN_NAME_4 = "Начало периода";
 let COLUMN_NAME_5 = "Конец периода";
 let COLUMN_NAME_6 = "Количество дней";
-let COLUMN_NAME_7 = "Сумма";
+let COLUMN_NAME_7 = "Неустойка";
 
 let COLUMN_NAME_8 = "Начало неустойки до суда";
 let COLUMN_NAME_9 = "Конец неустойки до суда";
@@ -19,6 +19,8 @@ let pay_text = [];
 let payment_order = [];
 let pay_count = [];
 let pay_summ = [];
+
+let off_days = [];
 
 let court_period_before = [];
 let court_period_after = [];
@@ -37,14 +39,11 @@ let rub_string_payment = [];
 let rub_string_penalty = [];
 let kop_string = [];
 
-let holly, standart_motivation, first_paragraf, summary_paragraf;
+let holly, holly_boolen, standart_motivation, first_paragraf, summary_paragraf;
 let analize_period_paragraf = [], payment_paragraf = [];
 let payment_in_time_paragraf = [];
 let payment_not_in_time_paragraf = [];
 let total_analize_paragraf = "";
-
-holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
-'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
 
 standart_motivation = 'Согласно статье 12 ГК РФ '+
 'взыскание неустойки является одним из способов защиты нарушенного гражданского права.'+'<br>'+
@@ -83,6 +82,17 @@ standart_motivation = 'Согласно статье 12 ГК РФ '+
 
 document.querySelector('button').onclick = function(){
 
+  document.querySelector('#test_span').innerHTML = "";
+  holly = "";
+  holly_boolen = false;
+  var q = 1;
+
+  //Удаление всплывающей подсказки 193 ГК РФ
+  document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
+  document.querySelector('#date_uts_last_day').removeAttribute('tooltip');
+  document.querySelector('#date_ev_last_day').removeAttribute('tooltip');
+  document.querySelector('#date_stor_last_day').removeAttribute('tooltip');
+
   //Стирание всех значений в таблице
   document.querySelector('#COLUMN_NAME_4').innerHTML = "";
   document.querySelector('#COLUMN_NAME_5').innerHTML = "";
@@ -103,6 +113,11 @@ document.querySelector('button').onclick = function(){
     document.querySelector('#court_summ_after_' + i).innerHTML = "";
   }
 
+  document.querySelector('#date_sv_last_day').style.color = '#595b5e';
+  document.querySelector('#date_uts_last_day').style.color = '#595b5e';
+  document.querySelector('#date_ev_last_day').style.color = '#595b5e';
+  document.querySelector('#date_stor_last_day').style.color = '#595b5e';
+
   //Получение значения наименования ФО
   //fo_name = document.getElementById("fo_name").options[document.getElementById("fo_name").options.selectedIndex].text;
   fo_name = document.querySelector("#fo_name").value;
@@ -116,24 +131,40 @@ document.querySelector('button').onclick = function(){
   date_sv = changeDateType(date_sv);
   date_sv = Date.parse(date_sv);
   date_sv_last_day = findLastDay(date_sv);
+  if (holly_boolen) {
+    document.querySelector('#date_sv_last_day').style.color = '#b00000';
+    document.querySelector('#date_sv_last_day').setAttribute('tooltip', '193 ГК РФ');
+  }
   date_sv_penalty_day = date_sv_last_day + day;
 
   date_uts = document.querySelector('#date_uts').value;
   date_uts = changeDateType(date_uts);
   date_uts = Date.parse(date_uts);
   date_uts_last_day = findLastDay(date_uts);
+  if (holly_boolen) {
+    document.querySelector('#date_uts_last_day').style.color = '#b00000';
+    document.querySelector('#date_uts_last_day').setAttribute('tooltip', '193 ГК РФ');
+  }
   date_uts_penalty_day = date_uts_last_day + day;
 
   date_ev = document.querySelector('#date_ev').value;
   date_ev = changeDateType(date_ev);
   date_ev = Date.parse(date_ev);
   date_ev_last_day = findLastDay(date_ev);
+  if (holly_boolen) {
+    document.querySelector('#date_ev_last_day').style.color = '#b00000';
+    document.querySelector('#date_ev_last_day').setAttribute('tooltip', '193 ГК РФ');
+  }
   date_ev_penalty_day = date_ev_last_day + day;
 
   date_stor = document.querySelector('#date_stor').value;
   date_stor = changeDateType(date_stor);
   date_stor = Date.parse(date_stor);
   date_stor_last_day = findLastDay(date_stor);
+  if (holly_boolen) {
+    document.querySelector('#date_stor_last_day').style.color = '#b00000';
+    document.querySelector('#date_stor_last_day').setAttribute('tooltip', '193 ГК РФ');
+  }
   date_stor_penalty_day = date_stor_last_day + day;
 
   //Получение значения даты судебного взыскания неустойки
@@ -147,8 +178,8 @@ document.querySelector('button').onclick = function(){
 
   //выведение значений 20го дня на экран
   if (!isNaN(date_sv_last_day)) {
-    document.querySelector('#date_sv_last_day').innerHTML = '20й день: ' + formatDate(new Date(date_sv_last_day));
-    document.querySelector('#date_sv_penalty_day').innerHTML = 'Начало неустойки: ' + formatDate(new Date(date_sv_penalty_day));
+    document.querySelector('#date_sv_last_day').innerHTML = formatDate(new Date(date_sv_last_day));
+    document.querySelector('#date_sv_penalty_day').innerHTML = formatDate(new Date(date_sv_penalty_day));
   }
   if (!isNaN(date_uts_last_day)) {
     document.querySelector('#date_uts_last_day').innerHTML = formatDate(new Date(date_uts_last_day));
@@ -169,7 +200,8 @@ document.querySelector('button').onclick = function(){
     pay_date[i] = changeDateType(pay_date[i]);
     pay_date[i] = Date.parse(pay_date[i]);
     pay_text[i] = document.querySelector('#pay' + i + '_text').value;
-    payment_order[i] = document.querySelector('#payment_order_' + i).value;
+    pay_text[i] = pay_text[i].replace(/\s+/g, '');
+    // payment_order[i] = document.querySelector('#payment_order_' + i).value;
 
     switch (pay[i]) {
       case 0:
@@ -207,7 +239,9 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_sv_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату страхового возмещения в размере '+
-          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) +
+          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
           break;
         case 1:
           pay_count[i] = pay_date[i] - date_uts_last_day;
@@ -219,19 +253,31 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_uts_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату УТС в размере '+
-          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) +
+          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
           break;
         case 2:
           pay_count[i] = pay_date[i] - date_ev_last_day;
 
-          //TODO добавить в analize_period_paragraf мотивировку про эвакуатор
-          analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на эвакуацию Транспортного средства '+
+          analize_period_paragraf[i] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+          'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+          'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+          'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+          'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+          'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+          'приходит к выводу о том, что расходы на эвакуацию Транспортного средства относятся '+
+          'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты расходов '+
+          'на эвакуацию Транспортного средства подлежит взысканию.'+ '<br>'+
+          'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на эвакуацию Транспортного средства '+
           formatDate(new Date(date_ev)) + ', следовательно, последним днем срока осуществления '+
           'выплаты расходов на эвакуацию Транспортного средства является ' + formatDate(new Date(date_ev_last_day)) + ', а неустойка подлежит начислению с '+
           formatDate(new Date(date_ev_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату расходов на эвакуацию Транспортного средства в размере '+
-          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) +
+          //', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
           break;
         case 3:
           pay_count[i] = pay_date[i] - date_stor_last_day;
@@ -243,7 +289,9 @@ document.querySelector('button').onclick = function(){
           formatDate(new Date(date_stor_penalty_day)) +'.<br>'
 
           payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату расходов на хранение Транспортного средства в размере '+
-          makeRubText_1(pay_text[i]) + ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] + '.<br>'
+          makeRubText_1(pay_text[i]) +
+          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
           break;
       }
 
@@ -253,7 +301,6 @@ document.querySelector('button').onclick = function(){
         }
       }
 
-
       if (pay_count[i] < 0) {
         pay_count[i] = 0;
       }
@@ -262,21 +309,28 @@ document.querySelector('button').onclick = function(){
 
       //Склонение дней/день/дня
       days_string[i] = pay_count[i] / day;
-      let m = String(days_string[i]).length - 1;
-      m = String(days_string[i]).charAt(m);
+      let m = String(days_string[i]).length;
+      m = String(days_string[i]).slice(m - 2, m);
 
-      switch (m) {
-        case "1":
-          days_string[i] = " день";
-          break;
-        case "2":
-        case "3":
-        case "4":
-          days_string[i] = " дня";
-          break;
-        default:
-          days_string[i] = " дней";
+      if (Number(m) >= 11 && Number(m) <= 19) {
+        days_string[i] = " дней";
+      } else {
+        let m = String(days_string[i]).length - 1;
+        m = String(days_string[i]).charAt(m);
+        switch (m) {
+          case "1":
+            days_string[i] = " день";
+            break;
+          case "2":
+          case "3":
+          case "4":
+            days_string[i] = " дня";
+            break;
+          default:
+            days_string[i] = " дней";
+        }
       }
+
 
       if (!isNaN(pay_count[i]) && pay_date[i] >= date_penalty_day[i]) {
         document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
@@ -443,8 +497,8 @@ document.querySelector('button').onclick = function(){
 
     if (!isNaN(pay_date[1])) {
       document.querySelector('#decision').innerHTML = decision;
+      selectText('decision');
     }
-
 
     //Удаление всех значений
 
@@ -477,17 +531,90 @@ document.querySelector('button').onclick = function(){
     date_court_to = undefined;
 
     total_analize_paragraf = "";
-
+    holly = "";
 }
 
 //Function for find 20th day from start day without hollidays (14 days from 112 labor code article)
 function findLastDay(date) {
+  off_days.length = 0;
   let j = 0;
+  let k = 0;
   let misteryDays = 0;
+  holly_boolen = false;
 
   while (j != 20) {
     misteryDays++;
-     if (date + day * misteryDays != Date.parse(new Date(2020, 0, 1, 3)) &&
+     if (date + day * misteryDays != Date.parse(new Date(2015, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 0, 1, 3)) &&
         date + day * misteryDays != Date.parse(new Date(2020, 0, 2, 3)) &&
         date + day * misteryDays != Date.parse(new Date(2020, 0, 3, 3)) &&
         date + day * misteryDays != Date.parse(new Date(2020, 0, 4, 3)) &&
@@ -502,21 +629,129 @@ function findLastDay(date) {
         date + day * misteryDays != Date.parse(new Date(2020, 5, 12, 3)) &&
         date + day * misteryDays != Date.parse(new Date(2020, 10, 4, 3))) {
           j++;
+    } else {
+      off_days[k] = date + day * misteryDays;
+      k++;
     }
   }
   date = date + day * misteryDays;
 
 switch (new Date(date).getDay()) {
   case 6:
-    date = date + day * 2;
+    if (date != Date.parse(new Date(2016, 1, 20, 3)) &&
+        date != Date.parse(new Date(2018, 3, 28, 3)) &&
+        date != Date.parse(new Date(2018, 5, 9, 3)) &&
+        date != Date.parse(new Date(2018, 11  , 29, 3))) {
+
+      off_days[k] = date;
+      k++;
+      off_days[k] = date + day;
+      k++;
+
+      date = date + day * 2;
+      holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
+      'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
+      holly_boolen = true;
+      break;
+    }
     break;
   case 0:
+    off_days[k] = date;
+    k++;
+
     date = date + day;
+    holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
+    'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
+    holly_boolen = true;
     break;
   default:
 }
 
-while (date == Date.parse(new Date(2020, 0, 1, 3)) ||
+while (date == Date.parse(new Date(2015, 0, 1, 3)) ||
+   date == Date.parse(new Date(2015, 0, 2, 3)) ||
+   date == Date.parse(new Date(2015, 0, 3, 3)) ||
+   date == Date.parse(new Date(2015, 0, 4, 3)) ||
+   date == Date.parse(new Date(2015, 0, 5, 3)) ||
+   date == Date.parse(new Date(2015, 0, 6, 3)) ||
+   date == Date.parse(new Date(2015, 0, 7, 3)) ||
+   date == Date.parse(new Date(2015, 0, 8, 3)) ||
+   date == Date.parse(new Date(2015, 0, 9, 3)) ||
+   date == Date.parse(new Date(2015, 1, 23, 3)) ||
+   date == Date.parse(new Date(2015, 2, 9, 3)) ||
+   date == Date.parse(new Date(2015, 4, 1, 3)) ||
+   date == Date.parse(new Date(2015, 4, 4, 3)) ||
+   date == Date.parse(new Date(2015, 4, 11, 3)) ||
+   date == Date.parse(new Date(2015, 5, 12, 3)) ||
+   date == Date.parse(new Date(2015, 10, 4, 3)) ||
+   date == Date.parse(new Date(2016, 0, 1, 3)) ||
+   date == Date.parse(new Date(2016, 0, 2, 3)) ||
+   date == Date.parse(new Date(2016, 0, 3, 3)) ||
+   date == Date.parse(new Date(2016, 0, 4, 3)) ||
+   date == Date.parse(new Date(2016, 0, 5, 3)) ||
+   date == Date.parse(new Date(2016, 0, 6, 3)) ||
+   date == Date.parse(new Date(2016, 0, 7, 3)) ||
+   date == Date.parse(new Date(2016, 0, 8, 3)) ||
+   date == Date.parse(new Date(2016, 1, 22, 3)) ||
+   date == Date.parse(new Date(2016, 1, 23, 3)) ||
+   date == Date.parse(new Date(2016, 2, 7, 3)) ||
+   date == Date.parse(new Date(2016, 2, 8, 3)) ||
+   date == Date.parse(new Date(2016, 4, 2, 3)) ||
+   date == Date.parse(new Date(2016, 4, 3, 3)) ||
+   date == Date.parse(new Date(2016, 4, 9, 3)) ||
+   date == Date.parse(new Date(2016, 5, 13, 3)) ||
+   date == Date.parse(new Date(2016, 10, 4, 3)) ||
+   date == Date.parse(new Date(2017, 0, 1, 3)) ||
+   date == Date.parse(new Date(2017, 0, 2, 3)) ||
+   date == Date.parse(new Date(2017, 0, 3, 3)) ||
+   date == Date.parse(new Date(2017, 0, 4, 3)) ||
+   date == Date.parse(new Date(2017, 0, 5, 3)) ||
+   date == Date.parse(new Date(2017, 0, 6, 3)) ||
+   date == Date.parse(new Date(2017, 0, 7, 3)) ||
+   date == Date.parse(new Date(2017, 0, 8, 3)) ||
+   date == Date.parse(new Date(2017, 1, 23, 3)) ||
+   date == Date.parse(new Date(2017, 1, 24, 3)) ||
+   date == Date.parse(new Date(2017, 2, 8, 3)) ||
+   date == Date.parse(new Date(2017, 4, 1, 3)) ||
+   date == Date.parse(new Date(2017, 4, 8, 3)) ||
+   date == Date.parse(new Date(2017, 4, 9, 3)) ||
+   date == Date.parse(new Date(2017, 5, 12, 3)) ||
+   date == Date.parse(new Date(2017, 10, 6, 3)) ||
+   date == Date.parse(new Date(2018, 0, 1, 3)) ||
+   date == Date.parse(new Date(2018, 0, 2, 3)) ||
+   date == Date.parse(new Date(2018, 0, 3, 3)) ||
+   date == Date.parse(new Date(2018, 0, 4, 3)) ||
+   date == Date.parse(new Date(2018, 0, 5, 3)) ||
+   date == Date.parse(new Date(2018, 0, 6, 3)) ||
+   date == Date.parse(new Date(2018, 0, 7, 3)) ||
+   date == Date.parse(new Date(2018, 0, 8, 3)) ||
+   date == Date.parse(new Date(2018, 1, 23, 3)) ||
+   date == Date.parse(new Date(2018, 2, 8, 3)) ||
+   date == Date.parse(new Date(2018, 2, 9, 3)) ||
+   date == Date.parse(new Date(2018, 3, 30, 3)) ||
+   date == Date.parse(new Date(2018, 4, 1, 3)) ||
+   date == Date.parse(new Date(2018, 4, 2, 3)) ||
+   date == Date.parse(new Date(2018, 4, 9, 3)) ||
+   date == Date.parse(new Date(2018, 5, 11, 3)) ||
+   date == Date.parse(new Date(2018, 5, 12, 3)) ||
+   date == Date.parse(new Date(2018, 10, 5, 3)) ||
+   date == Date.parse(new Date(2018, 11, 31, 3)) ||
+   date == Date.parse(new Date(2019, 0, 1, 3)) ||
+   date == Date.parse(new Date(2019, 0, 2, 3)) ||
+   date == Date.parse(new Date(2019, 0, 3, 3)) ||
+   date == Date.parse(new Date(2019, 0, 4, 3)) ||
+   date == Date.parse(new Date(2019, 0, 5, 3)) ||
+   date == Date.parse(new Date(2019, 0, 6, 3)) ||
+   date == Date.parse(new Date(2019, 0, 7, 3)) ||
+   date == Date.parse(new Date(2019, 0, 8, 3)) ||
+   date == Date.parse(new Date(2019, 2, 8, 3)) ||
+   date == Date.parse(new Date(2019, 4, 1, 3)) ||
+   date == Date.parse(new Date(2019, 4, 2, 3)) ||
+   date == Date.parse(new Date(2019, 4, 3, 3)) ||
+   date == Date.parse(new Date(2019, 4, 9, 3)) ||
+   date == Date.parse(new Date(2019, 4, 10, 3)) ||
+   date == Date.parse(new Date(2019, 5, 12, 3)) ||
+   date == Date.parse(new Date(2019, 10, 4, 3)) ||
+   date == Date.parse(new Date(2020, 0, 1, 3)) ||
    date == Date.parse(new Date(2020, 0, 2, 3)) ||
    date == Date.parse(new Date(2020, 0, 3, 3)) ||
    date == Date.parse(new Date(2020, 0, 4, 3)) ||
@@ -524,13 +759,20 @@ while (date == Date.parse(new Date(2020, 0, 1, 3)) ||
    date == Date.parse(new Date(2020, 0, 6, 3)) ||
    date == Date.parse(new Date(2020, 0, 7, 3)) ||
    date == Date.parse(new Date(2020, 0, 8, 3)) ||
-   date == Date.parse(new Date(2020, 1, 23, 3)) ||
-   date == Date.parse(new Date(2020, 2, 8, 3)) ||
+   date == Date.parse(new Date(2020, 1, 24, 3)) ||
+   date == Date.parse(new Date(2020, 2, 9, 3)) ||
    date == Date.parse(new Date(2020, 4, 1, 3)) ||
-   date == Date.parse(new Date(2020, 4, 9, 3)) ||
+   date == Date.parse(new Date(2020, 4, 4, 3)) ||
+   date == Date.parse(new Date(2020, 4, 5, 3)) ||
+   date == Date.parse(new Date(2020, 4, 11, 3)) ||
    date == Date.parse(new Date(2020, 5, 12, 3)) ||
    date == Date.parse(new Date(2020, 10, 4, 3))) {
+     off_days[k] = date;
+     k++;
      date = date + day;
+     holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
+     'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
+     holly_boolen = true;
 }
   j = 0;
   misteryDays = 0;
@@ -683,5 +925,38 @@ function selectText(containerid) {
 			window.getSelection().removeAllRanges();
 			window.getSelection().addRange(range);
 		}
-    document.execCommand('copy')
+    document.execCommand('copy');
+
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+    } else { // старый IE
+      document.selection.empty();
+    }
+
+    iziToast.show({
+        timeout: 3000,
+        color: '#F5E1A6',
+        //title: 'Hey',
+        message: 'Текст решения скопирован',
+    });
 	}
+
+//Форматирование даты
+$('.datepicker-here').toArray().forEach(function(field){
+  new Cleave(field, {
+    date: true,
+    delimiter: '.',
+    datePattern: ['d', 'm', 'Y']
+  })
+});
+
+//Форматирование суммы
+$('.input-numeral').toArray().forEach(function(field){
+  new Cleave(field, {
+      numeral: true,
+      delimiter: ' ',
+      //numeralThousandsGroupStyle: 'none',
+      numeralPositiveOnly: true,
+      numeralIntegerScale: 8
+  })
+});
