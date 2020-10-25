@@ -2,6 +2,9 @@ let day = 24*60*60*1000;
 let fo_name;
 let decision;
 
+let COLUMN_NAME_20 = "20-й день (последний день выплаты)";
+let COLUMN_NAME_21 = "21-й день (первый день неустойки)";
+
 let COLUMN_NAME_4 = "Начало периода";
 let COLUMN_NAME_5 = "Конец периода";
 let COLUMN_NAME_6 = "Количество дней";
@@ -94,6 +97,8 @@ document.querySelector('button').onclick = function(){
   document.querySelector('#date_stor_last_day').removeAttribute('tooltip');
 
   //Стирание всех значений в таблице
+  document.querySelector('#COLUMN_NAME_20').innerHTML = "";
+  document.querySelector('#COLUMN_NAME_21').innerHTML = "";
   document.querySelector('#COLUMN_NAME_4').innerHTML = "";
   document.querySelector('#COLUMN_NAME_5').innerHTML = "";
   document.querySelector('#COLUMN_NAME_6').innerHTML = "";
@@ -119,7 +124,6 @@ document.querySelector('button').onclick = function(){
   document.querySelector('#date_stor_last_day').style.color = '#595b5e';
 
   //Получение значения наименования ФО
-  //fo_name = document.getElementById("fo_name").options[document.getElementById("fo_name").options.selectedIndex].text;
   fo_name = document.querySelector("#fo_name").value;
 
   first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name + ' неустойки '+
@@ -168,12 +172,12 @@ document.querySelector('button').onclick = function(){
   date_stor_penalty_day = date_stor_last_day + day;
 
   //Получение значения даты судебного взыскания неустойки
-    // date_court_from = document.querySelector('#date_court_from').value;
-    // date_court_from = changeDateType(date_court_from);
-    // date_court_from = Date.parse(date_court_from);
-    // date_court_to = document.querySelector('#date_court_to').value;
-    // date_court_to = changeDateType(date_court_to);
-    // date_court_to = Date.parse(date_court_to);
+    date_court_from = document.querySelector('#date_court_from').value;
+    date_court_from = changeDateType(date_court_from);
+    date_court_from = Date.parse(date_court_from);
+    date_court_to = document.querySelector('#date_court_to').value;
+    date_court_to = changeDateType(date_court_to);
+    date_court_to = Date.parse(date_court_to);
 
 
   //выведение значений 20го дня на экран
@@ -220,6 +224,8 @@ document.querySelector('button').onclick = function(){
   }
 
   if (isNaN(date_court_from)) {
+    document.querySelector('#COLUMN_NAME_20').innerHTML = COLUMN_NAME_20;
+    document.querySelector('#COLUMN_NAME_21').innerHTML = COLUMN_NAME_21;
     document.querySelector('#COLUMN_NAME_4').innerHTML = COLUMN_NAME_4;
     document.querySelector('#COLUMN_NAME_5').innerHTML = COLUMN_NAME_5;
     document.querySelector('#COLUMN_NAME_6').innerHTML = COLUMN_NAME_6;
@@ -308,34 +314,33 @@ document.querySelector('button').onclick = function(){
       pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
 
       //Склонение дней/день/дня
-      days_string[i] = pay_count[i] / day;
-      let m = String(days_string[i]).length;
-      m = String(days_string[i]).slice(m - 2, m);
-
-      if (Number(m) >= 11 && Number(m) <= 19) {
-        days_string[i] = " дней";
-      } else {
-        let m = String(days_string[i]).length - 1;
-        m = String(days_string[i]).charAt(m);
-        switch (m) {
-          case "1":
-            days_string[i] = " день";
-            break;
-          case "2":
-          case "3":
-          case "4":
-            days_string[i] = " дня";
-            break;
-          default:
-            days_string[i] = " дней";
-        }
-      }
-
+      // days_string[i] = pay_count[i] / day;
+      // let m = String(days_string[i]).length;
+      // m = String(days_string[i]).slice(m - 2, m);
+      //
+      // if (Number(m) >= 11 && Number(m) <= 19) {
+      //   days_string[i] = " дней";
+      // } else {
+      //   let m = String(days_string[i]).length - 1;
+      //   m = String(days_string[i]).charAt(m);
+      //   switch (m) {
+      //     case "1":
+      //       days_string[i] = " день";
+      //       break;
+      //     case "2":
+      //     case "3":
+      //     case "4":
+      //       days_string[i] = " дня";
+      //       break;
+      //     default:
+      //       days_string[i] = " дней";
+      //   }
+      // }
 
       if (!isNaN(pay_count[i]) && pay_date[i] >= date_penalty_day[i]) {
         document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
         document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(pay_date[i]));
-        document.querySelector('#pay' + i + '_count').innerHTML = pay_count[i] / day + days_string[i];
+        document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(pay_count[i] / day); //pay_count[i] / day + days_string[i];
         document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(pay_summ[i]);
       }
       if (isNaN(pay_count[i])) {
@@ -353,10 +358,10 @@ document.querySelector('button').onclick = function(){
       } else {
         payment_in_time_paragraf[i] = "";
         payment_not_in_time_paragraf[i] = 'Таким образом, неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' подлежит расчету за период с ' +
-        formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + pay_count[i] / day + days_string[i] + ').' + '<br>' +
+        formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + declinationDays(pay_count[i] / day) + ').' + '<br>' +
         'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, '+
         'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(pay_date[i])) +
-        ' составляет ' + makeRubText_2(pay_summ[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + pay_count[i] / day + days_string[i] +' × 1%).' + '<br>';
+        ' составляет ' + makeRubText_2(pay_summ[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + declinationDays(pay_count[i] / day) +' × 1%).' + '<br>';
       }
 
       if (isNaN(pay_date[i])) {
@@ -386,6 +391,8 @@ document.querySelector('button').onclick = function(){
 
   } else {
     //Определение периода взыскания неустойки до начала судебного взыскания
+    document.querySelector('#COLUMN_NAME_20').innerHTML = COLUMN_NAME_20;
+    document.querySelector('#COLUMN_NAME_21').innerHTML = COLUMN_NAME_21;
     document.querySelector('#COLUMN_NAME_4').innerHTML = COLUMN_NAME_8;
     document.querySelector('#COLUMN_NAME_5').innerHTML = COLUMN_NAME_9;
     document.querySelector('#COLUMN_NAME_6').innerHTML = COLUMN_NAME_6;
@@ -406,8 +413,8 @@ document.querySelector('button').onclick = function(){
               court_summ_before[i] = pay_text[i] * court_period_before[i] * 0.01;
               document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
               document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(date_court_from - day));
-              document.querySelector('#pay' + i + '_count').innerHTML = court_period_before[i];
-              document.querySelector('#pay' + i + '_summ').innerHTML = court_summ_before[i];
+              document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(court_period_before[i]);
+              document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(court_summ_before[i]);
           } else {
             court_period_before[i] = 0;
           }
@@ -420,8 +427,8 @@ document.querySelector('button').onclick = function(){
               court_summ_before[i] = pay_text[i] * court_period_before[i] * 0.01;
               document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
               document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(date_court_from - day));
-              document.querySelector('#pay' + i + '_count').innerHTML = court_period_before[i];
-              document.querySelector('#pay' + i + '_summ').innerHTML = court_summ_before[i];
+              document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(court_period_before[i]);
+              document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(court_summ_before[i]);
           } else {
             court_period_before[i] = 0;
           }
@@ -434,8 +441,8 @@ document.querySelector('button').onclick = function(){
               court_summ_before[i] = pay_text[i] * court_period_before[i] * 0.01;
               document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
               document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(date_court_from - day));
-              document.querySelector('#pay' + i + '_count').innerHTML = court_period_before[i];
-              document.querySelector('#pay' + i + '_summ').innerHTML = court_summ_before[i];
+              document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(court_period_before[i]);
+              document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(court_summ_before[i]);
           } else {
             court_period_before[i] = 0;
           }
@@ -448,8 +455,8 @@ document.querySelector('button').onclick = function(){
               court_summ_before[i] = pay_text[i] * court_period_before[i] * 0.01;
               document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
               document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(date_court_from - day));
-              document.querySelector('#pay' + i + '_count').innerHTML = court_period_before[i];
-              document.querySelector('#pay' + i + '_summ').innerHTML = court_summ_before[i];
+              document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(court_period_before[i]);
+              document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(court_summ_before[i]);
           } else {
             court_period_before[i] = 0;
           }
@@ -480,8 +487,8 @@ document.querySelector('button').onclick = function(){
       if (pay_date[i] >= date_penalty_day[i] && pay_date[i] > date_court_to) {
         document.querySelector('#date_court_to_out_' + i).innerHTML = formatDate(new Date(date_court_to + day));
         document.querySelector('#pay_date_out_' + i).innerHTML = formatDate(new Date(pay_date[i]));
-        document.querySelector('#court_period_after_' + i).innerHTML = court_period_after[i];
-        document.querySelector('#court_summ_after_' + i).innerHTML = court_summ_after[i];
+        document.querySelector('#court_period_after_' + i).innerHTML = declinationDays(court_period_after[i]);
+        document.querySelector('#court_summ_after_' + i).innerHTML = makeRubText_2(court_summ_after[i]);
       }
 
       total_count = total_count + court_summ_before[i] + court_summ_after[i];
@@ -499,6 +506,30 @@ document.querySelector('button').onclick = function(){
       document.querySelector('#decision').innerHTML = decision;
       selectText('decision');
     }
+
+
+    //Формирование Word файла
+    // const doc = new docx.Document();
+    //   doc.addSection({
+    //       properties: {},
+    //       children: [
+    //           new docx.Paragraph({
+    //               children: [
+    //                   new docx.TextRun({
+    //                       text: decision,
+    //                       font: "Times New Roman",
+    //                   }),
+    //               ],
+    //           }),
+    //       ],
+    //   });
+    //
+    //   docx.Packer.toBlob(doc).then(blob => {
+    //       console.log(blob);
+    //       saveAs(blob, "example.docx");
+    //       console.log("Document created successfully");
+    //   });
+
 
     //Удаление всех значений
 
@@ -800,6 +831,7 @@ function changeDateType(date){
   return date;
 }
 
+//родительный падеж
 function makeRubText_1(sum){
   let sumText;
   let rub, kop;
@@ -832,7 +864,7 @@ function makeRubText_1(sum){
   }
 
 
-  //Склонение рублей/рубля
+  //Склонение копеек/копейки
   if (kop == "11") {
     kop_string_payment = " копеек";
   } else {
@@ -852,6 +884,33 @@ function makeRubText_1(sum){
   return sumText;
 }
 
+//склонение дней
+function declinationDays (count_days) {
+  let m = String(count_days).length;
+  m = String(count_days).slice(m - 2, m);
+
+  if (Number(m) >= 11 && Number(m) <= 19) {
+    count_days = count_days + " дней";
+  } else {
+    let m = String(count_days).length - 1;
+    m = String(count_days).charAt(m);
+    switch (m) {
+      case "1":
+        count_days = count_days + " день";
+        break;
+      case "2":
+      case "3":
+      case "4":
+        count_days = count_days + " дня";
+        break;
+      default:
+        count_days = count_days + " дней";
+    }
+  }
+  return count_days;
+}
+
+//именительный падеж
 function makeRubText_2(sum){
   let sumText;
   let rub, kop;
