@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="css/style.css">
     <!-- <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css"> -->
     <link rel="stylesheet" href="css/tables.css">
+    <link rel="stylesheet" href="css/toggle.css">
     <link rel="stylesheet" href="css/button.css">
     <link rel="stylesheet" href="css/193.css">
     <link href="css/datapicker/datepicker.min.css" rel="stylesheet" type="text/css">
@@ -88,6 +89,7 @@
               <td>Дата выплаты</td>
               <td>Сумма выплаты</td>
               <!-- <td>№ ПП</td> -->
+              <td>Суд</td>
               <td class="td_main"><span id="COLUMN_NAME_4"></span></td>
               <td class="td_main"><span id="COLUMN_NAME_5"></span></td>
               <td class="td_main"><span id="COLUMN_NAME_6"></span></td>
@@ -117,6 +119,10 @@
               <!-- <td>
                 <input id="payment_order_1" class = "form_input" type="text" size="10">
               </td> -->
+              <td>
+                <input type = "checkbox" class = "cbx" id = "court_checked_1" style = "display:none"/>
+                <label for = "court_checked_1" class = "toggle"><span></span></label>
+              </td>
               <td>
                 <span id="date_penalty_day_1"></span>
               </td>
@@ -161,6 +167,10 @@
                 <input id="payment_order_2" class = "form_input" type="text" size="10">
               </td> -->
               <td>
+                <input type = "checkbox" class = "cbx" id = "court_checked_2" style = "display:none"/>
+                <label for = "court_checked_2" class = "toggle"><span></span></label>
+              </td>
+              <td>
                 <span id="date_penalty_day_2"></span>
               </td>
               <td>
@@ -203,6 +213,10 @@
               <!-- <td>
                 <input id="payment_order_3" class = "form_input" type="text" size="10">
               </td> -->
+              <td>
+                <input type = "checkbox" class = "cbx" id = "court_checked_3" style = "display:none"/>
+                <label for = "court_checked_3" class = "toggle"><span></span></label>
+              </td>
               <td>
                 <span id="date_penalty_day_3"></span>
               </td>
@@ -247,6 +261,10 @@
                 <input id="payment_order_4" class = "form_input" type="text" size="10">
               </td> -->
               <td>
+                <input type = "checkbox" class = "cbx" id = "court_checked_4" style = "display:none"/>
+                <label for = "court_checked_4" class = "toggle"><span></span></label>
+              </td>
+              <td>
                 <span id="date_penalty_day_4"></span>
               </td>
               <td>
@@ -289,6 +307,10 @@
               <!-- <td>
                 <input id="payment_order_5" class = "form_input" type="text" size="10">
               </td> -->
+              <td>
+                <input type = "checkbox" class = "cbx" id = "court_checked_5" style = "display:none"/>
+                <label for = "court_checked_5" class = "toggle"><span></span></label>
+              </td>
               <td>
                 <span id="date_penalty_day_5"></span>
               </td>

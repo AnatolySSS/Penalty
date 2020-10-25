@@ -22,6 +22,7 @@ let pay_text = [];
 let payment_order = [];
 let pay_count = [];
 let pay_summ = [];
+let court_checked = [];
 
 let off_days = [];
 
@@ -205,13 +206,24 @@ document.querySelector('button').onclick = function(){
   }
 
   for (var i = 1; i <= 5; i++) {
+    payment_not_in_time_paragraf_court[i] = "";
+    analize_period_paragraf[i] = "";
+    payment_paragraf[i] = "";
+
     pay[i] = document.getElementById("pay" + i ).options.selectedIndex;
     pay_date[i] = document.querySelector('#pay' + i + '_date').value;
     pay_date[i] = changeDateType(pay_date[i]);
     pay_date[i] = Date.parse(pay_date[i]);
     pay_text[i] = document.querySelector('#pay' + i + '_text').value;
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
+    court_checked[i] = document.getElementById("court_checked_" + i );
     // payment_order[i] = document.querySelector('#payment_order_' + i).value;
+
+    if (court_checked[i].checked) {
+      court_checked[i] = ', на основании Решения суда,';
+    } else {
+      court_checked[i] = '';
+    }
 
     switch (pay[i]) {
       case 0:
@@ -238,8 +250,6 @@ document.querySelector('button').onclick = function(){
     document.querySelector('#COLUMN_NAME_7').innerHTML = COLUMN_NAME_7;
 
     for (var i = 1; i <= 5; i++) {
-      analize_period_paragraf[i] = "";
-      payment_paragraf[i] = "";
 
       switch (pay[i]) {
         case 0:
@@ -391,7 +401,7 @@ document.querySelector('button').onclick = function(){
           'выплаты является ' + formatDate(new Date(date_sv_last_day)) + ', а неустойка подлежит начислению с '+
           formatDate(new Date(date_sv_penalty_day)) +'.<br>'
 
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ', на основании Решения суда, осуществило выплату страхового возмещения в размере '+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_checked[i] + ' осуществило выплату страхового возмещения в размере '+
           makeRubText_1(pay_text[i]) +
           // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
           '.<br>'
@@ -432,7 +442,7 @@ document.querySelector('button').onclick = function(){
           'выплаты УТС является ' + formatDate(new Date(date_uts_last_day)) + ', а неустойка подлежит начислению с '+
           formatDate(new Date(date_uts_penalty_day)) +'.<br>'
 
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ', на основании Решения суда, осуществило выплату УТС в размере '+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_checked[i] + ' осуществило выплату УТС в размере '+
           makeRubText_1(pay_text[i]) +
           // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
           '.<br>'
@@ -480,7 +490,7 @@ document.querySelector('button').onclick = function(){
           'выплаты расходов на эвакуацию Транспортного средства является ' + formatDate(new Date(date_ev_last_day)) + ', а неустойка подлежит начислению с '+
           formatDate(new Date(date_ev_penalty_day)) +'.<br>'
 
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ', на основании Решения суда, осуществило выплату расходов на эвакуацию Транспортного средства в размере '+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_checked[i] + ' осуществило выплату расходов на эвакуацию Транспортного средства в размере '+
           makeRubText_1(pay_text[i]) +
           //', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
           '.<br>'
@@ -519,7 +529,7 @@ document.querySelector('button').onclick = function(){
           'выплаты расходов на хранение Транспортного средства является ' + formatDate(new Date(date_stor_last_day)) + ', а неустойка подлежит начислению с '+
           formatDate(new Date(date_stor_penalty_day)) +'.<br>'
 
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ', на основании Решения суда, осуществило выплату расходов на хранение Транспортного средства в размере '+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_checked[i] + ' осуществило выплату расходов на хранение Транспортного средства в размере '+
           makeRubText_1(pay_text[i]) +
           // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
           '.<br>'
@@ -558,6 +568,7 @@ document.querySelector('button').onclick = function(){
         payment_not_in_time_paragraf[i] = "";
 
       } else {
+
         payment_in_time_paragraf[i] = 'Таким образом, выплата в размере ' + makeRubText_1(pay_text[i]) + ' произведена в установленный '+
         'Законом № 40-ФЗ срок, в силу чего неустойка на указанную сумму не начисляется.'+'<br>';
         payment_not_in_time_paragraf[i] = "";
