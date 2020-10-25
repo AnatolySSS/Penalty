@@ -6,6 +6,7 @@
   text-align: left;
   border-collapse: collapse;
   color: #595b5e;
+  table-layout: auto;
 }
 /* .table_1 th:first-child, .table_1 td:first-child {
 color: #F5F6F6;

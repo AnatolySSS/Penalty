@@ -42,11 +42,13 @@ let rub_string_payment = [];
 let rub_string_penalty = [];
 let kop_string = [];
 
-let holly, holly_boolen, standart_motivation, first_paragraf, summary_paragraf;
+let holly, holly_boolen, standart_motivation, first_paragraf, summary_paragraf = "";
 let analize_period_paragraf = [], payment_paragraf = [];
 let payment_in_time_paragraf = [];
 let payment_not_in_time_paragraf = [];
+let payment_not_in_time_paragraf_court = [];
 let total_analize_paragraf = "";
+let court_period_text = [];
 
 standart_motivation = 'Согласно статье 12 ГК РФ '+
 'взыскание неустойки является одним из способов защиты нарушенного гражданского права.'+'<br>'+
@@ -116,6 +118,7 @@ document.querySelector('button').onclick = function(){
     document.querySelector('#pay_date_out_' + i).innerHTML = "";
     document.querySelector('#court_period_after_' + i).innerHTML = "";
     document.querySelector('#court_summ_after_' + i).innerHTML = "";
+    court_period_text[i] = "";
   }
 
   document.querySelector('#date_sv_last_day').style.color = '#595b5e';
@@ -178,6 +181,9 @@ document.querySelector('button').onclick = function(){
     date_court_to = document.querySelector('#date_court_to').value;
     date_court_to = changeDateType(date_court_to);
     date_court_to = Date.parse(date_court_to);
+
+    court_period_text[1] = 'Решением суда с ' + fo_name + ' взыскана неустойка за период с ' +
+    formatDate(new Date(date_court_from)) + ' по ' + formatDate(new Date(date_court_to)) + '.<br>'
 
 
   //выведение значений 20го дня на экран
@@ -252,7 +258,7 @@ document.querySelector('button').onclick = function(){
         case 1:
           pay_count[i] = pay_date[i] - date_uts_last_day;
 
-          //TODO добавить в analize_period_paragraf мотивировку про УТС
+          TODO //добавить в analize_period_paragraf мотивировку про УТС
           analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате УТС '+
           formatDate(new Date(date_uts)) + ', следовательно, последним днем срока осуществления '+
           'выплаты УТС является ' + formatDate(new Date(date_uts_last_day)) + ', а неустойка подлежит начислению с '+
@@ -288,7 +294,7 @@ document.querySelector('button').onclick = function(){
         case 3:
           pay_count[i] = pay_date[i] - date_stor_last_day;
 
-          //TODO добавить в analize_period_paragraf мотивировку про хранение
+          TODO //добавить в analize_period_paragraf мотивировку про хранение
           analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на хранение Транспортного средства '+
           formatDate(new Date(date_stor)) + ', следовательно, последним днем срока осуществления '+
           'выплаты расходов на хранение Транспортного средства является ' + formatDate(new Date(date_stor_last_day)) + ', а неустойка подлежит начислению с '+
@@ -312,30 +318,6 @@ document.querySelector('button').onclick = function(){
       }
 
       pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
-
-      //Склонение дней/день/дня
-      // days_string[i] = pay_count[i] / day;
-      // let m = String(days_string[i]).length;
-      // m = String(days_string[i]).slice(m - 2, m);
-      //
-      // if (Number(m) >= 11 && Number(m) <= 19) {
-      //   days_string[i] = " дней";
-      // } else {
-      //   let m = String(days_string[i]).length - 1;
-      //   m = String(days_string[i]).charAt(m);
-      //   switch (m) {
-      //     case "1":
-      //       days_string[i] = " день";
-      //       break;
-      //     case "2":
-      //     case "3":
-      //     case "4":
-      //       days_string[i] = " дня";
-      //       break;
-      //     default:
-      //       days_string[i] = " дней";
-      //   }
-      // }
 
       if (!isNaN(pay_count[i]) && pay_date[i] >= date_penalty_day[i]) {
         document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
@@ -376,17 +358,7 @@ document.querySelector('button').onclick = function(){
 
     }
 
-    if (total_count > 0) {
-      summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
-      'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
-      makeRubText_1(total_count) + '.' + '<br>';
-    } else {
-      summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
-      'неустойки за несоблюдение срока выплаты страхового возмещения не подлежит удовлетворению.' + '<br>';
-    }
-
-
-    decision = first_paragraf + standart_motivation + holly + total_analize_paragraf + summary_paragraf;
+    //decision = first_paragraf + standart_motivation + holly + total_analize_paragraf + summary_paragraf;
 
 
   } else {
@@ -404,8 +376,26 @@ document.querySelector('button').onclick = function(){
 
     for (var i = 1; i <= 5; i++) {
       if (pay_date[i] > date_penalty_day[i]) {
+
+        court_period_after[i] = (pay_date[i] - date_court_to) / day;
+        if (court_period_after[i] < 0) {
+          court_period_after[i] = 0;
+        }
+
+        court_summ_after[i] = pay_text[i] * court_period_after[i] * 0.01;
+
         switch (pay[i]) {
           case 0:
+          analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о наступлении страхового случая '+
+          formatDate(new Date(date_sv)) + ', следовательно, последним днем срока осуществления '+
+          'выплаты является ' + formatDate(new Date(date_sv_last_day)) + ', а неустойка подлежит начислению с '+
+          formatDate(new Date(date_sv_penalty_day)) +'.<br>'
+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ', на основании Решения суда, осуществило выплату страхового возмещения в размере '+
+          makeRubText_1(pay_text[i]) +
+          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
+
           if (date_court_from > date_sv_penalty_day) {
               court_period_before[i] = date_court_from - date_sv_penalty_day;
               date_penalty_day[i] = date_sv_penalty_day;
@@ -415,11 +405,38 @@ document.querySelector('button').onclick = function(){
               document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(date_court_from - day));
               document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(court_period_before[i]);
               document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(court_summ_before[i]);
+
+              payment_not_in_time_paragraf_court[i] = 'Таким образом, неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' подлежит расчету за период с ' +
+              formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(date_court_from - day)) + ' (' + declinationDays(court_period_before[i]) + ') ' +
+              ' и за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + declinationDays(court_period_after[i]) + ').' + '<br>' +
+              'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, ' +
+              'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_penalty_day[i])) + ' по ' +
+              formatDate(new Date(date_court_from - day)) + ' составляет ' + makeRubText_2(court_summ_before[i]) + ' (' + makeRubText_2(pay_text[i]) +
+              ' × ' + declinationDays(court_period_before[i]) +' × 1%)' + ', за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) +
+              ' составляет ' + makeRubText_2(court_summ_after[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + declinationDays(court_period_after[i]) +' × 1%).<br>';
+
           } else {
             court_period_before[i] = 0;
+
+            payment_not_in_time_paragraf_court[i] = 'Таким образом, неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' подлежит расчету за период с ' +
+            formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + declinationDays(court_period_after[i]) + ').' + '<br>' +
+            'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, ' +
+            'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) +
+            ' составляет ' + makeRubText_2(court_summ_after[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + declinationDays(court_period_after[i]) +' × 1%).<br>';
+
           }
             break;
           case 1:
+          analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате УТС '+
+          formatDate(new Date(date_uts)) + ', следовательно, последним днем срока осуществления '+
+          'выплаты УТС является ' + formatDate(new Date(date_uts_last_day)) + ', а неустойка подлежит начислению с '+
+          formatDate(new Date(date_uts_penalty_day)) +'.<br>'
+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ', на основании Решения суда, осуществило выплату УТС в размере '+
+          makeRubText_1(pay_text[i]) +
+          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
+
           if (date_court_from > date_uts_penalty_day) {
               court_period_before[i] = date_court_from - date_uts_penalty_day;
               date_penalty_day[i] = date_uts_penalty_day;
@@ -429,11 +446,45 @@ document.querySelector('button').onclick = function(){
               document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(date_court_from - day));
               document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(court_period_before[i]);
               document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(court_summ_before[i]);
+
+              payment_not_in_time_paragraf_court[i] = 'Таким образом, неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' подлежит расчету за период с ' +
+              formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(date_court_from - day)) + ' (' + declinationDays(court_period_before[i]) + ') ' +
+              ' и за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + declinationDays(court_period_after[i]) + ').' + '<br>' +
+              'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, ' +
+              'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_penalty_day[i])) + ' по ' +
+              formatDate(new Date(date_court_from - day)) + ' составляет ' + makeRubText_2(court_summ_before[i]) + ' (' + makeRubText_2(pay_text[i]) +
+              ' × ' + declinationDays(court_period_before[i]) +' × 1%)' + ', за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) +
+              ' составляет ' + makeRubText_2(court_summ_after[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + declinationDays(court_period_after[i]) +' × 1%).<br>';
           } else {
             court_period_before[i] = 0;
+
+            payment_not_in_time_paragraf_court[i] = 'Таким образом, неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' подлежит расчету за период с ' +
+            formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + declinationDays(court_period_after[i]) + ').' + '<br>' +
+            'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, ' +
+            'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) +
+            ' составляет ' + makeRubText_2(court_summ_after[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + declinationDays(court_period_after[i]) +' × 1%).<br>';
           }
             break;
           case 2:
+          analize_period_paragraf[i] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+          'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+          'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+          'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+          'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+          'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+          'приходит к выводу о том, что расходы на эвакуацию Транспортного средства относятся '+
+          'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты расходов '+
+          'на эвакуацию Транспортного средства подлежит взысканию.'+ '<br>'+
+          'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на эвакуацию Транспортного средства '+
+          formatDate(new Date(date_ev)) + ', следовательно, последним днем срока осуществления '+
+          'выплаты расходов на эвакуацию Транспортного средства является ' + formatDate(new Date(date_ev_last_day)) + ', а неустойка подлежит начислению с '+
+          formatDate(new Date(date_ev_penalty_day)) +'.<br>'
+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ', на основании Решения суда, осуществило выплату расходов на эвакуацию Транспортного средства в размере '+
+          makeRubText_1(pay_text[i]) +
+          //', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
+
           if (date_court_from > date_ev_penalty_day) {
               court_period_before[i] = date_court_from - date_ev_penalty_day;
               date_penalty_day[i] = date_ev_penalty_day;
@@ -443,11 +494,36 @@ document.querySelector('button').onclick = function(){
               document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(date_court_from - day));
               document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(court_period_before[i]);
               document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(court_summ_before[i]);
+
+              payment_not_in_time_paragraf_court[i] = 'Таким образом, неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' подлежит расчету за период с ' +
+              formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(date_court_from - day)) + ' (' + declinationDays(court_period_before[i]) + ') ' +
+              ' и за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + declinationDays(court_period_after[i]) + ').' + '<br>' +
+              'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, ' +
+              'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_penalty_day[i])) + ' по ' +
+              formatDate(new Date(date_court_from - day)) + ' составляет ' + makeRubText_2(court_summ_before[i]) + ' (' + makeRubText_2(pay_text[i]) +
+              ' × ' + declinationDays(court_period_before[i]) +' × 1%)' + ', за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) +
+              ' составляет ' + makeRubText_2(court_summ_after[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + declinationDays(court_period_after[i]) +' × 1%).<br>';
           } else {
             court_period_before[i] = 0;
+
+            payment_not_in_time_paragraf_court[i] = 'Таким образом, неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' подлежит расчету за период с ' +
+            formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + declinationDays(court_period_after[i]) + ').' + '<br>' +
+            'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, ' +
+            'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) +
+            ' составляет ' + makeRubText_2(court_summ_after[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + declinationDays(court_period_after[i]) +' × 1%).<br>';
           }
             break;
           case 3:
+          analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на хранение Транспортного средства '+
+          formatDate(new Date(date_stor)) + ', следовательно, последним днем срока осуществления '+
+          'выплаты расходов на хранение Транспортного средства является ' + formatDate(new Date(date_stor_last_day)) + ', а неустойка подлежит начислению с '+
+          formatDate(new Date(date_stor_penalty_day)) +'.<br>'
+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ', на основании Решения суда, осуществило выплату расходов на хранение Транспортного средства в размере '+
+          makeRubText_1(pay_text[i]) +
+          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+          '.<br>'
+
           if (date_court_from > date_stor_penalty_day) {
               court_period_before[i] = date_court_from - date_stor_penalty_day;
               date_penalty_day[i] = date_stor_penalty_day;
@@ -457,20 +533,41 @@ document.querySelector('button').onclick = function(){
               document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(date_court_from - day));
               document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(court_period_before[i]);
               document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(court_summ_before[i]);
+
+              payment_not_in_time_paragraf_court[i] = 'Таким образом, неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' подлежит расчету за период с ' +
+              formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(date_court_from - day)) + ' (' + declinationDays(court_period_before[i]) + ') ' +
+              ' и за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + declinationDays(court_period_after[i]) + ').' + '<br>' +
+              'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, ' +
+              'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_penalty_day[i])) + ' по ' +
+              formatDate(new Date(date_court_from - day)) + ' составляет ' + makeRubText_2(court_summ_before[i]) + ' (' + makeRubText_2(pay_text[i]) +
+              ' × ' + declinationDays(court_period_before[i]) +' × 1%)' + ', за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) +
+              ' составляет ' + makeRubText_2(court_summ_after[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + declinationDays(court_period_after[i]) +' × 1%).<br>';
           } else {
             court_period_before[i] = 0;
+
+            payment_not_in_time_paragraf_court[i] = 'Таким образом, неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' подлежит расчету за период с ' +
+            formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) + ' (' + declinationDays(court_period_after[i]) + ').' + '<br>' +
+            'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, ' +
+            'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_court_to + day)) + ' по ' + formatDate(new Date(pay_date[i])) +
+            ' составляет ' + makeRubText_2(court_summ_after[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + declinationDays(court_period_after[i]) +' × 1%).<br>';
           }
             break;
         }
 
+        payment_in_time_paragraf[i] = "";
+        payment_not_in_time_paragraf[i] = "";
+
+      } else {
+        payment_in_time_paragraf[i] = 'Таким образом, выплата в размере ' + makeRubText_1(pay_text[i]) + ' произведена в установленный '+
+        'Законом № 40-ФЗ срок, в силу чего неустойка на указанную сумму не начисляется.'+'<br>';
+        payment_not_in_time_paragraf[i] = "";
       }
 
-      court_period_after[i] = (pay_date[i] - date_court_to) / day;
-      if (court_period_after[i] < 0) {
-        court_period_after[i] = 0;
+      for (var j = 1; j < i; j++) {
+        if (!isNaN(pay_date[i]) && pay[i] == pay[j]) {
+            analize_period_paragraf[i] = "";
+        }
       }
-
-      court_summ_after[i] = pay_text[i] * court_period_after[i] * 0.01;
 
       if (isNaN(court_period_before[i])) {
         court_period_before[i] = 0;
@@ -492,12 +589,35 @@ document.querySelector('button').onclick = function(){
       }
 
       total_count = total_count + court_summ_before[i] + court_summ_after[i];
+
+      if (isNaN(pay_date[i])) {
+        analize_period_paragraf[i] = "";
+        payment_paragraf[i] = "";
+        payment_in_time_paragraf[i] = "";
+        payment_not_in_time_paragraf[i] = "";
+        payment_not_in_time_paragraf_court[i] = "";
+      }
+
+      total_analize_paragraf = total_analize_paragraf + analize_period_paragraf[i] + court_period_text[i] + payment_paragraf[i] + payment_in_time_paragraf[i] +
+      payment_not_in_time_paragraf[i] + payment_not_in_time_paragraf_court[i];
+
     }
 
 
-    decision = "";
+    //decision = "";
 
   }
+
+  if (total_count > 0) {
+    summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
+    'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
+    makeRubText_1(total_count) + '.' + '<br>';
+  } else {
+    summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
+    'неустойки за несоблюдение срока выплаты страхового возмещения не подлежит удовлетворению.' + '<br>';
+  }
+
+  decision = first_paragraf + standart_motivation + holly + total_analize_paragraf + summary_paragraf;
 
     document.querySelector('#total_count').innerHTML = makeRubText_2(total_count);
     total_count = 0;
