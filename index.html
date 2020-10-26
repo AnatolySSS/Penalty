@@ -2,9 +2,9 @@
 <html lang="en" dir="ltr">
   <head>
     <meta charset="utf-8">
-    <title>Калькулятор неустойки</title>
+    <title>PayFo</title>
     <link rel="stylesheet" href="css/style.css">
-    <!-- <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.min.css">
     <link rel="stylesheet" href="css/tables.css">
     <link rel="stylesheet" href="css/toggle.css">
     <link rel="stylesheet" href="css/button.css">
@@ -19,15 +19,63 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
   </head>
   <body>
-    <!-- <header>
-      КАЛЬКУЛЯТОР НЕУСТОЙКИ
-    </header> -->
+    <div class="container">
+      <div class="page-header">
+        <h1>Калькулятор неустойки ОСАГО</h1>
+      </div>
+      <div class="jumbotron">
+        <div class="autocomplete">
+          <input id="fo_name" type="text" placeholder="Введите наименование ФО" size="40">
+        </div>
+        <table class="table_1">
+          <thead align = "center">
+            <tr>
+              <td>Заявление</td>
+              <td>Дата обращения</td>
+            </tr>
+          </thead>
+          <tbody id="table_1__tbody">
+            <tr>
+              <td>
+                <select id="pay1">
+                  <option value="">о страховом возмещении</option>
+                  <option value="">о выплате УТС</option>
+                  <option value="">о выплате расходов на эвакуатор</option>
+                  <option value="">о выплате расходов на хранение</option>
+                </select>
+              </td>
+              <td align = "center"><input id = "date_sv" class = "datepicker-here" type="text" size="8"></td>
+              <td><button id="sv_btn" class="btn btn-warning">+</button></td>
+            </tr>
+            <!-- <tr class="collapse" id="collapse_uts">
+              <td>о выплате УТС</td>
+              <td align = "center"><input id = "date_uts" class = "datepicker-here" type="text" size="8"></td>
+              <td><button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#collapse_ev" aria-expanded="false" aria-controls="collapseExample">
+                    +
+                  </button>
+              </td>
+            </tr>
+            <tr class="collapse" id="collapse_ev">
+              <td>о выплате расходов на эвакуатор</td>
+              <td align = "center"><input id = "date_ev" class = "datepicker-here" type="text" size="8"></td>
+              <td><button class="btn btn-warning" type="button" data-toggle="collapse" data-target="#collapse_stor" aria-expanded="false" aria-controls="collapseExample">
+                    +
+                  </button>
+              </td>
+            </tr>
+            <tr class="collapse" id="collapse_stor">
+              <td>о выплате расходов на хранение</td>
+              <td align = "center"><input id = "date_stor" class = "datepicker-here" type="text" size="8"></td>
+            </tr> -->
+          </tbody>
+        </table><!-- table_1 -->
+      </div><!-- jumbotron -->
     <form class="form" action="index.html" method="get">
       <div class="autocomplete">
         <input id="fo_name" type="text" placeholder="Введите наименование ФО" size="40">
       </div>
       <br>
-      <div class="container">
+      <!-- <div class="container"> -->
         <table class="table_1">
           <thead align = "center">
             <tr>
@@ -63,12 +111,12 @@
               <td align = "center"><span id = "date_stor_penalty_day"></span></td>
             </tr>
           </tbody>
-        </table>
-      </div>
+        </table><!-- table_1 -->
+      <!-- </div> -->
 
       <br>
       <div class="table_court">
-        <table class="table">
+        <table class="table_2">
             <tr>
               <td><label class="form_label" placeholder=" ">Суд взыскал неустойку с</label></td>
               <td><input id="date_court_from" class = "datepicker-here" type="text" size="8"></td>
@@ -82,7 +130,7 @@
 
       <br>
       <div class="table_of_payments">
-        <table class="table">
+        <table class="table_3">
           <thead align = "center">
             <tr>
               <td>Вид выплаты</td>
@@ -345,7 +393,7 @@
         <span id="total_count"></span>
       </div>
       <br>
-      <button class = "button" anim="ripple" type="button" name="button">Рассчитать</button>
+      <button id="btn_desicion" class ="button" anim="ripple" type="button" name="button">Рассчитать</button>
       <br><br>
       <span id="test_span"></span>
       <span id="decision"></span>
@@ -356,6 +404,8 @@
     <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/word.js"></script>
     <script type="text/javascript" src="js/button.js"></script>
+    <script type="text/javascript" src="js/addrows.js"></script>
     <script type="text/javascript" src="js/autocomplete.js"></script>
+    </div> <!-- container -->
   </body>
 </html>

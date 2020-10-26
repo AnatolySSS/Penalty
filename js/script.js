@@ -16,7 +16,6 @@ let COLUMN_NAME_10 = "Начало неустойки после суда";
 let COLUMN_NAME_11 = "Конец неустойки после суда";
 
 let pay = [];
-let date_penalty_day = [];
 let pay_date = [];
 let pay_text = [];
 let payment_order = [];
@@ -37,6 +36,10 @@ let date_ev, date_ev_last_day, date_ev_penalty_day;
 let date_stor, date_stor_last_day, date_stor_penalty_day;
 let date_court_from, date_court_to;
 let total_count = 0;
+let total_count_string = "";
+let date_sv_uts_ev_stor = [];
+let date_sv_uts_ev_stor_last_day = [];
+let date_penalty_day = [];
 
 let days_string = [];
 let rub_string_payment = [];
@@ -50,6 +53,13 @@ let payment_not_in_time_paragraf = [];
 let payment_not_in_time_paragraf_court = [];
 let total_analize_paragraf = "";
 let court_period_text = [];
+let claim_name = []; //название требований "с заявлением о наступлении страхового случая"/"УТС"/"эвакуатор"/"хранение"
+let claim_name_short = [];
+let claim_name_payment = [];
+let claim_add_motivation = []; //дополнительный абзац для УТС, эвакуации, хранение
+let article_191 = 'Статьей 191 ГК РФ установлено, что течение срока, определённого периодом времени, '+
+'начинается на следующий день после календарной даты или наступления события, '+
+'которыми определено его начало.'+'<br>';
 
 standart_motivation = 'Согласно статье 12 ГК РФ '+
 'взыскание неустойки является одним из способов защиты нарушенного гражданского права.'+'<br>'+
@@ -81,12 +91,9 @@ standart_motivation = 'Согласно статье 12 ГК РФ '+
 'со дня, следующего за днем, установленным для принятия решения о выплате страхового '+
 'возмещения, то есть с 21-го дня после получения страховщиком заявления потерпевшего '+
 'о страховой выплате и документов, предусмотренных Правилами ОСАГО, и до дня '+
-'фактического исполнения страховщиком обязательства по договору включительно.'+'<br>'+
-'Статьей 191 ГК РФ установлено, что течение срока, определённого периодом времени, '+
-'начинается на следующий день после календарной даты или наступления события, '+
-'которыми определено его начало.'+'<br>';
+'фактического исполнения страховщиком обязательства по договору включительно.'+'<br>';
 
-document.querySelector('button').onclick = function(){
+document.getElementById('btn_desicion').onclick = function(){
 
   document.querySelector('#test_span').innerHTML = "";
   holly = "";
@@ -130,6 +137,7 @@ document.querySelector('button').onclick = function(){
   //Получение значения наименования ФО
   fo_name = document.querySelector("#fo_name").value;
 
+  //Присваивание значения первому параграфу
   first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name + ' неустойки '+
   'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
   'Финансовый уполномоченный приходит к следующему.'+'<br>'
@@ -187,7 +195,7 @@ document.querySelector('button').onclick = function(){
     formatDate(new Date(date_court_from)) + ' по ' + formatDate(new Date(date_court_to)) + '.<br>'
 
 
-  //выведение значений 20го дня на экран
+  //выведение значений 20го и 21го дня на экран
   if (!isNaN(date_sv_last_day)) {
     document.querySelector('#date_sv_last_day').innerHTML = formatDate(new Date(date_sv_last_day));
     document.querySelector('#date_sv_penalty_day').innerHTML = formatDate(new Date(date_sv_penalty_day));
@@ -205,11 +213,13 @@ document.querySelector('button').onclick = function(){
     document.querySelector('#date_stor_penalty_day').innerHTML = formatDate(new Date(date_stor_penalty_day));
   }
 
+  //Цикл для присвоения общих значений
   for (var i = 1; i <= 5; i++) {
     payment_not_in_time_paragraf_court[i] = "";
     analize_period_paragraf[i] = "";
     payment_paragraf[i] = "";
 
+    //Получение значений из полей index
     pay[i] = document.getElementById("pay" + i ).options.selectedIndex;
     pay_date[i] = document.querySelector('#pay' + i + '_date').value;
     pay_date[i] = changeDateType(pay_date[i]);
@@ -226,21 +236,75 @@ document.querySelector('button').onclick = function(){
     }
 
     switch (pay[i]) {
-      case 0:
+      case 0: //Страховое возмещение
         date_penalty_day[i] = date_sv_penalty_day;
+        date_sv_uts_ev_stor[i] = date_sv;
+        date_sv_uts_ev_stor_last_day[i] = date_sv_last_day;
+        claim_name[i] = ' с заявлением о выплате страхового возмещения ';
+        claim_name_short[i] = ' страхового возмещения ';
+        claim_add_motivation[i] = '';
         break;
-      case 1:
+      case 1: //УТС
         date_penalty_day[i] = date_uts_penalty_day;
+        date_sv_uts_ev_stor[i] = date_uts;
+        date_sv_uts_ev_stor_last_day[i] = date_uts_last_day;
+        claim_name[i] = ' с заявлением о выплате УТС ';
+        claim_name_short[i] = ' УТС ';
+        claim_add_motivation[i] = 'Согласно пункту 20 Постановление Пленума № ' +
+        '58 при наступлении страхового случая потерпевший обязан не только уведомить ' +
+        'страховщика о его наступлении в сроки, установленные Правилами ОСАГО, ' +
+        'но и направить страховщику заявление о страховом возмещении и документы, ' +
+        'предусмотренные Правилами ОСАГО. В заявлении о страховом возмещении потерпевший ' +
+        'должен также сообщить о другом известном ему на момент подачи заявления ущербе, ' +
+        'кроме расходов на восстановление поврежденного имущества, который подлежит ' +
+        'возмещению  (например, об утрате товарной стоимости, о расходах на эвакуацию ' +
+        'транспортного средства с места дорожно-транспортного происшествия и т.п.).<br>' +
+        'Согласно пункту 37 Постановление Пленума № 58 к реальному ущербу, возникшему ' +
+        'в результате дорожно-транспортного происшествия, наряду со стоимостью ремонта ' +
+        'и запасных частей относится также утрата товарной стоимости, которая представляет ' +
+        'собой уменьшение стоимости транспортного средства, вызванное преждевременным ' +
+        'ухудшением товарного (внешнего) вида транспортного средства и его эксплуатационных ' +
+        'качеств в результате снижения прочности и долговечности отдельных деталей, узлов ' +
+        'и агрегатов, соединений и защитных покрытий вследствие дорожно-транспортного ' +
+        'происшествия и последующего ремонта.<br>';
         break;
-      case 2:
+      case 2: //Эвакуация
         date_penalty_day[i] = date_ev_penalty_day;
+        date_sv_uts_ev_stor[i] = date_ev;
+        date_sv_uts_ev_stor_last_day[i] = date_ev_last_day;
+        claim_name[i] = ' с заявлением о выплате расходов на эвакуацию Транспортного средства ';
+        claim_name_short[i] = ' расходов на эвакуацию Транспортного средства ';
+        claim_add_motivation[i] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+        'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+        'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+        'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+        'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+        'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+        'приходит к выводу о том, что расходы на эвакуацию Транспортного средства относятся '+
+        'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты страхового '+
+        'возмещения подлежит начислению на сумму расходов на эвакуацию Транспортного средства.'+ '<br>';
         break;
-      case 3:
+      case 3: // Хранение
         date_penalty_day[i] = date_stor_penalty_day;
+        date_sv_uts_ev_stor[i] = date_stor;
+        date_sv_uts_ev_stor_last_day[i] = date_stor_last_day;
+        claim_name[i] = ' с заявлением о выплате расходов на хранение Транспортного средства ';
+        claim_name_short[i] = ' расходов на хранение Транспортного средства ';
+        claim_add_motivation[i] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+        'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+        'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+        'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+        'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+        'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+        'приходит к выводу о том, что расходы на хранение Транспортного средства относятся '+
+        'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты страхового '+
+        'возмещения подлежит начислению на сумму расходов на хранение Транспортного средства.'+ '<br>';
         break;
-    }
-  }
+    } // завершение switch
+  } // завершение for
 
+  //"Собираем" текста решения
+  //Если суда не было
   if (isNaN(date_court_from)) {
     document.querySelector('#COLUMN_NAME_20').innerHTML = COLUMN_NAME_20;
     document.querySelector('#COLUMN_NAME_21').innerHTML = COLUMN_NAME_21;
@@ -251,98 +315,57 @@ document.querySelector('button').onclick = function(){
 
     for (var i = 1; i <= 5; i++) {
 
-      switch (pay[i]) {
-        case 0:
-          pay_count[i] = pay_date[i] - date_sv_last_day;
+      //Вычисление количества дней между датой выплаты и 20м днем
+      pay_count[i] = pay_date[i] - date_sv_uts_ev_stor_last_day[i];
 
-          analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о наступлении страхового случая '+
-          formatDate(new Date(date_sv)) + ', следовательно, последним днем срока осуществления '+
-          'выплаты является ' + formatDate(new Date(date_sv_last_day)) + ', а неустойка подлежит начислению с '+
-          formatDate(new Date(date_sv_penalty_day)) +'.<br>'
-
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату страхового возмещения в размере '+
-          makeRubText_1(pay_text[i]) +
-          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
-          '.<br>'
-          break;
-        case 1:
-          pay_count[i] = pay_date[i] - date_uts_last_day;
-
-          TODO //добавить в analize_period_paragraf мотивировку про УТС
-          analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате УТС '+
-          formatDate(new Date(date_uts)) + ', следовательно, последним днем срока осуществления '+
-          'выплаты УТС является ' + formatDate(new Date(date_uts_last_day)) + ', а неустойка подлежит начислению с '+
-          formatDate(new Date(date_uts_penalty_day)) +'.<br>'
-
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату УТС в размере '+
-          makeRubText_1(pay_text[i]) +
-          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
-          '.<br>'
-          break;
-        case 2:
-          pay_count[i] = pay_date[i] - date_ev_last_day;
-
-          analize_period_paragraf[i] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
-          'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
-          'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
-          'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
-          'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
-          'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
-          'приходит к выводу о том, что расходы на эвакуацию Транспортного средства относятся '+
-          'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты расходов '+
-          'на эвакуацию Транспортного средства подлежит взысканию.'+ '<br>'+
-          'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на эвакуацию Транспортного средства '+
-          formatDate(new Date(date_ev)) + ', следовательно, последним днем срока осуществления '+
-          'выплаты расходов на эвакуацию Транспортного средства является ' + formatDate(new Date(date_ev_last_day)) + ', а неустойка подлежит начислению с '+
-          formatDate(new Date(date_ev_penalty_day)) +'.<br>'
-
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату расходов на эвакуацию Транспортного средства в размере '+
-          makeRubText_1(pay_text[i]) +
-          //', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
-          '.<br>'
-          break;
-        case 3:
-          pay_count[i] = pay_date[i] - date_stor_last_day;
-
-          TODO //добавить в analize_period_paragraf мотивировку про хранение
-          analize_period_paragraf[i] = 'Заявитель обратился в ' + fo_name + ' с заявлением о выплате расходов на хранение Транспортного средства '+
-          formatDate(new Date(date_stor)) + ', следовательно, последним днем срока осуществления '+
-          'выплаты расходов на хранение Транспортного средства является ' + formatDate(new Date(date_stor_last_day)) + ', а неустойка подлежит начислению с '+
-          formatDate(new Date(date_stor_penalty_day)) +'.<br>'
-
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату расходов на хранение Транспортного средства в размере '+
-          makeRubText_1(pay_text[i]) +
-          // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
-          '.<br>'
-          break;
-      }
-
-      for (var j = 1; j < i; j++) {
-        if (!isNaN(pay_date[i]) && pay[i] == pay[j]) {
-            analize_period_paragraf[i] = "";
-        }
-      }
-
+      //Если выплата была в срок, то изменение отрицательного значения на нулевое
       if (pay_count[i] < 0) {
         pay_count[i] = 0;
       }
 
+      //Вычисление суммы неустойки
       pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
 
+      //Выведение значений на экран
       if (!isNaN(pay_count[i]) && pay_date[i] >= date_penalty_day[i]) {
         document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
         document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(pay_date[i]));
-        document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(pay_count[i] / day); //pay_count[i] / day + days_string[i];
+        document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(pay_count[i] / day);
         document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(pay_summ[i]);
       }
+
+      //Установление для количества дней и суммы нулевого значения, в случае,
+      //если они не рассчитываются, чтобы не было ошибки
       if (isNaN(pay_count[i])) {
         pay_count[i] = 0;
       }
       if (isNaN(pay_summ[i])) {
         pay_summ[i] = 0;
       }
+
+      //Вычисление общего размера неустойки
       total_count = total_count + pay_summ[i];
 
+      //"Собираем" абзац про анализ сроков 20 и 21 дней
+      analize_period_paragraf[i] = claim_add_motivation[i] + 'Заявитель обратился в ' + fo_name + claim_name[i] +
+      formatDate(new Date(date_sv_uts_ev_stor[i])) + ', следовательно, последним днем срока осуществления '+
+      'выплаты' + claim_name_short[i] + 'является ' + formatDate(new Date(date_sv_uts_ev_stor_last_day[i])) + ', а неустойка подлежит начислению с '+
+      formatDate(new Date(date_penalty_day[i])) +'.<br>'
+
+      //"Собираем" абзац про выплату
+      payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату' + claim_name_short[i] + 'в размере '+
+      makeRubText_1(pay_text[i]) +
+      // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+      '.<br>'
+
+      //Удаление абзаца с анализом сроков 20 и 21 дней в случае его повторения
+      for (var j = 1; j < i; j++) {
+        if (!isNaN(pay_date[i]) && pay[i] == pay[j]) {
+            analize_period_paragraf[i] = "";
+        }
+      }
+
+      //"Собираем" абзац с выводами
       if (pay_date[i] < date_penalty_day[i]) {
         payment_in_time_paragraf[i] = 'Таким образом, выплата в размере ' + makeRubText_1(pay_text[i]) + ' произведена в установленный '+
         'Законом № 40-ФЗ срок, в силу чего неустойка на указанную сумму не начисляется.'+'<br>';
@@ -365,14 +388,32 @@ document.querySelector('button').onclick = function(){
 
       total_analize_paragraf = total_analize_paragraf + analize_period_paragraf[i] + payment_paragraf[i] + payment_in_time_paragraf[i] +
       payment_not_in_time_paragraf[i];
-
     }
 
-    //decision = first_paragraf + standart_motivation + holly + total_analize_paragraf + summary_paragraf;
+    let stop_ind_1 = 1;
+    let stop_ind_2 = false;
+    for (var i = 1; i <= 5; i++) {
+      if (pay_summ[i] > 0) {
+        total_count_string = ' (' + makeRubText_2(pay_summ[i]);
+        stop_ind_1 = i + 1;
+        break
+      }
+    }
 
+    for (var i = stop_ind_1; i <= 5; i++) {
+      if (pay_summ[i] > 0) {
+        total_count_string = total_count_string + ' + ' + makeRubText_2(pay_summ[i]);
+        stop_ind_2 = true;
+      }
+    }
 
-  } else {
-    //Определение периода взыскания неустойки до начала судебного взыскания
+    if (stop_ind_2) {
+      total_count_string = total_count_string + ')'
+    } else {
+      total_count_string = '';
+    }
+
+  } else { //Определение периода взыскания неустойки до начала судебного взыскания
     document.querySelector('#COLUMN_NAME_20').innerHTML = COLUMN_NAME_20;
     document.querySelector('#COLUMN_NAME_21').innerHTML = COLUMN_NAME_21;
     document.querySelector('#COLUMN_NAME_4').innerHTML = COLUMN_NAME_8;
@@ -622,13 +663,13 @@ document.querySelector('button').onclick = function(){
   if (total_count > 0) {
     summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
     'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
-    makeRubText_1(total_count) + '.' + '<br>';
+    makeRubText_1(total_count) + total_count_string + '.' + '<br>';
   } else {
     summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
     'неустойки за несоблюдение срока выплаты страхового возмещения не подлежит удовлетворению.' + '<br>';
   }
 
-  decision = first_paragraf + standart_motivation + holly + total_analize_paragraf + summary_paragraf;
+  decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + summary_paragraf;
 
     document.querySelector('#total_count').innerHTML = makeRubText_2(total_count);
     total_count = 0;

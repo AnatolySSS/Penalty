@@ -1,4 +1,4 @@
-.table_1, .table {
+.table_1, .table_2, .table_3 {
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
   font-size: 14px;
   /* width: 660px; */
@@ -12,14 +12,14 @@
 color: #F5F6F6;
 border-left: none;
 } */
-.table_1 thead {
+.table_1 thead, .table_3 thead {
 font-weight: normal;
 border-bottom: 2px solid #F5E1A6;
 /* border-right: 20px solid white;
 border-left: 20px solid white; */
 padding-bottom: 5;
 }
-.table_1 td, .table td {
+.table_1 td, .table_2 td, .table_3 td {
 /* border-right: 20px solid white;
 border-left: 20px solid white; */
 padding: 5px 5px;
