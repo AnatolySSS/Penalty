@@ -1,55 +1,81 @@
-document.getElementById('sv_btn').onclick =  function addrows() {
+function addrows(e) {
 
-  var sv_btn = document.getElementById('sv_btn');
-  var table_1__tbody = document.getElementById('table_1__tbody');
+  var target = e.target || e.srcElement
+  var pay_form_row_2_boolen;
+  var pay_form_row_3_boolen;
 
-  var tr = [];
-  var td_name = [];
-  var td_date = [];
-  var td_btn = [];
-  var input = [];
-  var btn = [];
-
-  for (var i = 1; i <= 4; i++) {
-    tr[i] = document.createElement('tr');
-    td_name[i] = document.createElement('td');
-    td_date[i] = document.createElement('td');
-    td_btn[i] = document.createElement('td');
-    input[i] = document.createElement('input');
-    btn[i] = document.createElement('button');
-
-    tr[i].setAttribute('id', 'tr' + i);
-    td_name[i].innerHTML = 'о выплате УТС';
-    td_name[i].setAttribute('id', 'td_name' + i);
-    td_date[i].setAttribute('align', 'center');
-    td_date[i].setAttribute('id', 'td_date' + i);
-    input[i].setAttribute('id', 'date_uts');
-    input[i].setAttribute('class', 'datepicker-here');
-    input[i].setAttribute('type', 'text-here');
-    input[i].setAttribute('size', '8');
-    input[i].setAttribute('id', 'input' + i);
-    btn[i].setAttribute('class', 'btn btn-warning');
-    btn[i].setAttribute('id', 'btn' + i);
-    btn[i].innerHTML = '+';
+  if (target == app_btn_1) {
+    $("#app_form_row_2").show('fast');
+    $("#app_form_row_3").show('fast');
+    $("#app_form_row_4").show('fast');
+  } else if (target == app_btn_1) {
+    $("#app_form_row_2").hide('fast');
+  } else if (target == app_btn_2) {
+    $("#app_form_row_2").hide('fast');
+    document.getElementById('app_date_2').value = "";
+  } else if (target == app_btn_3) {
+    $("#app_form_row_3").hide('fast');
+    document.getElementById('app_date_3').value = "";
+  } else if (target == app_btn_4) {
+    $("#app_form_row_4").hide('fast');
+    document.getElementById('app_date_4').value = "";
   }
 
-  if (sv_btn.innerHTML == "+") {
-    table_1__tbody.appendChild(tr[1]);
-    tr[1].appendChild(td_name[1]);
-    tr[1].appendChild(td_date[1]);
-    tr[1].appendChild(td_btn[1]);
-    td_date[1].appendChild(input[1]);
-    td_btn[1].appendChild(btn[1]);
-    sv_btn.innerHTML = '-';
-  } else {
-    document.getElementById('tr' + 1).parentNode.removeChild(document.getElementById('tr' + 1));
-    sv_btn.innerHTML = '+';
+  if ((target == pay_btn_1) && !pay_form_row_2_boolen) {
+    $("#pay_form_row_2").show('fast');
+    pay_form_row_2_boolen = true;
+  } else if ((target == pay_btn_1) && pay_form_row_2_boolen) {
+    $("#pay_form_row_3").show('fast');
+    pay_form_row_3_boolen = true;
   }
 
 
 
 
+  if ((target == add_info_btn_1) && (add_info_btn_1.innerHTML == "▼")) {
+    $("#add_info_pay_form_row_1").show();
+    document.getElementById('add_info_btn_1').innerHTML = "▲";
+  } else if ((target == add_info_btn_1) && (add_info_btn_1.innerHTML == "▲")) {
+    $("#add_info_pay_form_row_1").hide();
+    document.getElementById('add_info_btn_1').innerHTML = "▼";
+  } else if ((target == add_info_btn_2) && (add_info_btn_2.innerHTML == "▼")) {
+    $("#add_info_pay_form_row_2").show();
+    document.getElementById('add_info_btn_2').innerHTML = "▲";
+  } else if ((target == add_info_btn_2) && (add_info_btn_2.innerHTML == "▲")) {
+    $("#add_info_pay_form_row_2").hide();
+    document.getElementById('add_info_btn_2').innerHTML = "▼";
+  } else if ((target == add_info_btn_3) && (add_info_btn_3.innerHTML == "▼")) {
+    $("#add_info_pay_form_row_3").show();
+    document.getElementById('add_info_btn_3').innerHTML = "▲";
+  } else if ((target == add_info_btn_3) && (add_info_btn_3.innerHTML == "▲")) {
+    $("#add_info_pay_form_row_3").hide();
+    document.getElementById('add_info_btn_3').innerHTML = "▼";
+  }
 
+  if (target == court_if_1) {
+    $("#div_date_court_1").show();
+    $("#div_date_fu_1").hide();
+  } else if ((target == voluntary_if_1)) {
+    $("#div_date_fu_1").hide();
+    $("#div_date_court_1").hide();
+  } else if ((target == fu_if_1)) {
+    $("#div_date_fu_1").show();
+    $("#div_date_court_1").hide();
+  }
 
+switch (target) {
+  case pay_btn_2:
+    $("#pay_form_row_2").hide('fast');
+    pay_form_row_2_boolen = false;
+    break;
+  case pay_btn_3:
+    $("#pay_form_row_3").hide('fast');
+    pay_form_row_3_boolen = false;
+    break;
+  default:
 
 }
+
+}
+
+document.addEventListener('click', addrows);

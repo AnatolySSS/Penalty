@@ -4,6 +4,12 @@
   margin: 10px;
 }
 
+.jumbotron {
+  width: 80%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .form_grup {
          position: relative; # Положение элемента устанавливается относительно его исходного места.
          margin-bottom: 32px;# Внешний отступ снизу элемента
@@ -78,7 +84,7 @@ thead {
 }
 
 .input-numeral:focus {
-  background-image: url("img/rub2.png");
+  /* background-image: url("img/rub2.png"); */
   background-repeat: no-repeat;
   background-position: right;
   padding-right: 16px;

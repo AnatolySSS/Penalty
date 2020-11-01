@@ -117,6 +117,16 @@ document.getElementById('btn_desicion').onclick = function(){
   document.querySelector('#COLUMN_NAME_9').innerHTML = "";
   document.querySelector('#COLUMN_NAME_10').innerHTML = "";
   document.querySelector('#COLUMN_NAME_11').innerHTML = "";
+
+  document.querySelector('#date_sv_last_day').innerHTML = "";
+  document.querySelector('#date_sv_penalty_day').innerHTML = "";
+  document.querySelector('#date_uts_last_day').innerHTML = "";
+  document.querySelector('#date_uts_penalty_day').innerHTML = "";
+  document.querySelector('#date_ev_last_day').innerHTML = "";
+  document.querySelector('#date_ev_penalty_day').innerHTML = "";
+  document.querySelector('#date_stor_last_day').innerHTML = "";
+  document.querySelector('#date_stor_penalty_day').innerHTML = "";
+
   for (var i = 1; i < 6; i++) {
     document.querySelector('#date_penalty_day_' + i).innerHTML = "";
     document.querySelector('#date_court_from_out_' + i).innerHTML = "";
@@ -143,7 +153,7 @@ document.getElementById('btn_desicion').onclick = function(){
   'Финансовый уполномоченный приходит к следующему.'+'<br>'
 
   //Получение значений даты обращений с требованиями и исчисление 20го дня
-  date_sv = document.querySelector('#date_sv').value;
+  date_sv = document.querySelector('#app_date_1').value;
   date_sv = changeDateType(date_sv);
   date_sv = Date.parse(date_sv);
   date_sv_last_day = findLastDay(date_sv);
@@ -153,7 +163,7 @@ document.getElementById('btn_desicion').onclick = function(){
   }
   date_sv_penalty_day = date_sv_last_day + day;
 
-  date_uts = document.querySelector('#date_uts').value;
+  date_uts = document.querySelector('#app_date_2').value;
   date_uts = changeDateType(date_uts);
   date_uts = Date.parse(date_uts);
   date_uts_last_day = findLastDay(date_uts);
@@ -163,7 +173,7 @@ document.getElementById('btn_desicion').onclick = function(){
   }
   date_uts_penalty_day = date_uts_last_day + day;
 
-  date_ev = document.querySelector('#date_ev').value;
+  date_ev = document.querySelector('#app_date_3').value;
   date_ev = changeDateType(date_ev);
   date_ev = Date.parse(date_ev);
   date_ev_last_day = findLastDay(date_ev);
@@ -173,7 +183,7 @@ document.getElementById('btn_desicion').onclick = function(){
   }
   date_ev_penalty_day = date_ev_last_day + day;
 
-  date_stor = document.querySelector('#date_stor').value;
+  date_stor = document.querySelector('#app_date_4').value;
   date_stor = changeDateType(date_stor);
   date_stor = Date.parse(date_stor);
   date_stor_last_day = findLastDay(date_stor);
