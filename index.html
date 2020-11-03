@@ -146,6 +146,7 @@
 
         <hr class="mb-2">
 
+
         <h6>Судом взыскана неустойка за период:</h6>
         <div id="div_court" class="form-group row form-inline">
           <label for="date_court_from" class="ml-3">c</label>
@@ -157,6 +158,7 @@
             <input id = "date_court_to" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
           </div>
         </div><!-- div_court -->
+        
 
         <hr class="mb-6">
 
@@ -202,15 +204,15 @@
 
         <div id="add_info_pay_form_row_1" class="form-row ml-2 mb-4" style="display:none">
           <div class="form-check form-check-inline">
-            <input id="voluntary_if_1" class="form-check-input" type="radio" name="payment_option" value="option1" >
+            <input id="voluntary_if_1" class="form-check-input" type="radio" name="payment_option_1" value="option1" >
             <label for="voluntary_if_1" class="form-check-label">Добровольная выплата</label>
           </div><!-- div_voluntary -->
           <div class="form-check form-check-inline">
-            <input id="fu_if_1" class="form-check-input" type="radio" name="payment_option" value="option2" >
+            <input id="fu_if_1" class="form-check-input" type="radio" name="payment_option_1" value="option2" >
             <label for="fu_if_1" class="form-check-label">Выплата на основании решения ФУ</label>
           </div><!-- div_FU -->
           <div class="form-check form-check-inline">
-            <input id="court_if_1" class="form-check-input" type="radio" name="payment_option" value="option3" >
+            <input id="court_if_1" class="form-check-input" type="radio" name="payment_option_1" value="option3" >
             <label for="court_if_1" class="form-check-label">Выплата на основании решения суда</label>
           </div><!-- div_court -->
           <div id="div_date_court_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
@@ -253,15 +255,15 @@
 
         <div id="add_info_pay_form_row_2" class="form-row ml-2 mb-4" style="display:none">
           <div class="form-check form-check-inline">
-            <input id="voluntary_if_2" class="form-check-input" type="radio" name="payment_option" value="option1" >
+            <input id="voluntary_if_2" class="form-check-input" type="radio" name="payment_option_2" value="option1" >
             <label for="voluntary_if_2" class="form-check-label">Добровольная выплата</label>
           </div><!-- div_voluntary -->
           <div class="form-check form-check-inline">
-            <input id="fu_if_2" class="form-check-input" type="radio" name="payment_option" value="option2" >
+            <input id="fu_if_2" class="form-check-input" type="radio" name="payment_option_2" value="option2" >
             <label for="fu_if_2" class="form-check-label">Выплата на основании решения ФУ</label>
           </div><!-- div_FU -->
           <div class="form-check form-check-inline">
-            <input id="court_if_2" class="form-check-input" type="radio" name="payment_option" value="option3" >
+            <input id="court_if_2" class="form-check-input" type="radio" name="payment_option_2" value="option3" >
             <label for="court_if_2" class="form-check-label">Выплата на основании решения суда</label>
           </div><!-- div_court -->
           <div id="div_date_court_2" class="form-group col-md-6 form-inline mt-2" style="display:none">
@@ -304,15 +306,15 @@
 
         <div id="add_info_pay_form_row_3" class="form-row ml-2 mb-4" style="display:none">
           <div class="form-check form-check-inline">
-            <input id="voluntary_if_3" class="form-check-input" type="radio" name="payment_option" value="option1" >
+            <input id="voluntary_if_3" class="form-check-input" type="radio" name="payment_option_3" value="option1" >
             <label for="voluntary_if_3" class="form-check-label">Добровольная выплата</label>
           </div><!-- div_voluntary -->
           <div class="form-check form-check-inline">
-            <input id="fu_if_3" class="form-check-input" type="radio" name="payment_option" value="option2" >
+            <input id="fu_if_3" class="form-check-input" type="radio" name="payment_option_3" value="option2" >
             <label for="fu_if_3" class="form-check-label">Выплата на основании решения ФУ</label>
           </div><!-- div_FU -->
           <div class="form-check form-check-inline">
-            <input id="court_if_3" class="form-check-input" type="radio" name="payment_option" value="option3" >
+            <input id="court_if_3" class="form-check-input" type="radio" name="payment_option_3" value="option3" >
             <label for="court_if_3" class="form-check-label">Выплата на основании решения суда</label>
           </div><!-- div_court -->
           <div id="div_date_court_3" class="form-group col-md-6 form-inline mt-2" style="display:none">
@@ -325,11 +327,107 @@
           </div><!-- div_date_court_3 -->
         </div><!-- add_info_pay_form_row_3 -->
 
+        <div id="pay_form_row_4" class="form-row" style="display:none">
+          <div class="form-group col-md-4 form-inline">
+            <select id="pay4" class="custom-select col-md-12">
+              <option>Страховое возмещение</option>
+              <option>УТС</option>
+              <option>Эвакуатор</option>
+              <option>Хранение</option>
+            </select>
+          </div>
+          <div class="form-group col-md-2">
+            <input id = "pay4_date" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+          </div>
+          <div class="form-group col-md-3">
+            <div class="input-group">
+              <input id="pay4_text" class = "input-numeral form-control" placeholder="Сумма" type="text" size="10">
+              <div class="input-group-append">
+                <span class="input-group-text">&#8381;</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-ms-1">
+            <button id="add_info_btn_4" class="btn btn-outline-warning" onclick="addrows()">▼</button>
+          </div>
+          <div class="form-group col-md-1">
+            <button id="pay_btn_4" class="btn btn-outline-danger" onclick="addrows()">×</button>
+          </div>
+        </div><!-- pay_form_row_4 -->
 
+        <div id="add_info_pay_form_row_4" class="form-row ml-2 mb-4" style="display:none">
+          <div class="form-check form-check-inline">
+            <input id="voluntary_if_4" class="form-check-input" type="radio" name="payment_option_4" value="option1" >
+            <label for="voluntary_if_4" class="form-check-label">Добровольная выплата</label>
+          </div><!-- div_voluntary -->
+          <div class="form-check form-check-inline">
+            <input id="fu_if_4" class="form-check-input" type="radio" name="payment_option_4" value="option2" >
+            <label for="fu_if_4" class="form-check-label">Выплата на основании решения ФУ</label>
+          </div><!-- div_FU -->
+          <div class="form-check form-check-inline">
+            <input id="court_if_4" class="form-check-input" type="radio" name="payment_option_4" value="option3" >
+            <label for="court_if_4" class="form-check-label">Выплата на основании решения суда</label>
+          </div><!-- div_court -->
+          <div id="div_date_court_4" class="form-group col-md-6 form-inline mt-2" style="display:none">
+            <label for="date_court_4" class="mr-2">Дата решения суда</label>
+            <input id = "date_court_4" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+          </div><!-- div_date_court_4 -->
+          <div id="div_date_fu_4" class="form-group col-md-6 form-inline mt-2" style="display:none">
+            <label for="date_fu_4" class="mr-2">Дата решения ФУ</label>
+            <input id = "date_fu_4" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+          </div><!-- div_date_court_4 -->
+        </div><!-- add_info_pay_form_row_4 -->
 
-        <!-- <td>
-          <input id="payment_order_1" class = "form_input" type="text" size="10">
-        </td> -->
+        <div id="pay_form_row_5" class="form-row" style="display:none">
+          <div class="form-group col-md-4 form-inline">
+            <select id="pay5" class="custom-select col-md-12">
+              <option>Страховое возмещение</option>
+              <option>УТС</option>
+              <option>Эвакуатор</option>
+              <option>Хранение</option>
+            </select>
+          </div>
+          <div class="form-group col-md-2">
+            <input id = "pay5_date" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+          </div>
+          <div class="form-group col-md-3">
+            <div class="input-group">
+              <input id="pay5_text" class = "input-numeral form-control" placeholder="Сумма" type="text" size="10">
+              <div class="input-group-append">
+                <span class="input-group-text">&#8381;</span>
+              </div>
+            </div>
+          </div>
+          <div class="form-group col-ms-1">
+            <button id="add_info_btn_5" class="btn btn-outline-warning" onclick="addrows()">▼</button>
+          </div>
+          <div class="form-group col-md-1">
+            <button id="pay_btn_5" class="btn btn-outline-danger" onclick="addrows()">×</button>
+          </div>
+        </div><!-- pay_form_row_5 -->
+
+        <div id="add_info_pay_form_row_5" class="form-row ml-2 mb-4" style="display:none">
+          <div class="form-check form-check-inline">
+            <input id="voluntary_if_5" class="form-check-input" type="radio" name="payment_option_5" value="option1" >
+            <label for="voluntary_if_5" class="form-check-label">Добровольная выплата</label>
+          </div><!-- div_voluntary -->
+          <div class="form-check form-check-inline">
+            <input id="fu_if_5" class="form-check-input" type="radio" name="payment_option_5" value="option2" >
+            <label for="fu_if_5" class="form-check-label">Выплата на основании решения ФУ</label>
+          </div><!-- div_FU -->
+          <div class="form-check form-check-inline">
+            <input id="court_if_5" class="form-check-input" type="radio" name="payment_option_5" value="option3" >
+            <label for="court_if_5" class="form-check-label">Выплата на основании решения суда</label>
+          </div><!-- div_court -->
+          <div id="div_date_court_5" class="form-group col-md-6 form-inline mt-2" style="display:none">
+            <label for="date_court_5" class="mr-2">Дата решения суда</label>
+            <input id = "date_court_5" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+          </div><!-- div_date_court_5 -->
+          <div id="div_date_fu_5" class="form-group col-md-6 form-inline mt-2" style="display:none">
+            <label for="date_fu_5" class="mr-2">Дата решения ФУ</label>
+            <input id = "date_fu_5" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+          </div><!-- div_date_court_5 -->
+        </div><!-- add_info_pay_form_row_5 -->
 
         <br class="mb-6">
 

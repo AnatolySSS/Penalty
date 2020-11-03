@@ -21,7 +21,7 @@ let pay_text = [];
 let payment_order = [];
 let pay_count = [];
 let pay_summ = [];
-let court_checked = [];
+let court_if = [];
 
 let off_days = [];
 
@@ -236,13 +236,13 @@ document.getElementById('btn_desicion').onclick = function(){
     pay_date[i] = Date.parse(pay_date[i]);
     pay_text[i] = document.querySelector('#pay' + i + '_text').value;
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
-    court_checked[i] = document.getElementById("court_checked_" + i );
+    court_if[i] = document.getElementById("court_if_" + i );
     // payment_order[i] = document.querySelector('#payment_order_' + i).value;
 
-    if (court_checked[i].checked) {
-      court_checked[i] = ', на основании Решения суда,';
+    if (court_if[i].checked) {
+      court_if[i] = ', на основании Решения суда,';
     } else {
-      court_checked[i] = '';
+      court_if[i] = '';
     }
 
     switch (pay[i]) {
@@ -452,7 +452,7 @@ document.getElementById('btn_desicion').onclick = function(){
           'выплаты является ' + formatDate(new Date(date_sv_last_day)) + ', а неустойка подлежит начислению с '+
           formatDate(new Date(date_sv_penalty_day)) +'.<br>'
 
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_checked[i] + ' осуществило выплату страхового возмещения в размере '+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_if[i] + ' осуществило выплату страхового возмещения в размере '+
           makeRubText_1(pay_text[i]) +
           // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
           '.<br>'
@@ -493,7 +493,7 @@ document.getElementById('btn_desicion').onclick = function(){
           'выплаты УТС является ' + formatDate(new Date(date_uts_last_day)) + ', а неустойка подлежит начислению с '+
           formatDate(new Date(date_uts_penalty_day)) +'.<br>'
 
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_checked[i] + ' осуществило выплату УТС в размере '+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_if[i] + ' осуществило выплату УТС в размере '+
           makeRubText_1(pay_text[i]) +
           // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
           '.<br>'
@@ -541,7 +541,7 @@ document.getElementById('btn_desicion').onclick = function(){
           'выплаты расходов на эвакуацию Транспортного средства является ' + formatDate(new Date(date_ev_last_day)) + ', а неустойка подлежит начислению с '+
           formatDate(new Date(date_ev_penalty_day)) +'.<br>'
 
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_checked[i] + ' осуществило выплату расходов на эвакуацию Транспортного средства в размере '+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_if[i] + ' осуществило выплату расходов на эвакуацию Транспортного средства в размере '+
           makeRubText_1(pay_text[i]) +
           //', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
           '.<br>'
@@ -580,7 +580,7 @@ document.getElementById('btn_desicion').onclick = function(){
           'выплаты расходов на хранение Транспортного средства является ' + formatDate(new Date(date_stor_last_day)) + ', а неустойка подлежит начислению с '+
           formatDate(new Date(date_stor_penalty_day)) +'.<br>'
 
-          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_checked[i] + ' осуществило выплату расходов на хранение Транспортного средства в размере '+
+          payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_if[i] + ' осуществило выплату расходов на хранение Транспортного средства в размере '+
           makeRubText_1(pay_text[i]) +
           // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
           '.<br>'
