@@ -1,13 +1,11 @@
 function addrows(e) {
 
-  var target = e.target || e.srcElement
+  let target = e.target || e.srcElement;
 
   if (target == app_btn_1) {
     $("#app_form_row_2").show('fast');
     $("#app_form_row_3").show('fast');
     $("#app_form_row_4").show('fast');
-  } else if (target == app_btn_1) {
-    $("#app_form_row_2").hide('fast');
   } else if (target == app_btn_2) {
     $("#app_form_row_2").hide('fast');
     document.getElementById('app_date_2').value = "";
@@ -25,38 +23,6 @@ function addrows(e) {
     }
   }
 
-  if ((target == add_info_btn_1) && (add_info_btn_1.innerHTML == "▼")) {
-    $("#add_info_pay_form_row_1").show();
-    document.getElementById('add_info_btn_1').innerHTML = "▲";
-  } else if ((target == add_info_btn_1) && (add_info_btn_1.innerHTML == "▲")) {
-    $("#add_info_pay_form_row_1").hide();
-    document.getElementById('add_info_btn_1').innerHTML = "▼";
-  } else if ((target == add_info_btn_2) && (add_info_btn_2.innerHTML == "▼")) {
-    $("#add_info_pay_form_row_2").show();
-    document.getElementById('add_info_btn_2').innerHTML = "▲";
-  } else if ((target == add_info_btn_2) && (add_info_btn_2.innerHTML == "▲")) {
-    $("#add_info_pay_form_row_2").hide();
-    document.getElementById('add_info_btn_2').innerHTML = "▼";
-  } else if ((target == add_info_btn_3) && (add_info_btn_3.innerHTML == "▼")) {
-    $("#add_info_pay_form_row_3").show();
-    document.getElementById('add_info_btn_3').innerHTML = "▲";
-  } else if ((target == add_info_btn_3) && (add_info_btn_3.innerHTML == "▲")) {
-    $("#add_info_pay_form_row_3").hide();
-    document.getElementById('add_info_btn_3').innerHTML = "▼";
-  } else if ((target == add_info_btn_4) && (add_info_btn_4.innerHTML == "▼")) {
-    $("#add_info_pay_form_row_4").show();
-    document.getElementById('add_info_btn_4').innerHTML = "▲";
-  } else if ((target == add_info_btn_4) && (add_info_btn_4.innerHTML == "▲")) {
-    $("#add_info_pay_form_row_4").hide();
-    document.getElementById('add_info_btn_4').innerHTML = "▼";
-  } else if ((target == add_info_btn_5) && (add_info_btn_5.innerHTML == "▼")) {
-    $("#add_info_pay_form_row_5").show();
-    document.getElementById('add_info_btn_5').innerHTML = "▲";
-  } else if ((target == add_info_btn_5) && (add_info_btn_5.innerHTML == "▲")) {
-    $("#add_info_pay_form_row_5").hide();
-    document.getElementById('add_info_btn_5').innerHTML = "▼";
-  }
-
   if (target == court_if_1) {
     $("#div_date_court_1").show();
     $("#div_date_fu_1").hide();
@@ -71,15 +37,31 @@ function addrows(e) {
     switch (target) {
       case pay_btn_2:
         $("#pay_form_row_2").hide('fast');
+        $("#add_info_pay_form_row_2").hide('fast');
+        if ($("#add_info_btn_2").find(".toggle").hasClass("rotate")) {
+          $("#add_info_btn_2").find(".toggle").removeClass("rotate");
+        }
         break;
       case pay_btn_3:
         $("#pay_form_row_3").hide('fast');
+        $("#add_info_pay_form_row_3").hide('fast');
+        if ($("#add_info_btn_3").find(".toggle").hasClass("rotate")) {
+          $("#add_info_btn_3").find(".toggle").removeClass("rotate");
+        }
         break;
       case pay_btn_4:
         $("#pay_form_row_4").hide('fast');
+        $("#add_info_pay_form_row_4").hide('fast');
+        if ($("#add_info_btn_4").find(".toggle").hasClass("rotate")) {
+          $("#add_info_btn_4").find(".toggle").removeClass("rotate");
+        }
         break;
       case pay_btn_5:
         $("#pay_form_row_5").hide('fast');
+        $("#add_info_pay_form_row_5").hide('fast');
+        if ($("#add_info_btn_5").find(".toggle").hasClass("rotate")) {
+          $("#add_info_btn_5").find(".toggle").removeClass("rotate");
+        }
         break;
       default:
     }
