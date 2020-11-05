@@ -766,6 +766,8 @@ while (date == Date.parse(new Date(2015, 0, 1, 3)) ||
    date == Date.parse(new Date(2020, 4, 5, 3)) ||
    date == Date.parse(new Date(2020, 4, 11, 3)) ||
    date == Date.parse(new Date(2020, 5, 12, 3)) ||
+   date == Date.parse(new Date(2020, 5, 24, 3)) ||
+   date == Date.parse(new Date(2020, 6, 1, 3)) ||
    date == Date.parse(new Date(2020, 10, 4, 3))) {
      off_days[k] = date;
      k++;
