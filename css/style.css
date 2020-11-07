@@ -94,3 +94,21 @@ thead {
   line-height: 1.5;
   text-indent: 20px;
 }
+
+.table_result {
+white-space: nowrap;
+}
+
+.total_count {
+  text-align: center;
+}
+
+#total_count:hover {
+  color: #e0a800;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.card-header, #menu_osago_penalty:hover, #menu_osago_fs:hover {
+  cursor: pointer;
+}

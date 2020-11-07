@@ -22,6 +22,7 @@
   <body>
     <div class="container-lg mt-5">
       <div class="row">
+        <!-- BEGIN Left menu -->
         <div class="col-md-3">
           <div id="accordion_menu" class="accordion mb-2" >
             <div class="card">
@@ -36,9 +37,9 @@
               <div id="collapse_1" class="collapse" aria-labelledby="headingOne" data-parent="#accordion_menu">
                 <div class="card-body">
                   <ul class="list-group">
-                    <li class="list-group-item"><a id="menu_osago_penalty" href="#"><i class="fa fa-percent"></i> Неустойка</a></li>
-                    <li class="list-group-item"><a id="menu_osago_fs"href="#"><i class="fa fa-coin"></i> Финансовая санкция</a></li>
-                    <li class="list-group-item"><a href="#"><i class="fa fa-trash"></i> Расходы на экспертизу</a></li>
+                    <li id="menu_osago_penalty" class="list-group-item"><a href="#"><i class="fa fa-percent"></i> Неустойка</a></li>
+                    <li id="menu_osago_fs" class="list-group-item"><a href="#"><i class="fa fa-money"></i> Финансовая санкция</a></li>
+                    <li class="list-group-item"><a href="#"><i class="fa fa-pie-chart"></i> Расходы</a></li>
                   </ul>
                 </div>
               </div>
@@ -55,189 +56,161 @@
               <div id="collapse_2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion_menu">
                 <div class="card-body">
                   <ul class="list-group">
-                    <li class="list-group-item"><a href="#"><i class="fa fa-pencil"></i> Неустойка</a></li>
-                    <li class="list-group-item"><a href="#"><i class="fa fa-trash"></i> Расходы на экспертизу</a></li>
+                    <li class="list-group-item"><a href="#"><i class="fa fa-percent"></i> Неустойка</a></li>
+                    <li class="list-group-item"><a href="#"><i class="fa fa-pie-chart"></i> Расходы</a></li>
                   </ul>
                 </div>
               </div>
             </div>
           </div>
-        </div><!-- left menu -->
+        </div>
+        <!-- END Left menu -->
 
+        <!-- BEGIN Right menu -->
         <div class="col-md-9">
+          <!-- BEGIN jumbotron_osago_penalty -->
           <div id="jumbotron_osago_penalty" class="jumbotron">
             <h1>Неустойка (ОСАГО)</h1>
             <br>
-            <div class="form-row align-items-center">
+            <!-- BEGIN fo_name -->
+            <div class="fo_name form-row align-items-center">
               <div class="form-group col-md-6">
                 <div class="autocomplete">
-                  <!-- <label for="fo_name">Введите наименование ФО</label> -->
                   <input id="fo_name" class="form-control" type="text" placeholder="Введите наименование ФО" size="40">
                 </div>
               </div>
             </div>
-
-
-            <hr>
-
-
+            <!-- END fo_name -->
+            <hr class="mb-4">
+            <!-- BEGIN First_app -->
             <div class="first_app">
               <!-- <button id="first_app_btn" data-toggle="collapse" type="button" class="btn accordion_right " name="button">
                 <span>Первоначальное заявление о страховой выплате</span>
                 <i id="first_app_toggle" class="fa fa-chevron-down toggle"></i>
               </button> -->
-
-              <!-- <div class="panel"> -->
-                <div class="form-row">
-                  <div class="form-group col-md-4">
-                    <h6>Заявление</h6>
-                  </div>
-                  <div class="form-group col-md-3">
-                    <h6>Дата обращения</h6>
-                  </div>
-                  <!-- <div class="form-group col-md-1"></div> -->
-                  <div class="form-group col-md-2">
-                    <h6><span id="COLUMN_NAME_20" tooltip="Последний день выплаты"></span></h6>
-                  </div>
-                  <div class="form-group col-md-2">
-                    <h6><span id="COLUMN_NAME_21" tooltip="Первый день начисления неустойки"></span></h6>
-                  </div>
+              <div class="form-row">
+                <div class="form-group col-md-4">
+                  <h6>Заявление</h6>
                 </div>
-
-                <div id="app_form_row_1" class="form-row">
-                  <div class="form-group col-md-4 form-inline">о страховом возмещении
-                    <!-- <select id="app_name_1" class="custom-select mr-sm-2">
-                      <option>о страховом возмещении</option>
-                      <option>о выплате УТС</option>
-                      <option>о выплате расходов на эвакуатор</option>
-                      <option>о выплате расходов на хранение</option>
-                    </select> -->
-                    <!-- <small class="form-text text-muted">
-                      Выберите тип обращения
-                    </small> -->
-                  </div>
-                  <div class="form-group col-md-2">
-                    <!-- <label class="mr-sm-2" for="date_sv">Дата</label> -->
-                    <input id = "app_date_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                    <!-- <small class="form-text text-muted">
-                      Укажите дату обращения
-                    </small> -->
-                  </div>
-                  <div class="form-group col-md-1">
-                    <!-- <label class="mr-sm-2" for="date_sv"> </label> -->
-                    <button id="app_btn_1" class="btn btn-outline-warning" onclick="addrows()">+</button>
-                  </div>
-                  <div class="form-group col-md-2 form-inline">
-                    <span id = "date_sv_last_day"></span>
-                  </div>
-                  <div class="form-group col-md-2 form-inline">
-                    <span id = "date_sv_penalty_day"></span>
-                  </div>
-                </div><!-- app_form_row_1 -->
-
-                <div id="app_form_row_2" class="form-row" style="display:none">
-                  <div class="form-group col-md-4 form-inline">о выплате УТС
-                    <!-- <select id="app_name_2" class="custom-select mr-sm-2">
-                      <option>о страховом возмещении</option>
-                      <option>о выплате УТС</option>
-                      <option>о выплате расходов на эвакуатор</option>
-                      <option>о выплате расходов на хранение</option>
-                    </select> -->
-                    <!-- <small class="form-text text-muted">
-                      Выберите тип обращения
-                    </small> -->
-                  </div>
-                  <div class="form-group col-md-2">
-                    <!-- <label class="mr-sm-2" for="date_sv">Дата</label> -->
-                    <input id = "app_date_2" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                    <!-- <small class="form-text text-muted">
-                      Укажите дату обращения
-                    </small> -->
-                  </div>
-                  <div class="form-group col-md-1">
-                    <!-- <label class="mr-sm-2" for="date_sv"> </label> -->
-                    <button id="app_btn_2" class="btn btn-outline-danger" onclick="addrows()">×</button>
-                  </div>
-                  <div class="form-group col-md-2 form-inline">
-                    <span id = "date_uts_last_day"></span>
-                  </div>
-                  <div class="form-group col-md-2 form-inline">
-                    <span id = "date_uts_penalty_day"></span>
-                  </div>
-                </div><!-- app_form_row_2 -->
-
-                <div id="app_form_row_3" class="form-row" style="display:none">
-                  <div class="form-group col-md-4 form-inline">о выплате расходов на эвакуатор
-                    <!-- <select id="app_name_3" class="custom-select mr-sm-2">
-                      <option>о страховом возмещении</option>
-                      <option>о выплате УТС</option>
-                      <option>о выплате расходов на эвакуатор</option>
-                      <option>о выплате расходов на хранение</option>
-                    </select> -->
-                    <!-- <small class="form-text text-muted">
-                      Выберите тип обращения
-                    </small> -->
-                  </div>
-                  <div class="form-group col-md-2">
-                    <!-- <label class="mr-sm-2" for="date_sv">Дата</label> -->
-                    <input id = "app_date_3" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                    <!-- <small class="form-text text-muted">
-                      Укажите дату обращения
-                    </small> -->
-                  </div>
-                  <div class="form-group col-md-1">
-                    <!-- <label class="mr-sm-2" for="date_sv"> </label> -->
-                    <button id="app_btn_3" class="btn btn-outline-danger" onclick="addrows()">×</button>
-                  </div>
-                  <div class="form-group col-md-2 form-inline">
-                    <span id = "date_ev_last_day"></span>
-                  </div>
-                  <div class="form-group col-md-2 form-inline">
-                    <span id = "date_ev_penalty_day"></span>
-                  </div>
-                </div><!-- app_form_row_3 -->
-
-                <div id="app_form_row_4" class="form-row" style="display:none">
-                  <div class="form-group col-md-4 form-inline">о выплате расходов на хранение
-                    <!-- <select id="app_name_3" class="custom-select mr-sm-2">
-                      <option>о страховом возмещении</option>
-                      <option>о выплате УТС</option>
-                      <option>о выплате расходов на эвакуатор</option>
-                      <option>о выплате расходов на хранение</option>
-                    </select> -->
-                    <!-- <small class="form-text text-muted">
-                      Выберите тип обращения
-                    </small> -->
-                  </div>
-                  <div class="form-group col-md-2">
-                    <!-- <label class="mr-sm-2" for="date_sv">Дата</label> -->
-                    <input id = "app_date_4" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                    <!-- <small class="form-text text-muted">
-                      Укажите дату обращения
-                    </small> -->
-                  </div>
-                  <div class="form-group col-md-1">
-                    <!-- <label class="mr-sm-2" for="date_sv"> </label> -->
-                    <button id="app_btn_4" class="btn btn-outline-danger" onclick="addrows()">×</button>
-                  </div>
-                  <div class="form-group col-md-2 form-inline">
-                    <span id = "date_stor_last_day"></span>
-                  </div>
-                  <div class="form-group col-md-2 form-inline">
-                    <span id = "date_stor_penalty_day"></span>
-                  </div>
-                </div><!-- app_form_row_4 -->
+                <div class="form-group col-md-3">
+                  <h6>Дата обращения</h6>
+                </div>
+                <div class="form-group col-md-2">
+                  <h6><span id="COLUMN_NAME_20" data-toggle="tooltip" title="Последний день выплаты"></span></h6>
+                </div>
+                <div class="form-group col-md-2">
+                  <h6><span id="COLUMN_NAME_21" data-toggle="tooltip" title="Первый день начисления неустойки"></span></h6>
+                </div>
               </div>
-            <!-- </div> -->
 
+              <!-- BEGIN app_form_row_1 (sv) -->
+              <div id="app_form_row_1" class="form-row">
+                <div class="form-group col-md-4 form-inline">о страховом возмещении
+                  <!-- <select id="app_name_1" class="custom-select mr-sm-2">
+                    <option>о страховом возмещении</option>
+                    <option>о выплате УТС</option>
+                    <option>о выплате расходов на эвакуатор</option>
+                    <option>о выплате расходов на хранение</option>
+                  </select> -->
+                </div>
+                <div class="form-group col-md-2">
+                  <input id = "app_date_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                </div>
+                <div class="form-group col-md-1">
+                  <button id="app_btn_1" class="btn btn-outline-warning" onclick="addrows()">+</button>
+                </div>
+                <div class="form-group col-md-2 form-inline">
+                  <span id = "date_sv_last_day"></span>
+                </div>
+                <div class="form-group col-md-2 form-inline">
+                  <span id = "date_sv_penalty_day"></span>
+                </div>
+              </div>
+              <!-- END app_form_row_1 (sv) -->
 
+              <!-- BEGIN app_form_row_2 (uts) -->
+              <div id="app_form_row_2" class="form-row" style="display:none">
+                <div class="form-group col-md-4 form-inline">о выплате УТС
+                  <!-- <select id="app_name_2" class="custom-select mr-sm-2">
+                    <option>о страховом возмещении</option>
+                    <option>о выплате УТС</option>
+                    <option>о выплате расходов на эвакуатор</option>
+                    <option>о выплате расходов на хранение</option>
+                  </select> -->
+                </div>
+                <div class="form-group col-md-2">
+                  <input id = "app_date_2" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                </div>
+                <div class="form-group col-md-1">
+                  <button id="app_btn_2" class="btn btn-outline-danger" onclick="addrows()">×</button>
+                </div>
+                <div class="form-group col-md-2 form-inline">
+                  <span id = "date_uts_last_day"></span>
+                </div>
+                <div class="form-group col-md-2 form-inline">
+                  <span id = "date_uts_penalty_day"></span>
+                </div>
+              </div>
+              <!-- END app_form_row_2 (uts) -->
 
+              <!-- BEGIN app_form_row_3 (ev) -->
+              <div id="app_form_row_3" class="form-row" style="display:none">
+                <div class="form-group col-md-4 form-inline">о выплате расходов на эвакуатор
+                  <!-- <select id="app_name_3" class="custom-select mr-sm-2">
+                    <option>о страховом возмещении</option>
+                    <option>о выплате УТС</option>
+                    <option>о выплате расходов на эвакуатор</option>
+                    <option>о выплате расходов на хранение</option>
+                  </select> -->
+                </div>
+                <div class="form-group col-md-2">
+                  <input id = "app_date_3" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                </div>
+                <div class="form-group col-md-1">
+                  <button id="app_btn_3" class="btn btn-outline-danger" onclick="addrows()">×</button>
+                </div>
+                <div class="form-group col-md-2 form-inline">
+                  <span id = "date_ev_last_day"></span>
+                </div>
+                <div class="form-group col-md-2 form-inline">
+                  <span id = "date_ev_penalty_day"></span>
+                </div>
+              </div>
+              <!-- END app_form_row_3 (ev) -->
+
+              <!-- BEGIN app_form_row_4 (stor) -->
+              <div id="app_form_row_4" class="form-row" style="display:none">
+                <div class="form-group col-md-4 form-inline">о выплате расходов на хранение
+                  <!-- <select id="app_name_3" class="custom-select mr-sm-2">
+                    <option>о страховом возмещении</option>
+                    <option>о выплате УТС</option>
+                    <option>о выплате расходов на эвакуатор</option>
+                    <option>о выплате расходов на хранение</option>
+                  </select> -->
+                </div>
+                <div class="form-group col-md-2">
+                  <input id = "app_date_4" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                </div>
+                <div class="form-group col-md-1">
+                  <button id="app_btn_4" class="btn btn-outline-danger" onclick="addrows()">×</button>
+                </div>
+                <div class="form-group col-md-2 form-inline">
+                  <span id = "date_stor_last_day"></span>
+                </div>
+                <div class="form-group col-md-2 form-inline">
+                  <span id = "date_stor_penalty_day"></span>
+                </div>
+              </div>
+              <!-- END app_form_row_4 (stor) -->
+            </div>
+            <!-- END First_app -->
             <hr class="mb-2">
-
-            <button type="button" class="accordion_right" name="button">
-              <span>Судебная неустойка (кликните в случае взыскания неустойки судом)</span>
-              <i class="fa fa-chevron-down toggle"></i>
-            </button>
+            <!-- BEGIN Court -->
+            <div class="court_period">
+              <button type="button" class="accordion_right" name="button">
+                <span>Судебная неустойка (кликните в случае взыскания неустойки судом)</span>
+                <i class="fa fa-chevron-down toggle"></i>
+              </button>
               <div class="panel">
                 <h6>Судом взыскана неустойка за период:</h6>
                 <div id="div_court" class="form-group row form-inline">
@@ -251,403 +224,157 @@
                   </div>
                 </div><!-- div_court -->
               </div>
-
-
-            <hr class="mb-6">
-
-            <div class="form-row">
-              <div class="form-group col-md-4">
-                <h6>Вид выплаты</h6>
-              </div>
-              <div class="form-group col-md-2">
-                <h6>Дата выплаты</h6>
-              </div>
-              <div class="form-group col-md-3">
-                <h6>Сумма выплаты</h6>
-              </div>
             </div>
-
-            <div id="pays" class="">
-              <div id="pay_form_row_1" class="form-row payments">
-                <div class="form-group col-md-4 form-inline">
-                  <select id="pay1" class="custom-select col-md-12">
-                    <option>Страховое возмещение</option>
-                    <option>УТС</option>
-                    <option>Эвакуатор</option>
-                    <option>Хранение</option>
-                  </select>
+            <!-- END Court -->
+            <hr class="mb-4">
+            <!-- BEGIN payments_all -->
+            <div class="payments_all">
+              <!-- BEGIN payments_colunm_names -->
+              <div class="payments_colunm_names form-row">
+                <div class="form-group col-md-4">
+                  <h6>Вид выплаты</h6>
                 </div>
                 <div class="form-group col-md-2">
-                  <input id = "pay1_date" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  <h6>Дата выплаты</h6>
                 </div>
                 <div class="form-group col-md-3">
-                  <div class="input-group">
-                    <input id="pay1_text" class = "input-numeral form-control" placeholder="Сумма" type="text" size="10">
-                    <div class="input-group-append">
-                      <span class="input-group-text">&#8381;</span>
+                  <h6>Сумма выплаты</h6>
+                </div>
+              </div>
+              <!-- END payments_colunm_names -->
+              <!-- BEGIN Pays -->
+              <div id="pays" class="pays">
+                <div id="pay_form_row_1" class="form-row payments">
+                  <div class="form-group col-md-4 form-inline">
+                    <select id="pay1" class="payments_names custom-select col-md-12">
+                      <option>Страховое возмещение</option>
+                      <option>УТС</option>
+                      <option>Эвакуатор</option>
+                      <option>Хранение</option>
+                    </select>
+                  </div>
+                  <div class="form-group col-md-2">
+                    <input id = "pay1_date" class = "payments_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  </div>
+                  <div class="form-group col-md-3">
+                    <div class="input-group">
+                      <input id="pay1_text" class = "payments_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">
+                      <div class="input-group-append">
+                        <span class="input-group-text">&#8381;</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="form-group col-ms-1">
-                  <button id="add_info_btn_1" class="btn btn-outline-warning add_info" onclick="addInfo(1)">
-                    <i class="fa fa-chevron-down toggle"></i>
-                  </button>
-                </div>
-                <div class="form-group col-ms-1">
-                  <button id="pay_btn_1" class="btn btn-outline-warning" onclick="addPay()">+</button>
-                </div>
-              </div><!-- pay_form_row_1 -->
+                  <div class="form-group col-ms-1">
+                    <button id="add_info_btn_1" class="btn btn-outline-warning add_info" onclick="addInfo(1)">
+                      <i class="fa fa-chevron-down toggle"></i>
+                    </button>
+                  </div>
+                  <div class="form-group col-ms-1">
+                    <button id="pay_btn_1" class="btn btn-outline-warning" onclick="addPay()">+</button>
+                  </div>
+                </div><!-- pay_form_row_1 -->
 
-              <div id="add_info_pay_form_row_1" class="add_info_pay_form form-row ml-2 mb-4" style="display:none">
-                <div class="form-check form-check-inline">
-                  <input id="voluntary_if_1" class="form-check-input" type="radio" name="payment_option_1" value="option1" >
-                  <label for="voluntary_if_1" class="form-check-label">Добровольная выплата</label>
-                </div><!-- div_voluntary -->
-                <div class="form-check form-check-inline">
-                  <input id="fu_if_1" class="form-check-input" type="radio" name="payment_option_1" value="option2" >
-                  <label for="fu_if_1" class="form-check-label">Выплата на основании решения ФУ</label>
-                </div><!-- div_FU -->
-                <div class="form-check form-check-inline">
-                  <input id="court_if_1" class="form-check-input" type="radio" name="payment_option_1" value="option3" >
-                  <label for="court_if_1" class="form-check-label">Выплата на основании решения суда</label>
-                </div><!-- div_court -->
-                <div id="div_date_court_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
-                  <label for="date_court_1" class="mr-2">Дата решения суда</label>
-                  <input id = "date_court_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                </div><!-- div_date_court_1 -->
-                <div id="div_date_fu_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
-                  <label for="date_fu_1" class="mr-2">Дата решения ФУ</label>
-                  <input id = "date_fu_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                </div><!-- div_date_court_1 -->
-              </div><!-- add_info_pay_form_row_1 -->
-            </div><!-- pays -->
-
-            <br class="mb-6">
-
-            <button id="btn_desicion" class ="btn btn-warning btn-lg btn-block" anim="ripple" type="button" name="button">Рассчитать</button>
-
-
-
-            <!-- TODO: Отсюда нужно обновлять -->
-            <br><br>
-
-            <br>
-            <div class="form_grup">
-              <label class="form_label">Общий размер неустойки: </label>
-              <span id="total_count"></span>
+                <div id="add_info_pay_form_row_1" class="add_info_pay_form form-row ml-2 mb-4" style="display:none">
+                  <div class="form-check form-check-inline">
+                    <input id="voluntary_if_1" class="voluntary_ifs form-check-input" type="radio" name="payment_option_1" value="option1" >
+                    <label for="voluntary_if_1" class="form-check-label">Добровольная выплата</label>
+                  </div><!-- div_voluntary -->
+                  <div class="form-check form-check-inline">
+                    <input id="fu_if_1" class="fu_ifs form-check-input" type="radio" name="payment_option_1" value="option2" >
+                    <label for="fu_if_1" class="form-check-label">Выплата на основании решения ФУ</label>
+                  </div><!-- div_FU -->
+                  <div class="form-check form-check-inline">
+                    <input id="court_if_1" class="court_ifs form-check-input" type="radio" name="payment_option_1" value="option3" >
+                    <label for="court_if_1" class="form-check-label">Выплата на основании решения суда</label>
+                  </div><!-- div_court -->
+                  <div id="div_date_court_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
+                    <label for="date_court_1" class="mr-2">Дата решения суда</label>
+                    <input id = "date_court_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  </div><!-- div_date_court_1 -->
+                  <div id="div_date_fu_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
+                    <label for="date_fu_1" class="mr-2">Дата решения ФУ</label>
+                    <input id = "date_fu_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  </div><!-- div_date_court_1 -->
+                </div><!-- add_info_pay_form_row_1 -->
+              </div>
+              <!-- END Pays -->
             </div>
-            <br>
-
+            <!-- END payments_all -->
+            <br class="mb-6">
+            <!-- BEGIN btn_desicion -->
+            <button id="btn_desicion" class ="btn btn-warning btn-lg btn-block" anim="ripple" type="button" name="button">
+              Рассчитать
+            </button>
+            <!-- END btn_desicion -->
+            <br class="mb-6">
+            <!-- BEGIN count_result -->
+            <div class="count_result">
+              <div class="form_grup total_count_div">
+                <!-- <label class="form_label">Общий размер неустойки: </label> -->
+                <h3 class="total_count" data-toggle="tooltip" title="Кликните для подробного расчета неустойки"><span id="total_count" data-toggle="modal" data-target="#exampleModal"></span></h3>
+              </div>
+              <br>
+              <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Подробный расчет неустойки</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div><!-- modal-header -->
+                    <div class="modal-body">
+                      <div class="container-fluid">
+                        <div class="row">
+                          <div class="table_result table-responsive">
+                            <table class="table table-striped">
+                              <thead class="thead-dark">
+                                <tr>
+                                  <th scope="col"><span id="COLUMN_NAME_0"></span></th>
+                                  <th scope="col"><span id="COLUMN_NAME_1"></span></th>
+                                  <!-- <th scope="col"><span id="COLUMN_NAME_2"></span></th> -->
+                                  <th scope="col"><span id="COLUMN_NAME_3"></span></th>
+                                  <th scope="col"><span id="COLUMN_NAME_4"></span></th>
+                                  <th scope="col"><span id="COLUMN_NAME_5"></span></th>
+                                  <th scope="col"><span id="COLUMN_NAME_6"></span></th>
+                                  <th scope="col"><span id="COLUMN_NAME_7"></span></th>
+                                </tr>
+                              </thead>
+                              <tbody id="str_payment_dataled" class="table-striped">
+                              </tbody>
+                            </table>
+                          </div><!-- table_result -->
+                        </div>
+                        <div class="row">
+                          <div class="col">
+                            <span id="decision" style="display:none"></span>
+                          </div>
+                        </div><!-- decision -->
+                      </div><!-- container-fluid -->
+                    </div><!-- modal-body -->
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                      <button id="show_decision" type="button" class="btn btn-warning" onclick="show_decision()">Показать текст решения</button>
+                    </div><!-- modal-footer -->
+                  </div><!-- modal-content -->
+                </div><!-- modal-dialog -->
+              </div><!-- exampleModal -->
+            </div>
+            <!-- END count_result -->
           </div><!-- jumbotron -->
+          <!-- END jumbotron_osago_penalty -->
 
+          <!-- BEGIN jumbotron_osago_fs -->
           <div id="jumbotron_osago_fs" class="jumbotron" style="display:none">
             <h1>Финансовая санкция (ОСАГО)</h1>
           </div>
+          <!-- END jumbotron_osago_fs -->
         </div>
+        <!-- END Right menu -->
       </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    <form class="form" action="index.html" method="get">
-      <!-- <div class="autocomplete">
-        <input id="fo_name" type="text" placeholder="Введите наименование ФО" size="40">
-      </div> -->
-      <br>
-
-
-
-      <!-- <br>
-      <div class="table_court">
-        <table class="table_2">
-            <tr>
-              <td><label class="form_label" placeholder=" ">Суд взыскал неустойку с</label></td>
-              <td><input id="date_court_from" class = "datepicker-here" type="text" size="8"></td>
-            </tr>
-            <tr>
-              <td><label class="form_label" placeholder=" ">Суд взыскал неустойку по</label></td>
-              <td><input id="date_court_to" class = "datepicker-here" type="text" size="8"></td>
-            </tr>
-        </table>
-      </div> -->
-
-      <br>
-      <div class="table_of_payments">
-        <table class="table_3">
-          <thead align = "center">
-            <tr>
-              <!-- <td>Вид выплаты</td>
-              <td>Дата выплаты</td>
-              <td>Сумма выплаты</td> -->
-              <!-- <td>№ ПП</td> -->
-              <!-- <td>Суд</td> -->
-              <td class="td_main"><span id="COLUMN_NAME_4"></span></td>
-              <td class="td_main"><span id="COLUMN_NAME_5"></span></td>
-              <td class="td_main"><span id="COLUMN_NAME_6"></span></td>
-              <td class="td_main"><span id="COLUMN_NAME_7"></span></td>
-              <td class="td_main"><span id="COLUMN_NAME_8"></span></td>
-              <td class="td_main"><span id="COLUMN_NAME_9"></span></td>
-              <td class="td_main"><span id="COLUMN_NAME_10"></span></td>
-              <td class="td_main"><span id="COLUMN_NAME_11"></span></td>
-            </tr>
-          </thead>
-          <tbody align = "center">
-            <tr>
-              <!-- <td>
-                <select id="pay1">
-                  <option value="">Страховое возмещение</option>
-                  <option value="">УТС</option>
-                  <option value="">Эвакуатор</option>
-                  <option value="">Хранение</option>
-                </select>
-              </td>
-              <td>
-                <input id="pay1_date" class = "datepicker-here" type="text" size="10">
-              </td>
-              <td>
-                <input id="pay1_text" class = "input-numeral" type="text" size="10">
-              </td>
-              <!- <td>
-                <input id="payment_order_1" class = "form_input" type="text" size="10">
-              </td>
-              <td>
-                <input type = "checkbox" class = "cbx" id = "court_checked_1" style = "display:none"/>
-                <label for = "court_checked_1" class = "toggle"><span></span></label>
-              </td> -->
-              <td>
-                <span id="date_penalty_day_1"></span>
-              </td>
-              <td>
-                <span id="date_court_from_out_1"></span>
-              </td>
-              <td>
-                <span id="pay1_count"></span>
-              </td>
-              <td>
-                <span id="pay1_summ"></span>
-              </td>
-              <td>
-                <span id="date_court_to_out_1"></span>
-              </td>
-              <td>
-                <span id="pay_date_out_1"></span>
-              </td>
-              <td>
-                <span id="court_period_after_1"></span>
-              </td>
-              <td>
-                <span id="court_summ_after_1"></span>
-              </td>
-            </tr>
-            <tr>
-              <!-- <td>
-                <select id="pay2" class="" name="">
-                  <option value="">Страховое возмещение</option>
-                  <option value="">УТС</option>
-                  <option value="">Эвакуатор</option>
-                  <option value="">Хранение</option>
-                </select>
-              </td>
-              <td>
-                <input id="pay2_date" class = "datepicker-here" type="text" size="10">
-              </td>
-              <td>
-                <input id="pay2_text" class = "input-numeral" type="text" size="10">
-              </td> -->
-              <!-- <td>
-                <input id="payment_order_2" class = "form_input" type="text" size="10">
-              </td> -->
-              <!-- <td>
-                <input type = "checkbox" class = "cbx" id = "court_checked_2" style = "display:none"/>
-                <label for = "court_checked_2" class = "toggle"><span></span></label>
-              </td> -->
-              <td>
-                <span id="date_penalty_day_2"></span>
-              </td>
-              <td>
-                <span id="date_court_from_out_2"></span>
-              </td>
-              <td>
-                <span id="pay2_count"></span>
-              </td>
-              <td>
-                <span id="pay2_summ"></span>
-              </td>
-              <td>
-                <span id="date_court_to_out_2"></span>
-              </td>
-              <td>
-                <span id="pay_date_out_2"></span>
-              </td>
-              <td>
-                <span id="court_period_after_2"></span>
-              </td>
-              <td>
-                <span id="court_summ_after_2"></span>
-              </td>
-            </tr>
-            <tr>
-              <!-- <td>
-                <select id="pay3" class="" name="">
-                  <option value="">Страховое возмещение</option>
-                  <option value="">УТС</option>
-                  <option value="">Эвакуатор</option>
-                  <option value="">Хранение</option>
-                </select>
-              </td>
-              <td>
-                <input id="pay3_date" class = "datepicker-here" type="text" size="10">
-              </td>
-              <td>
-                <input id="pay3_text" class = "input-numeral" type="text" size="10">
-              </td> -->
-              <!-- <td>
-                <input id="payment_order_3" class = "form_input" type="text" size="10">
-              </td> -->
-              <!-- <td>
-                <input type = "checkbox" class = "cbx" id = "court_checked_3" style = "display:none"/>
-                <label for = "court_checked_3" class = "toggle"><span></span></label>
-              </td> -->
-              <td>
-                <span id="date_penalty_day_3"></span>
-              </td>
-              <td>
-                <span id="date_court_from_out_3"></span>
-              </td>
-              <td>
-                <span id="pay3_count"></span>
-              </td>
-              <td>
-                <span id="pay3_summ"></span>
-              </td>
-              <td>
-                <span id="date_court_to_out_3"></span>
-              </td>
-              <td>
-                <span id="pay_date_out_3"></span>
-              </td>
-              <td>
-                <span id="court_period_after_3"></span>
-              </td>
-              <td>
-                <span id="court_summ_after_3"></span>
-              </td>
-            </tr>
-            <tr>
-              <!-- <td>
-                <select id="pay4" class="" name="">
-                  <option value="">Страховое возмещение</option>
-                  <option value="">УТС</option>
-                  <option value="">Эвакуатор</option>
-                  <option value="">Хранение</option>
-                </select>
-              </td>
-              <td>
-                <input id="pay4_date" class = "datepicker-here" type="text" size="10">
-              </td>
-              <td>
-                <input id="pay4_text" class = "input-numeral" type="text" size="10">
-              </td> -->
-              <!-- <td>
-                <input id="payment_order_4" class = "form_input" type="text" size="10">
-              </td> -->
-              <!-- <td>
-                <input type = "checkbox" class = "cbx" id = "court_checked_4" style = "display:none"/>
-                <label for = "court_checked_4" class = "toggle"><span></span></label>
-              </td> -->
-              <td>
-                <span id="date_penalty_day_4"></span>
-              </td>
-              <td>
-                <span id="date_court_from_out_4"></span>
-              </td>
-              <td>
-                <span id="pay4_count"></span>
-              </td>
-              <td>
-                <span id="pay4_summ"></span>
-              </td>
-              <td>
-                <span id="date_court_to_out_4"></span>
-              </td>
-              <td>
-                <span id="pay_date_out_4"></span>
-              </td>
-              <td>
-                <span id="court_period_after_4"></span>
-              </td>
-              <td>
-                <span id="court_summ_after_4"></span>
-              </td>
-            </tr>
-            <tr>
-              <!-- <td>
-                <select id="pay5" class="" name="">
-                  <option value="">Страховое возмещение</option>
-                  <option value="">УТС</option>
-                  <option value="">Эвакуатор</option>
-                  <option value="">Хранение</option>
-                </select>
-              </td>
-              <td>
-                <input id="pay5_date" class = "datepicker-here" type="text" size="10">
-              </td>
-              <td>
-                <input id="pay5_text" class = "input-numeral" type="text" size="10">
-              </td> -->
-              <!-- <td>
-                <input id="payment_order_5" class = "form_input" type="text" size="10">
-              </td> -->
-              <!-- <td>
-                <input type = "checkbox" class = "cbx" id = "court_checked_5" style = "display:none"/>
-                <label for = "court_checked_5" class = "toggle"><span></span></label>
-              </td> -->
-              <td>
-                <span id="date_penalty_day_5"></span>
-              </td>
-              <td>
-                <span id="date_court_from_out_5"></span>
-              </td>
-              <td>
-                <span id="pay5_count"></span>
-              </td>
-              <td>
-                <span id="pay5_summ"></span>
-              </td>
-              <td>
-                <span id="date_court_to_out_5"></span>
-              </td>
-              <td>
-                <span id="pay_date_out_5"></span>
-              </td>
-              <td>
-                <span id="court_period_after_5"></span>
-              </td>
-              <td>
-                <span id="court_summ_after_5"></span>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <br><br>
-      <span id="test_span"></span>
-      <span id="decision"></span>
-    </form>
-    <div class="toast">
+    <!-- </form> -->
+    <div class="toast"></div><!-- toast -->
     <script type="text/javascript" src="js/script.js"></script>
     <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/word.js"></script>
@@ -658,6 +385,6 @@
     <script type="text/javascript" src="js/izitoast/iziToast.min.js"></script>
     <script type="text/javascript" src="js/accordion.js"></script>
     <script type="text/javascript" src="js/left-menu.js"></script>
-    </div> <!-- container -->
+  </div> <!-- container -->
   </body>
 </html>

@@ -5,6 +5,11 @@ let decision;
 let COLUMN_NAME_20 = "20-й день";
 let COLUMN_NAME_21 = "21-й день";
 
+let COLUMN_NAME_0 = "№";
+let COLUMN_NAME_1 = "Вид выплаты";
+let COLUMN_NAME_2 = "Дата выплаты";
+let COLUMN_NAME_3 = "Сумма выплаты";
+
 let COLUMN_NAME_4 = "Начало периода";
 let COLUMN_NAME_5 = "Конец периода";
 let COLUMN_NAME_6 = "Количество дней";
@@ -21,7 +26,11 @@ let pay_text = [];
 let payment_order = [];
 let pay_count = [];
 let pay_summ = [];
+let voluntary_if = [];
+let fu_if = [];
 let court_if = [];
+
+let str_payment_dataled = [];
 
 let off_days = [];
 
@@ -197,13 +206,18 @@ $('#app_date_4').focusout(function analizeDate(){
 
 document.getElementById('btn_desicion').onclick = function(){
 
-  document.querySelector('#test_span').innerHTML = "";
   holly = "";
   holly_boolen = false;
   var q = 1;
 
   //Получение количества строк с выплатами
   var number_of_payments = $('div.payments').length;
+  var payments_names = $('.payments_names');
+  var payments_dates = $('.payments_dates');
+  var payments_summs = $('.payments_summs');
+  var voluntary_ifs = $('.voluntary_ifs');
+  var fu_ifs = $('.fu_ifs');
+  var court_ifs = $('.court_ifs');
 
   //Удаление всплывающей подсказки 193 ГК РФ
   document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
@@ -212,16 +226,19 @@ document.getElementById('btn_desicion').onclick = function(){
   document.querySelector('#date_stor_last_day').removeAttribute('tooltip');
 
   //Стирание всех значений в таблице
-  document.querySelector('#COLUMN_NAME_20').innerHTML = "";
-  document.querySelector('#COLUMN_NAME_21').innerHTML = "";
+  // document.querySelector('#COLUMN_NAME_20').innerHTML = "";
+  // document.querySelector('#COLUMN_NAME_21').innerHTML = "";
+  document.querySelector('#COLUMN_NAME_0').innerHTML = "";
+  document.querySelector('#COLUMN_NAME_1').innerHTML = "";
+  document.querySelector('#COLUMN_NAME_3').innerHTML = "";
   document.querySelector('#COLUMN_NAME_4').innerHTML = "";
   document.querySelector('#COLUMN_NAME_5').innerHTML = "";
   document.querySelector('#COLUMN_NAME_6').innerHTML = "";
   document.querySelector('#COLUMN_NAME_7').innerHTML = "";
-  document.querySelector('#COLUMN_NAME_8').innerHTML = "";
-  document.querySelector('#COLUMN_NAME_9').innerHTML = "";
-  document.querySelector('#COLUMN_NAME_10').innerHTML = "";
-  document.querySelector('#COLUMN_NAME_11').innerHTML = "";
+  // document.querySelector('#COLUMN_NAME_8').innerHTML = "";
+  // document.querySelector('#COLUMN_NAME_9').innerHTML = "";
+  // document.querySelector('#COLUMN_NAME_10').innerHTML = "";
+  // document.querySelector('#COLUMN_NAME_11').innerHTML = "";
 
   document.querySelector('#date_sv_last_day').innerHTML = "";
   document.querySelector('#date_sv_penalty_day').innerHTML = "";
@@ -232,15 +249,9 @@ document.getElementById('btn_desicion').onclick = function(){
   document.querySelector('#date_stor_last_day').innerHTML = "";
   document.querySelector('#date_stor_penalty_day').innerHTML = "";
 
+  //Удаление значений в таблице результатов
   for (var i = 1; i <= number_of_payments; i++) {
-    document.querySelector('#date_penalty_day_' + i).innerHTML = "";
-    document.querySelector('#date_court_from_out_' + i).innerHTML = "";
-    document.querySelector('#pay' + i + '_count').innerHTML = "";
-    document.querySelector('#pay' + i + '_summ').innerHTML = "";
-    document.querySelector('#date_court_to_out_' + i).innerHTML = "";
-    document.querySelector('#pay_date_out_' + i).innerHTML = "";
-    document.querySelector('#court_period_after_' + i).innerHTML = "";
-    document.querySelector('#court_summ_after_' + i).innerHTML = "";
+    $('#str_payment_dataled').empty();
     court_period_text[i] = "";
   }
 
@@ -335,13 +346,21 @@ document.getElementById('btn_desicion').onclick = function(){
     payment_paragraf[i] = "";
 
     //Получение значений из полей index
-    pay[i] = document.getElementById("pay" + i ).options.selectedIndex;
-    pay_date[i] = document.querySelector('#pay' + i + '_date').value;
+    // pay[i] = document.getElementById("pay" + i ).options.selectedIndex;
+    // pay_date[i] = document.querySelector('#pay' + i + '_date').value;
+    // pay_text[i] = document.querySelector('#pay' + i + '_text').value;
+    // court_if[i] = document.getElementById("court_if_" + i );
+    pay[i] = payments_names[i - 1].options.selectedIndex; //получение значения наименования выплаты
+    pay_date[i] = payments_dates[i - 1].value; // получение значения даты выплаты
+    pay_text[i] = payments_summs[i - 1].value; // получение значения суммы выплаты
+    court_if[i] = court_ifs[i - 1]; // получение значения "выплата на основании решения суда"
+    fu_if[i] = fu_ifs[i - 1]; // получение значения "выплата на основании решения ФУ"
+    voluntary_if[i] = voluntary_ifs[i - 1]; // получение значения "добровольная выплата"
+
     pay_date[i] = changeDateType(pay_date[i]);
     pay_date[i] = Date.parse(pay_date[i]);
-    pay_text[i] = document.querySelector('#pay' + i + '_text').value;
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
-    court_if[i] = document.getElementById("court_if_" + i );
+
     // payment_order[i] = document.querySelector('#payment_order_' + i).value;
 
     if (court_if[i].checked) {
@@ -423,6 +442,10 @@ document.getElementById('btn_desicion').onclick = function(){
   if (isNaN(date_court_from)) {
     document.querySelector('#COLUMN_NAME_20').innerHTML = COLUMN_NAME_20;
     document.querySelector('#COLUMN_NAME_21').innerHTML = COLUMN_NAME_21;
+    document.querySelector('#COLUMN_NAME_0').innerHTML = COLUMN_NAME_0;
+    document.querySelector('#COLUMN_NAME_1').innerHTML = COLUMN_NAME_1;
+    // document.querySelector('#COLUMN_NAME_2').innerHTML = COLUMN_NAME_2;
+    document.querySelector('#COLUMN_NAME_3').innerHTML = COLUMN_NAME_3;
     document.querySelector('#COLUMN_NAME_4').innerHTML = COLUMN_NAME_4;
     document.querySelector('#COLUMN_NAME_5').innerHTML = COLUMN_NAME_5;
     document.querySelector('#COLUMN_NAME_6').innerHTML = COLUMN_NAME_6;
@@ -442,11 +465,21 @@ document.getElementById('btn_desicion').onclick = function(){
       pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
 
       //Выведение значений на экран
-      if (!isNaN(pay_count[i]) && pay_date[i] >= date_penalty_day[i]) {
-        document.querySelector('#date_penalty_day_' + i).innerHTML = formatDate(new Date(date_penalty_day[i]));
-        document.querySelector('#date_court_from_out_' + i).innerHTML = formatDate(new Date(pay_date[i]));
-        document.querySelector('#pay' + i + '_count').innerHTML = declinationDays(pay_count[i] / day);
-        document.querySelector('#pay' + i + '_summ').innerHTML = makeRubText_2(pay_summ[i]);
+      // if (!isNaN(pay_count[i]) && pay_date[i] >= date_penalty_day[i]) {
+      if (!isNaN(pay_count[i])) {
+
+        str_payment_dataled = '<tr>' +
+          '<th scope="row"><span>' + i + '</span></th>' +
+          '<td><span>' + payments_names[i - 1].value + '</span></td>' +
+          '<!-- <td><span>' + formatDate(new Date(pay_date[i])) + '</span></td> -->' +
+          '<td><span>' + makeRubText_1(pay_text[i]) + '</span></td>' +
+          '<td><span>' + formatDate(new Date(date_penalty_day[i])) + '</span></td>' +
+          '<td><span>' + formatDate(new Date(pay_date[i])) + '</span></td>' +
+          '<td><span>' + declinationDays(pay_count[i] / day) + '</span></td>' +
+          '<td><span>' + makeRubText_2(pay_summ[i]) + '</span></td>' +
+        '</tr>';
+
+        $('#str_payment_dataled').append(str_payment_dataled);
       }
 
       //Установление для количества дней и суммы нулевого значения, в случае,
@@ -787,13 +820,13 @@ document.getElementById('btn_desicion').onclick = function(){
 
   decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + summary_paragraf;
 
-    document.querySelector('#total_count').innerHTML = makeRubText_2(total_count);
+    document.querySelector('#total_count').innerHTML = "Общий размер неустойки: " + makeRubText_2(total_count);
     total_count = 0;
 
-    if (!isNaN(pay_date[1])) {
-      document.querySelector('#decision').innerHTML = decision;
-      selectText('decision');
-    }
+    // if (!isNaN(pay_date[1])) {
+    //   document.querySelector('#decision').innerHTML = decision;
+    //   selectText('decision');
+    // }
 
 
     //Формирование Word файла
@@ -1309,3 +1342,19 @@ $('.input-numeral').toArray().forEach(function(field){
       numeralIntegerScale: 8
   })
 });
+
+$(function () {
+  $('[data-toggle="tooltip"]').tooltip()
+})
+
+function show_decision(){
+  if ($('#show_decision').html() == "Показать текст решения") {
+    $('#decision').show();
+    $('#show_decision').html("Скрыть текст решения");
+    document.querySelector('#decision').innerHTML = decision;
+    selectText('decision');
+  } else {
+    $('#decision').hide();
+    $('#show_decision').html("Показать текст решения");;
+  }
+}
