@@ -2,8 +2,8 @@ let day = 24*60*60*1000;
 let fo_name;
 let decision;
 
-let COLUMN_NAME_20 = "20-й день (последний день выплаты)";
-let COLUMN_NAME_21 = "21-й день (первый день неустойки)";
+let COLUMN_NAME_20 = "20-й день";
+let COLUMN_NAME_21 = "21-й день";
 
 let COLUMN_NAME_4 = "Начало периода";
 let COLUMN_NAME_5 = "Конец периода";
@@ -93,12 +93,117 @@ standart_motivation = 'Согласно статье 12 ГК РФ '+
 'о страховой выплате и документов, предусмотренных Правилами ОСАГО, и до дня '+
 'фактического исполнения страховщиком обязательства по договору включительно.'+'<br>';
 
+//Обработчик потери фокуса у поля с датой первоначального обращения о страховом случае
+$('#app_date_1').focusout(function analizeDate(){
+
+  document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
+  document.querySelector('#date_sv_last_day').innerHTML = "";
+  document.querySelector('#date_sv_penalty_day').innerHTML = "";
+  document.querySelector('#date_sv_last_day').style.color = '#595b5e';
+
+  date_sv = document.querySelector('#app_date_1').value;
+  date_sv = changeDateType(date_sv);
+  date_sv = Date.parse(date_sv);
+  date_sv_last_day = findLastDay(date_sv);
+  if (holly_boolen) {
+    document.querySelector('#date_sv_last_day').style.color = '#b00000';
+    document.querySelector('#date_sv_last_day').setAttribute('tooltip', '193 ГК РФ');
+  }
+  date_sv_penalty_day = date_sv_last_day + day;
+
+  if (!isNaN(date_sv_last_day)) {
+    document.querySelector('#date_sv_last_day').innerHTML = formatDate(new Date(date_sv_last_day));
+    document.querySelector('#date_sv_penalty_day').innerHTML = formatDate(new Date(date_sv_penalty_day));
+    document.querySelector('#COLUMN_NAME_20').innerHTML = COLUMN_NAME_20;
+    document.querySelector('#COLUMN_NAME_21').innerHTML = COLUMN_NAME_21;
+  }
+});
+
+//Обработчик потери фокуса у поля с датой первоначального обращения с требованием о выплате УТС
+$('#app_date_2').focusout(function analizeDate(){
+
+  document.querySelector('#date_uts_last_day').removeAttribute('tooltip');
+  document.querySelector('#date_uts_last_day').innerHTML = "";
+  document.querySelector('#date_uts_penalty_day').innerHTML = "";
+  document.querySelector('#date_uts_last_day').style.color = '#595b5e';
+
+  date_uts = document.querySelector('#app_date_2').value;
+  date_uts = changeDateType(date_uts);
+  date_uts = Date.parse(date_uts);
+  date_uts_last_day = findLastDay(date_uts);
+  if (holly_boolen) {
+    document.querySelector('#date_uts_last_day').style.color = '#b00000';
+    document.querySelector('#date_uts_last_day').setAttribute('tooltip', '193 ГК РФ');
+  }
+  date_uts_penalty_day = date_uts_last_day + day;
+
+  if (!isNaN(date_uts_last_day)) {
+    document.querySelector('#date_uts_last_day').innerHTML = formatDate(new Date(date_uts_last_day));
+    document.querySelector('#date_uts_penalty_day').innerHTML = formatDate(new Date(date_uts_penalty_day));
+    document.querySelector('#COLUMN_NAME_20').innerHTML = COLUMN_NAME_20;
+    document.querySelector('#COLUMN_NAME_21').innerHTML = COLUMN_NAME_21;
+  }
+});
+
+$('#app_date_3').focusout(function analizeDate(){
+
+  document.querySelector('#date_ev_last_day').removeAttribute('tooltip');
+  document.querySelector('#date_ev_last_day').innerHTML = "";
+  document.querySelector('#date_ev_penalty_day').innerHTML = "";
+  document.querySelector('#date_ev_last_day').style.color = '#595b5e';
+
+  date_ev = document.querySelector('#app_date_3').value;
+  date_ev = changeDateType(date_ev);
+  date_ev = Date.parse(date_ev);
+  date_ev_last_day = findLastDay(date_ev);
+  if (holly_boolen) {
+    document.querySelector('#date_ev_last_day').style.color = '#b00000';
+    document.querySelector('#date_ev_last_day').setAttribute('tooltip', '193 ГК РФ');
+  }
+  date_ev_penalty_day = date_ev_last_day + day;
+
+  if (!isNaN(date_ev_last_day)) {
+    document.querySelector('#date_ev_last_day').innerHTML = formatDate(new Date(date_ev_last_day));
+    document.querySelector('#date_ev_penalty_day').innerHTML = formatDate(new Date(date_ev_penalty_day));
+    document.querySelector('#COLUMN_NAME_20').innerHTML = COLUMN_NAME_20;
+    document.querySelector('#COLUMN_NAME_21').innerHTML = COLUMN_NAME_21;
+  }
+});
+
+$('#app_date_4').focusout(function analizeDate(){
+
+  document.querySelector('#date_stor_last_day').removeAttribute('tooltip');
+  document.querySelector('#date_stor_last_day').innerHTML = "";
+  document.querySelector('#date_stor_penalty_day').innerHTML = "";
+  document.querySelector('#date_stor_last_day').style.color = '#595b5e';
+
+  date_stor = document.querySelector('#app_date_4').value;
+  date_stor = changeDateType(date_stor);
+  date_stor = Date.parse(date_stor);
+  date_stor_last_day = findLastDay(date_stor);
+  if (holly_boolen) {
+    document.querySelector('#date_stor_last_day').style.color = '#b00000';
+    document.querySelector('#date_stor_last_day').setAttribute('tooltip', '193 ГК РФ');
+  }
+  date_stor_penalty_day = date_stor_last_day + day;
+
+  if (!isNaN(date_stor_last_day)) {
+    document.querySelector('#date_stor_last_day').innerHTML = formatDate(new Date(date_stor_last_day));
+    document.querySelector('#date_stor_penalty_day').innerHTML = formatDate(new Date(date_stor_penalty_day));
+    document.querySelector('#COLUMN_NAME_20').innerHTML = COLUMN_NAME_20;
+    document.querySelector('#COLUMN_NAME_21').innerHTML = COLUMN_NAME_21;
+  }
+});
+
 document.getElementById('btn_desicion').onclick = function(){
 
   document.querySelector('#test_span').innerHTML = "";
   holly = "";
   holly_boolen = false;
   var q = 1;
+
+  //Получение количества строк с выплатами
+  var number_of_payments = $('div.payments').length;
 
   //Удаление всплывающей подсказки 193 ГК РФ
   document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
@@ -127,7 +232,7 @@ document.getElementById('btn_desicion').onclick = function(){
   document.querySelector('#date_stor_last_day').innerHTML = "";
   document.querySelector('#date_stor_penalty_day').innerHTML = "";
 
-  for (var i = 1; i < 6; i++) {
+  for (var i = 1; i <= number_of_payments; i++) {
     document.querySelector('#date_penalty_day_' + i).innerHTML = "";
     document.querySelector('#date_court_from_out_' + i).innerHTML = "";
     document.querySelector('#pay' + i + '_count').innerHTML = "";
@@ -224,7 +329,7 @@ document.getElementById('btn_desicion').onclick = function(){
   }
 
   //Цикл для присвоения общих значений
-  for (var i = 1; i <= 5; i++) {
+  for (var i = 1; i <= number_of_payments; i++) {
     payment_not_in_time_paragraf_court[i] = "";
     analize_period_paragraf[i] = "";
     payment_paragraf[i] = "";
@@ -323,7 +428,7 @@ document.getElementById('btn_desicion').onclick = function(){
     document.querySelector('#COLUMN_NAME_6').innerHTML = COLUMN_NAME_6;
     document.querySelector('#COLUMN_NAME_7').innerHTML = COLUMN_NAME_7;
 
-    for (var i = 1; i <= 5; i++) {
+    for (var i = 1; i <= number_of_payments; i++) {
 
       //Вычисление количества дней между датой выплаты и 20м днем
       pay_count[i] = pay_date[i] - date_sv_uts_ev_stor_last_day[i];
@@ -400,9 +505,10 @@ document.getElementById('btn_desicion').onclick = function(){
       payment_not_in_time_paragraf[i];
     }
 
+    //Формирование абзаца со сложением нескольких неустоек
     let stop_ind_1 = 1;
     let stop_ind_2 = false;
-    for (var i = 1; i <= 5; i++) {
+    for (var i = 1; i <= number_of_payments; i++) {
       if (pay_summ[i] > 0) {
         total_count_string = ' (' + makeRubText_2(pay_summ[i]);
         stop_ind_1 = i + 1;
@@ -410,7 +516,7 @@ document.getElementById('btn_desicion').onclick = function(){
       }
     }
 
-    for (var i = stop_ind_1; i <= 5; i++) {
+    for (var i = stop_ind_1; i <= number_of_payments; i++) {
       if (pay_summ[i] > 0) {
         total_count_string = total_count_string + ' + ' + makeRubText_2(pay_summ[i]);
         stop_ind_2 = true;
@@ -435,7 +541,7 @@ document.getElementById('btn_desicion').onclick = function(){
     document.querySelector('#COLUMN_NAME_10').innerHTML = COLUMN_NAME_6;
     document.querySelector('#COLUMN_NAME_11').innerHTML = COLUMN_NAME_7;
 
-    for (var i = 1; i <= 5; i++) {
+    for (var i = 1; i <= number_of_payments; i++) {
       if (pay_date[i] > date_penalty_day[i]) {
 
         court_period_after[i] = (pay_date[i] - date_court_to) / day;
@@ -715,7 +821,7 @@ document.getElementById('btn_desicion').onclick = function(){
 
     //Удаление всех значений
 
-    for (var i = 0; i < 5; i++) {
+    for (var i = 1; i <= number_of_payments; i++) {
       pay[i] = undefined;
       date_penalty_day[i] = undefined;
       pay_date[i] = undefined;

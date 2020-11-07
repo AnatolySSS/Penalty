@@ -9,18 +9,24 @@ function addrows(e) {
   } else if (target == app_btn_2) {
     $("#app_form_row_2").hide('fast');
     document.getElementById('app_date_2').value = "";
+    document.querySelector('#date_uts_last_day').removeAttribute('tooltip');
+    document.querySelector('#date_uts_last_day').innerHTML = "";
+    document.querySelector('#date_uts_penalty_day').innerHTML = "";
+    document.querySelector('#date_uts_last_day').style.color = '#595b5e';
   } else if (target == app_btn_3) {
     $("#app_form_row_3").hide('fast');
     document.getElementById('app_date_3').value = "";
+    document.querySelector('#date_ev_last_day').removeAttribute('tooltip');
+    document.querySelector('#date_ev_last_day').innerHTML = "";
+    document.querySelector('#date_ev_penalty_day').innerHTML = "";
+    document.querySelector('#date_ev_last_day').style.color = '#595b5e';
   } else if (target == app_btn_4) {
     $("#app_form_row_4").hide('fast');
     document.getElementById('app_date_4').value = "";
-  }
-
-  if (target == pay_btn_1) {
-    for (var i = 2; i <= 5; i++) {
-      $("#pay_form_row_" + i).show('fast');
-    }
+    document.querySelector('#date_stor_last_day').removeAttribute('tooltip');
+    document.querySelector('#date_stor_last_day').innerHTML = "";
+    document.querySelector('#date_stor_penalty_day').innerHTML = "";
+    document.querySelector('#date_stor_last_day').style.color = '#595b5e';
   }
 
   if (target == court_if_1) {
@@ -34,38 +40,136 @@ function addrows(e) {
     $("#div_date_court_1").hide();
   }
 
-    switch (target) {
-      case pay_btn_2:
-        $("#pay_form_row_2").hide('fast');
-        $("#add_info_pay_form_row_2").hide('fast');
-        if ($("#add_info_btn_2").find(".toggle").hasClass("rotate")) {
-          $("#add_info_btn_2").find(".toggle").removeClass("rotate");
-        }
-        break;
-      case pay_btn_3:
-        $("#pay_form_row_3").hide('fast');
-        $("#add_info_pay_form_row_3").hide('fast');
-        if ($("#add_info_btn_3").find(".toggle").hasClass("rotate")) {
-          $("#add_info_btn_3").find(".toggle").removeClass("rotate");
-        }
-        break;
-      case pay_btn_4:
-        $("#pay_form_row_4").hide('fast');
-        $("#add_info_pay_form_row_4").hide('fast');
-        if ($("#add_info_btn_4").find(".toggle").hasClass("rotate")) {
-          $("#add_info_btn_4").find(".toggle").removeClass("rotate");
-        }
-        break;
-      case pay_btn_5:
-        $("#pay_form_row_5").hide('fast');
-        $("#add_info_pay_form_row_5").hide('fast');
-        if ($("#add_info_btn_5").find(".toggle").hasClass("rotate")) {
-          $("#add_info_btn_5").find(".toggle").removeClass("rotate");
-        }
-        break;
-      default:
-    }
+    // switch (target) {
+    //   case pay_btn_2:
+    //     $("#pay_form_row_2").hide('fast');
+    //     $("#add_info_pay_form_row_2").hide('fast');
+    //     if ($("#add_info_btn_2").find(".toggle").hasClass("rotate")) {
+    //       $("#add_info_btn_2").find(".toggle").removeClass("rotate");
+    //     }
+    //     break;
+    //   case pay_btn_3:
+    //     $("#pay_form_row_3").hide('fast');
+    //     $("#add_info_pay_form_row_3").hide('fast');
+    //     if ($("#add_info_btn_3").find(".toggle").hasClass("rotate")) {
+    //       $("#add_info_btn_3").find(".toggle").removeClass("rotate");
+    //     }
+    //     break;
+    //   case pay_btn_4:
+    //     $("#pay_form_row_4").hide('fast');
+    //     $("#add_info_pay_form_row_4").hide('fast');
+    //     if ($("#add_info_btn_4").find(".toggle").hasClass("rotate")) {
+    //       $("#add_info_btn_4").find(".toggle").removeClass("rotate");
+    //     }
+    //     break;
+    //   case pay_btn_5:
+    //     $("#pay_form_row_5").hide('fast');
+    //     $("#add_info_pay_form_row_5").hide('fast');
+    //     if ($("#add_info_btn_5").find(".toggle").hasClass("rotate")) {
+    //       $("#add_info_btn_5").find(".toggle").removeClass("rotate");
+    //     }
+    //     break;
+    //   default:
+    // }
 
 }
 
 document.addEventListener('click', addrows);
+
+var payId = 1;
+
+function addPay() {
+	payId++;
+  var str = '<div id="pay_form_row_' + payId + '" class="form-row payments">' +
+    '<div class="form-group col-md-4 form-inline">' +
+      '<select id="pay' + payId + '" class="custom-select col-md-12">' +
+        '<option>Страховое возмещение</option>' +
+        '<option>УТС</option>' +
+        '<option>Эвакуатор</option>' +
+        '<option>Хранение</option>' +
+      '</select>' +
+    '</div>' +
+    '<div class="form-group col-md-2">' +
+      '<input id = "pay' + payId + '_date" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+    '</div>' +
+    '<div class="form-group col-md-3">' +
+      '<div class="input-group">' +
+        '<input id="pay' + payId + '_text" class = "input-numeral form-control" placeholder="Сумма" type="text" size="10">' +
+        '<div class="input-group-append">' +
+          '<span class="input-group-text">&#8381;</span>' +
+        '</div>' +
+      '</div>' +
+    '</div>' +
+    '<div class="form-group col-ms-1">' +
+      '<button id="add_info_btn_' + payId + '" class="btn btn-outline-warning add_info" onclick="addInfo(' + payId + ')">' +
+        '<i class="fa fa-chevron-down toggle"></i>' +
+      '</button>' +
+    '</div>' +
+    '<div class="form-group col-ms-1">' +
+      '<button id="pay_btn_' + payId + '" class="btn btn-outline-danger" onclick="removePay(' + payId + ')">×</button>' +
+    '</div>' +
+  '</div><!-- pay_form_row -->' +
+
+  '<div id="add_info_pay_form_row_' + payId + '" class="add_info_pay_form form-row ml-2 mb-4" style="display:none">' +
+    '<div class="form-check form-check-inline">' +
+      '<input id="voluntary_if_' + payId + '" class="form-check-input" type="radio" name="payment_option_' + payId + '" value="option1" >' +
+      '<label for="voluntary_if_' + payId + '" class="form-check-label">Добровольная выплата</label>' +
+    '</div><!-- div_voluntary -->' +
+    '<div class="form-check form-check-inline">' +
+      '<input id="fu_if_' + payId + '" class="form-check-input" type="radio" name="payment_option_' + payId + '" value="option2" >' +
+      '<label for="fu_if_' + payId + '" class="form-check-label">Выплата на основании решения ФУ</label>' +
+    '</div><!-- div_FU -->' +
+    '<div class="form-check form-check-inline">' +
+      '<input id="court_if_' + payId + '" class="form-check-input" type="radio" name="payment_option_' + payId + '" value="option3" >' +
+      '<label for="court_if_' + payId + '" class="form-check-label">Выплата на основании решения суда</label>' +
+    '</div><!-- div_court -->' +
+    '<div id="div_date_court_' + payId + '" class="form-group col-md-6 form-inline mt-2" style="display:none">' +
+      '<label for="date_court_' + payId + '" class="mr-2">Дата решения суда</label>' +
+      '<input id = "date_court_' + payId + '" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+    '</div><!-- div_date_court -->' +
+    '<div id="div_date_fu_' + payId + '" class="form-group col-md-6 form-inline mt-2" style="display:none">' +
+      '<label for="date_fu_' + payId + '" class="mr-2">Дата решения ФУ</label>' +
+      '<input id = "date_fu_' + payId + '" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+    '</div><!-- div_date_court -->' +
+  '</div><!-- add_info_pay_form_row -->'
+
+	$('#pays').append(str);
+	$('#pay' + payId + '_date').datepicker();
+
+  $('.datepicker-here').toArray().forEach(function(field){
+    new Cleave(field, {
+      date: true,
+      delimiter: '.',
+      datePattern: ['d', 'm', 'Y']
+    })
+  });
+
+  //Форматирование суммы
+  $('.input-numeral').toArray().forEach(function(field){
+    new Cleave(field, {
+        numeral: true,
+        delimiter: ' ',
+        //numeralThousandsGroupStyle: 'none',
+        numeralPositiveOnly: true,
+        numeralIntegerScale: 8
+    })
+  });
+}
+
+function removePay(id) {
+	$('#pay_form_row_' + id).remove();
+  $('#add_info_pay_form_row_' + id).remove();
+  if ($("#add_info_btn_" + id).find(".toggle").hasClass("rotate")) {
+    $("#add_info_btn_" + id).find(".toggle").removeClass("rotate");
+  }
+}
+
+function addInfo(id) {
+  if (!($('#add_info_btn_' + id).find(".toggle").hasClass("rotate"))) {
+    $('#add_info_pay_form_row_' + id).show('fast');
+    $('#add_info_btn_' + id).find(".toggle").addClass("rotate");
+  } else {
+    $('#add_info_btn_' + id).parent().parent().next().hide('fast');
+    $('#add_info_btn_' + id).find(".toggle").removeClass("rotate");
+  }
+}
