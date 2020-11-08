@@ -275,26 +275,28 @@
                 </div><!-- pay_form_row_1 -->
 
                 <div id="add_info_pay_form_row_1" class="add_info_pay_form form-row ml-2 mb-4" style="display:none">
-                  <div class="form-check form-check-inline">
-                    <input id="voluntary_if_1" class="voluntary_ifs form-check-input" type="radio" name="payment_option_1" value="option1" >
-                    <label for="voluntary_if_1" class="form-check-label">Добровольная выплата</label>
-                  </div><!-- div_voluntary -->
-                  <div class="form-check form-check-inline">
-                    <input id="fu_if_1" class="fu_ifs form-check-input" type="radio" name="payment_option_1" value="option2" >
-                    <label for="fu_if_1" class="form-check-label">Выплата на основании решения ФУ</label>
-                  </div><!-- div_FU -->
-                  <div class="form-check form-check-inline">
-                    <input id="court_if_1" class="court_ifs form-check-input" type="radio" name="payment_option_1" value="option3" >
-                    <label for="court_if_1" class="form-check-label">Выплата на основании решения суда</label>
-                  </div><!-- div_court -->
-                  <div id="div_date_court_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
-                    <label for="date_court_1" class="mr-2">Дата решения суда</label>
-                    <input id = "date_court_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                  </div><!-- div_date_court_1 -->
-                  <div id="div_date_fu_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
-                    <label for="date_fu_1" class="mr-2">Дата решения ФУ</label>
-                    <input id = "date_fu_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                  </div><!-- div_date_court_1 -->
+                  <div class="col">
+                    <div class="form-check">
+                      <input id="voluntary_if_1" class="voluntary_ifs form-check-input" type="radio" name="payment_option_1" value="option1" >
+                      <label for="voluntary_if_1" class="form-check-label">Добровольная выплата</label>
+                    </div><!-- div_voluntary -->
+                    <div class="form-check">
+                      <input id="fu_if_1" class="fu_ifs form-check-input" type="radio" name="payment_option_1" value="option2" onclick="show_court_fu_date(1)">
+                      <label for="fu_if_1" class="form-check-label">Выплата на основании решения ФУ</label>
+                    </div><!-- div_FU -->
+                    <div class="form-check">
+                      <input id="court_if_1" class="court_ifs form-check-input" type="radio" name="payment_option_1" value="option3" onclick="show_court_fu_date(1)">
+                      <label for="court_if_1" class="form-check-label">Выплата на основании решения суда</label>
+                    </div><!-- div_court -->
+                  </div>
+                    <div id="div_date_court_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
+                      <label for="date_court_1" class="mr-2">Дата решения суда</label>
+                      <input id = "date_court_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                    </div><!-- div_date_court_1 -->
+                    <div id="div_date_fu_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
+                      <label for="date_fu_1" class="mr-2">Дата решения ФУ</label>
+                      <input id = "date_fu_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                    </div><!-- div_date_court_1 -->
                 </div><!-- add_info_pay_form_row_1 -->
               </div>
               <!-- END Pays -->
@@ -328,17 +330,7 @@
                         <div class="row">
                           <div class="table_result table-responsive">
                             <table class="table table-striped">
-                              <thead class="thead-dark">
-                                <tr>
-                                  <th scope="col"><span id="COLUMN_NAME_0"></span></th>
-                                  <th scope="col"><span id="COLUMN_NAME_1"></span></th>
-                                  <!-- <th scope="col"><span id="COLUMN_NAME_2"></span></th> -->
-                                  <th scope="col"><span id="COLUMN_NAME_3"></span></th>
-                                  <th scope="col"><span id="COLUMN_NAME_4"></span></th>
-                                  <th scope="col"><span id="COLUMN_NAME_5"></span></th>
-                                  <th scope="col"><span id="COLUMN_NAME_6"></span></th>
-                                  <th scope="col"><span id="COLUMN_NAME_7"></span></th>
-                                </tr>
+                              <thead id="str_payment_dataled_header" class="thead-dark">
                               </thead>
                               <tbody id="str_payment_dataled" class="table-striped">
                               </tbody>
