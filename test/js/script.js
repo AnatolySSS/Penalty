@@ -49,6 +49,7 @@ let date_stor, date_stor_last_day, date_stor_penalty_day;
 let date_court_from, date_court_to;
 let total_count = 0;
 let total_penalty = 0;
+let total_ndfl = 0;
 let total_count_paragraf = "";
 let total_penalty_payments_paragraf = "";
 let total_penalty_paragraf = "";
@@ -63,7 +64,7 @@ let rub_string_payment = [];
 let rub_string_penalty = [];
 let kop_string = [];
 
-let holly, holly_boolen, standart_motivation, first_paragraf, summary_paragraf = "";
+let holly, holly_boolen, standart_motivation, first_paragraf, ndfl_motivation = "", ndfl_motivation_on, summary_paragraf = "";
 let analize_period_paragraf = [], payment_paragraf = [];
 let payment_in_time_paragraf = [];
 let payment_not_in_time_paragraf = [];
@@ -109,6 +110,40 @@ standart_motivation = 'Согласно статье 12 ГК РФ '+
 'возмещения, то есть с 21-го дня после получения страховщиком заявления потерпевшего '+
 'о страховой выплате и документов, предусмотренных Правилами ОСАГО, и до дня '+
 'фактического исполнения страховщиком обязательства по договору включительно.'+'<br>';
+
+ndfl_motivation_on = 'Пунктом 1 статьи 210 Налогового кодекса Российской Федерации (далее – НК РФ) '+
+'установлено, что при определении налоговой базы учитываются все доходы налогоплательщика, '+
+'полученные им как в денежной, так и в натуральной формах или право на распоряжение которыми '+
+'у него возникло, а также доходы в виде материальной выгоды.'+'<br>'+
+'Согласно статье 41 НК РФ доходом признается экономическая выгода в денежной или натуральной '+
+'форме, учитываемая в случае возможности ее оценки и в той мере, в которой такую выгоду можно '+
+'оценить, и определяемая в соответствии с главой 23 НК РФ.'+'<br>'+
+'В соответствии с подпунктом 10 пункта 1 статьи 208 НК РФ налогообложению подлежат иные доходы, '+
+'получаемые налогоплательщиком в результате осуществления им деятельности в Российской Федерации.'+'<br>'+
+'Сумма выплачиваемых штрафов, пени, неустоек не является компенсацией реального физического или '+
+'морального вреда физического лица и не входит в перечень выплат, освобожденных от налогообложения '+
+'на основании статьи 217 НК РФ.'+'<br>'+
+'Указанная выше позиция содержится в Письме Минфина России от 28.10.2015 № 03-04-07/62079, а также '+
+'в «Обзоре практики рассмотрения судами дел, связанных с применением главы 23 Налогового кодекса '+
+'Российской Федерации» (утв. Президиумом Верховного Суда РФ 21.10.2015) (далее – Обзор практики).'+'<br>'+
+'В частности, пункте 7 Обзора практики указано, что предусмотренные законодательством о защите прав '+
+'потребителей санкции носят исключительно штрафной характер. Их взыскание не преследует цель компенсации '+
+'потерь (реального ущерба) потребителя. Поскольку выплата сумм таких санкций приводит к образованию '+
+'имущественной выгоды у потребителя, они включаются в доход гражданина на основании положений '+
+'статей 41, 209 НК РФ вне зависимости от того, что получение данных сумм обусловлено нарушением '+
+'прав физического лица.'+'<br>'+
+'В связи с этим, сумма неустойки, выплаченная Страховщиком потерпевшему в случае нарушения '+
+'предусмотренного договором ОСАГО срока выплаты страхового возмещения в соответствии '+
+'с пунктом 21 статьи 12 Закона № 40-ФЗ, отвечает вышеуказанным признакам экономической '+
+'выгоды и являются его доходом, подлежащим обложению налогом на доходы физических лиц.'+'<br>'+
+'Пунктом 1 статьи 226 НК РФ установлено, что российские организации, от которых или '+
+'в результате отношений с которыми налогоплательщик получил доходы, подлежащие налогообложению, '+
+'обязаны исчислить, удержать у налогоплательщика и уплатить сумму налога на доходы физических лиц, '+
+'исчисленную в соответствии со статьей 224 НК РФ с учетом особенностей, предусмотренных статьей 226 НК РФ.'+'<br>'+
+'Указанные организации признаются налоговыми агентами и обязаны исполнять обязанности, '+
+'предусмотренные для налоговых агентов, в частности, статьей 226 НК РФ.'+'<br>'+
+'В соответствии с пунктом 4 статьи 226 НК РФ налоговые агенты обязаны удержать начисленную '+
+'сумму налога непосредственно из доходов налогоплательщика при их фактической выплате.'+'<br>';
 
 //Обработчик потери фокуса у поля с датой первоначального обращения о страховом случае
 $('#app_date_1').focusout(function analizeDate(){
@@ -358,17 +393,15 @@ document.getElementById('btn_desicion').onclick = function(){
     fu_if[i] = fu_ifs[i - 1]; // получение значения "выплата на основании решения ФУ"
     voluntary_if[i] = voluntary_ifs[i - 1]; // получение значения "добровольная выплата"
     penalty_ndfl[i] = penalty_ndfls[i - 1]; // получение значения "удержан НДФЛ (checkbox)"
-    if (!isNaN(penalty_ndfl_summ[i])) {
-      penalty_ndfl_summ[i] = penalty_ndfl_summs[i - 1].value; // получение значения "удержан НДФЛ (сумма)"
-    }
+    penalty_ndfl_summ[i] = penalty_ndfl_summs[i - 1].value; // получение значения "удержан НДФЛ (сумма)"
 
     //редактирвоание значений даты и суммы выплаты
     pay_date[i] = changeDateType(pay_date[i]);
     pay_date[i] = Date.parse(pay_date[i]);
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
-    if (!isNaN(penalty_ndfl_summ[i])) {
-      penalty_ndfl_summ[i] = penalty_ndfl_summ[i].replace(/\s+/g, '');
-    }
+    pay_text[i] = Number(pay_text[i]);
+    penalty_ndfl_summ[i] = penalty_ndfl_summ[i].replace(/\s+/g, '');
+    penalty_ndfl_summ[i] = Number(penalty_ndfl_summ[i]);
 
     // payment_order[i] = document.querySelector('#payment_order_' + i).value;
 
@@ -460,6 +493,16 @@ document.getElementById('btn_desicion').onclick = function(){
     makeRubText_1(pay_text[i]) +
     // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
     '.<br>'
+
+    if (pay[i] == 4 && penalty_ndfl[i].checked) {
+      payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату' + claim_name_short[i] + 'исходя из суммы '+
+      makeRubText_1(pay_text[i] + penalty_ndfl_summ[i]) + ' (с учетом удержания 13% НДФЛ), в связи с чем Заявителю было перечислено ' +
+      makeRubText_1(pay_text[i]) + '.<br>' +
+      formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' исполнило свою обязанность как налогового агента по перечислению налога на доход физического лица (НДФЛ) в размере ' +
+      makeRubText_1(penalty_ndfl_summ[i]) + '.<br>';
+      pay_text[i] = pay_text[i] + penalty_ndfl_summ[i];
+      total_ndfl = total_ndfl + penalty_ndfl_summ[i];
+    }
 
     //Удаление абзаца с анализом сроков 20 и 21 дней в случае его повторения
     for (var j = 1; j < i; j++) {
@@ -861,7 +904,7 @@ document.getElementById('btn_desicion').onclick = function(){
 
     //Абзац про общий размер выплаченной неустойки
   if (total_penalty > 0) {
-    total_penalty_paragraf = 'Таким образом, общий размер неустойки, добровольно выплаченной ' + fo_name + ' составляет ' +
+    total_penalty_paragraf = 'Таким образом, общий размер неустойки, добровольно выплаченной ' + fo_name + ', составляет ' +
     makeRubText_1(total_penalty) + total_penalty_string + '.' + '<br>';
   } else {
     total_penalty_paragraf = '';
@@ -880,7 +923,15 @@ document.getElementById('btn_desicion').onclick = function(){
     'неустойки за несоблюдение срока выплаты страхового возмещения не подлежит удовлетворению.' + '<br>';
   }
 
-  decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + total_count_paragraf + total_penalty_payments_paragraf + total_penalty_paragraf + summary_paragraf;
+  if (total_ndfl > 0) {
+    ndfl_motivation = ndfl_motivation_on + 'Следовательно, ' + fo_name + ' при выплате '+
+    'неустойки в связи с нарушением срока выплаты страхового возмещения в рамках Договора ОСАГО '+
+    'обосновано удержало сумму НДФЛ в размере ' + makeRubText_1(total_ndfl) +
+    ', рассчитанную следующим образом: (' + makeRubText_1(total_penalty) +
+    ' × 13%)' + '.<br>';
+  }
+
+  decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + total_count_paragraf + total_penalty_payments_paragraf + ndfl_motivation + total_penalty_paragraf + summary_paragraf;
 
   total_count = total_count - total_penalty;
     document.querySelector('#total_count').innerHTML = "Общий размер неустойки: " + makeRubText_2(total_count);
@@ -941,7 +992,9 @@ document.getElementById('btn_desicion').onclick = function(){
 
     total_analize_paragraf = "";
     total_penalty_payments_paragraf = "";
+    total_penalty_paragraf
     holly = "";
+    ndfl_motivation = "";
 }
 
 //Function for find 20th day from start day without hollidays (14 days from 112 labor code article)

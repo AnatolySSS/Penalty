@@ -310,7 +310,7 @@
                     </div>
                     <div id="penalty_ndfl_summ_form_1" class="form-group col-md-3" style="display:none">
                       <div class="input-group">
-                        <input id="penalty_ndfl_summ1" class = "penalty_ndfl_summs input-numeral form-control" placeholder="Сумма НДФЛ" type="text" size="10">
+                        <input id="penalty_ndfl_summ_1" class = "penalty_ndfl_summs input-numeral form-control" placeholder="Сумма НДФЛ" type="text" size="10">
                         <div class="input-group-append">
                           <span class="input-group-text">&#8381;</span>
                         </div>
@@ -323,7 +323,7 @@
             <!-- END payments_all -->
             <br class="mb-6">
             <!-- BEGIN btn_desicion -->
-            <button id="btn_desicion" class ="btn btn-warning btn-lg btn-block" anim="ripple" type="button" name="button">
+            <button id="btn_desicion" class ="btn btn-warning btn-lg btn-block" anim="ripple" type="button" name="button" data-toggle="modal" data-target="#exampleModal">
               Рассчитать
             </button>
             <!-- END btn_desicion -->
@@ -332,14 +332,16 @@
             <div class="count_result">
               <div class="form_grup total_count_div">
                 <!-- <label class="form_label">Общий размер неустойки: </label> -->
-                <h3 class="total_count" data-toggle="tooltip" title="Кликните для подробного расчета неустойки"><span id="total_count" data-toggle="modal" data-target="#exampleModal"></span></h3>
+                <!-- <h3 class="total_count" data-toggle="tooltip" title="Кликните для подробного расчета неустойки"><span id="total_count" data-toggle="modal" data-target="#exampleModal"></span></h3> -->
               </div>
-              <br>
+              <!-- <br> -->
               <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-scrollable modal-xl">
                   <div class="modal-content">
                     <div class="modal-header">
-                      <h5 class="modal-title" id="exampleModalLabel">Подробный расчет неустойки</h5>
+                      <h5 class="modal-title" id="exampleModalLabel">
+                        <span id="total_count"></span>
+                      </h5>
                       <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                       </button>

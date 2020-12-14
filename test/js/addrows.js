@@ -111,7 +111,7 @@ function addPay() {
       '</div>' +
       '<div id="penalty_ndfl_summ_form_' + payId + '" class="form-group col-md-3" style="display:none">' +
         '<div class="input-group">' +
-          '<input id="penalty_ndfl_summ' + payId + '" class = "input-numeral form-control" placeholder="Сумма НДФЛ" type="text" size="10">' +
+          '<input id="penalty_ndfl_summ_' + payId + '" class = "penalty_ndfl_summs input-numeral form-control" placeholder="Сумма НДФЛ" type="text" size="10">' +
           '<div class="input-group-append">' +
             '<span class="input-group-text">&#8381;</span>' +
           '</div>' +
@@ -145,6 +145,7 @@ function addPay() {
 function removePay(id) {
 	$('#pay_form_row_' + id).remove();
   $('#add_info_pay_form_row_' + id).remove();
+  $('#add_info_penalty_form_row_' + id).remove();
   if ($("#add_info_btn_" + id).find(".toggle").hasClass("rotate")) {
     $("#add_info_btn_" + id).find(".toggle").removeClass("rotate");
   }
