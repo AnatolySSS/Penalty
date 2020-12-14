@@ -253,6 +253,7 @@
                       <option>УТС</option>
                       <option>Эвакуатор</option>
                       <option>Хранение</option>
+                      <option>Неустойка</option>
                     </select>
                   </div>
                   <div class="form-group col-md-2">
@@ -300,7 +301,23 @@
                       <input id = "date_fu_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
                     </div><!-- div_date_court_1 -->
                 </div><!-- add_info_pay_form_row_1 -->
-              </div>
+                <div id="add_info_penalty_form_row_1" class="form-row" style="display:none">
+                    <div class="form-group col-md-4">
+                      <div class="form-check">
+                        <input id="penalty_ndfl_1" class="penalty_ndfls form-check-input" type="checkbox" onclick="addPenalty_ndfl_summ_form(1)">
+                        <label for="penalty_ndfl_1" class="form-check-label">удержан НДФЛ в размере</label>
+                      </div>
+                    </div>
+                    <div id="penalty_ndfl_summ_form_1" class="form-group col-md-3" style="display:none">
+                      <div class="input-group">
+                        <input id="penalty_ndfl_summ1" class = "penalty_ndfl_summs input-numeral form-control" placeholder="Сумма НДФЛ" type="text" size="10">
+                        <div class="input-group-append">
+                          <span class="input-group-text">&#8381;</span>
+                        </div>
+                      </div>
+                    </div>
+                </div><!-- add_info_penalty_form_row_1 -->
+              </div><!-- pays -->
               <!-- END Pays -->
             </div>
             <!-- END payments_all -->

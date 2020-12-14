@@ -29,6 +29,8 @@ let pay_summ = [];
 let voluntary_if = [];
 let fu_if = [];
 let court_if = [];
+let penalty_ndfl = [];
+let penalty_ndfl_summ = [];
 
 let str_payment_dataled;
 let str_payment_dataled_header;
@@ -46,7 +48,12 @@ let date_ev, date_ev_last_day, date_ev_penalty_day;
 let date_stor, date_stor_last_day, date_stor_penalty_day;
 let date_court_from, date_court_to;
 let total_count = 0;
+let total_penalty = 0;
+let total_count_paragraf = "";
+let total_penalty_payments_paragraf = "";
+let total_penalty_paragraf = "";
 let total_count_string = "";
+let total_penalty_string = "";
 let date_sv_uts_ev_stor = [];
 let date_sv_uts_ev_stor_last_day = [];
 let date_penalty_day = [];
@@ -155,6 +162,7 @@ $('#app_date_2').focusout(function analizeDate(){
   }
 });
 
+//Обработчик потери фокуса у поля с датой первоначального обращения с требованием о выплате расходов на эвакуатор
 $('#app_date_3').focusout(function analizeDate(){
 
   document.querySelector('#date_ev_last_day').removeAttribute('tooltip');
@@ -180,6 +188,7 @@ $('#app_date_3').focusout(function analizeDate(){
   }
 });
 
+//Обработчик потери фокуса у поля с датой первоначального обращения с требованием о выплате расходов на хранение
 $('#app_date_4').focusout(function analizeDate(){
 
   document.querySelector('#date_stor_last_day').removeAttribute('tooltip');
@@ -210,6 +219,8 @@ document.getElementById('btn_desicion').onclick = function(){
   holly = "";
   holly_boolen = false;
   var q = 1;
+  total_count = 0;
+  total_penalty = 0;
 
   //Получение количества строк с выплатами
   var number_of_payments = $('div.payments').length;
@@ -219,6 +230,8 @@ document.getElementById('btn_desicion').onclick = function(){
   var voluntary_ifs = $('.voluntary_ifs');
   var fu_ifs = $('.fu_ifs');
   var court_ifs = $('.court_ifs');
+  var penalty_ndfls = $('.penalty_ndfls');
+  var penalty_ndfl_summs = $('.penalty_ndfl_summs');
 
   //Удаление всплывающей подсказки 193 ГК РФ
   document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
@@ -344,11 +357,18 @@ document.getElementById('btn_desicion').onclick = function(){
     court_if[i] = court_ifs[i - 1]; // получение значения "выплата на основании решения суда"
     fu_if[i] = fu_ifs[i - 1]; // получение значения "выплата на основании решения ФУ"
     voluntary_if[i] = voluntary_ifs[i - 1]; // получение значения "добровольная выплата"
+    penalty_ndfl[i] = penalty_ndfls[i - 1]; // получение значения "удержан НДФЛ (checkbox)"
+    if (!isNaN(penalty_ndfl_summ[i])) {
+      penalty_ndfl_summ[i] = penalty_ndfl_summs[i - 1].value; // получение значения "удержан НДФЛ (сумма)"
+    }
 
     //редактирвоание значений даты и суммы выплаты
     pay_date[i] = changeDateType(pay_date[i]);
     pay_date[i] = Date.parse(pay_date[i]);
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
+    if (!isNaN(penalty_ndfl_summ[i])) {
+      penalty_ndfl_summ[i] = penalty_ndfl_summ[i].replace(/\s+/g, '');
+    }
 
     // payment_order[i] = document.querySelector('#payment_order_' + i).value;
 
@@ -424,6 +444,9 @@ document.getElementById('btn_desicion').onclick = function(){
         'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты страхового '+
         'возмещения подлежит начислению на сумму расходов на хранение Транспортного средства.'+ '<br>';
         break;
+      case 4:
+        claim_name_short[i] = ' неустойки за несоблюдение сроков выплаты страхового возмещения по Договору ОСАГО ';
+        break;
     } // завершение switch
 
     //"Собираем" абзац про анализ сроков 20 и 21 дней
@@ -440,13 +463,13 @@ document.getElementById('btn_desicion').onclick = function(){
 
     //Удаление абзаца с анализом сроков 20 и 21 дней в случае его повторения
     for (var j = 1; j < i; j++) {
-      if (!isNaN(pay_date[i]) && pay[i] == pay[j]) {
+      if ((!isNaN(pay_date[i]) && pay[i] == pay[j])) {
           analize_period_paragraf[i] = "";
       }
     }
   } // завершение for
 
-  //"Собираем" текста решения
+  //"Собираем" текст решения
   //Если суда не было
   if (isNaN(date_court_from)) {
 
@@ -478,7 +501,7 @@ document.getElementById('btn_desicion').onclick = function(){
       pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
 
       //Выведение выплат на экран
-      if (!isNaN(pay_count[i])) {
+      if ((!isNaN(pay_count[i])) && pay[i] != 4) {
         str_payment_dataled = '<tr>' +
           '<th scope="row"><span>' + i + '</span></th>' +
           '<td><span>' + payments_names[i - 1].value + '</span></td>' +
@@ -505,6 +528,11 @@ document.getElementById('btn_desicion').onclick = function(){
       //Вычисление общего размера неустойки
       total_count = total_count + pay_summ[i];
 
+      //Вычисление общего размера выплаченной неустойки
+      if (pay[i] == 4) {
+        total_penalty = total_penalty + pay_text[i] * 1;
+      }
+
       //"Собираем" абзац с выводами по каждому платежу
       if (pay_date[i] < date_penalty_day[i]) {
         payment_in_time_paragraf[i] = 'Таким образом, выплата в размере ' + makeRubText_1(pay_text[i]) + ' произведена в установленный '+
@@ -525,6 +553,15 @@ document.getElementById('btn_desicion').onclick = function(){
         payment_paragraf[i] = "";
         payment_in_time_paragraf[i] = "";
         payment_not_in_time_paragraf[i] = "";
+      }
+
+      //Удаление абзаца с анализом сроков 20 и 21 дней и сроков в случае, если выплата неустойки
+      if (pay[i] == 4) {
+          total_penalty_payments_paragraf = total_penalty_payments_paragraf + payment_paragraf[i];
+          payment_paragraf[i] = "";
+          analize_period_paragraf[i] = "";
+          payment_in_time_paragraf[i] = "";
+          payment_not_in_time_paragraf[i] = "";
       }
 
       // сложение абзацев в один
@@ -557,6 +594,33 @@ document.getElementById('btn_desicion').onclick = function(){
       total_count_string = total_count_string + ')'
     } else {
       total_count_string = '';
+    }
+
+    //Формирование абзаца со сложением нескольких ВЫПЛАЧЕННЫХ неустоек
+    //добавление открывающейся скобки и первой выплаты, в случае, если количество выплат больше 1
+    stop_ind_1 = 1;
+    stop_ind_2 = false;
+    for (var i = 1; i <= number_of_payments; i++) {
+      if (pay[i] == 4) {
+        total_penalty_string = ' (' + makeRubText_2(pay_text[i]);
+        stop_ind_1 = i + 1;
+        break
+      }
+    }
+
+    // добавление выплат, в случае, если их было больше 1
+    for (var i = stop_ind_1; i <= number_of_payments; i++) {
+      if (pay[i] == 4) {
+        total_penalty_string = total_penalty_string + ' + ' + makeRubText_2(pay_text[i]);
+        stop_ind_2 = true;
+      }
+    }
+
+    //добавление закрывающейся скобки, если количество выплат больше 1
+    if (stop_ind_2) {
+      total_penalty_string = total_penalty_string + ')'
+    } else {
+      total_penalty_string = '';
     }
 
   } else { //Определение периода взыскания неустойки до начала судебного взыскания
@@ -661,7 +725,7 @@ document.getElementById('btn_desicion').onclick = function(){
       }
 
       //Выведение выплат на экран
-      if (!isNaN(pay_date[i])) {
+      if ((!isNaN(pay_date[i])) && pay[i] != 4) {
         str_payment_dataled = '<tr>' +
           '<th scope="row"><span>' + i + '</span></th>' +
           '<td><span>' + payments_names[i - 1].value + '</span></td>' +
@@ -691,10 +755,25 @@ document.getElementById('btn_desicion').onclick = function(){
       //добавление суммы неустойки до судебного вызскания и после к общему значению
       total_count = total_count + court_summ_before[i] + court_summ_after[i];
 
+      //Вычисление общего размера выплаченной неустойки
+      if (pay[i] == 4) {
+        total_penalty = total_penalty + pay_text[i] * 1;
+      }
+
       // удаление значений пустых параграфов
       if (isNaN(pay_date[i])) {
         analize_period_paragraf[i] = "";
         payment_paragraf[i] = "";
+        payment_in_time_paragraf[i] = "";
+        payment_not_in_time_paragraf[i] = "";
+        payment_not_in_time_paragraf_court[i] = "";
+      }
+
+      //Удаление абзаца с анализом сроков 20 и 21 дней и сроков в случае, если выплата неустойки
+      if (pay[i] == 4) {
+        total_penalty_payments_paragraf = total_penalty_payments_paragraf + payment_paragraf[i];
+        payment_paragraf[i] = "";
+        analize_period_paragraf[i] = "";
         payment_in_time_paragraf[i] = "";
         payment_not_in_time_paragraf[i] = "";
         payment_not_in_time_paragraf_court[i] = "";
@@ -743,19 +822,67 @@ document.getElementById('btn_desicion').onclick = function(){
       total_count_string = '';
     }
 
+    //Формирование абзаца со сложением нескольких ВЫПЛАЧЕННЫХ неустоек
+    //добавление открывающейся скобки и первой выплаты, в случае, если количество выплат больше 1
+    stop_ind_1 = 1;
+    stop_ind_2 = false;
+    for (var i = 1; i <= number_of_payments; i++) {
+      if (pay[i] == 4) {
+        total_penalty_string = ' (' + makeRubText_2(pay_text[i]);
+        stop_ind_1 = i + 1;
+        break
+      }
+    }
+
+    // добавление выплат, в случае, если их было больше 1
+    for (var i = stop_ind_1; i <= number_of_payments; i++) {
+      if (pay[i] == 4) {
+        total_penalty_string = total_penalty_string + ' + ' + makeRubText_2(pay_text[i]);
+        stop_ind_2 = true;
+      }
+    }
+
+    //добавление закрывающейся скобки, если количество выплат больше 1
+    if (stop_ind_2) {
+      total_penalty_string = total_penalty_string + ')'
+    } else {
+      total_penalty_string = '';
+    }
+
   } //конец ветки судебного взыскания неустойки
 
+  //Абзац про общий размер начисленной неустойки
   if (total_count > 0) {
+    total_count_paragraf = 'Таким образом, общий размер начисленной неустойки составляет ' +
+    makeRubText_1(total_count) + total_count_string + '.' + '<br>';
+  } else {
+    total_count_paragraf = '';
+  }
+
+    //Абзац про общий размер выплаченной неустойки
+  if (total_penalty > 0) {
+    total_penalty_paragraf = 'Таким образом, общий размер неустойки, добровольно выплаченной ' + fo_name + ' составляет ' +
+    makeRubText_1(total_penalty) + total_penalty_string + '.' + '<br>';
+  } else {
+    total_penalty_paragraf = '';
+  }
+
+  if ((total_count > total_penalty) && (total_penalty > 0)) {
     summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
     'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
-    makeRubText_1(total_count) + total_count_string + '.' + '<br>';
+    makeRubText_1(total_count - total_penalty) + ' (' + makeRubText_1(total_count) + ' - ' + makeRubText_1(total_penalty) + ').' + '<br>';
+  } else if (total_count > total_penalty) {
+    summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
+    'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
+    makeRubText_1(total_count) +'.' + '<br>';
   } else {
     summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
     'неустойки за несоблюдение срока выплаты страхового возмещения не подлежит удовлетворению.' + '<br>';
   }
 
-  decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + summary_paragraf;
+  decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + total_count_paragraf + total_penalty_payments_paragraf + total_penalty_paragraf + summary_paragraf;
 
+  total_count = total_count - total_penalty;
     document.querySelector('#total_count').innerHTML = "Общий размер неустойки: " + makeRubText_2(total_count);
     total_count = 0;
 
@@ -813,6 +940,7 @@ document.getElementById('btn_desicion').onclick = function(){
     date_court_to = undefined;
 
     total_analize_paragraf = "";
+    total_penalty_payments_paragraf = "";
     holly = "";
 }
 
