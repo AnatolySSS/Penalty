@@ -1,5 +1,6 @@
 let day = 24*60*60*1000;
-let fo_name;
+let fo_name, fo_name_nominative, fo_name_genitive, fo_name_accusative, fo_name_instrumental;
+let make_a_payment,fulfill, keep;
 let decision;
 
 let COLUMN_NAME_20 = "20-й день";
@@ -299,8 +300,27 @@ document.getElementById('btn_desicion').onclick = function(){
   //Получение значения наименования ФО
   fo_name = document.querySelector("#fo_name").value;
 
+  if (fo_name != "") {
+    fo_name = document.querySelector("#fo_name").value;
+    fo_name_nominative = fo_name;
+    fo_name_genitive = fo_name;
+    fo_name_accusative = fo_name;
+    fo_name_instrumental = fo_name;
+    make_a_payment = " осуществило";
+    fulfill = " исполнило";
+    keep = " удержало";
+  } else {
+    fo_name_nominative = "Финансовая организация";
+    fo_name_genitive = "Финансовой организации";
+    fo_name_accusative = "Финансовую организацию";
+    fo_name_instrumental = "Финансовой организацией";
+    make_a_payment = " осуществила";
+    fulfill = " исполнила";
+    keep = " удержала";
+  }
+
   //Присваивание значения первому параграфу
-  first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name + ' неустойки '+
+  first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name_genitive + ' неустойки '+
   'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
   'Финансовый уполномоченный приходит к следующему.'+'<br>'
 
@@ -353,7 +373,7 @@ document.getElementById('btn_desicion').onclick = function(){
     date_court_to = changeDateType(date_court_to);
     date_court_to = Date.parse(date_court_to);
 
-    court_period_text[1] = 'Решением суда с ' + fo_name + ' взыскана неустойка за период с ' +
+    court_period_text[1] = 'Решением суда с ' + fo_name_genitive + ' взыскана неустойка за период с ' +
     formatDate(new Date(date_court_from)) + ' по ' + formatDate(new Date(date_court_to)) + '.<br>'
 
 
@@ -478,27 +498,27 @@ document.getElementById('btn_desicion').onclick = function(){
         'возмещения подлежит начислению на сумму расходов на хранение Транспортного средства.'+ '<br>';
         break;
       case 4:
-        claim_name_short[i] = ' неустойки за несоблюдение сроков выплаты страхового возмещения по Договору ОСАГО ';
+        claim_name_short[i] = ' неустойки за несоблюдение сроков выплаты страхового возмещения по договору ОСАГО ';
         break;
     } // завершение switch
 
     //"Собираем" абзац про анализ сроков 20 и 21 дней
-    analize_period_paragraf[i] = claim_add_motivation[i] + 'Заявитель обратился в ' + fo_name + claim_name[i] +
+    analize_period_paragraf[i] = claim_add_motivation[i] + 'Заявитель обратился в ' + fo_name_accusative + claim_name[i] +
     formatDate(new Date(date_sv_uts_ev_stor[i])) + ', следовательно, последним днем срока осуществления '+
     'выплаты' + claim_name_short[i] + 'является ' + formatDate(new Date(date_sv_uts_ev_stor_last_day[i])) + ', а неустойка подлежит начислению с '+
     formatDate(new Date(date_penalty_day[i])) +'.<br>'
 
     //"Собираем" абзац про выплату
-    payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + court_if[i] + ' осуществило выплату' + claim_name_short[i] + 'в размере '+
+    payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name_nominative + court_if[i] + make_a_payment + ' выплату' + claim_name_short[i] + 'в размере '+
     makeRubText_1(pay_text[i]) +
     // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
     '.<br>'
 
     if (pay[i] == 4 && penalty_ndfl[i].checked) {
-      payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' осуществило выплату' + claim_name_short[i] + 'исходя из суммы '+
+      payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name_nominative + make_a_payment + ' выплату' + claim_name_short[i] + 'исходя из суммы '+
       makeRubText_1(pay_text[i] + penalty_ndfl_summ[i]) + ' (с учетом удержания 13% НДФЛ), в связи с чем Заявителю было перечислено ' +
       makeRubText_1(pay_text[i]) + '.<br>' +
-      formatDate(new Date(pay_date[i])) + ' ' + fo_name + ' исполнило свою обязанность как налогового агента по перечислению налога на доход физического лица (НДФЛ) в размере ' +
+      formatDate(new Date(pay_date[i])) + ' ' + fo_name_nominative + fulfill + ' свою обязанность как налогового агента по перечислению налога на доход физического лица (НДФЛ) в размере ' +
       makeRubText_1(penalty_ndfl_summ[i]) + '.<br>';
       pay_text[i] = pay_text[i] + penalty_ndfl_summ[i];
       total_ndfl = total_ndfl + penalty_ndfl_summ[i];
@@ -904,7 +924,7 @@ document.getElementById('btn_desicion').onclick = function(){
 
     //Абзац про общий размер выплаченной неустойки
   if (total_penalty > 0) {
-    total_penalty_paragraf = 'Таким образом, общий размер неустойки, добровольно выплаченной ' + fo_name + ', составляет ' +
+    total_penalty_paragraf = 'Таким образом, общий размер неустойки, добровольно выплаченной ' + fo_name_instrumental + ', составляет ' +
     makeRubText_1(total_penalty) + total_penalty_string + '.' + '<br>';
   } else {
     total_penalty_paragraf = '';
@@ -924,9 +944,9 @@ document.getElementById('btn_desicion').onclick = function(){
   }
 
   if (total_ndfl > 0) {
-    ndfl_motivation = ndfl_motivation_on + 'Следовательно, ' + fo_name + ' при выплате '+
-    'неустойки в связи с нарушением срока выплаты страхового возмещения в рамках Договора ОСАГО '+
-    'обосновано удержало сумму НДФЛ в размере ' + makeRubText_1(total_ndfl) +
+    ndfl_motivation = ndfl_motivation_on + 'Следовательно, ' + fo_name_nominative + ' при выплате '+
+    'неустойки в связи с нарушением срока выплаты страхового возмещения в рамках договора ОСАГО '+
+    'обосновано' + keep + ' сумму НДФЛ в размере ' + makeRubText_1(total_ndfl) +
     ', рассчитанную следующим образом: (' + makeRubText_1(total_penalty) +
     ' × 13%)' + '.<br>';
   }
