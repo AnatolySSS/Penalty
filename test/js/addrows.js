@@ -103,10 +103,10 @@ function addPay() {
     '</div><!-- div_date_court -->' +
   '</div><!-- add_info_pay_form_row -->' +
   '<div id="add_info_penalty_form_row_' + payId + '" class="form-row" style="display:none">' +
-      '<div class="form-group col-md-4">' +
+      '<div class="form-group col-md-4 form-inline">' +
         '<div class="form-check">' +
           '<input id="penalty_ndfl_' + payId + '" class="penalty_ndfls form-check-input" type="checkbox" onclick="addPenalty_ndfl_summ_form(' + payId + ')">' +
-          '<label for="penalty_ndfl_' + payId + '" class="form-check-label">удержан НДФЛ в размере</label>' +
+          '<label for="penalty_ndfl_' + payId + '" class="ml-2  form-check-label">удержан НДФЛ в размере</label>' +
         '</div>' +
       '</div>' +
       '<div id="penalty_ndfl_summ_form_' + payId + '" class="form-group col-md-3" style="display:none">' +
@@ -116,6 +116,9 @@ function addPay() {
             '<span class="input-group-text">&#8381;</span>' +
           '</div>' +
         '</div>' +
+      '</div>' +
+      '<div class="form-group col-md-3 form-inline">' +
+        '<span id="penalty_ndfl_persent_' + payId + '" class="penalty_ndfl_persents">13 %</span>' +
       '</div>' +
   '</div><!-- add_info_penalty_form_row_1 -->'
 

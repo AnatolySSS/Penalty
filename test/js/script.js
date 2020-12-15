@@ -31,6 +31,7 @@ let voluntary_if = [];
 let fu_if = [];
 let court_if = [];
 let penalty_ndfl = [];
+let penalty_ndfl_persent = [];
 let penalty_ndfl_summ = [];
 
 let str_payment_dataled;
@@ -257,6 +258,7 @@ document.getElementById('btn_desicion').onclick = function(){
   var q = 1;
   total_count = 0;
   total_penalty = 0;
+  total_ndfl = 0;
 
   //Получение количества строк с выплатами
   var number_of_payments = $('div.payments').length;
@@ -268,6 +270,8 @@ document.getElementById('btn_desicion').onclick = function(){
   var court_ifs = $('.court_ifs');
   var penalty_ndfls = $('.penalty_ndfls');
   var penalty_ndfl_summs = $('.penalty_ndfl_summs');
+  var penalty_ndfl_persents = $('.penalty_ndfl_persents');
+
 
   //Удаление всплывающей подсказки 193 ГК РФ
   document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
@@ -432,6 +436,12 @@ document.getElementById('btn_desicion').onclick = function(){
       court_if[i] = '';
     }
 
+    if (fu_if[i].checked) {
+      fu_if[i] = ', на основании Решения Финансового уполномоченного,';
+    } else {
+      fu_if[i] = '';
+    }
+
     switch (pay[i]) {
       case 0: //Страховое возмещение
         date_penalty_day[i] = date_sv_penalty_day;
@@ -509,7 +519,7 @@ document.getElementById('btn_desicion').onclick = function(){
     formatDate(new Date(date_penalty_day[i])) +'.<br>'
 
     //"Собираем" абзац про выплату
-    payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name_nominative + court_if[i] + make_a_payment + ' выплату' + claim_name_short[i] + 'в размере '+
+    payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name_nominative + fu_if[i] + court_if[i] + make_a_payment + ' выплату' + claim_name_short[i] + 'в размере '+
     makeRubText_1(pay_text[i]) +
     // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
     '.<br>'
@@ -522,6 +532,9 @@ document.getElementById('btn_desicion').onclick = function(){
       makeRubText_1(penalty_ndfl_summ[i]) + '.<br>';
       pay_text[i] = pay_text[i] + penalty_ndfl_summ[i];
       total_ndfl = total_ndfl + penalty_ndfl_summ[i];
+      penalty_ndfl_persent[i] = Math.round(penalty_ndfl_summ[i] * 100 / pay_text[i]);
+      penalty_ndfl_persents[i - 1].innerHTML = penalty_ndfl_persent[i] + " %";
+      //alert(penalty_ndfl_persent[i] + " %");
     }
 
     //Удаление абзаца с анализом сроков 20 и 21 дней в случае его повторения
@@ -530,6 +543,9 @@ document.getElementById('btn_desicion').onclick = function(){
           analize_period_paragraf[i] = "";
       }
     }
+
+
+
   } // завершение for
 
   //"Собираем" текст решения
