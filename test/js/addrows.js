@@ -118,7 +118,7 @@ function addPay() {
         '</div>' +
       '</div>' +
       '<div class="form-group col-md-3 form-inline">' +
-        '<span id="penalty_ndfl_persent_' + payId + '" class="penalty_ndfl_persents">13 %</span>' +
+        '<span id="penalty_ndfl_persent_' + payId + '" class="penalty_ndfl_persents"></span>' +
       '</div>' +
   '</div><!-- add_info_penalty_form_row_1 -->'
 
