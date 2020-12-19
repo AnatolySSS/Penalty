@@ -42,7 +42,7 @@ thead {
   position: relative;
   display: inline-block;
   border: 1px solid transparent;
-  padding: 10px;
+  /* padding: 10px; */
   font-size: 12px;
   font-family: "Lucida Sans Unicode", "Lucida Grande", Sans-Serif;
 }

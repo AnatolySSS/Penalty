@@ -74,15 +74,33 @@
           <div id="jumbotron_osago_penalty" class="jumbotron">
             <h1>Неустойка</h1>
             <br>
-            <!-- BEGIN fo_name -->
-            <div class="fo_name form-row align-items-center">
-              <div class="form-group col-md-6">
-                <div class="autocomplete">
-                  <input id="fo_name" class="form-control" type="text" placeholder="Введите наименование ФО" size="40">
+            <div class="general_info">
+              <!-- BEGIN fo_name -->
+              <div class="fo_name form-row align-items-center">
+                <div class="form-group col-md-6">
+                  <div class="autocomplete">
+                    <input id="fo_name" class="form-control" type="text" placeholder="Введите наименование ФО" size="40">
+                  </div>
+                </div>
+              </div>
+              <!-- END fo_name -->
+              <div class="form-row">
+                <div class="form-group row form-inline">
+                  <label for="date_dtp" class="ml-4">Дата ДТП</label>
+                  <div class="col-md-2">
+                    <input id = "date_dtp" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  </div>
+                </div>
+                <div class="form-group col-md-3 form-inline ml-3">
+                  <input id="europrotocol" type="checkbox">
+                  <label for="europrotocol" class="ml-2 form-check-label">европротокол</label>
+                </div>
+                <div class="form-group form-inline col-md-4">
+                  <span id="max_summ"></span>
                 </div>
               </div>
             </div>
-            <!-- END fo_name -->
+
             <hr class="mb-4">
             <!-- BEGIN First_app -->
             <div class="first_app">

@@ -1,4 +1,5 @@
 let day = 24*60*60*1000;
+let date_euro_start = Date.parse(new Date(2018, 5, 1, 3))
 let fo_name, fo_name_nominative, fo_name_genitive, fo_name_accusative, fo_name_instrumental;
 let make_a_payment,fulfill, keep;
 let decision;
@@ -20,6 +21,8 @@ let COLUMN_NAME_8 = "Период ДО суда";
 let COLUMN_NAME_9 = "Период ПОСЛЕ суда";
 // let COLUMN_NAME_10 = "Начало неустойки после суда";
 // let COLUMN_NAME_11 = "Конец неустойки после суда";
+
+
 
 let pay = [];
 let pay_date = [];
@@ -49,6 +52,9 @@ let date_uts, date_uts_last_day, date_uts_penalty_day;
 let date_ev, date_ev_last_day, date_ev_penalty_day;
 let date_stor, date_stor_last_day, date_stor_penalty_day;
 let date_court_from, date_court_to;
+let date_dtp;
+let max_summ;
+let europrotocol;
 let total_count = 0;
 let total_penalty = 0;
 let total_ndfl = 0;
@@ -67,6 +73,7 @@ let rub_string_penalty = [];
 let kop_string = [];
 
 let holly, holly_boolen, standart_motivation, first_paragraf, ndfl_motivation = "", ndfl_motivation_on, summary_paragraf = "";
+let max_summ_paragraf = "";
 let analize_period_paragraf = [], payment_paragraf = [];
 let payment_in_time_paragraf = [];
 let payment_not_in_time_paragraf = [];
@@ -321,6 +328,29 @@ document.getElementById('btn_desicion').onclick = function(){
     make_a_payment = " осуществила";
     fulfill = " исполнила";
     keep = " удержала";
+  }
+
+  //Расчет страховой суммы
+  europrotocol = document.querySelector('#europrotocol').checked;
+  date_dtp = document.querySelector('#date_dtp').value;
+  date_dtp = changeDateType(date_dtp);
+  date_dtp = Date.parse(date_dtp);
+
+  if (date_dtp >= date_euro_start && europrotocol) {
+    max_summ = 100000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
+  } else if (date_dtp >= date_euro_start && !europrotocol){
+    max_summ = 400000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
+  } else if (date_dtp < date_euro_start && europrotocol) {
+    max_summ = 50000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 50 000₽";
+  } else if (date_dtp < date_euro_start && !europrotocol) {
+    max_summ = 400000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
+  } else {
+    max_summ = 400000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
   }
 
   //Присваивание значения первому параграфу
@@ -946,6 +976,44 @@ document.getElementById('btn_desicion').onclick = function(){
     total_penalty_paragraf = '';
   }
 
+  if (total_count > max_summ) {
+    total_count = max_summ;
+    if (max_summ == 400000) {
+      max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
+      'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
+      'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
+      'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
+      'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
+      'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
+      'причиненного имуществу каждого потерпевшего, 400 000 рублей 00 копеек.'+'<br>';
+    } else if (max_summ == 100000) {
+      max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
+      'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
+      'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
+      'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
+      'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
+      'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
+      'причиненного имуществу каждого потерпевшего, 400 000 рублей 00 копеек.' +'<br>'+
+      'В соответствии с пунктом 4 статьи 11.1 Закона № 40-ФЗ в случае оформления документов '+
+      'о дорожно-транспортном происшествии без участия уполномоченных на то сотрудников полиции '+
+      'размер страхового возмещения, причитающегося потерпевшему в счет возмещения вреда, '+
+      'причиненного его транспортному средству, не может превышать 100 000 рублей 00 копеек.'+'<br>';
+    } else if (max_summ == 50000) {
+      max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
+      'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
+      'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
+      'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
+      'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
+      'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
+      'причиненного имуществу каждого потерпевшего, 400 000 рублей 00 копеек.' +'<br>'+
+      'В соответствии с пунктом 4 статьи 11.1 Закона № 40-ФЗ в случае оформления документов '+
+      'о дорожно-транспортном происшествии без участия уполномоченных на то сотрудников полиции '+
+      'размер страхового возмещения, причитающегося потерпевшему в счет возмещения вреда, '+
+      'причиненного его транспортному средству, не может превышать 50 000 рублей 00 копеек.'+'<br>';
+    }
+
+  }
+
   if ((total_count > total_penalty) && (total_penalty > 0)) {
     summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
     'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
@@ -967,7 +1035,7 @@ document.getElementById('btn_desicion').onclick = function(){
     ' × 13%)' + '.<br>';
   }
 
-  decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + total_count_paragraf + total_penalty_payments_paragraf + ndfl_motivation + total_penalty_paragraf + summary_paragraf;
+  decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + total_count_paragraf + max_summ_paragraf + total_penalty_payments_paragraf + ndfl_motivation + total_penalty_paragraf + summary_paragraf;
 
   total_count = total_count - total_penalty;
     document.querySelector('#total_count').innerHTML = "Общий размер неустойки: " + makeRubText_2(total_count);
@@ -1031,6 +1099,7 @@ document.getElementById('btn_desicion').onclick = function(){
     total_penalty_paragraf
     holly = "";
     ndfl_motivation = "";
+    max_summ_paragraf = "";
 }
 
 //Function for find 20th day from start day without hollidays (14 days from 112 labor code article)
