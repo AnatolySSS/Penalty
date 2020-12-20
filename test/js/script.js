@@ -1195,7 +1195,22 @@ function findLastDay(date) {
         date + day * misteryDays != Date.parse(new Date(2020, 4, 1, 3)) &&
         date + day * misteryDays != Date.parse(new Date(2020, 4, 9, 3)) &&
         date + day * misteryDays != Date.parse(new Date(2020, 5, 12, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 10, 4, 3))) {
+        date + day * misteryDays != Date.parse(new Date(2020, 10, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 2, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 3, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 4, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 5, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 6, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 7, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 1, 23, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 2, 8, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 4, 1, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 4, 9, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 5, 12, 3)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 10, 4, 3))
+      ) {
           j++;
     } else {
       off_days[k] = date + day * misteryDays;
@@ -1209,7 +1224,9 @@ switch (new Date(date).getDay()) {
     if (date != Date.parse(new Date(2016, 1, 20, 3)) &&
         date != Date.parse(new Date(2018, 3, 28, 3)) &&
         date != Date.parse(new Date(2018, 5, 9, 3)) &&
-        date != Date.parse(new Date(2018, 11  , 29, 3))) {
+        date != Date.parse(new Date(2018, 11, 29, 3)) &&
+        date != Date.parse(new Date(2021, 1, 20, 3))
+      ) {
 
       off_days[k] = date;
       k++;
@@ -1336,7 +1353,27 @@ while (date == Date.parse(new Date(2015, 0, 1, 3)) ||
    date == Date.parse(new Date(2020, 5, 12, 3)) ||
    date == Date.parse(new Date(2020, 5, 24, 3)) ||
    date == Date.parse(new Date(2020, 6, 1, 3)) ||
-   date == Date.parse(new Date(2020, 10, 4, 3))) {
+   date == Date.parse(new Date(2020, 10, 4, 3)) ||
+   date == Date.parse(new Date(2021, 0, 1, 3)) ||
+   date == Date.parse(new Date(2021, 0, 2, 3)) ||
+   date == Date.parse(new Date(2021, 0, 3, 3)) ||
+   date == Date.parse(new Date(2021, 0, 4, 3)) ||
+   date == Date.parse(new Date(2021, 0, 5, 3)) ||
+   date == Date.parse(new Date(2021, 0, 6, 3)) ||
+   date == Date.parse(new Date(2021, 0, 7, 3)) ||
+   date == Date.parse(new Date(2021, 0, 8, 3)) ||
+   date == Date.parse(new Date(2021, 0, 9, 3)) ||
+   date == Date.parse(new Date(2021, 0, 10, 3)) ||
+   date == Date.parse(new Date(2021, 1, 22, 3)) ||
+   date == Date.parse(new Date(2021, 1, 23, 3)) ||
+   date == Date.parse(new Date(2021, 2, 8, 3)) ||
+   date == Date.parse(new Date(2021, 4, 3, 3)) ||
+   date == Date.parse(new Date(2021, 4, 10, 3)) ||
+   date == Date.parse(new Date(2021, 5, 14, 3)) ||
+   date == Date.parse(new Date(2021, 10, 4, 3)) ||
+   date == Date.parse(new Date(2021, 10, 5, 3)) ||
+   date == Date.parse(new Date(2021, 11, 31, 3)) ||
+ ) {
      off_days[k] = date;
      k++;
      date = date + day;
