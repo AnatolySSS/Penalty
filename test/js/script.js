@@ -1372,7 +1372,7 @@ while (date == Date.parse(new Date(2015, 0, 1, 3)) ||
    date == Date.parse(new Date(2021, 5, 14, 3)) ||
    date == Date.parse(new Date(2021, 10, 4, 3)) ||
    date == Date.parse(new Date(2021, 10, 5, 3)) ||
-   date == Date.parse(new Date(2021, 11, 31, 3)) ||
+   date == Date.parse(new Date(2021, 11, 31, 3))
  ) {
      off_days[k] = date;
      k++;
