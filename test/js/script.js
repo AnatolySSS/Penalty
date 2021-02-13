@@ -1,5 +1,5 @@
 let day = 24*60*60*1000;
-let date_euro_start = Date.parse(new Date(2018, 5, 1, 3))
+let date_euro_start = Date.parse(new Date(2018, 5, 1, 0))
 let fo_name, fo_name_nominative, fo_name_genitive, fo_name_accusative, fo_name_instrumental;
 let make_a_payment,fulfill, keep;
 let decision;
@@ -21,8 +21,6 @@ let COLUMN_NAME_8 = "Период ДО суда";
 let COLUMN_NAME_9 = "Период ПОСЛЕ суда";
 // let COLUMN_NAME_10 = "Начало неустойки после суда";
 // let COLUMN_NAME_11 = "Конец неустойки после суда";
-
-
 
 let pay = [];
 let pay_date = [];
@@ -164,7 +162,7 @@ $('#app_date_1').focusout(function analizeDate(){
 
   date_sv = document.querySelector('#app_date_1').value;
   date_sv = changeDateType(date_sv);
-  date_sv = Date.parse(date_sv);
+  date_sv = Date.parse(date_sv + 'T00:00:00');
   date_sv_last_day = findLastDay(date_sv);
   if (holly_boolen) {
     document.querySelector('#date_sv_last_day').style.color = '#b00000';
@@ -190,7 +188,7 @@ $('#app_date_2').focusout(function analizeDate(){
 
   date_uts = document.querySelector('#app_date_2').value;
   date_uts = changeDateType(date_uts);
-  date_uts = Date.parse(date_uts);
+  date_uts = Date.parse(date_uts + 'T00:00:00');
   date_uts_last_day = findLastDay(date_uts);
   if (holly_boolen) {
     document.querySelector('#date_uts_last_day').style.color = '#b00000';
@@ -216,7 +214,7 @@ $('#app_date_3').focusout(function analizeDate(){
 
   date_ev = document.querySelector('#app_date_3').value;
   date_ev = changeDateType(date_ev);
-  date_ev = Date.parse(date_ev);
+  date_ev = Date.parse(date_ev + 'T00:00:00');
   date_ev_last_day = findLastDay(date_ev);
   if (holly_boolen) {
     document.querySelector('#date_ev_last_day').style.color = '#b00000';
@@ -242,7 +240,7 @@ $('#app_date_4').focusout(function analizeDate(){
 
   date_stor = document.querySelector('#app_date_4').value;
   date_stor = changeDateType(date_stor);
-  date_stor = Date.parse(date_stor);
+  date_stor = Date.parse(date_stor + 'T00:00:00');
   date_stor_last_day = findLastDay(date_stor);
   if (holly_boolen) {
     document.querySelector('#date_stor_last_day').style.color = '#b00000';
@@ -334,7 +332,7 @@ document.getElementById('btn_desicion').onclick = function(){
   europrotocol = document.querySelector('#europrotocol').checked;
   date_dtp = document.querySelector('#date_dtp').value;
   date_dtp = changeDateType(date_dtp);
-  date_dtp = Date.parse(date_dtp);
+  date_dtp = Date.parse(date_dtp + 'T00:00:00');
 
   if (date_dtp >= date_euro_start && europrotocol) {
     max_summ = 100000;
@@ -361,7 +359,7 @@ document.getElementById('btn_desicion').onclick = function(){
   //Получение значений даты обращений с требованиями и исчисление 20го дня
   date_sv = document.querySelector('#app_date_1').value;
   date_sv = changeDateType(date_sv);
-  date_sv = Date.parse(date_sv);
+  date_sv = Date.parse(date_sv + 'T00:00:00');
   date_sv_last_day = findLastDay(date_sv);
   if (holly_boolen) {
     document.querySelector('#date_sv_last_day').style.color = '#b00000';
@@ -371,7 +369,7 @@ document.getElementById('btn_desicion').onclick = function(){
 
   date_uts = document.querySelector('#app_date_2').value;
   date_uts = changeDateType(date_uts);
-  date_uts = Date.parse(date_uts);
+  date_uts = Date.parse(date_uts + 'T00:00:00');
   date_uts_last_day = findLastDay(date_uts);
   if (holly_boolen) {
     document.querySelector('#date_uts_last_day').style.color = '#b00000';
@@ -381,7 +379,7 @@ document.getElementById('btn_desicion').onclick = function(){
 
   date_ev = document.querySelector('#app_date_3').value;
   date_ev = changeDateType(date_ev);
-  date_ev = Date.parse(date_ev);
+  date_ev = Date.parse(date_ev + 'T00:00:00');
   date_ev_last_day = findLastDay(date_ev);
   if (holly_boolen) {
     document.querySelector('#date_ev_last_day').style.color = '#b00000';
@@ -391,7 +389,7 @@ document.getElementById('btn_desicion').onclick = function(){
 
   date_stor = document.querySelector('#app_date_4').value;
   date_stor = changeDateType(date_stor);
-  date_stor = Date.parse(date_stor);
+  date_stor = Date.parse(date_stor + 'T00:00:00');
   date_stor_last_day = findLastDay(date_stor);
   if (holly_boolen) {
     document.querySelector('#date_stor_last_day').style.color = '#b00000';
@@ -402,10 +400,10 @@ document.getElementById('btn_desicion').onclick = function(){
   //Получение значения даты судебного взыскания неустойки
     date_court_from = document.querySelector('#date_court_from').value;
     date_court_from = changeDateType(date_court_from);
-    date_court_from = Date.parse(date_court_from);
+    date_court_from = Date.parse(date_court_from + 'T00:00:00');
     date_court_to = document.querySelector('#date_court_to').value;
     date_court_to = changeDateType(date_court_to);
-    date_court_to = Date.parse(date_court_to);
+    date_court_to = Date.parse(date_court_to + 'T00:00:00');
 
     court_period_text[1] = 'Решением суда с ' + fo_name_genitive + ' взыскана неустойка за период с ' +
     formatDate(new Date(date_court_from)) + ' по ' + formatDate(new Date(date_court_to)) + '.<br>'
@@ -451,7 +449,7 @@ document.getElementById('btn_desicion').onclick = function(){
 
     //редактирвоание значений даты и суммы выплаты
     pay_date[i] = changeDateType(pay_date[i]);
-    pay_date[i] = Date.parse(pay_date[i]);
+    pay_date[i] = Date.parse(pay_date[i] + 'T00:00:00');
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
     pay_text[i] = Number(pay_text[i]);
     penalty_ndfl_summ[i] = penalty_ndfl_summ[i].replace(/\s+/g, '');
@@ -1112,104 +1110,104 @@ function findLastDay(date) {
 
   while (j != 20) {
     misteryDays++;
-     if (date + day * misteryDays != Date.parse(new Date(2015, 0, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 0, 2, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 0, 3, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 0, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 0, 5, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 0, 6, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 0, 7, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 0, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 1, 23, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 2, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 4, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 4, 9, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 5, 12, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2015, 10, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 0, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 0, 2, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 0, 3, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 0, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 0, 5, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 0, 6, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 0, 7, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 0, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 1, 23, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 2, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 4, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 4, 9, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 5, 12, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2016, 10, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 0, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 0, 2, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 0, 3, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 0, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 0, 5, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 0, 6, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 0, 7, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 0, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 1, 23, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 2, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 4, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 4, 9, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 5, 12, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2017, 10, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 0, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 0, 2, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 0, 3, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 0, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 0, 5, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 0, 6, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 0, 7, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 0, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 1, 23, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 2, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 4, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 4, 9, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 5, 12, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2018, 10, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 0, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 0, 2, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 0, 3, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 0, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 0, 5, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 0, 6, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 0, 7, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 0, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 1, 23, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 2, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 4, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 4, 9, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 5, 12, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2019, 10, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 0, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 0, 2, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 0, 3, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 0, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 0, 5, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 0, 6, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 0, 7, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 0, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 1, 23, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 2, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 4, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 4, 9, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 5, 12, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2020, 10, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 0, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 0, 2, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 0, 3, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 0, 4, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 0, 5, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 0, 6, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 0, 7, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 0, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 1, 23, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 2, 8, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 4, 1, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 4, 9, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 5, 12, 3)) &&
-        date + day * misteryDays != Date.parse(new Date(2021, 10, 4, 3))
+     if (date + day * misteryDays != Date.parse(new Date(2015, 0, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 2, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 3, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 5, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 6, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 7, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 0, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 1, 23, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 2, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 4, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 4, 9, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 5, 12, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2015, 10, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 2, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 3, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 5, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 6, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 7, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 0, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 1, 23, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 2, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 4, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 4, 9, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 5, 12, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2016, 10, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 2, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 3, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 5, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 6, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 7, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 0, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 1, 23, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 2, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 4, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 4, 9, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 5, 12, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2017, 10, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 2, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 3, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 5, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 6, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 7, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 0, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 1, 23, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 2, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 4, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 4, 9, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 5, 12, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2018, 10, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 2, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 3, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 5, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 6, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 7, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 0, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 1, 23, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 2, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 4, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 4, 9, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 5, 12, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2019, 10, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 0, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 0, 2, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 0, 3, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 0, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 0, 5, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 0, 6, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 0, 7, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 0, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 1, 23, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 2, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 4, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 4, 9, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 5, 12, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2020, 10, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 2, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 3, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 4, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 5, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 6, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 7, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 0, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 1, 23, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 2, 8, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 4, 1, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 4, 9, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 5, 12, 0)) &&
+        date + day * misteryDays != Date.parse(new Date(2021, 10, 4, 0))
       ) {
           j++;
     } else {
@@ -1221,11 +1219,11 @@ function findLastDay(date) {
 
 switch (new Date(date).getDay()) {
   case 6:
-    if (date != Date.parse(new Date(2016, 1, 20, 3)) &&
-        date != Date.parse(new Date(2018, 3, 28, 3)) &&
-        date != Date.parse(new Date(2018, 5, 9, 3)) &&
-        date != Date.parse(new Date(2018, 11, 29, 3)) &&
-        date != Date.parse(new Date(2021, 1, 20, 3))
+    if (date != Date.parse(new Date(2016, 1, 20, 0)) &&
+        date != Date.parse(new Date(2018, 3, 28, 0)) &&
+        date != Date.parse(new Date(2018, 5, 9, 0)) &&
+        date != Date.parse(new Date(2018, 11, 29, 0)) &&
+        date != Date.parse(new Date(2021, 1, 20, 0))
       ) {
 
       off_days[k] = date;
@@ -1252,127 +1250,127 @@ switch (new Date(date).getDay()) {
   default:
 }
 
-while (date == Date.parse(new Date(2015, 0, 1, 3)) ||
-   date == Date.parse(new Date(2015, 0, 2, 3)) ||
-   date == Date.parse(new Date(2015, 0, 3, 3)) ||
-   date == Date.parse(new Date(2015, 0, 4, 3)) ||
-   date == Date.parse(new Date(2015, 0, 5, 3)) ||
-   date == Date.parse(new Date(2015, 0, 6, 3)) ||
-   date == Date.parse(new Date(2015, 0, 7, 3)) ||
-   date == Date.parse(new Date(2015, 0, 8, 3)) ||
-   date == Date.parse(new Date(2015, 0, 9, 3)) ||
-   date == Date.parse(new Date(2015, 1, 23, 3)) ||
-   date == Date.parse(new Date(2015, 2, 9, 3)) ||
-   date == Date.parse(new Date(2015, 4, 1, 3)) ||
-   date == Date.parse(new Date(2015, 4, 4, 3)) ||
-   date == Date.parse(new Date(2015, 4, 11, 3)) ||
-   date == Date.parse(new Date(2015, 5, 12, 3)) ||
-   date == Date.parse(new Date(2015, 10, 4, 3)) ||
-   date == Date.parse(new Date(2016, 0, 1, 3)) ||
-   date == Date.parse(new Date(2016, 0, 2, 3)) ||
-   date == Date.parse(new Date(2016, 0, 3, 3)) ||
-   date == Date.parse(new Date(2016, 0, 4, 3)) ||
-   date == Date.parse(new Date(2016, 0, 5, 3)) ||
-   date == Date.parse(new Date(2016, 0, 6, 3)) ||
-   date == Date.parse(new Date(2016, 0, 7, 3)) ||
-   date == Date.parse(new Date(2016, 0, 8, 3)) ||
-   date == Date.parse(new Date(2016, 1, 22, 3)) ||
-   date == Date.parse(new Date(2016, 1, 23, 3)) ||
-   date == Date.parse(new Date(2016, 2, 7, 3)) ||
-   date == Date.parse(new Date(2016, 2, 8, 3)) ||
-   date == Date.parse(new Date(2016, 4, 2, 3)) ||
-   date == Date.parse(new Date(2016, 4, 3, 3)) ||
-   date == Date.parse(new Date(2016, 4, 9, 3)) ||
-   date == Date.parse(new Date(2016, 5, 13, 3)) ||
-   date == Date.parse(new Date(2016, 10, 4, 3)) ||
-   date == Date.parse(new Date(2017, 0, 1, 3)) ||
-   date == Date.parse(new Date(2017, 0, 2, 3)) ||
-   date == Date.parse(new Date(2017, 0, 3, 3)) ||
-   date == Date.parse(new Date(2017, 0, 4, 3)) ||
-   date == Date.parse(new Date(2017, 0, 5, 3)) ||
-   date == Date.parse(new Date(2017, 0, 6, 3)) ||
-   date == Date.parse(new Date(2017, 0, 7, 3)) ||
-   date == Date.parse(new Date(2017, 0, 8, 3)) ||
-   date == Date.parse(new Date(2017, 1, 23, 3)) ||
-   date == Date.parse(new Date(2017, 1, 24, 3)) ||
-   date == Date.parse(new Date(2017, 2, 8, 3)) ||
-   date == Date.parse(new Date(2017, 4, 1, 3)) ||
-   date == Date.parse(new Date(2017, 4, 8, 3)) ||
-   date == Date.parse(new Date(2017, 4, 9, 3)) ||
-   date == Date.parse(new Date(2017, 5, 12, 3)) ||
-   date == Date.parse(new Date(2017, 10, 6, 3)) ||
-   date == Date.parse(new Date(2018, 0, 1, 3)) ||
-   date == Date.parse(new Date(2018, 0, 2, 3)) ||
-   date == Date.parse(new Date(2018, 0, 3, 3)) ||
-   date == Date.parse(new Date(2018, 0, 4, 3)) ||
-   date == Date.parse(new Date(2018, 0, 5, 3)) ||
-   date == Date.parse(new Date(2018, 0, 6, 3)) ||
-   date == Date.parse(new Date(2018, 0, 7, 3)) ||
-   date == Date.parse(new Date(2018, 0, 8, 3)) ||
-   date == Date.parse(new Date(2018, 1, 23, 3)) ||
-   date == Date.parse(new Date(2018, 2, 8, 3)) ||
-   date == Date.parse(new Date(2018, 2, 9, 3)) ||
-   date == Date.parse(new Date(2018, 3, 30, 3)) ||
-   date == Date.parse(new Date(2018, 4, 1, 3)) ||
-   date == Date.parse(new Date(2018, 4, 2, 3)) ||
-   date == Date.parse(new Date(2018, 4, 9, 3)) ||
-   date == Date.parse(new Date(2018, 5, 11, 3)) ||
-   date == Date.parse(new Date(2018, 5, 12, 3)) ||
-   date == Date.parse(new Date(2018, 10, 5, 3)) ||
-   date == Date.parse(new Date(2018, 11, 31, 3)) ||
-   date == Date.parse(new Date(2019, 0, 1, 3)) ||
-   date == Date.parse(new Date(2019, 0, 2, 3)) ||
-   date == Date.parse(new Date(2019, 0, 3, 3)) ||
-   date == Date.parse(new Date(2019, 0, 4, 3)) ||
-   date == Date.parse(new Date(2019, 0, 5, 3)) ||
-   date == Date.parse(new Date(2019, 0, 6, 3)) ||
-   date == Date.parse(new Date(2019, 0, 7, 3)) ||
-   date == Date.parse(new Date(2019, 0, 8, 3)) ||
-   date == Date.parse(new Date(2019, 2, 8, 3)) ||
-   date == Date.parse(new Date(2019, 4, 1, 3)) ||
-   date == Date.parse(new Date(2019, 4, 2, 3)) ||
-   date == Date.parse(new Date(2019, 4, 3, 3)) ||
-   date == Date.parse(new Date(2019, 4, 9, 3)) ||
-   date == Date.parse(new Date(2019, 4, 10, 3)) ||
-   date == Date.parse(new Date(2019, 5, 12, 3)) ||
-   date == Date.parse(new Date(2019, 10, 4, 3)) ||
-   date == Date.parse(new Date(2020, 0, 1, 3)) ||
-   date == Date.parse(new Date(2020, 0, 2, 3)) ||
-   date == Date.parse(new Date(2020, 0, 3, 3)) ||
-   date == Date.parse(new Date(2020, 0, 4, 3)) ||
-   date == Date.parse(new Date(2020, 0, 5, 3)) ||
-   date == Date.parse(new Date(2020, 0, 6, 3)) ||
-   date == Date.parse(new Date(2020, 0, 7, 3)) ||
-   date == Date.parse(new Date(2020, 0, 8, 3)) ||
-   date == Date.parse(new Date(2020, 1, 24, 3)) ||
-   date == Date.parse(new Date(2020, 2, 9, 3)) ||
-   date == Date.parse(new Date(2020, 4, 1, 3)) ||
-   date == Date.parse(new Date(2020, 4, 4, 3)) ||
-   date == Date.parse(new Date(2020, 4, 5, 3)) ||
-   date == Date.parse(new Date(2020, 4, 11, 3)) ||
-   date == Date.parse(new Date(2020, 5, 12, 3)) ||
-   date == Date.parse(new Date(2020, 5, 24, 3)) ||
-   date == Date.parse(new Date(2020, 6, 1, 3)) ||
-   date == Date.parse(new Date(2020, 10, 4, 3)) ||
-   date == Date.parse(new Date(2021, 0, 1, 3)) ||
-   date == Date.parse(new Date(2021, 0, 2, 3)) ||
-   date == Date.parse(new Date(2021, 0, 3, 3)) ||
-   date == Date.parse(new Date(2021, 0, 4, 3)) ||
-   date == Date.parse(new Date(2021, 0, 5, 3)) ||
-   date == Date.parse(new Date(2021, 0, 6, 3)) ||
-   date == Date.parse(new Date(2021, 0, 7, 3)) ||
-   date == Date.parse(new Date(2021, 0, 8, 3)) ||
-   date == Date.parse(new Date(2021, 0, 9, 3)) ||
-   date == Date.parse(new Date(2021, 0, 10, 3)) ||
-   date == Date.parse(new Date(2021, 1, 22, 3)) ||
-   date == Date.parse(new Date(2021, 1, 23, 3)) ||
-   date == Date.parse(new Date(2021, 2, 8, 3)) ||
-   date == Date.parse(new Date(2021, 4, 3, 3)) ||
-   date == Date.parse(new Date(2021, 4, 10, 3)) ||
-   date == Date.parse(new Date(2021, 5, 14, 3)) ||
-   date == Date.parse(new Date(2021, 10, 4, 3)) ||
-   date == Date.parse(new Date(2021, 10, 5, 3)) ||
-   date == Date.parse(new Date(2021, 11, 31, 3))
+while (date == Date.parse(new Date(2015, 0, 1, 0)) ||
+   date == Date.parse(new Date(2015, 0, 2, 0)) ||
+   date == Date.parse(new Date(2015, 0, 3, 0)) ||
+   date == Date.parse(new Date(2015, 0, 4, 0)) ||
+   date == Date.parse(new Date(2015, 0, 5, 0)) ||
+   date == Date.parse(new Date(2015, 0, 6, 0)) ||
+   date == Date.parse(new Date(2015, 0, 7, 0)) ||
+   date == Date.parse(new Date(2015, 0, 8, 0)) ||
+   date == Date.parse(new Date(2015, 0, 9, 0)) ||
+   date == Date.parse(new Date(2015, 1, 23, 0)) ||
+   date == Date.parse(new Date(2015, 2, 9, 0)) ||
+   date == Date.parse(new Date(2015, 4, 1, 0)) ||
+   date == Date.parse(new Date(2015, 4, 4, 0)) ||
+   date == Date.parse(new Date(2015, 4, 11, 0)) ||
+   date == Date.parse(new Date(2015, 5, 12, 0)) ||
+   date == Date.parse(new Date(2015, 10, 4, 0)) ||
+   date == Date.parse(new Date(2016, 0, 1, 0)) ||
+   date == Date.parse(new Date(2016, 0, 2, 0)) ||
+   date == Date.parse(new Date(2016, 0, 3, 0)) ||
+   date == Date.parse(new Date(2016, 0, 4, 0)) ||
+   date == Date.parse(new Date(2016, 0, 5, 0)) ||
+   date == Date.parse(new Date(2016, 0, 6, 0)) ||
+   date == Date.parse(new Date(2016, 0, 7, 0)) ||
+   date == Date.parse(new Date(2016, 0, 8, 0)) ||
+   date == Date.parse(new Date(2016, 1, 22, 0)) ||
+   date == Date.parse(new Date(2016, 1, 23, 0)) ||
+   date == Date.parse(new Date(2016, 2, 7, 0)) ||
+   date == Date.parse(new Date(2016, 2, 8, 0)) ||
+   date == Date.parse(new Date(2016, 4, 2, 0)) ||
+   date == Date.parse(new Date(2016, 4, 3, 0)) ||
+   date == Date.parse(new Date(2016, 4, 9, 0)) ||
+   date == Date.parse(new Date(2016, 5, 13, 0)) ||
+   date == Date.parse(new Date(2016, 10, 4, 0)) ||
+   date == Date.parse(new Date(2017, 0, 1, 0)) ||
+   date == Date.parse(new Date(2017, 0, 2, 0)) ||
+   date == Date.parse(new Date(2017, 0, 3, 0)) ||
+   date == Date.parse(new Date(2017, 0, 4, 0)) ||
+   date == Date.parse(new Date(2017, 0, 5, 0)) ||
+   date == Date.parse(new Date(2017, 0, 6, 0)) ||
+   date == Date.parse(new Date(2017, 0, 7, 0)) ||
+   date == Date.parse(new Date(2017, 0, 8, 0)) ||
+   date == Date.parse(new Date(2017, 1, 23, 0)) ||
+   date == Date.parse(new Date(2017, 1, 24, 0)) ||
+   date == Date.parse(new Date(2017, 2, 8, 0)) ||
+   date == Date.parse(new Date(2017, 4, 1, 0)) ||
+   date == Date.parse(new Date(2017, 4, 8, 0)) ||
+   date == Date.parse(new Date(2017, 4, 9, 0)) ||
+   date == Date.parse(new Date(2017, 5, 12, 0)) ||
+   date == Date.parse(new Date(2017, 10, 6, 0)) ||
+   date == Date.parse(new Date(2018, 0, 1, 0)) ||
+   date == Date.parse(new Date(2018, 0, 2, 0)) ||
+   date == Date.parse(new Date(2018, 0, 3, 0)) ||
+   date == Date.parse(new Date(2018, 0, 4, 0)) ||
+   date == Date.parse(new Date(2018, 0, 5, 0)) ||
+   date == Date.parse(new Date(2018, 0, 6, 0)) ||
+   date == Date.parse(new Date(2018, 0, 7, 0)) ||
+   date == Date.parse(new Date(2018, 0, 8, 0)) ||
+   date == Date.parse(new Date(2018, 1, 23, 0)) ||
+   date == Date.parse(new Date(2018, 2, 8, 0)) ||
+   date == Date.parse(new Date(2018, 2, 9, 0)) ||
+   date == Date.parse(new Date(2018, 3, 30, 0)) ||
+   date == Date.parse(new Date(2018, 4, 1, 0)) ||
+   date == Date.parse(new Date(2018, 4, 2, 0)) ||
+   date == Date.parse(new Date(2018, 4, 9, 0)) ||
+   date == Date.parse(new Date(2018, 5, 11, 0)) ||
+   date == Date.parse(new Date(2018, 5, 12, 0)) ||
+   date == Date.parse(new Date(2018, 10, 5, 0)) ||
+   date == Date.parse(new Date(2018, 11, 31, 0)) ||
+   date == Date.parse(new Date(2019, 0, 1, 0)) ||
+   date == Date.parse(new Date(2019, 0, 2, 0)) ||
+   date == Date.parse(new Date(2019, 0, 3, 0)) ||
+   date == Date.parse(new Date(2019, 0, 4, 0)) ||
+   date == Date.parse(new Date(2019, 0, 5, 0)) ||
+   date == Date.parse(new Date(2019, 0, 6, 0)) ||
+   date == Date.parse(new Date(2019, 0, 7, 0)) ||
+   date == Date.parse(new Date(2019, 0, 8, 0)) ||
+   date == Date.parse(new Date(2019, 2, 8, 0)) ||
+   date == Date.parse(new Date(2019, 4, 1, 0)) ||
+   date == Date.parse(new Date(2019, 4, 2, 0)) ||
+   date == Date.parse(new Date(2019, 4, 3, 0)) ||
+   date == Date.parse(new Date(2019, 4, 9, 0)) ||
+   date == Date.parse(new Date(2019, 4, 10, 0)) ||
+   date == Date.parse(new Date(2019, 5, 12, 0)) ||
+   date == Date.parse(new Date(2019, 10, 4, 0)) ||
+   date == Date.parse(new Date(2020, 0, 1, 0)) ||
+   date == Date.parse(new Date(2020, 0, 2, 0)) ||
+   date == Date.parse(new Date(2020, 0, 3, 0)) ||
+   date == Date.parse(new Date(2020, 0, 4, 0)) ||
+   date == Date.parse(new Date(2020, 0, 5, 0)) ||
+   date == Date.parse(new Date(2020, 0, 6, 0)) ||
+   date == Date.parse(new Date(2020, 0, 7, 0)) ||
+   date == Date.parse(new Date(2020, 0, 8, 0)) ||
+   date == Date.parse(new Date(2020, 1, 24, 0)) ||
+   date == Date.parse(new Date(2020, 2, 9, 0)) ||
+   date == Date.parse(new Date(2020, 4, 1, 0)) ||
+   date == Date.parse(new Date(2020, 4, 4, 0)) ||
+   date == Date.parse(new Date(2020, 4, 5, 0)) ||
+   date == Date.parse(new Date(2020, 4, 11, 0)) ||
+   date == Date.parse(new Date(2020, 5, 12, 0)) ||
+   date == Date.parse(new Date(2020, 5, 24, 0)) ||
+   date == Date.parse(new Date(2020, 6, 1, 0)) ||
+   date == Date.parse(new Date(2020, 10, 4, 0)) ||
+   date == Date.parse(new Date(2021, 0, 1, 0)) ||
+   date == Date.parse(new Date(2021, 0, 2, 0)) ||
+   date == Date.parse(new Date(2021, 0, 3, 0)) ||
+   date == Date.parse(new Date(2021, 0, 4, 0)) ||
+   date == Date.parse(new Date(2021, 0, 5, 0)) ||
+   date == Date.parse(new Date(2021, 0, 6, 0)) ||
+   date == Date.parse(new Date(2021, 0, 7, 0)) ||
+   date == Date.parse(new Date(2021, 0, 8, 0)) ||
+   date == Date.parse(new Date(2021, 0, 9, 0)) ||
+   date == Date.parse(new Date(2021, 0, 10, 0)) ||
+   date == Date.parse(new Date(2021, 1, 22, 0)) ||
+   date == Date.parse(new Date(2021, 1, 23, 0)) ||
+   date == Date.parse(new Date(2021, 2, 8, 0)) ||
+   date == Date.parse(new Date(2021, 4, 3, 0)) ||
+   date == Date.parse(new Date(2021, 4, 10, 0)) ||
+   date == Date.parse(new Date(2021, 5, 14, 0)) ||
+   date == Date.parse(new Date(2021, 10, 4, 0)) ||
+   date == Date.parse(new Date(2021, 10, 5, 0)) ||
+   date == Date.parse(new Date(2021, 11, 31, 0))
  ) {
      off_days[k] = date;
      k++;
