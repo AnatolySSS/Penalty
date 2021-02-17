@@ -31,6 +31,8 @@ let pay_summ = [];
 let voluntary_if = [];
 let fu_if = [];
 let court_if = [];
+let date_court = [];
+let date_fu = [];
 let penalty_ndfl = [];
 let penalty_ndfl_persent = [];
 let penalty_ndfl_summ = [];
@@ -51,8 +53,10 @@ let date_ev, date_ev_last_day, date_ev_penalty_day;
 let date_stor, date_stor_last_day, date_stor_penalty_day;
 let date_court_from, date_court_to;
 let date_dtp;
+let court_date;
 let max_summ;
 let europrotocol;
+let court_without_period;
 let total_count = 0;
 let total_penalty = 0;
 let total_ndfl = 0;
@@ -78,6 +82,11 @@ let payment_not_in_time_paragraf = [];
 let payment_not_in_time_paragraf_court = [];
 let total_analize_paragraf = "";
 let court_period_text = [];
+let court_without_period_text = 'Заявителем и Финансовой организацией не предоставлены сведения, '+
+'содержащие данные о периоде, за который взыскана неустойка по Решению суда, в связи с чем, '+
+'Финансовый уполномоченный приходит к выводу о наличии оснований для взыскания неустойки за '+
+'несоблюдение срока выплаты страхового возмещения по Договору ОСАГО за период со дня, следующего '+
+'за днем вынесения Решения суда, по дату исполнения Финансовой организацией обязательства.'+'<br>';
 let claim_name = []; //название требований "с заявлением о наступлении страхового случая"/"УТС"/"эвакуатор"/"хранение"
 let claim_name_short = [];
 let claim_name_payment = [];
@@ -273,10 +282,11 @@ document.getElementById('btn_desicion').onclick = function(){
   var voluntary_ifs = $('.voluntary_ifs');
   var fu_ifs = $('.fu_ifs');
   var court_ifs = $('.court_ifs');
+  var fu_dates = $('.fu_dates');
+  var court_dates = $('.court_dates');
   var penalty_ndfls = $('.penalty_ndfls');
   var penalty_ndfl_summs = $('.penalty_ndfl_summs');
   var penalty_ndfl_persents = $('.penalty_ndfl_persents');
-
 
   //Удаление всплывающей подсказки 193 ГК РФ
   document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
@@ -404,10 +414,11 @@ document.getElementById('btn_desicion').onclick = function(){
     date_court_to = document.querySelector('#date_court_to').value;
     date_court_to = changeDateType(date_court_to);
     date_court_to = Date.parse(date_court_to + 'T00:00:00');
+    court_date = document.querySelector('#court_date').value;
+    court_date = changeDateType(court_date);
+    court_date = Date.parse(court_date + 'T00:00:00');
 
-    court_period_text[1] = 'Решением суда с ' + fo_name_genitive + ' взыскана неустойка за период с ' +
-    formatDate(new Date(date_court_from)) + ' по ' + formatDate(new Date(date_court_to)) + '.<br>'
-
+    court_without_period = document.querySelector('#court_without_period').checked;
 
   //выведение значений 20го и 21го дня на экран
   if (!isNaN(date_sv_last_day)) {
@@ -444,6 +455,8 @@ document.getElementById('btn_desicion').onclick = function(){
     court_if[i] = court_ifs[i - 1]; // получение значения "выплата на основании решения суда"
     fu_if[i] = fu_ifs[i - 1]; // получение значения "выплата на основании решения ФУ"
     voluntary_if[i] = voluntary_ifs[i - 1]; // получение значения "добровольная выплата"
+    date_court[i] = court_dates[i - 1].value; // получение значения даты выплаты
+    date_fu[i] = fu_dates[i - 1].value; // получение значения даты выплаты
     penalty_ndfl[i] = penalty_ndfls[i - 1]; // получение значения "удержан НДФЛ (checkbox)"
     penalty_ndfl_summ[i] = penalty_ndfl_summs[i - 1].value; // получение значения "удержан НДФЛ (сумма)"
 
@@ -452,6 +465,12 @@ document.getElementById('btn_desicion').onclick = function(){
     pay_date[i] = Date.parse(pay_date[i] + 'T00:00:00');
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
     pay_text[i] = Number(pay_text[i]);
+
+    date_court[i] = changeDateType(date_court[i]);
+    date_court[i] = Date.parse(date_court[i] + 'T00:00:00');
+    date_fu[i] = changeDateType(date_fu[i]);
+    date_fu[i] = Date.parse(date_fu[i] + 'T00:00:00');
+
     penalty_ndfl_summ[i] = penalty_ndfl_summ[i].replace(/\s+/g, '');
     penalty_ndfl_summ[i] = Number(penalty_ndfl_summ[i]);
 
@@ -572,13 +591,11 @@ document.getElementById('btn_desicion').onclick = function(){
       }
     }
 
-
-
   } // завершение for
 
   //"Собираем" текст решения
   //Если суда не было
-  if (isNaN(date_court_from)) {
+  if (isNaN(date_court_from) && !court_without_period) {
 
     //Выведение заголовка таблицы на экран
     str_payment_dataled_header = '<tr>' +
@@ -757,6 +774,19 @@ document.getElementById('btn_desicion').onclick = function(){
     }
 
     for (var i = 1; i <= number_of_payments; i++) {
+
+      court_period_text[1] = 'Решением суда с ' + fo_name_genitive + ' в пользу Заявителя взыскана неустойка за период с ' +
+      formatDate(new Date(date_court_from)) + ' по ' + formatDate(new Date(date_court_to)) + '.<br>'
+
+      //Если из решения суда невозможно установить период неустойки,
+      //то переопределяем значения дат и добавляем новый абзац
+      if (court_without_period) {
+        date_court_from = date_penalty_day[i];
+        date_court_to = court_date;
+        court_period_text[1] = 'Решением суда с ' + fo_name_genitive + ' в пользу Заявителя взыскана неустойка'  + '.<br>'
+        court_period_text[1] = court_period_text[1] + court_without_period_text;
+      }
+
       //Если выплата с нарушением срока
       if (pay_date[i] > date_penalty_day[i]) {
 
@@ -804,6 +834,18 @@ document.getElementById('btn_desicion').onclick = function(){
           'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, ' +
           'размер неустойки, подлежащий выплате за период с ' + formatDate(new Date(date_penalty_day[i])) + ' по ' + formatDate(new Date(date_court_from - day)) +
           ' составляет ' + makeRubText_2(court_summ_before[i]) + ' (' + makeRubText_2(pay_text[i]) + ' × ' + declinationDays(court_period_before[i] / day) +' × 1%).<br>';
+        } else {
+          payment_not_in_time_paragraf_court[i] = 'Учитывая, что Решением суда c Финансовой организации в пользу Заявителя '+
+          'взыскана неустойка за несоблюдение срока выплаты страхового возмещения по Договору ОСАГО за период с ' +
+          formatDate(new Date(date_court_from)) + ' по ' + formatDate(new Date(date_court_to)) +
+          ', неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' расчету не подлежит.' + '<br>';
+
+          if (court_without_period) {
+            payment_not_in_time_paragraf_court[i] = 'Учитывая, что ранее Финансовый уполномоченный пришел к выводу о ' +
+            'наличии оснований для взыскания неустойки за несоблюдение срока выплаты страхового возмещения по Договору ОСАГО ' +
+            'за период со дня, следующего за днем вынесения Решения суда (' + formatDate(new Date(date_court_to)) + '), по дату исполнения Финансовой организацией обязательства' +
+            ', неустойка на сумму ' + makeRubText_2(pay_text[i]) + ' расчету не подлежит.' + '<br>';
+          }
         }
 
         payment_in_time_paragraf[i] = "";

@@ -84,6 +84,7 @@
                 </div>
               </div>
               <!-- END fo_name -->
+              <!-- BEGIN date_dtp -->
               <div class="form-row">
                 <div class="form-group row form-inline">
                   <label for="date_dtp" class="ml-4">Дата ДТП</label>
@@ -99,6 +100,7 @@
                   <span id="max_summ"></span>
                 </div>
               </div>
+              <!-- END date_dtp -->
             </div>
 
             <hr class="mb-4">
@@ -233,7 +235,7 @@
               </button>
               <div class="panel">
                 <h6>Судом взыскана неустойка за период:</h6>
-                <div id="div_court" class="form-group row form-inline">
+                <div class="form-group row form-inline">
                   <label for="date_court_from" class="ml-3">c</label>
                   <div class="col-md-2">
                     <input id = "date_court_from" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
@@ -242,7 +244,17 @@
                   <div class="col-md-2">
                     <input id = "date_court_to" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
                   </div>
-                </div><!-- div_court -->
+                </div>
+                <div class="form-group row form-inline">
+                  <div class="form-group col-md-3 form-inline">
+                    <input id="court_without_period" type="checkbox" onclick="block_court_date()">
+                    <label for="court_without_period" class="ml-2 form-check-label">Период не указан</label>
+                  </div>
+                  <div id="div_court_date" class="form-group col-md-5 form-inline" style="display:none">
+                    <label for="court_date" class="mr-2">Дата решения суда</label>
+                    <input id = "court_date" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  </div>
+                </div>
               </div>
             </div>
             <!-- END Court -->
@@ -298,7 +310,7 @@
                 <div id="add_info_pay_form_row_1" class="add_info_pay_form form-row ml-2 mb-4" style="display:none">
                   <div class="col">
                     <div class="form-check">
-                      <input id="voluntary_if_1" class="voluntary_ifs form-check-input" type="radio" name="payment_option_1" value="option1" >
+                      <input id="voluntary_if_1" class="voluntary_ifs form-check-input" type="radio" name="payment_option_1" value="option1" onclick="show_court_fu_date(1)">
                       <label for="voluntary_if_1" class="form-check-label">Добровольная выплата</label>
                     </div><!-- div_voluntary -->
                     <div class="form-check">
@@ -310,14 +322,14 @@
                       <label for="court_if_1" class="form-check-label">Выплата на основании решения суда</label>
                     </div><!-- div_court -->
                   </div>
-                    <div id="div_date_court_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
-                      <label for="date_court_1" class="mr-2">Дата решения суда</label>
-                      <input id = "date_court_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                    </div><!-- div_date_court_1 -->
-                    <div id="div_date_fu_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
-                      <label for="date_fu_1" class="mr-2">Дата решения ФУ</label>
-                      <input id = "date_fu_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                    </div><!-- div_date_court_1 -->
+                  <div id="div_date_court_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
+                    <label for="date_court_1" class="mr-2">Дата решения суда</label>
+                    <input id = "date_court_1" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  </div><!-- div_date_court_1 -->
+                  <div id="div_date_fu_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
+                    <label for="date_fu_1" class="mr-2">Дата решения ФУ</label>
+                    <input id = "date_fu_1" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  </div><!-- div_date_court_1 -->
                 </div><!-- add_info_pay_form_row_1 -->
                 <div id="add_info_penalty_form_row_1" class="form-row" style="display:none">
                     <div class="form-group col-md-4 form-inline">
