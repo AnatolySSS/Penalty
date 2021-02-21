@@ -1,7 +1,15 @@
+//Количество миллисекунд в одном дне
 let day = 24*60*60*1000;
+//Дата начала действия лимита для европротокола 100 000₽
 let date_euro_start = Date.parse(new Date(2018, 5, 1, 0))
+//Переменные для имени финансовой организации (в разных падежах)
 let fo_name, fo_name_nominative, fo_name_genitive, fo_name_accusative, fo_name_instrumental;
+//Для правильного склонения финансовой организации
+// make_a_payment - "осуществило"/"осуществила"
+// fulfill - "исполнило"/"исполнила"
+// keep - "удержало"/"удержала"
 let make_a_payment,fulfill, keep;
+//Переменная с тестом всего решения в части неустойки
 let decision;
 
 let COLUMN_NAME_20 = "20-й день";
@@ -265,6 +273,7 @@ $('#app_date_4').focusout(function analizeDate(){
   }
 });
 
+//Основная функция для анализа введенных значений и собирания текста решения
 document.getElementById('btn_desicion').onclick = function(){
 
   holly = "";
@@ -274,19 +283,18 @@ document.getElementById('btn_desicion').onclick = function(){
   total_penalty = 0;
   total_ndfl = 0;
 
-  //Получение количества строк с выплатами
-  var number_of_payments = $('div.payments').length;
-  var payments_names = $('.payments_names');
-  var payments_dates = $('.payments_dates');
-  var payments_summs = $('.payments_summs');
-  var voluntary_ifs = $('.voluntary_ifs');
-  var fu_ifs = $('.fu_ifs');
-  var court_ifs = $('.court_ifs');
-  var fu_dates = $('.fu_dates');
-  var court_dates = $('.court_dates');
-  var penalty_ndfls = $('.penalty_ndfls');
-  var penalty_ndfl_summs = $('.penalty_ndfl_summs');
-  var penalty_ndfl_persents = $('.penalty_ndfl_persents');
+  var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
+  var payments_names = $('.payments_names'); //Получение массива видов выплат
+  var payments_dates = $('.payments_dates'); //Получение массива дат выплат
+  var payments_summs = $('.payments_summs'); //Получение массива сумм выплат
+  var voluntary_ifs = $('.voluntary_ifs'); //Получение массива значений добровольных выплат
+  var fu_ifs = $('.fu_ifs'); //Получение массива значений выплат по решению ФУ
+  var court_ifs = $('.court_ifs'); //Получение массива значений выплат по решению суда
+  var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
+  var court_dates = $('.court_dates'); //Получение массива дат решений суда
+  var penalty_ndfls = $('.penalty_ndfls'); //Получение массива выплат неустойки с НДФЛ
+  var penalty_ndfl_summs = $('.penalty_ndfl_summs'); //Получение массива сумм удержанного НДФЛ
+  var penalty_ndfl_persents = $('.penalty_ndfl_persents'); //Получение массива процентов НДФЛ
 
   //Удаление всплывающей подсказки 193 ГК РФ
   document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
@@ -311,6 +319,7 @@ document.getElementById('btn_desicion').onclick = function(){
     court_period_text[i] = "";
   }
 
+  //Перекрашивание 21го дня в серый цвет
   document.querySelector('#date_sv_last_day').style.color = '#595b5e';
   document.querySelector('#date_uts_last_day').style.color = '#595b5e';
   document.querySelector('#date_ev_last_day').style.color = '#595b5e';
@@ -319,6 +328,8 @@ document.getElementById('btn_desicion').onclick = function(){
   //Получение значения наименования ФО
   fo_name = document.querySelector("#fo_name").value;
 
+  //Если поле Финансовая организация не заполнено, то в текст решения
+  //добавляется термин "Финансовая организация" в соответствующем падеже
   if (fo_name != "") {
     fo_name = document.querySelector("#fo_name").value;
     fo_name_nominative = fo_name;
@@ -338,33 +349,36 @@ document.getElementById('btn_desicion').onclick = function(){
     keep = " удержала";
   }
 
+  //Присваивание значения первому параграфу
+  first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name_genitive + ' неустойки '+
+  'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
+  'Финансовый уполномоченный приходит к следующему.'+'<br>'
+
   //Расчет страховой суммы
   europrotocol = document.querySelector('#europrotocol').checked;
   date_dtp = document.querySelector('#date_dtp').value;
   date_dtp = changeDateType(date_dtp);
   date_dtp = Date.parse(date_dtp + 'T00:00:00');
 
-  if (date_dtp >= date_euro_start && europrotocol) {
+  if (date_dtp >= date_euro_start && europrotocol) { // Если дата ДТП после 01.06.2018 И Европротокол
     max_summ = 100000;
     document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
-  } else if (date_dtp >= date_euro_start && !europrotocol){
+  } else if (date_dtp >= date_euro_start && !europrotocol){ // Если дата ДТП после 01.06.2018 И НЕ Европротокол
     max_summ = 400000;
     document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
-  } else if (date_dtp < date_euro_start && europrotocol) {
+  } else if (date_dtp < date_euro_start && europrotocol) { // Если дата ДТП до 01.06.2018 И Европротокол
     max_summ = 50000;
     document.querySelector('#max_summ').innerHTML = "Страховая сумма: 50 000₽";
-  } else if (date_dtp < date_euro_start && !europrotocol) {
+  } else if (date_dtp < date_euro_start && !europrotocol) { // Если дата ДТП до 01.06.2018 И НЕ Европротокол
     max_summ = 400000;
     document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
-  } else {
+  } else if (europrotocol) { //Если Европротокол (без указания даты)
+    max_summ = 100000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
+  } else { // остальные случаи
     max_summ = 400000;
     document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
   }
-
-  //Присваивание значения первому параграфу
-  first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name_genitive + ' неустойки '+
-  'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
-  'Финансовый уполномоченный приходит к следующему.'+'<br>'
 
   //Получение значений даты обращений с требованиями и исчисление 20го дня
   date_sv = document.querySelector('#app_date_1').value;
@@ -408,17 +422,20 @@ document.getElementById('btn_desicion').onclick = function(){
   date_stor_penalty_day = date_stor_last_day + day;
 
   //Получение значения даты судебного взыскания неустойки
-    date_court_from = document.querySelector('#date_court_from').value;
-    date_court_from = changeDateType(date_court_from);
-    date_court_from = Date.parse(date_court_from + 'T00:00:00');
-    date_court_to = document.querySelector('#date_court_to').value;
-    date_court_to = changeDateType(date_court_to);
-    date_court_to = Date.parse(date_court_to + 'T00:00:00');
-    court_date = document.querySelector('#court_date').value;
-    court_date = changeDateType(court_date);
-    court_date = Date.parse(court_date + 'T00:00:00');
-
-    court_without_period = document.querySelector('#court_without_period').checked;
+  //Дата начала периода
+  date_court_from = document.querySelector('#date_court_from').value;
+  date_court_from = changeDateType(date_court_from);
+  date_court_from = Date.parse(date_court_from + 'T00:00:00');
+  //Дата конца периода
+  date_court_to = document.querySelector('#date_court_to').value;
+  date_court_to = changeDateType(date_court_to);
+  date_court_to = Date.parse(date_court_to + 'T00:00:00');
+  //Дата решения суда
+  court_date = document.querySelector('#court_date').value;
+  court_date = changeDateType(court_date);
+  court_date = Date.parse(court_date + 'T00:00:00');
+  //Получение случая отсутствия указания в решении суда на конкретный период взыскания неустойки
+  court_without_period = document.querySelector('#court_without_period').checked;
 
   //выведение значений 20го и 21го дня на экран
   if (!isNaN(date_sv_last_day)) {
@@ -438,43 +455,39 @@ document.getElementById('btn_desicion').onclick = function(){
     document.querySelector('#date_stor_penalty_day').innerHTML = formatDate(new Date(date_stor_penalty_day));
   }
 
-  //Цикл для присвоения общих значений
+  //Цикл для присваивание общих значений
   for (var i = 1; i <= number_of_payments; i++) {
     payment_not_in_time_paragraf_court[i] = "";
     analize_period_paragraf[i] = "";
     payment_paragraf[i] = "";
 
     //Получение значений из полей index
-    // pay[i] = document.getElementById("pay" + i ).options.selectedIndex;
-    // pay_date[i] = document.querySelector('#pay' + i + '_date').value;
-    // pay_text[i] = document.querySelector('#pay' + i + '_text').value;
-    // court_if[i] = document.getElementById("court_if_" + i );
     pay[i] = payments_names[i - 1].options.selectedIndex; //получение значения наименования выплаты
     pay_date[i] = payments_dates[i - 1].value; // получение значения даты выплаты
     pay_text[i] = payments_summs[i - 1].value; // получение значения суммы выплаты
     court_if[i] = court_ifs[i - 1]; // получение значения "выплата на основании решения суда"
     fu_if[i] = fu_ifs[i - 1]; // получение значения "выплата на основании решения ФУ"
     voluntary_if[i] = voluntary_ifs[i - 1]; // получение значения "добровольная выплата"
-    date_court[i] = court_dates[i - 1].value; // получение значения даты выплаты
-    date_fu[i] = fu_dates[i - 1].value; // получение значения даты выплаты
+    date_court[i] = court_dates[i - 1].value; // получение значения даты решения суда
+    date_fu[i] = fu_dates[i - 1].value; // получение значения даты решения ФУ
     penalty_ndfl[i] = penalty_ndfls[i - 1]; // получение значения "удержан НДФЛ (checkbox)"
     penalty_ndfl_summ[i] = penalty_ndfl_summs[i - 1].value; // получение значения "удержан НДФЛ (сумма)"
 
-    //редактирвоание значений даты и суммы выплаты
+    //редактирвоание значений даты выплаты
     pay_date[i] = changeDateType(pay_date[i]);
     pay_date[i] = Date.parse(pay_date[i] + 'T00:00:00');
+    //редактирвоание значений суммы выплаты
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
     pay_text[i] = Number(pay_text[i]);
-
+    //редактирование значения даты решения суда
     date_court[i] = changeDateType(date_court[i]);
     date_court[i] = Date.parse(date_court[i] + 'T00:00:00');
+    //редактирование значения даты решения ФУ
     date_fu[i] = changeDateType(date_fu[i]);
     date_fu[i] = Date.parse(date_fu[i] + 'T00:00:00');
-
+    //редактирование значения суммы НДФЛ
     penalty_ndfl_summ[i] = penalty_ndfl_summ[i].replace(/\s+/g, '');
     penalty_ndfl_summ[i] = Number(penalty_ndfl_summ[i]);
-
-    // payment_order[i] = document.querySelector('#payment_order_' + i).value;
 
     // присваивание текстового значения для выплаты по суду
     if (court_if[i].checked) {
