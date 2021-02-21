@@ -112,3 +112,9 @@ white-space: nowrap;
 .card-header, #menu_osago_penalty:hover, #menu_osago_fs:hover {
   cursor: pointer;
 }
+
+#penalty_graph{
+  /* background-color: red; */
+  /* margin-left: auto;
+  margin-right: auto; */
+}

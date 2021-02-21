@@ -12,6 +12,18 @@ let make_a_payment,fulfill, keep;
 //Переменная с тестом всего решения в части неустойки
 let decision;
 
+var canvas = document.getElementById("penalty_graph");
+var penalty_graph = canvas.getContext("2d");
+penalty_graph.translate(0, canvas.height);
+penalty_graph.scale(1, -1);
+
+//Переменные для canvas
+var date_sv_penalty_day_x;
+var max_days_delay = 0;
+var space = 10;
+var pay_summ_y_all = 0; //Сложение всех предыдущих сумм выплат (для определения координат начала очередного прямоугольника)
+var pay_date_x = [], pay_summ_y = [];
+
 let COLUMN_NAME_20 = "20-й день";
 let COLUMN_NAME_21 = "21-й день";
 
@@ -276,12 +288,16 @@ $('#app_date_4').focusout(function analizeDate(){
 //Основная функция для анализа введенных значений и собирания текста решения
 document.getElementById('btn_desicion').onclick = function(){
 
+  penalty_graph.clearRect(0, 0, canvas.width, canvas.height);
+
   holly = "";
   holly_boolen = false;
   var q = 1;
   total_count = 0;
   total_penalty = 0;
   total_ndfl = 0;
+  pay_summ_y_all = 0;
+  max_days_delay = 0;
 
   var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
   var payments_names = $('.payments_names'); //Получение массива видов выплат
@@ -636,6 +652,14 @@ document.getElementById('btn_desicion').onclick = function(){
 
       //Вычисление суммы неустойки
       pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
+
+      //Рисование графика
+      pay_count[0] = 0;
+      if (pay_count[i] > pay_count[i - 1]) {
+        max_days_delay = (pay_count[i] + 21 * day) / day; //Получение значения самой большой задержки
+      }
+
+      //canvas.width = max_days_delay + 50;
 
       //Выведение выплат на экран
       if ((!isNaN(pay_count[i])) && pay[i] != 4) {
@@ -1091,68 +1115,144 @@ document.getElementById('btn_desicion').onclick = function(){
   decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + total_count_paragraf + max_summ_paragraf + total_penalty_payments_paragraf + ndfl_motivation + total_penalty_paragraf + summary_paragraf;
 
   total_count = total_count - total_penalty;
-    document.querySelector('#total_count').innerHTML = "Общий размер неустойки: " + makeRubText_2(total_count);
-    total_count = 0;
+  document.querySelector('#total_count').innerHTML = "Общий размер неустойки: " + makeRubText_2(total_count);
+  total_count = 0;
 
-    //Формирование Word файла
-    // const doc = new docx.Document();
-    //   doc.addSection({
-    //       properties: {},
-    //       children: [
-    //           new docx.Paragraph({
-    //               children: [
-    //                   new docx.TextRun({
-    //                       text: decision,
-    //                       font: "Times New Roman",
-    //                   }),
-    //               ],
-    //           }),
-    //       ],
-    //   });
-    //
-    //   docx.Packer.toBlob(doc).then(blob => {
-    //       console.log(blob);
-    //       saveAs(blob, "example.docx");
-    //       console.log("Document created successfully");
-    //   });
+  //Формирование Word файла
+  // const doc = new docx.Document();
+  //   doc.addSection({
+  //       properties: {},
+  //       children: [
+  //           new docx.Paragraph({
+  //               children: [
+  //                   new docx.TextRun({
+  //                       text: decision,
+  //                       font: "Times New Roman",
+  //                   }),
+  //               ],
+  //           }),
+  //       ],
+  //   });
+  //
+  //   docx.Packer.toBlob(doc).then(blob => {
+  //       console.log(blob);
+  //       saveAs(blob, "example.docx");
+  //       console.log("Document created successfully");
+  //   });
+
+  //Отрисовка графикаы
+  //Получение количества календарных дней с даты заявления до 21го дня
+  date_sv_penalty_day_x = (date_sv_penalty_day - date_sv) / day;
+
+  //Отрисовка пунктирной прямой (21й день)
+  penalty_graph.strokeStyle = "black";
+  penalty_graph.setLineDash([6, 2]);
+  penalty_graph.beginPath();
+  penalty_graph.moveTo(space + date_sv_penalty_day_x * canvas.width * 0.9 / max_days_delay, space);
+  penalty_graph.lineTo(space + date_sv_penalty_day_x * canvas.width * 0.9 / max_days_delay, canvas.height);
+  penalty_graph.stroke();
+  penalty_graph.setLineDash([6, 0]);
+
+  for (var i = 1; i <= number_of_payments; i++) {
+    pay_summ_y[0] = 0;
+    pay_date_x[i] = pay_count[i] / day;
+    pay_summ_y[i] = pay_text[i] / 1000;
+
+    pay_summ_y_all = pay_summ_y_all + pay_summ_y[i - 1];
+
+    //Отрисовска прямоугольников с неустойками
+    if (pay_count[i] == 0) {
+      penalty_graph.strokeStyle = "green";
+      penalty_graph.lineWidth = 10;
+      penalty_graph.beginPath();
+      penalty_graph.moveTo(space + ((pay_date[i] - date_sv) / day) * canvas.width * 0.9 / max_days_delay, space);
+      penalty_graph.lineTo(space + ((pay_date[i] - date_sv) / day) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all + pay_summ_y[i]);
+      penalty_graph.stroke();
+      penalty_graph.lineWidth = 1;
+      penalty_graph.strokeStyle = "black";
+      // penalty_graph.beginPath();
+      // penalty_graph.rect(space + (pay_date[i] - date_sv) / day, space + pay_summ_y_all, pay_date_x[i], pay_summ_y[i]);
+      // penalty_graph.stroke();
+    } else {
+      penalty_graph.strokeStyle = "red";
+      penalty_graph.fillStyle = "red";
+      penalty_graph.lineWidth = 10;
+      penalty_graph.beginPath();
+      penalty_graph.moveTo(space + ((pay_date[i] - date_sv) / day + 1) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all);
+      penalty_graph.lineTo(space + ((pay_date[i] - date_sv) / day + 1) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all + pay_summ_y[i]);
+      penalty_graph.stroke();
+      penalty_graph.lineWidth = 1;
+      penalty_graph.beginPath();
+      penalty_graph.rect(space + (date_sv_penalty_day_x) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all, (pay_date_x[i]) * canvas.width * 0.9 / max_days_delay, pay_summ_y[i]);
+      penalty_graph.stroke();
+      penalty_graph.globalAlpha = 0.2;
+      penalty_graph.beginPath();
+      penalty_graph.rect(space + (date_sv_penalty_day_x) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all, (pay_date_x[i]) * canvas.width * 0.9 / max_days_delay, pay_summ_y[i]);
+      penalty_graph.fill();
+      penalty_graph.fillStyle = "black";
+      penalty_graph.globalAlpha = 1;
+    }
+  }
+
+  penalty_graph.strokeStyle = "black";
+  penalty_graph.beginPath();
+  penalty_graph.moveTo(space, canvas.height);
+  penalty_graph.lineTo(space, space);
+  penalty_graph.lineTo(canvas.width, space);
+  penalty_graph.stroke();
+
+  penalty_graph.beginPath();
+  penalty_graph.moveTo(space - 5, canvas.height - 20);
+  penalty_graph.lineTo(space, canvas.height);
+  penalty_graph.lineTo(space + 5, canvas.height - 20);
+  penalty_graph.arc(space, canvas.height - 20, 5, 0, Math.PI, false);
+  penalty_graph.fill();
+
+  penalty_graph.beginPath();
+  penalty_graph.moveTo(canvas.width - 20, space - 5);
+  penalty_graph.lineTo(canvas.width, space);
+  penalty_graph.lineTo(canvas.width - 20, space + 5);
+  penalty_graph.arc(canvas.width - 20, space, 5, Math.PI * 0,5, Math.PI * 1,5, true);
+  penalty_graph.fill();
 
 
-    //Удаление всех значений
+  //Удаление всех значений
 
-    for (var i = 1; i <= number_of_payments; i++) {
-      pay[i] = undefined;
-      date_penalty_day[i] = undefined;
-      pay_date[i] = undefined;
-      pay_text[i] = undefined;
-      pay_count[i] = undefined;
-      pay_summ[i] = undefined;
-      court_period_before[i] = undefined;
-      court_period_after[i] = undefined;
-      court_summ_before[i] = undefined;
-      court_summ_after[i] = undefined;
-      }
+  for (var i = 1; i <= number_of_payments; i++) {
+    pay[i] = undefined;
+    date_penalty_day[i] = undefined;
+    pay_date[i] = undefined;
+    pay_text[i] = undefined;
+    pay_count[i] = undefined;
+    pay_summ[i] = undefined;
+    court_period_before[i] = undefined;
+    court_period_after[i] = undefined;
+    court_summ_before[i] = undefined;
+    court_summ_after[i] = undefined;
+    }
 
-    date_sv = undefined;
-    date_sv_last_day = undefined;
-    date_sv_penalty_day = undefined;
-    date_uts = undefined;
-    date_uts_last_day = undefined;
-    date_uts_penalty_day = undefined;
-    date_ev = undefined;
-    date_ev_last_day = undefined;
-    date_ev_penalty_day = undefined;
-    date_stor = undefined;
-    date_stor_last_day = undefined;
-    date_stor_penalty_day = undefined;
-    date_court_from = undefined;
-    date_court_to = undefined;
+  date_sv = undefined;
+  date_sv_last_day = undefined;
+  date_sv_penalty_day = undefined;
+  date_uts = undefined;
+  date_uts_last_day = undefined;
+  date_uts_penalty_day = undefined;
+  date_ev = undefined;
+  date_ev_last_day = undefined;
+  date_ev_penalty_day = undefined;
+  date_stor = undefined;
+  date_stor_last_day = undefined;
+  date_stor_penalty_day = undefined;
+  date_court_from = undefined;
+  date_court_to = undefined;
 
-    total_analize_paragraf = "";
-    total_penalty_payments_paragraf = "";
-    total_penalty_paragraf
-    holly = "";
-    ndfl_motivation = "";
-    max_summ_paragraf = "";
+  total_analize_paragraf = "";
+  total_penalty_payments_paragraf = "";
+  total_penalty_paragraf
+  holly = "";
+  ndfl_motivation = "";
+  max_summ_paragraf = "";
+
 }
 
 //Function for find 20th day from start day without hollidays (14 days from 112 labor code article)
@@ -1662,5 +1762,15 @@ function show_decision(){
   } else {
     $('#decision').hide();
     $('#show_decision').html("Показать текст решения");
+  }
+}
+
+function show_graph(){
+  if ($('#show_graph').html() == "Показать график неустоек") {
+    $('#penalty_graph').show();
+    $('#show_graph').html("Скрыть график неустоек");
+  } else {
+    $('#penalty_graph').hide();
+    $('#show_graph').html("Показать график неустоек");
   }
 }

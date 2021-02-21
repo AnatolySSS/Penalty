@@ -391,6 +391,10 @@
                             </table>
                           </div><!-- table_result -->
                         </div>
+
+                        <div class="row">
+                          <canvas id="penalty_graph" width="1000" height="500" style="display:none"></canvas>
+                        </div>
                         <div class="row">
                           <div class="col">
                             <span id="decision" style="display:none"></span>
@@ -400,6 +404,7 @@
                     </div><!-- modal-body -->
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                      <button id="show_graph" type="button" class="btn btn-success" onclick="show_graph()">Показать график неустоек</button>
                       <button id="show_decision" type="button" class="btn btn-warning" onclick="show_decision()">Показать текст решения</button>
                     </div><!-- modal-footer -->
                   </div><!-- modal-content -->
@@ -422,6 +427,7 @@
     <!-- </form> -->
     <div class="toast"></div><!-- toast -->
     <script type="text/javascript" src="js/script.js"></script>
+    <script type="text/javascript" src="js/graph.js"></script>
     <script type="text/javascript" src="js/bootstrap/bootstrap.min.js"></script>
     <script type="text/javascript" src="js/word.js"></script>
     <script type="text/javascript" src="js/button.js"></script>
