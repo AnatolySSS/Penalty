@@ -16,6 +16,7 @@ var canvas = document.getElementById("penalty_graph");
 var penalty_graph = canvas.getContext("2d");
 penalty_graph.translate(0, canvas.height);
 penalty_graph.scale(1, -1);
+var penalty_rect = [];
 
 //Переменные для canvas
 var date_sv_penalty_day_x;
@@ -812,6 +813,23 @@ document.getElementById('btn_desicion').onclick = function(){
 
     for (var i = 1; i <= number_of_payments; i++) {
 
+      //Вычисление количества дней между датой выплаты и 20м днем
+      pay_count[i] = pay_date[i] - date_sv_uts_ev_stor_last_day[i];
+
+      //Если выплата была в срок, то изменение отрицательного значения на нулевое
+      if (pay_count[i] < 0) {
+        pay_count[i] = 0;
+      }
+
+      //Вычисление суммы неустойки
+      pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
+
+      //Рисование графика
+      pay_count[0] = 0;
+      if (pay_count[i] > pay_count[i - 1]) {
+        max_days_delay = (pay_count[i] + 21 * day) / day; //Получение значения самой большой задержки
+      }
+
       court_period_text[1] = 'Решением суда с ' + fo_name_genitive + ' в пользу Заявителя взыскана неустойка за период с ' +
       formatDate(new Date(date_court_from)) + ' по ' + formatDate(new Date(date_court_to)) + '.<br>'
 
@@ -1157,12 +1175,11 @@ document.getElementById('btn_desicion').onclick = function(){
     pay_summ_y[0] = 0;
     pay_date_x[i] = pay_count[i] / day;
     pay_summ_y[i] = pay_text[i] / 1000;
-
     pay_summ_y_all = pay_summ_y_all + pay_summ_y[i - 1];
 
     //Отрисовска прямоугольников с неустойками
     if (pay_count[i] == 0) {
-      penalty_graph.strokeStyle = "green";
+      penalty_graph.strokeStyle = "#28a745";
       penalty_graph.lineWidth = 10;
       penalty_graph.beginPath();
       penalty_graph.moveTo(space + ((pay_date[i] - date_sv) / day) * canvas.width * 0.9 / max_days_delay, space);
@@ -1174,32 +1191,90 @@ document.getElementById('btn_desicion').onclick = function(){
       // penalty_graph.rect(space + (pay_date[i] - date_sv) / day, space + pay_summ_y_all, pay_date_x[i], pay_summ_y[i]);
       // penalty_graph.stroke();
     } else {
-      penalty_graph.strokeStyle = "red";
-      penalty_graph.fillStyle = "red";
+      //Отрисовка линии выплаты
+      penalty_graph.strokeStyle = "#dc3545";
       penalty_graph.lineWidth = 10;
       penalty_graph.beginPath();
-      penalty_graph.moveTo(space + ((pay_date[i] - date_sv) / day + 1) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all);
-      penalty_graph.lineTo(space + ((pay_date[i] - date_sv) / day + 1) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all + pay_summ_y[i]);
+      penalty_graph.moveTo(space + ((pay_date[i] - date_sv) / day + 1) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all - 1);
+      penalty_graph.lineTo(space + ((pay_date[i] - date_sv) / day + 1) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all + pay_summ_y[i] + 1);
       penalty_graph.stroke();
+      //Отрисовка прямоугольника выплаты
       penalty_graph.lineWidth = 1;
       penalty_graph.beginPath();
       penalty_graph.rect(space + (date_sv_penalty_day_x) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all, (pay_date_x[i]) * canvas.width * 0.9 / max_days_delay, pay_summ_y[i]);
-      penalty_graph.stroke();
+      penalty_graph.stroke(); //контур прямоугольника
+
+      penalty_rect[i] = new Path2D();
+      penalty_graph.fillStyle = "#dc3545";
       penalty_graph.globalAlpha = 0.2;
       penalty_graph.beginPath();
-      penalty_graph.rect(space + (date_sv_penalty_day_x) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all, (pay_date_x[i]) * canvas.width * 0.9 / max_days_delay, pay_summ_y[i]);
-      penalty_graph.fill();
+      penalty_rect[i].rect(space + (date_sv_penalty_day_x) * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all, (pay_date_x[i]) * canvas.width * 0.9 / max_days_delay, pay_summ_y[i]);
+      penalty_graph.fill(penalty_rect[i]); //заливка прямоугольника
       penalty_graph.fillStyle = "black";
       penalty_graph.globalAlpha = 1;
     }
+
+    // canvas.addEventListener('mousemove', function(event) {
+    //   // Check whether point is inside circle
+    //   if (penalty_graph.isPointInPath(penalty_rect[1], event.offsetX, event.offsetY)) {
+    //     penalty_graph.fillStyle = "#fb4365";
+    //     penalty_graph.globalAlpha = 1;
+    //
+    //   }
+    //   else {
+    //     penalty_graph.fillStyle = "#fb4365";
+    //     penalty_graph.globalAlpha = 0.2;
+    //   }
+    //
+    //   // Draw rectangle
+    //   penalty_graph.strokeStyle = "#fb4365";
+    //   penalty_graph.clearRect(space + 1 + (date_sv_penalty_day_x) * canvas.width * 0.9 / max_days_delay, space + 1 + pay_summ_y_all, (pay_date_x[1]) * canvas.width * 0.9 / max_days_delay - 6, pay_summ_y[1] - 1);
+    //   penalty_graph.fill(penalty_rect[1]);
+    //   penalty_graph.stroke(penalty_rect[1]);
+    //   penalty_graph.strokeStyle = "black";
+    //   penalty_graph.stroke(penalty_coordinate_system);
+    // });
+
+      //Очистка прямоугольников
+      // for (var i = 1; i <= number_of_payments; i++) {
+      //   penalty_graph.clearRect(space + (date_court_from - date_sv) / day * canvas.width * 0.9 / max_days_delay, space + pay_summ_y_all, (pay_date_x[i]) * canvas.width * 0.9 / max_days_delay, pay_summ_y[i]);
+      // }
+    }
+
+    //Если был суд
+    if (!isNaN(date_court_from) || court_without_period) {
+      //Очистка прямоугольника судебного периода
+      //penalty_graph.clearRect(space + (date_court_from - date_sv) / day * canvas.width * 0.9 / max_days_delay, space, (date_court_to - date_court_from) / day * canvas.width * 0.9 / max_days_delay, canvas.height);
+      //Отрисовка пунктирной прямой (судебное взыскание неустойки)
+      penalty_graph.strokeStyle = "#dc3545";
+      penalty_graph.setLineDash([6, 2]);
+      penalty_graph.beginPath();
+      //Начало периода
+      penalty_graph.moveTo(space + (date_court_from - date_sv) / day * canvas.width * 0.9 / max_days_delay, space);
+      penalty_graph.lineTo(space + (date_court_from - date_sv) / day * canvas.width * 0.9 / max_days_delay, canvas.height);
+      //Конец периода
+      penalty_graph.moveTo(space + (date_court_to - date_sv) / day * canvas.width * 0.9 / max_days_delay, space);
+      penalty_graph.lineTo(space + (date_court_to - date_sv) / day * canvas.width * 0.9 / max_days_delay, canvas.height);
+      penalty_graph.stroke();
+
+      //Прямоугольник на весь период взыскания неустойки
+      penalty_graph.fillStyle = "grey";
+      penalty_graph.globalAlpha = 0.6;
+      penalty_graph.rect(space + (date_court_from - date_sv) / day * canvas.width * 0.9 / max_days_delay, space, (date_court_to - date_court_from) / day * canvas.width * 0.9 / max_days_delay, canvas.height);
+      penalty_graph.fill();
+      penalty_graph.setLineDash([6, 0]);
+      penalty_graph.fillStyle = "black";
+      penalty_graph.globalAlpha = 1;
+
   }
 
+  //Отрисовка системы координат
+  const penalty_coordinate_system = new Path2D();
   penalty_graph.strokeStyle = "black";
-  penalty_graph.beginPath();
-  penalty_graph.moveTo(space, canvas.height);
-  penalty_graph.lineTo(space, space);
-  penalty_graph.lineTo(canvas.width, space);
-  penalty_graph.stroke();
+  penalty_coordinate_system.moveTo(space, canvas.height);
+  penalty_coordinate_system.lineTo(space, space);
+  penalty_coordinate_system.lineTo(canvas.width, space);
+  penalty_graph.stroke(penalty_coordinate_system);
 
   penalty_graph.beginPath();
   penalty_graph.moveTo(space - 5, canvas.height - 20);
