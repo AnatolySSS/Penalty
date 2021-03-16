@@ -197,18 +197,3 @@ function show_court_fu_date(id) {
 //  }
 
  }
-
-//Блокировать даты судебной неустойки при проставленной галочке "Период не указан"
-function block_court_date(){
-  if ($("#court_without_period").prop('checked')) {
-    $("#date_court_from").prop('disabled', true);
-    $("#date_court_to").prop('disabled', true);
-    $("#date_court_from").val('');
-    $("#date_court_to").val('');
-    $('#div_court_date').show();
-  } else {
-    $("#date_court_from").prop('disabled', false);
-    $("#date_court_to").prop('disabled', false);
-    $('#div_court_date').hide();
-  }
-}

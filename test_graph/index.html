@@ -229,10 +229,16 @@
             </div>
             <!-- END First_app -->
             <hr class="mb-2">
+
+
+
+
+
+
             <!-- BEGIN Court -->
             <div class="court_period">
               <button type="button" class="accordion_right" name="button">
-                <span>Решения суда</span>
+                <span>Решения суда (заполнять в случае наличия суда)</span>
                 <i class="fa fa-chevron-down toggle"></i>
               </button>
               <div class="panel">
@@ -249,62 +255,74 @@
                     </div>
                   </div>
                   <div id="courts" class="courts">
-                    <div id="court_form_row_1" class="form-row courts">
-                      <div class="form-group col-md-4">
-                        <input id="court1_name" class="courts_names form-control" type="text" placeholder="Наименование суда" size="40">
-                      </div>
-                      <div class="form-group col-md-3">
-                        <div class="input-group">
-                          <input id="court1_number" class = "courts_numbers form-control" placeholder="Номер" type="text" size="10">
-                          <div class="input-group-append">
-                            <span class="input-group-text">&#8470;</span>
+                    <div id="court_1">
+                      <div id="court_form_row_1" class="form-row courts">
+                        <div class="form-group col-md-4">
+                          <input id="court1_name" class="courts_names form-control" type="text" placeholder="Наименование суда" size="40">
+                        </div>
+                        <div class="form-group col-md-3">
+                          <div class="input-group">
+                            <input id="court1_number" class = "courts_numbers form-control" placeholder="Номер" type="text" size="10">
+                            <div class="input-group-append">
+                              <span class="input-group-text">&#8470;</span>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div class="form-group col-md-2">
-                        <input id = "court1_date" class = "courts_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                      </div>
-                      <div class="form-group col-ms-1">
-                        <button id="add_court_info_btn_1" class="btn btn-outline-warning add_info" onclick="addCourtInfo(1)">
-                          <i class="fa fa-chevron-down toggle"></i>
-                        </button>
-                      </div>
-                      <div class="form-group col-ms-1">
-                        <button id="court_btn_1" class="btn btn-outline-warning" onclick="addCourt()">+</button>
-                      </div>
-                    </div><!-- court_form_row_1 -->
-                    <div id="add_court_info_row_1" class="add_court_info form-row mb-4" style="display:none">
-                      <div class="form-group col-md-4 form-inline">
-                        <select id="court1_claim" class="court1_claims custom-select col-md-12">
-                          <option>Страховое возмещение</option>
-                          <option>УТС</option>
-                          <option>Эвакуатор</option>
-                          <option>Хранение</option>
-                          <option>Неустойка</option>
-                          <option>Экспертиза</option>
-                          <option>Юрист</option>
-                          <option>Нотариус</option>
-                          <option>Почта</option>
-                        </select>
-                      </div>
-                      <div class="form-group col-md-3">
-                        <div class="input-group">
-                          <input id="court1_claim_summ" class = "court1_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">
-                          <div class="input-group-append">
-                            <span class="input-group-text">&#8381;</span>
-                          </div>
+                        <div class="form-group col-md-2">
+                          <input id = "court1_date" class = "courts_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
                         </div>
-                      </div>
-                      <div class="form-group col-ms-1">
-                        <button id="add_court1_claim_info_btn_1" class="btn btn-outline-warning add_info" onclick="addCourtInfo(1)">
-                          <i class="fa fa-chevron-down toggle"></i>
-                        </button>
-                      </div>
-                      <div class="form-group col-ms-1">
-                        <button id="court1_claim_btn_1" class="btn btn-outline-warning" onclick="addClaim(1)">+</button>
-                      </div>
-                    </div><!-- add_court_info_row_1 -->
-                  </div>
+                        <div class="form-group col-ms-1">
+                          <button id="add_court_info_btn_1" class="add_court_info_btns btn btn-outline-warning add_info">
+                            <i class="fa fa-chevron-down toggle"></i>
+                          </button>
+                        </div>
+                        <div class="form-group col-ms-1">
+                          <button id="court_btn_1" class="btn btn-outline-warning" onclick="addCourt()">+</button>
+                        </div>
+                      </div><!-- court_form_row_1 -->
+                      <div id="add_court_info_1" style="display:none">
+                        <div id="add_court_info_row_1_1" class="add_court_info_1 add_court_infos form-row">
+                          <div class="form-group col-md-4 form-inline">
+                            <select id="court_claim_1_1" class="court_claim_1 court_claims custom-select col-md-12">
+                              <option>Страховое возмещение</option>
+                              <option>УТС</option>
+                              <option>Эвакуатор</option>
+                              <option>Хранение</option>
+                              <option>Неустойка</option>
+                              <option>Экспертиза</option>
+                              <option>Юрист</option>
+                              <option>Нотариус</option>
+                              <option>Почта</option>
+                            </select>
+                          </div>
+                          <div class="form-group col-md-3">
+                            <div class="input-group">
+                              <input id="court_claim_summ_1_1" class = "court_claim_summ_1 court_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">
+                              <div class="input-group-append">
+                                <span class="input-group-text">&#8381;</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="form-group col-ms-1">
+                            <button id="court_claim_btn_1_1" class="court_claim_btn_1 btn btn-outline-warning" onclick="addClaim(1)">+</button>
+                          </div>
+                        </div><!-- add_court_info_row_1 -->
+                        <div id="add_court_claim_info_1_1" class="add_court_claim_info_1 form-group" style="display:none">
+                          <div class="form-group">
+                            <h6>Период неустойки</h6>
+                          </div>
+                          <div class="form-group form-inline">
+                            <label for="date_court_from_1_1">c</label>
+                            <input id = "date_court_from_1_1" class = "date_court_from_1 date_court_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                            <label for="date_court_to_1_1" class="ml-2">по</label>
+                            <input id = "date_court_to_1_1" class = "date_court_to_1 date_court_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                            <input id="court_without_period_1_1" class="court_without_period_1 court_without_periods ml-2" type="checkbox" onclick="block_court_date(1, 1)">
+                            <label for="court_without_period_1_1" class="ml-2 form-check-label">Период не указан</label>
+                          </div>
+                        </div><!-- add_court1_claim_info_1 -->
+                      </div><!-- add_court_info_1 -->
+                    </div><!-- court_1 -->
+                  </div><!-- courts -->
                 </div>
 
 
