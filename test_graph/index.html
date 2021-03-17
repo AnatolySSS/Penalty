@@ -78,7 +78,7 @@
             <br>
             <div class="general_info">
               <!-- BEGIN fo_name -->
-              <div class="fo_name form-row align-items-center">
+              <div class="fo_name form-row align-items-center" style="display:none">
                 <div class="form-group col-md-6">
                   <div class="autocomplete">
                     <input id="fo_name" class="form-control" type="text" placeholder="Введите наименование ФО" size="40" disabled>
@@ -108,11 +108,7 @@
             <hr class="mb-4">
             <!-- BEGIN First_app -->
             <div class="first_app">
-              <!-- <button id="first_app_btn" data-toggle="collapse" type="button" class="btn accordion_right " name="button">
-                <span>Первоначальное заявление о страховой выплате</span>
-                <i id="first_app_toggle" class="fa fa-chevron-down toggle"></i>
-              </button> -->
-              <div class="form-row">
+              <div class="first_app_colunm_names form-row">
                 <div class="form-group col-md-4">
                   <h6>Заявление</h6>
                 </div>
@@ -125,17 +121,10 @@
                 <div class="form-group col-md-2">
                   <h6><span id="COLUMN_NAME_21" data-toggle="tooltip" title="Первый день начисления неустойки"></span></h6>
                 </div>
-              </div>
-
-              <!-- BEGIN app_form_row_1 (sv) -->
+              </div><!-- first_app_colunm_names -->
               <div id="app_form_row_1" class="form-row">
-                <div class="form-group col-md-4 form-inline">о страховом возмещении
-                  <!-- <select id="app_name_1" class="custom-select mr-sm-2">
-                    <option>о страховом возмещении</option>
-                    <option>о выплате УТС</option>
-                    <option>о выплате расходов на эвакуатор</option>
-                    <option>о выплате расходов на хранение</option>
-                  </select> -->
+                <div class="form-group col-md-4 form-inline">
+                  о страховом возмещении
                 </div>
                 <div class="form-group col-md-2">
                   <input id = "app_date_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
@@ -149,18 +138,10 @@
                 <div class="form-group col-md-2 form-inline">
                   <span id = "date_sv_penalty_day"></span>
                 </div>
-              </div>
-              <!-- END app_form_row_1 (sv) -->
-
-              <!-- BEGIN app_form_row_2 (uts) -->
+              </div><!-- app_form_row_1 -->
               <div id="app_form_row_2" class="form-row" style="display:none">
-                <div class="form-group col-md-4 form-inline">о выплате УТС
-                  <!-- <select id="app_name_2" class="custom-select mr-sm-2">
-                    <option>о страховом возмещении</option>
-                    <option>о выплате УТС</option>
-                    <option>о выплате расходов на эвакуатор</option>
-                    <option>о выплате расходов на хранение</option>
-                  </select> -->
+                <div class="form-group col-md-4 form-inline">
+                  о выплате УТС
                 </div>
                 <div class="form-group col-md-2">
                   <input id = "app_date_2" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
@@ -174,18 +155,10 @@
                 <div class="form-group col-md-2 form-inline">
                   <span id = "date_uts_penalty_day"></span>
                 </div>
-              </div>
-              <!-- END app_form_row_2 (uts) -->
-
-              <!-- BEGIN app_form_row_3 (ev) -->
+              </div><!-- app_form_row_2 -->
               <div id="app_form_row_3" class="form-row" style="display:none">
-                <div class="form-group col-md-4 form-inline">о выплате расходов на эвакуатор
-                  <!-- <select id="app_name_3" class="custom-select mr-sm-2">
-                    <option>о страховом возмещении</option>
-                    <option>о выплате УТС</option>
-                    <option>о выплате расходов на эвакуатор</option>
-                    <option>о выплате расходов на хранение</option>
-                  </select> -->
+                <div class="form-group col-md-4 form-inline">
+                  о выплате расходов на эвакуатор
                 </div>
                 <div class="form-group col-md-2">
                   <input id = "app_date_3" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
@@ -199,18 +172,10 @@
                 <div class="form-group col-md-2 form-inline">
                   <span id = "date_ev_penalty_day"></span>
                 </div>
-              </div>
-              <!-- END app_form_row_3 (ev) -->
-
-              <!-- BEGIN app_form_row_4 (stor) -->
+              </div><!-- app_form_row_3 -->
               <div id="app_form_row_4" class="form-row" style="display:none">
-                <div class="form-group col-md-4 form-inline">о выплате расходов на хранение
-                  <!-- <select id="app_name_3" class="custom-select mr-sm-2">
-                    <option>о страховом возмещении</option>
-                    <option>о выплате УТС</option>
-                    <option>о выплате расходов на эвакуатор</option>
-                    <option>о выплате расходов на хранение</option>
-                  </select> -->
+                <div class="form-group col-md-4 form-inline">
+                  о выплате расходов на хранение
                 </div>
                 <div class="form-group col-md-2">
                   <input id = "app_date_4" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
@@ -224,240 +189,356 @@
                 <div class="form-group col-md-2 form-inline">
                   <span id = "date_stor_penalty_day"></span>
                 </div>
-              </div>
-              <!-- END app_form_row_4 (stor) -->
-            </div>
+              </div><!-- app_form_row_4 -->
+            </div><!-- first_app -->
             <!-- END First_app -->
+
             <hr class="mb-2">
 
-
-
-
-
-
-            <!-- BEGIN Court -->
-            <div class="court_period">
+            <!-- BEGIN payments -->
+            <div class="payments_all">
               <button type="button" class="accordion_right" name="button">
-                <span>Решения суда (заполнять в случае наличия суда)</span>
+                <span>Добровольные выплаты</span>
                 <i class="fa fa-chevron-down toggle"></i>
               </button>
               <div class="panel">
-                <div class="courts_all ml-2">
-                  <div class="courts_colunm_names form-row">
+                <div id="pays" class="pays ml-2">
+                  <div class="payments_colunm_names form-row">
                     <div class="form-group col-md-4">
+                      <h6>Вид выплаты</h6>
+                    </div>
+                    <div class="form-group col-md-2">
+                      <h6>Дата выплаты</h6>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <h6>Сумма выплаты</h6>
+                    </div>
+                  </div>
+                  <div id="payment_1">
+                    <div id="pay_form_row_1" class="form-row payments">
+                      <div class="form-group col-md-4 form-inline">
+                        <select id="pay1" class="payments_names custom-select col-md-12">
+                          <option>Страховое возмещение</option>
+                          <option>УТС</option>
+                          <option>Эвакуатор</option>
+                          <option>Хранение</option>
+                          <option>Неустойка</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-2">
+                        <input id = "pay1_date" class = "payments_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                      </div>
+                      <div class="form-group col-md-3">
+                        <div class="input-group">
+                          <input id="pay1_text" class = "payments_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">
+                          <div class="input-group-append">
+                            <span class="input-group-text">&#8381;</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group col-ms-1">
+                        <button id="add_info_btn_1" class="btn btn-outline-warning add_info" onclick="addInfo(1)">
+                          <i class="fa fa-chevron-down toggle"></i>
+                        </button>
+                      </div>
+                      <div class="form-group col-ms-1">
+                        <button id="pay_btn_1" class="btn btn-outline-warning" onclick="addPay()">+</button>
+                      </div>
+                    </div><!-- pay_form_row_1 -->
+
+                    <!-- <div id="add_info_pay_form_row_1" class="add_info_pay_form form-row ml-2 mb-4" style="display:none">
+                      <div class="col">
+                        <div class="form-check">
+                          <input id="voluntary_if_1" class="voluntary_ifs form-check-input" type="radio" name="payment_option_1" value="option1" onclick="show_court_fu_date(1)">
+                          <label for="voluntary_if_1" class="form-check-label">Добровольная выплата</label>
+                        </div>
+                        <div class="form-check">
+                          <input id="fu_if_1" class="fu_ifs form-check-input" type="radio" name="payment_option_1" value="option2" onclick="show_court_fu_date(1)">
+                          <label for="fu_if_1" class="form-check-label">Выплата на основании решения ФУ</label>
+                        </div>
+                        <div class="form-check">
+                          <input id="court_if_1" class="court_ifs form-check-input" type="radio" name="payment_option_1" value="option3" onclick="show_court_fu_date(1)">
+                          <label for="court_if_1" class="form-check-label">Выплата на основании решения суда</label>
+                        </div>
+                      </div>
+                      <div id="div_date_court_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
+                        <label for="date_court_1" class="mr-2">Дата решения суда</label>
+                        <input id = "date_court_1" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                      </div>
+                      <div id="div_date_fu_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
+                        <label for="date_fu_1" class="mr-2">Дата решения ФУ</label>
+                        <input id = "date_fu_1" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                      </div>
+                    </div> -->
+                    <div id="add_info_penalty_form_row_1" class="form-row" style="display:none">
+                        <div class="form-group col-md-4 form-inline">
+                          <div class="form-check">
+                            <input id="penalty_ndfl_1" class="penalty_ndfls form-check-input" type="checkbox" onclick="addPenalty_ndfl_summ_form(1)">
+                            <label for="penalty_ndfl_1" class="ml-2 form-check-label">удержан НДФЛ в размере</label>
+                          </div>
+                        </div>
+                        <div id="penalty_ndfl_summ_form_1" class="form-group col-md-3" style="display:none">
+                          <div class="input-group">
+                            <input id="penalty_ndfl_summ_1" class = "penalty_ndfl_summs input-numeral form-control" placeholder="Сумма НДФЛ" type="text" size="10">
+                            <div class="input-group-append">
+                              <span class="input-group-text">&#8381;</span>
+                            </div>
+                          </div>
+                        </div><!-- penalty_ndfl_summ_form_1 -->
+                        <div class="form-group col-md-3 form-inline">
+                          <span id="penalty_ndfl_persent_1" class="penalty_ndfl_persents"></span>
+                        </div>
+                    </div><!-- add_info_penalty_form_row_1 -->
+                  </div><!-- payment_1 -->
+                </div><!-- pays -->
+              </div><!-- panel -->
+            </div><!-- payments_all -->
+            <!-- END payments -->
+
+            <hr class="mb-2">
+
+            <!-- BEGIN fus -->
+            <div class="fus_all">
+              <button type="button" class="accordion_right" name="button">
+                <span>Выплаты на основании решения ФУ</span>
+                <i class="fa fa-chevron-down toggle"></i>
+              </button>
+              <div class="panel">
+                <div id="fus" class="fus ml-2">
+                  <div class="fus_colunm_names form-row">
+                    <div class="form-group col-md-6">
                       <h6>Наименование суда</h6>
                     </div>
                     <div class="form-group col-md-3">
                       <h6>№ решения</h6>
                     </div>
-                    <div class="form-group col-md-2">
-                      <h6>Дата решения</h6>
-                    </div>
                   </div>
-                  <div id="courts" class="courts">
-                    <div id="court_1">
-                      <div id="court_form_row_1" class="form-row courts">
-                        <div class="form-group col-md-4">
-                          <input id="court1_name" class="courts_names form-control" type="text" placeholder="Наименование суда" size="40">
+                  <div id="fu_1">
+                    <div id="fu_form_row_1" class="form-row">
+                      <div class="form-group col-md-6">
+                        <input id="fu_name_1" class="fu_names form-control" type="text" placeholder="Наименование суда" size="40">
+                      </div>
+                      <div class="form-group col-md-3">
+                        <div class="input-group">
+                          <input id="fu_number_1" class = "fu_numbers form-control" placeholder="Номер" type="text" size="10">
+                          <div class="input-group-append">
+                            <span class="input-group-text">&#8470;</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group col-ms-1">
+                        <button id="add_fu_info_btn_1" class="add_fu_info_btns btn btn-outline-warning add_info">
+                          <i class="fa fa-chevron-down toggle"></i>
+                        </button>
+                      </div>
+                      <div class="form-group col-ms-1">
+                        <button id="fu_btn_1" class="fu_btns btn btn-outline-warning" onclick="addFu()">+</button>
+                      </div>
+                    </div><!-- fu_form_row_1 -->
+
+                    <div id="add_fu_info_1" class="ml-3" style="display:none">
+                      <div class="add_fu_info_dates">
+                        <div class="form-row">
+                          <div class="form-group col-md-3">
+                            <h6>Дата решения</h6>
+                          </div>
+                          <div class="form-group col-md-3">
+                            <h6>Дата исполнения</h6>
+                          </div>
+                          <div class="form-group col-md-4">
+                            <h6>Дата вступление в силу</h6>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col-md-3 form-inline">
+                            <input id = "fu_date_1" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          </div>
+                          <div class="form-group col-md-3 form-inline">
+                            <input id = "fu_pay_date_1" class = "fu_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          </div>
+                          <div class="form-group col-md-4 form-inline">
+                            <input id = "fu_in_force_date_1" class = "fu_in_force_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          </div>
+                        </div>
+                      </div><!-- add_fu_info_dates -->
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <h6>Удовлетворенные требования</h6>
+                        </div>
+                      </div>
+                      <div id="add_fu_info_row_1_1" class="add_fu_info_1 add_fu_infos form-row">
+                        <div class="form-group col-md-4 form-inline">
+                          <select id="fu_claim_1_1" class="fu_claim_1 fu_claims custom-select col-md-12">
+                            <option>Страховое возмещение</option>
+                            <option>УТС</option>
+                            <option>Эвакуатор</option>
+                            <option>Хранение</option>
+                            <option>Неустойка</option>
+                            <option>Экспертиза</option>
+                            <option>Юрист</option>
+                            <option>Нотариус</option>
+                            <option>Почта</option>
+                          </select>
                         </div>
                         <div class="form-group col-md-3">
                           <div class="input-group">
-                            <input id="court1_number" class = "courts_numbers form-control" placeholder="Номер" type="text" size="10">
+                            <input id="fu_claim_summ_1_1" class = "fu_claim_summ_1 fu_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">
                             <div class="input-group-append">
-                              <span class="input-group-text">&#8470;</span>
+                              <span class="input-group-text">&#8381;</span>
                             </div>
                           </div>
                         </div>
-                        <div class="form-group col-md-2">
-                          <input id = "court1_date" class = "courts_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                        </div>
                         <div class="form-group col-ms-1">
-                          <button id="add_court_info_btn_1" class="add_court_info_btns btn btn-outline-warning add_info">
-                            <i class="fa fa-chevron-down toggle"></i>
-                          </button>
+                          <button id="fu_claim_btn_1_1" class="fu_claim_btn_1 btn btn-outline-warning" onclick="addClaim(1)">+</button>
                         </div>
-                        <div class="form-group col-ms-1">
-                          <button id="court_btn_1" class="btn btn-outline-warning" onclick="addCourt()">+</button>
+                      </div><!-- add_court_info_row_1 -->
+                      <div id="add_fu_claim_info_1_1" class="add_fu_claim_info_1 form-group ml-3" style="display:none">
+                        <div class="form-group">
+                          <h6>Период неустойки</h6>
                         </div>
-                      </div><!-- court_form_row_1 -->
-                      <div id="add_court_info_1" style="display:none">
-                        <div id="add_court_info_row_1_1" class="add_court_info_1 add_court_infos form-row">
-                          <div class="form-group col-md-4 form-inline">
-                            <select id="court_claim_1_1" class="court_claim_1 court_claims custom-select col-md-12">
-                              <option>Страховое возмещение</option>
-                              <option>УТС</option>
-                              <option>Эвакуатор</option>
-                              <option>Хранение</option>
-                              <option>Неустойка</option>
-                              <option>Экспертиза</option>
-                              <option>Юрист</option>
-                              <option>Нотариус</option>
-                              <option>Почта</option>
-                            </select>
+                        <div class="form-group form-inline">
+                          <label for="date_fu_from_1_1">c</label>
+                          <input id = "date_fu_from_1_1" class = "date_fu_penalty_from_1 date_court_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          <label for="date_fu_to_1_1" class="ml-2">по</label>
+                          <input id = "date_fu_to_1_1" class = "date_fu_penalty_to_1 date_fu_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          <input id="fu_without_period_1_1" class="fu_without_period_1 fu_without_periods ml-2" type="checkbox" onclick="block_court_date(1, 1)">
+                          <label for="fu_without_period_1_1" class="ml-2 form-check-label">Период не указан</label>
+                        </div>
+                      </div><!-- add_court1_claim_info_1 -->
+                    </div><!-- add_FU_info_1 -->
+                  </div><!-- FU_1 -->
+                </div><!-- FUs -->
+              </div><!-- panel -->
+            </div><!-- FUs_all -->
+            <!-- END FUs -->
+
+            <hr class="mb-2">
+
+            <!-- BEGIN Courts -->
+            <div class="courts_all">
+              <button type="button" class="accordion_right" name="button">
+                <span>Выплаты на основании решения суда</span>
+                <i class="fa fa-chevron-down toggle"></i>
+              </button>
+              <div class="panel">
+                <div id="courts" class="courts ml-2">
+                  <div class="courts_colunm_names form-row">
+                    <div class="form-group col-md-6">
+                      <h6>Наименование суда</h6>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <h6>№ решения</h6>
+                    </div>
+                  </div>
+                  <div id="court_1">
+                    <div id="court_form_row_1" class="form-row">
+                      <div class="form-group col-md-6">
+                        <input id="court_name_1" class="court_names form-control" type="text" placeholder="Наименование суда" size="40">
+                      </div>
+                      <div class="form-group col-md-3">
+                        <div class="input-group">
+                          <input id="court_number_1" class = "court_numbers form-control" placeholder="Номер" type="text" size="10">
+                          <div class="input-group-append">
+                            <span class="input-group-text">&#8470;</span>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="form-group col-ms-1">
+                        <button id="add_court_info_btn_1" class="add_court_info_btns btn btn-outline-warning add_info">
+                          <i class="fa fa-chevron-down toggle"></i>
+                        </button>
+                      </div>
+                      <div class="form-group col-ms-1">
+                        <button id="court_btn_1" class="court_btns btn btn-outline-warning" onclick="addCourt()">+</button>
+                      </div>
+                    </div><!-- court_form_row_1 -->
+
+                    <div id="add_court_info_1" class="ml-3" style="display:none">
+                      <div class="add_court_info_dates">
+                        <div class="form-row">
+                          <div class="form-group col-md-3">
+                            <h6>Дата решения</h6>
                           </div>
                           <div class="form-group col-md-3">
-                            <div class="input-group">
-                              <input id="court_claim_summ_1_1" class = "court_claim_summ_1 court_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">
-                              <div class="input-group-append">
-                                <span class="input-group-text">&#8381;</span>
-                              </div>
-                            </div>
+                            <h6>Дата исполнения</h6>
                           </div>
-                          <div class="form-group col-ms-1">
-                            <button id="court_claim_btn_1_1" class="court_claim_btn_1 btn btn-outline-warning" onclick="addClaim(1)">+</button>
+                          <div class="form-group col-md-4">
+                            <h6>Дата вступление в силу</h6>
                           </div>
-                        </div><!-- add_court_info_row_1 -->
-                        <div id="add_court_claim_info_1_1" class="add_court_claim_info_1 form-group" style="display:none">
-                          <div class="form-group">
-                            <h6>Период неустойки</h6>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col-md-3 form-inline">
+                            <input id = "court_date_1" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
                           </div>
-                          <div class="form-group form-inline">
-                            <label for="date_court_from_1_1">c</label>
-                            <input id = "date_court_from_1_1" class = "date_court_from_1 date_court_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                            <label for="date_court_to_1_1" class="ml-2">по</label>
-                            <input id = "date_court_to_1_1" class = "date_court_to_1 date_court_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                            <input id="court_without_period_1_1" class="court_without_period_1 court_without_periods ml-2" type="checkbox" onclick="block_court_date(1, 1)">
-                            <label for="court_without_period_1_1" class="ml-2 form-check-label">Период не указан</label>
+                          <div class="form-group col-md-3 form-inline">
+                            <input id = "court_pay_date_1" class = "court_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
                           </div>
-                        </div><!-- add_court1_claim_info_1 -->
-                      </div><!-- add_court_info_1 -->
-                    </div><!-- court_1 -->
-                  </div><!-- courts -->
-                </div>
-
-
-
-
-
-
-
-                <h6 style="display:none">Судом взыскана неустойка за период:</h6>
-                <div class="form-group row form-inline" style="display:none">
-                  <label for="date_court_from" class="ml-3">c</label>
-                  <div class="col-md-2">
-                    <input id = "date_court_from" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                  </div>
-                  <label for="date_court_to" class="ml-3">по</label>
-                  <div class="col-md-2">
-                    <input id = "date_court_to" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                  </div>
-                </div>
-                <div class="form-group row form-inline" style="display:none">
-                  <div class="form-group col-md-3 form-inline">
-                    <input id="court_without_period" type="checkbox" onclick="block_court_date()">
-                    <label for="court_without_period" class="ml-2 form-check-label">Период не указан</label>
-                  </div>
-                  <div id="div_court_date" class="form-group col-md-5 form-inline" style="display:none">
-                    <label for="court_date" class="mr-2">Дата решения суда</label>
-                    <input id = "court_date" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- END Court -->
-            <hr class="mb-4">
-            <!-- BEGIN payments_all -->
-            <div class="payments_all">
-              <!-- BEGIN payments_colunm_names -->
-              <div class="payments_colunm_names form-row">
-                <div class="form-group col-md-4">
-                  <h6>Вид выплаты</h6>
-                </div>
-                <div class="form-group col-md-2">
-                  <h6>Дата выплаты</h6>
-                </div>
-                <div class="form-group col-md-3">
-                  <h6>Сумма выплаты</h6>
-                </div>
-              </div>
-              <!-- END payments_colunm_names -->
-              <!-- BEGIN Pays -->
-              <div id="pays" class="pays">
-                <div id="pay_form_row_1" class="form-row payments">
-                  <div class="form-group col-md-4 form-inline">
-                    <select id="pay1" class="payments_names custom-select col-md-12">
-                      <option>Страховое возмещение</option>
-                      <option>УТС</option>
-                      <option>Эвакуатор</option>
-                      <option>Хранение</option>
-                      <option>Неустойка</option>
-                    </select>
-                  </div>
-                  <div class="form-group col-md-2">
-                    <input id = "pay1_date" class = "payments_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                  </div>
-                  <div class="form-group col-md-3">
-                    <div class="input-group">
-                      <input id="pay1_text" class = "payments_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">
-                      <div class="input-group-append">
-                        <span class="input-group-text">&#8381;</span>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="form-group col-ms-1">
-                    <button id="add_info_btn_1" class="btn btn-outline-warning add_info" onclick="addInfo(1)">
-                      <i class="fa fa-chevron-down toggle"></i>
-                    </button>
-                  </div>
-                  <div class="form-group col-ms-1">
-                    <button id="pay_btn_1" class="btn btn-outline-warning" onclick="addPay()">+</button>
-                  </div>
-                </div><!-- pay_form_row_1 -->
-
-                <div id="add_info_pay_form_row_1" class="add_info_pay_form form-row ml-2 mb-4" style="display:none">
-                  <div class="col">
-                    <div class="form-check">
-                      <input id="voluntary_if_1" class="voluntary_ifs form-check-input" type="radio" name="payment_option_1" value="option1" onclick="show_court_fu_date(1)">
-                      <label for="voluntary_if_1" class="form-check-label">Добровольная выплата</label>
-                    </div><!-- div_voluntary -->
-                    <div class="form-check">
-                      <input id="fu_if_1" class="fu_ifs form-check-input" type="radio" name="payment_option_1" value="option2" onclick="show_court_fu_date(1)">
-                      <label for="fu_if_1" class="form-check-label">Выплата на основании решения ФУ</label>
-                    </div><!-- div_FU -->
-                    <div class="form-check">
-                      <input id="court_if_1" class="court_ifs form-check-input" type="radio" name="payment_option_1" value="option3" onclick="show_court_fu_date(1)">
-                      <label for="court_if_1" class="form-check-label">Выплата на основании решения суда</label>
-                    </div><!-- div_court -->
-                  </div>
-                  <div id="div_date_court_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
-                    <label for="date_court_1" class="mr-2">Дата решения суда</label>
-                    <input id = "date_court_1" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                  </div><!-- div_date_court_1 -->
-                  <div id="div_date_fu_1" class="form-group col-md-6 form-inline mt-2" style="display:none">
-                    <label for="date_fu_1" class="mr-2">Дата решения ФУ</label>
-                    <input id = "date_fu_1" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                  </div><!-- div_date_court_1 -->
-                </div><!-- add_info_pay_form_row_1 -->
-                <div id="add_info_penalty_form_row_1" class="form-row" style="display:none">
-                    <div class="form-group col-md-4 form-inline">
-                      <div class="form-check">
-                        <input id="penalty_ndfl_1" class="penalty_ndfls form-check-input" type="checkbox" onclick="addPenalty_ndfl_summ_form(1)">
-                        <label for="penalty_ndfl_1" class="ml-2 form-check-label">удержан НДФЛ в размере</label>
-                      </div>
-                    </div>
-                    <div id="penalty_ndfl_summ_form_1" class="form-group col-md-3" style="display:none">
-                      <div class="input-group">
-                        <input id="penalty_ndfl_summ_1" class = "penalty_ndfl_summs input-numeral form-control" placeholder="Сумма НДФЛ" type="text" size="10">
-                        <div class="input-group-append">
-                          <span class="input-group-text">&#8381;</span>
+                          <div class="form-group col-md-4 form-inline">
+                            <input id = "court_in_force_date_1" class = "court_in_force_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          </div>
+                        </div>
+                      </div><!-- add_court_info_dates -->
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <h6>Удовлетворенные требования</h6>
                         </div>
                       </div>
-                    </div><!-- penalty_ndfl_summ_form_1 -->
-                    <div class="form-group col-md-3 form-inline">
-                      <span id="penalty_ndfl_persent_1" class="penalty_ndfl_persents"></span>
-                    </div>
-                </div><!-- add_info_penalty_form_row_1 -->
-              </div><!-- pays -->
-              <!-- END Pays -->
-            </div>
-            <!-- END payments_all -->
+                      <div id="add_court_info_row_1_1" class="add_court_info_1 add_court_infos form-row">
+                        <div class="form-group col-md-4 form-inline">
+                          <select id="court_claim_1_1" class="court_claim_1 court_claims custom-select col-md-12">
+                            <option>Страховое возмещение</option>
+                            <option>УТС</option>
+                            <option>Эвакуатор</option>
+                            <option>Хранение</option>
+                            <option>Неустойка</option>
+                            <option>Экспертиза</option>
+                            <option>Юрист</option>
+                            <option>Нотариус</option>
+                            <option>Почта</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <div class="input-group">
+                            <input id="court_claim_summ_1_1" class = "court_claim_summ_1 court_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">
+                            <div class="input-group-append">
+                              <span class="input-group-text">&#8381;</span>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="form-group col-ms-1">
+                          <button id="court_claim_btn_1_1" class="court_claim_btn_1 btn btn-outline-warning" onclick="addClaim(1)">+</button>
+                        </div>
+                      </div><!-- add_court_info_row_1 -->
+                      <div id="add_court_claim_info_1_1" class="add_court_claim_info_1 form-group ml-3" style="display:none">
+                        <div class="form-group">
+                          <h6>Период неустойки</h6>
+                        </div>
+                        <div class="form-group form-inline">
+                          <label for="date_court_from_1_1">c</label>
+                          <input id = "date_court_from_1_1" class = "date_court_penalty_from_1 date_court_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          <label for="date_court_to_1_1" class="ml-2">по</label>
+                          <input id = "date_court_to_1_1" class = "date_court_penalty_to_1 date_court_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          <input id="court_without_period_1_1" class="court_without_period_1 court_without_periods ml-2" type="checkbox" onclick="block_court_date(1, 1)">
+                          <label for="court_without_period_1_1" class="ml-2 form-check-label">Период не указан</label>
+                        </div>
+                      </div><!-- add_court1_claim_info_1 -->
+                    </div><!-- add_court_info_1 -->
+                  </div><!-- court_1 -->
+                </div><!-- courts -->
+              </div><!-- panel -->
+            </div><!-- courts_all -->
+            <!-- END Courts -->
+
             <br class="mb-6">
+
             <!-- BEGIN btn_desicion -->
             <button id="btn_desicion" class ="btn btn-warning btn-lg btn-block" anim="ripple" type="button" name="button" data-toggle="modal" data-target="#exampleModal">
               Рассчитать
             </button>
             <!-- END btn_desicion -->
+
             <br class="mb-6">
+
             <!-- BEGIN count_result -->
             <div class="count_result">
               <div class="form_grup total_count_div">

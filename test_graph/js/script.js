@@ -11,7 +11,7 @@ let fo_name, fo_name_nominative, fo_name_genitive, fo_name_accusative, fo_name_i
 let make_a_payment,fulfill, keep;
 //Переменная с тестом всего решения в части неустойки
 let decision;
-
+var str_test = "";
 // var canvas = document.getElementById("penalty_graph");
 // var penalty_graph = canvas.getContext("2d");
 // penalty_graph.translate(0, canvas.height);
@@ -54,14 +54,27 @@ let pay_text = [];
 let payment_order = [];
 let pay_count = [];
 let pay_summ = [];
-let voluntary_if = [];
-let fu_if = [];
-let court_if = [];
-let date_court = [];
-let date_fu = [];
+// let voluntary_if = [];
+// let fu_if = [];
+// let court_if = [];
+// let date_court = [];
+// let date_fu = [];
 let penalty_ndfl = [];
 let penalty_ndfl_persent = [];
 let penalty_ndfl_summ = [];
+
+let court = [];
+let court_number = [];
+let court_date = [];
+let court_pay_date = [];
+let court_in_force_date = [];
+let court_claim = [];
+let court_claim_summ = [];
+let date_court_penalty_from = [];
+let date_court_penalty_to = [];
+let court_without_period = [];
+
+let date_court_from, date_court_to;
 
 let str_payment_dataled;
 let str_payment_dataled_header;
@@ -77,12 +90,9 @@ let date_sv, date_sv_last_day, date_sv_penalty_day;
 let date_uts, date_uts_last_day, date_uts_penalty_day;
 let date_ev, date_ev_last_day, date_ev_penalty_day;
 let date_stor, date_stor_last_day, date_stor_penalty_day;
-let date_court_from, date_court_to;
 let date_dtp;
-let court_date;
 let max_summ;
 let europrotocol;
-let court_without_period;
 let total_count = 0;
 let total_penalty = 0;
 let total_ndfl = 0;
@@ -309,14 +319,53 @@ document.getElementById('btn_desicion').onclick = function(){
   var payments_names = $('.payments_names'); //Получение массива видов выплат
   var payments_dates = $('.payments_dates'); //Получение массива дат выплат
   var payments_summs = $('.payments_summs'); //Получение массива сумм выплат
-  var voluntary_ifs = $('.voluntary_ifs'); //Получение массива значений добровольных выплат
-  var fu_ifs = $('.fu_ifs'); //Получение массива значений выплат по решению ФУ
-  var court_ifs = $('.court_ifs'); //Получение массива значений выплат по решению суда
-  var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
-  var court_dates = $('.court_dates'); //Получение массива дат решений суда
+  // var voluntary_ifs = $('.voluntary_ifs'); //Получение массива значений добровольных выплат
+  // var fu_ifs = $('.fu_ifs'); //Получение массива значений выплат по решению ФУ
+  // var court_ifs = $('.court_ifs'); //Получение массива значений выплат по решению суда
+  // var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
+  // var court_dates = $('.court_dates'); //Получение массива дат решений суда
   var penalty_ndfls = $('.penalty_ndfls'); //Получение массива выплат неустойки с НДФЛ
   var penalty_ndfl_summs = $('.penalty_ndfl_summs'); //Получение массива сумм удержанного НДФЛ
   var penalty_ndfl_persents = $('.penalty_ndfl_persents'); //Получение массива процентов НДФЛ
+
+  var number_of_courts = $('div.courts').length; //Получение количества строк с судами
+  var court_names = $('.court_names'); //Получение массива наименвоаний судов
+  var court_numbers = $('.court_numbers'); //Получение массива нмоеров дел
+  var court_dates = $('.court_dates'); //Получение массива дат решений
+  var court_pay_dates = $('.court_pay_dates'); //Получение массива дат исполнений решений
+  var court_in_force_dates = $('.court_in_force_dates'); //Получение массива дат вступления в силу решений
+  let number_of_claims = []; //Массив для количества удовлетворенных требвоаний для каждого решения
+  let court_claims = []; //Массив для требований
+  let court_claim_summs = []; //Массив для вызсканных сумм
+  let date_court_penalty_froms = []; //Массив для дат начала периода судебных неустоек
+  let date_court_penalty_tos = []; //Массив для дат конца периода судебных неустоек
+  let court_without_periods = []; //Массив для неустоек без периода
+  for (var i = 1; i <= number_of_courts; i++) {
+    number_of_claims[i - 1] = $('.court_claim_' + i).length; //Получение количества удовлетворенных требований для каждого решения
+    court_claims[i - 1] = $('.court_claim_' + i); //Получение массива требований
+    court_claim_summs[i - 1] = $('.court_claim_summ_' + i); //Получение массива дат решений
+    date_court_penalty_froms[i - 1] = $('.date_court_penalty_from_' + i); //Получение массива дат начала периода судебных неустоек
+    date_court_penalty_tos[i - 1] = $('.date_court_penalty_to_' + i); //Получение массива дат конца периода судебных неустоек
+    court_without_periods[i - 1] = $('.court_without_period_' + i); //Получение массива неустоек без периода
+  }
+
+
+
+  // //Получение значения даты судебного взыскания неустойки
+  // //Дата начала периода
+  // date_court_from = document.querySelector('#date_court_from').value;
+  // date_court_from = changeDateType(date_court_from);
+  // date_court_from = Date.parse(date_court_from + 'T00:00:00');
+  // //Дата конца периода
+  // date_court_to = document.querySelector('#date_court_to').value;
+  // date_court_to = changeDateType(date_court_to);
+  // date_court_to = Date.parse(date_court_to + 'T00:00:00');
+  // //Дата решения суда
+  // court_date = document.querySelector('#court_date').value;
+  // court_date = changeDateType(court_date);
+  // court_date = Date.parse(court_date + 'T00:00:00');
+  // //Получение случая отсутствия указания в решении суда на конкретный период взыскания неустойки
+  // court_without_period = document.querySelector('#court_without_period').checked;
 
   //Удаление всплывающей подсказки 193 ГК РФ
   document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
@@ -443,22 +492,6 @@ document.getElementById('btn_desicion').onclick = function(){
   }
   date_stor_penalty_day = date_stor_last_day + day;
 
-  //Получение значения даты судебного взыскания неустойки
-  //Дата начала периода
-  date_court_from = document.querySelector('#date_court_from').value;
-  date_court_from = changeDateType(date_court_from);
-  date_court_from = Date.parse(date_court_from + 'T00:00:00');
-  //Дата конца периода
-  date_court_to = document.querySelector('#date_court_to').value;
-  date_court_to = changeDateType(date_court_to);
-  date_court_to = Date.parse(date_court_to + 'T00:00:00');
-  //Дата решения суда
-  court_date = document.querySelector('#court_date').value;
-  court_date = changeDateType(court_date);
-  court_date = Date.parse(court_date + 'T00:00:00');
-  //Получение случая отсутствия указания в решении суда на конкретный период взыскания неустойки
-  court_without_period = document.querySelector('#court_without_period').checked;
-
   //выведение значений 20го и 21го дня на экран
   if (!isNaN(date_sv_last_day)) {
     document.querySelector('#date_sv_last_day').innerHTML = formatDate(new Date(date_sv_last_day));
@@ -477,7 +510,69 @@ document.getElementById('btn_desicion').onclick = function(){
     document.querySelector('#date_stor_penalty_day').innerHTML = formatDate(new Date(date_stor_penalty_day));
   }
 
-  //Цикл для присваивание общих значений
+  //Цикл для присваивание общих значений выплат по решению суда
+  for (var i = 1; i <= number_of_courts; i++) {
+    court[i] = court_names[i - 1].value; //получение значения наименования суда
+    court_number[i] = court_numbers[i - 1].value; // получение значения номера дела
+    court_date[i] = court_dates[i - 1].value; // получение значения даты решения суда
+    court_pay_date[i] = court_pay_dates[i - 1].value; // получение значения даты исполнения решения
+    court_in_force_date[i] = court_in_force_dates[i - 1].value; // получение значения даты вступления в силу решения
+    court_claim[i] = [];
+    court_claim_summ[i] = [];
+    date_court_penalty_from[i] = [];
+    date_court_penalty_to[i] = [];
+    court_without_period[i] = [];
+
+    //редактирование значений даты решения суда
+    court_date[i] = changeDateType(court_date[i]);
+    court_date[i] = Date.parse(court_date[i] + 'T00:00:00');
+    //редактирование значений даты исполнения решения
+    court_pay_date[i] = changeDateType(court_pay_date[i]);
+    court_pay_date[i] = Date.parse(court_pay_date[i] + 'T00:00:00');
+    //редактирование значений даты вступления в силу решения
+    court_in_force_date[i] = changeDateType(court_in_force_date[i]);
+    court_in_force_date[i] = Date.parse(court_in_force_date[i] + 'T00:00:00');
+
+    str_test = str_test + "Суд " + i + ": " + court[i] +
+                          ".№: " + court_number[i] +
+                          ".Дата решения: " + formatDate(new Date(court_date[i])) +
+                          ".Дата исполнения: " + formatDate(new Date(court_pay_date[i])) +
+                          ".Дата вступления в силу: " + formatDate(new Date(court_in_force_date[i])) +
+                          "\n";
+
+    for (var j = 1; j <= number_of_claims[i - 1]; j++) {
+
+      court_claim[i][j] = court_claims[i - 1][j - 1].options.selectedIndex; // получение значения требования
+      court_claim_summ[i][j] = court_claim_summs[i - 1][j - 1].value; // получение значения взысканных сумм
+      date_court_penalty_from[i][j] = date_court_penalty_froms[i - 1][j - 1].value; // получение значения даты начала периода судебных неустоек
+      date_court_penalty_to[i][j] = date_court_penalty_tos[i - 1][j - 1].value; // получение значения даты конца периода судебных неустоек
+      court_without_period[i][j] = court_without_periods[i - 1][j - 1].value; // получение значения неустоек без периода
+
+      //редактирование значений взысканных сумм
+      court_claim_summ[i][j] = court_claim_summ[i][j].replace(/\s+/g, '');
+      court_claim_summ[i][j] = Number(court_claim_summ[i][j]);
+      //редактирование значений даты начала периода судебных неустоек
+      date_court_penalty_from[i][j] = changeDateType(date_court_penalty_from[i][j]);
+      date_court_penalty_from[i][j] = Date.parse(date_court_penalty_from[i][j] + 'T00:00:00');
+      //редактирование значений даты начала периода судебных неустоек
+      date_court_penalty_to[i][j] = changeDateType(date_court_penalty_to[i][j]);
+      date_court_penalty_to[i][j] = Date.parse(date_court_penalty_to[i][j] + 'T00:00:00');
+
+      str_test = str_test + " Требование " + j + ": " + court_claims[i - 1][j - 1].value +
+                            " Сумма: " + makeRubText_2(court_claim_summ[i][j]);
+      if (court_claim[i][j] == 4) {
+        str_test = str_test + " Период с " + formatDate(new Date(date_court_penalty_from[i][j])) + " по " + formatDate(new Date(date_court_penalty_to[i][j]));
+      }
+      str_test = str_test + "\n";
+    }
+    str_test = str_test + "\n";
+
+
+
+  }
+  alert(str_test);
+
+  //Цикл для присваивание общих значений добровольных выплат
   for (var i = 1; i <= number_of_payments; i++) {
     payment_not_in_time_paragraf_court[i] = "";
     analize_period_paragraf[i] = "";
@@ -487,11 +582,11 @@ document.getElementById('btn_desicion').onclick = function(){
     pay[i] = payments_names[i - 1].options.selectedIndex; //получение значения наименования выплаты
     pay_date[i] = payments_dates[i - 1].value; // получение значения даты выплаты
     pay_text[i] = payments_summs[i - 1].value; // получение значения суммы выплаты
-    court_if[i] = court_ifs[i - 1]; // получение значения "выплата на основании решения суда"
-    fu_if[i] = fu_ifs[i - 1]; // получение значения "выплата на основании решения ФУ"
-    voluntary_if[i] = voluntary_ifs[i - 1]; // получение значения "добровольная выплата"
-    date_court[i] = court_dates[i - 1].value; // получение значения даты решения суда
-    date_fu[i] = fu_dates[i - 1].value; // получение значения даты решения ФУ
+    // court_if[i] = court_ifs[i - 1]; // получение значения "выплата на основании решения суда"
+    // fu_if[i] = fu_ifs[i - 1]; // получение значения "выплата на основании решения ФУ"
+    // voluntary_if[i] = voluntary_ifs[i - 1]; // получение значения "добровольная выплата"
+    // date_court[i] = court_dates[i - 1].value; // получение значения даты решения суда
+    // date_fu[i] = fu_dates[i - 1].value; // получение значения даты решения ФУ
     penalty_ndfl[i] = penalty_ndfls[i - 1]; // получение значения "удержан НДФЛ (checkbox)"
     penalty_ndfl_summ[i] = penalty_ndfl_summs[i - 1].value; // получение значения "удержан НДФЛ (сумма)"
 
@@ -501,28 +596,28 @@ document.getElementById('btn_desicion').onclick = function(){
     //редактирвоание значений суммы выплаты
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
     pay_text[i] = Number(pay_text[i]);
-    //редактирование значения даты решения суда
-    date_court[i] = changeDateType(date_court[i]);
-    date_court[i] = Date.parse(date_court[i] + 'T00:00:00');
-    //редактирование значения даты решения ФУ
-    date_fu[i] = changeDateType(date_fu[i]);
-    date_fu[i] = Date.parse(date_fu[i] + 'T00:00:00');
+    // //редактирование значения даты решения суда
+    // date_court[i] = changeDateType(date_court[i]);
+    // date_court[i] = Date.parse(date_court[i] + 'T00:00:00');
+    // //редактирование значения даты решения ФУ
+    // date_fu[i] = changeDateType(date_fu[i]);
+    // date_fu[i] = Date.parse(date_fu[i] + 'T00:00:00');
     //редактирование значения суммы НДФЛ
     penalty_ndfl_summ[i] = penalty_ndfl_summ[i].replace(/\s+/g, '');
     penalty_ndfl_summ[i] = Number(penalty_ndfl_summ[i]);
 
     // присваивание текстового значения для выплаты по суду
-    if (court_if[i].checked) {
-      court_if[i] = ', на основании Решения суда,';
-    } else {
-      court_if[i] = '';
-    }
-
-    if (fu_if[i].checked) {
-      fu_if[i] = ', на основании Решения Финансового уполномоченного,';
-    } else {
-      fu_if[i] = '';
-    }
+    // if (court_if[i].checked) {
+    //   court_if[i] = ', на основании Решения суда,';
+    // } else {
+    //   court_if[i] = '';
+    // }
+    //
+    // if (fu_if[i].checked) {
+    //   fu_if[i] = ', на основании Решения Финансового уполномоченного,';
+    // } else {
+    //   fu_if[i] = '';
+    // }
 
     switch (pay[i]) {
       case 0: //Страховое возмещение
@@ -601,7 +696,7 @@ document.getElementById('btn_desicion').onclick = function(){
     formatDate(new Date(date_penalty_day[i])) +'.<br>'
 
     //"Собираем" абзац про выплату
-    payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name_nominative + fu_if[i] + court_if[i] + make_a_payment + ' выплату' + claim_name_short[i] + 'в размере '+
+    payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name_nominative + /**fu_if[i] + court_if[i] +*/ make_a_payment + ' выплату' + claim_name_short[i] + 'в размере '+
     makeRubText_1(pay_text[i]) +
     // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
     '.<br>'
@@ -630,7 +725,7 @@ document.getElementById('btn_desicion').onclick = function(){
 
   //"Собираем" текст решения
   //Если суда не было
-  if (isNaN(date_court_from) && !court_without_period) {
+  if (court[1] == "") {
 
     //Выведение заголовка таблицы на экран
     str_payment_dataled_header = '<tr>' +
@@ -842,7 +937,7 @@ document.getElementById('btn_desicion').onclick = function(){
       //то переопределяем значения дат и добавляем новый абзац
       if (court_without_period) {
         date_court_from = date_penalty_day[i];
-        date_court_to = court_date;
+        // date_court_to = court_date;
         court_period_text[1] = 'Решением суда с ' + fo_name_genitive + ' в пользу Заявителя взыскана неустойка'  + '.<br>'
         court_period_text[1] = court_period_text[1] + court_without_period_text;
       }
@@ -1415,7 +1510,7 @@ document.getElementById('btn_desicion').onclick = function(){
   holly = "";
   ndfl_motivation = "";
   max_summ_paragraf = "";
-
+  str_test = "";
 }
 
 //Function for find 20th day from start day without hollidays (14 days from 112 labor code article)
