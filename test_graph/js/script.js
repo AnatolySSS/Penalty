@@ -717,7 +717,6 @@ document.getElementById('btn_desicion').onclick = function(){
     claim_court_add_motivation[i] = [];
     analize_court_period_paragraf[i] = [];
 
-
     //редактирование значений даты решения суда
     court_date[i] = changeDateType(court_date[i]);
     court_date[i] = Date.parse(court_date[i] + 'T00:00:00');
@@ -728,14 +727,7 @@ document.getElementById('btn_desicion').onclick = function(){
     court_in_force_date[i] = changeDateType(court_in_force_date[i]);
     court_in_force_date[i] = Date.parse(court_in_force_date[i] + 'T00:00:00');
 
-    // str_test = str_test + "Суд " + i + ": " + court[i] +
-    //                       ".№: " + court_number[i] +
-    //                       ".Дата решения: " + formatDate(new Date(court_date[i])) +
-    //                       ".Дата исполнения: " + formatDate(new Date(court_pay_date[i])) +
-    //                       ".Дата вступления в силу: " + formatDate(new Date(court_in_force_date[i])) +
-    //                       "\n";
-
-    //Присчаивание значений форм переменным
+    //Присваивание значений форм переменным
     for (var j = 1; j <= number_of_claims[i - 1]; j++) {
 
       court_claim[i][j] = court_claims[i - 1][j - 1].options.selectedIndex; // получение значения требования
@@ -807,9 +799,9 @@ document.getElementById('btn_desicion').onclick = function(){
         case 2: //Эвакуатор
           str_court_claim[i][j] = "расходы на эвакуацию Транспортного средства";
           str_court_collect_test = "взысканы ";
-          date_court_penalty_day[i] = date_ev_penalty_day;
-          date_court_sv_uts_ev_stor[i] = date_ev;
-          date_court_sv_uts_ev_stor_last_day[i] = date_ev_last_day;
+          date_court_penalty_day[i][j] = date_ev_penalty_day;
+          date_court_sv_uts_ev_stor[i][j] = date_ev;
+          date_court_sv_uts_ev_stor_last_day[i][j] = date_ev_last_day;
           claim_court_name[i][j] = ' с заявлением о выплате расходов на эвакуацию Транспортного средства ';
           claim_court_name_short[i][j] = ' расходов на эвакуацию Транспортного средства ';
           claim_court_add_motivation[i][j] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
@@ -875,10 +867,14 @@ document.getElementById('btn_desicion').onclick = function(){
       }
 
       //"Собираем" абзац про анализ сроков 20 и 21 дней
-      analize_court_period_paragraf[i][j] = claim_court_add_motivation[i][j] + 'Заявитель обратился в ' + fo_name_accusative + claim_court_name[i][j] +
-      formatDate(new Date(date_court_sv_uts_ev_stor[i][j])) + ', следовательно, последним днем срока осуществления '+
-      'выплаты' + claim_court_name_short[i][j] + 'является ' + formatDate(new Date(date_court_sv_uts_ev_stor_last_day[i][j])) + ', а неустойка подлежит начислению с '+
-      formatDate(new Date(date_court_penalty_day[i][j])) +'.<br>'
+      if (court_claim[i][j] == 0 || court_claim[i][j] == 1 || court_claim[i][j] == 2 || court_claim[i][j] == 3) {
+        analize_court_period_paragraf[i][j] = claim_court_add_motivation[i][j] + 'Заявитель обратился в ' + fo_name_accusative + claim_court_name[i][j] +
+        formatDate(new Date(date_court_sv_uts_ev_stor[i][j])) + ', следовательно, последним днем срока осуществления ' +
+        'выплаты' + claim_court_name_short[i][j] + 'является ' + formatDate(new Date(date_court_sv_uts_ev_stor_last_day[i][j])) + ', а неустойка подлежит начислению с ' +
+        formatDate(new Date(date_court_penalty_day[i][j])) + '.<br>';
+      } else {
+        analize_court_period_paragraf[i][j] = "";
+      }
 
       if (j == 1) {
         court_claim_all[i] = str_court_claim[i][j] + court_penalty_period_paragraph[i][j] + " в размере " + makeRubText_1(court_claim_summ[i][j]);
@@ -888,21 +884,27 @@ document.getElementById('btn_desicion').onclick = function(){
       }
     }
 
-    for (var j = 1; j < number_of_claims[i - 1]; j++) {
-      for (var k = 1; k < j; k++) {
-        if ((!court_claim_summ[i][j] == "" && court_claim[i][j] == court_claim[i][k])) {
+    for (var l = 1; l <= i; l++) {
+      for (var j = 1; j <= number_of_claims[i - 1]; j++) {
+        if (!court_claim_summ[i][j] == "" && court_claim[i][j] == court_claim[l][j]) {
             analize_court_period_paragraf[i][j] = "";
+        }
+        for (var k = 1; k < j; k++) {
+          if (!court_claim_summ[i][j] == "" && court_claim[i][j] == court_claim[l][k]) {
+              analize_court_period_paragraf[i][j] = "";
+          }
         }
       }
     }
+    
     for (var j = 1; j <= number_of_claims[i - 1]; j++) {
       total_analize_court_period_paragraf = total_analize_court_period_paragraf + analize_court_period_paragraf[i][j];
     }
 
     court_paragraph_main[i] = formatDate(new Date(court_date[i])) + " Решением суда" + court_decision_N[i] + " с Финансовой организации " +
-    "в пользу Заявителя " + str_court_collect + court_claim_all[i] + "<br>.";
+    "в пользу Заявителя " + str_court_collect + court_claim_all[i] + ".<br>";
 
-    court_paragraph_payment[i] = "Решение Суда" + court_decision_N[i] + " было исполнено в полном объеме " + formatDate(new Date(court_pay_date[i])) + ".";
+    court_paragraph_payment[i] = "Решение Суда" + court_decision_N[i] + " было исполнено в полном объеме " + formatDate(new Date(court_pay_date[i])) + ".<br>";
     str_test = str_test + court_paragraph_main[i] + "<br>" + court_paragraph_payment[i] + "<br>" + court_without_period_text[i] + "<br>.";
 
     if (isNaN(court_date[i])) {
@@ -1707,7 +1709,7 @@ document.getElementById('btn_desicion').onclick = function(){
   ndfl_motivation = "";
   max_summ_paragraf = "";
   str_test = "";
-  analize_court_period_paragraf = "";
+  total_analize_court_period_paragraf = "";
 }
 
 //Function for find 20th day from start day without hollidays (14 days from 112 labor code article)
