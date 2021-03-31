@@ -73,6 +73,27 @@ let court_claim_summ = [];
 let date_court_penalty_from = [];
 let date_court_penalty_to = [];
 let court_without_period = [];
+let str_court_claim = [];
+let court_decision_N = [];
+
+let date_court_penalty_day = [];
+let date_court_sv_uts_ev_stor = [];
+let date_court_sv_uts_ev_stor_last_day = [];
+let claim_court_name = [];
+let claim_court_name_short = [];
+let claim_court_add_motivation = [];
+let analize_court_period_paragraf = [];
+let total_analize_court_period_paragraf;
+
+let court_penalty_boolean;
+
+let str_court_collect_test;
+let str_court_collect;
+
+let court_penalty_period_paragraph = [];
+let court_claim_all = [];
+let court_paragraph_main = [];
+let court_paragraph_payment = [];
 
 let date_court_from, date_court_to;
 
@@ -99,6 +120,7 @@ let total_ndfl = 0;
 let total_count_paragraf = "";
 let total_penalty_payments_paragraf = "";
 let total_penalty_paragraf = "";
+let total_courts_paragraph = "";
 let total_count_string = "";
 let total_penalty_string = "";
 let date_sv_uts_ev_stor = [];
@@ -118,11 +140,7 @@ let payment_not_in_time_paragraf = [];
 let payment_not_in_time_paragraf_court = [];
 let total_analize_paragraf = "";
 let court_period_text = [];
-let court_without_period_text = 'Заявителем и Финансовой организацией не предоставлены сведения, '+
-'содержащие данные о периоде, за который взыскана неустойка по Решению суда, в связи с чем, '+
-'Финансовый уполномоченный приходит к выводу о наличии оснований для взыскания неустойки за '+
-'несоблюдение срока выплаты страхового возмещения по Договору ОСАГО за период со дня, следующего '+
-'за днем вынесения Решения суда, по дату исполнения Финансовой организацией обязательства.'+'<br>';
+let court_without_period_text = [];
 let claim_name = []; //название требований "с заявлением о наступлении страхового случая"/"УТС"/"эвакуатор"/"хранение"
 let claim_name_short = [];
 let claim_name_payment = [];
@@ -308,13 +326,14 @@ document.getElementById('btn_desicion').onclick = function(){
 
   holly = "";
   holly_boolen = false;
-  var q = 1;
+  court_penalty_boolean = false;
   total_count = 0;
   total_penalty = 0;
   total_ndfl = 0;
   pay_summ_y_all = 0;
   max_days_delay = 0;
 
+  //Получение массива значений всех переменных добровольных выплат
   var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
   var payments_names = $('.payments_names'); //Получение массива видов выплат
   var payments_dates = $('.payments_dates'); //Получение массива дат выплат
@@ -328,6 +347,7 @@ document.getElementById('btn_desicion').onclick = function(){
   var penalty_ndfl_summs = $('.penalty_ndfl_summs'); //Получение массива сумм удержанного НДФЛ
   var penalty_ndfl_persents = $('.penalty_ndfl_persents'); //Получение массива процентов НДФЛ
 
+  //Получение массива значений всех переменных выплат по решению суда
   var number_of_courts = $('div.courts').length; //Получение количества строк с судами
   var court_names = $('.court_names'); //Получение массива наименвоаний судов
   var court_numbers = $('.court_numbers'); //Получение массива нмоеров дел
@@ -348,8 +368,6 @@ document.getElementById('btn_desicion').onclick = function(){
     date_court_penalty_tos[i - 1] = $('.date_court_penalty_to_' + i); //Получение массива дат конца периода судебных неустоек
     court_without_periods[i - 1] = $('.court_without_period_' + i); //Получение массива неустоек без периода
   }
-
-
 
   // //Получение значения даты судебного взыскания неустойки
   // //Дата начала периода
@@ -510,68 +528,6 @@ document.getElementById('btn_desicion').onclick = function(){
     document.querySelector('#date_stor_penalty_day').innerHTML = formatDate(new Date(date_stor_penalty_day));
   }
 
-  //Цикл для присваивание общих значений выплат по решению суда
-  for (var i = 1; i <= number_of_courts; i++) {
-    court[i] = court_names[i - 1].value; //получение значения наименования суда
-    court_number[i] = court_numbers[i - 1].value; // получение значения номера дела
-    court_date[i] = court_dates[i - 1].value; // получение значения даты решения суда
-    court_pay_date[i] = court_pay_dates[i - 1].value; // получение значения даты исполнения решения
-    court_in_force_date[i] = court_in_force_dates[i - 1].value; // получение значения даты вступления в силу решения
-    court_claim[i] = [];
-    court_claim_summ[i] = [];
-    date_court_penalty_from[i] = [];
-    date_court_penalty_to[i] = [];
-    court_without_period[i] = [];
-
-    //редактирование значений даты решения суда
-    court_date[i] = changeDateType(court_date[i]);
-    court_date[i] = Date.parse(court_date[i] + 'T00:00:00');
-    //редактирование значений даты исполнения решения
-    court_pay_date[i] = changeDateType(court_pay_date[i]);
-    court_pay_date[i] = Date.parse(court_pay_date[i] + 'T00:00:00');
-    //редактирование значений даты вступления в силу решения
-    court_in_force_date[i] = changeDateType(court_in_force_date[i]);
-    court_in_force_date[i] = Date.parse(court_in_force_date[i] + 'T00:00:00');
-
-    str_test = str_test + "Суд " + i + ": " + court[i] +
-                          ".№: " + court_number[i] +
-                          ".Дата решения: " + formatDate(new Date(court_date[i])) +
-                          ".Дата исполнения: " + formatDate(new Date(court_pay_date[i])) +
-                          ".Дата вступления в силу: " + formatDate(new Date(court_in_force_date[i])) +
-                          "\n";
-
-    for (var j = 1; j <= number_of_claims[i - 1]; j++) {
-
-      court_claim[i][j] = court_claims[i - 1][j - 1].options.selectedIndex; // получение значения требования
-      court_claim_summ[i][j] = court_claim_summs[i - 1][j - 1].value; // получение значения взысканных сумм
-      date_court_penalty_from[i][j] = date_court_penalty_froms[i - 1][j - 1].value; // получение значения даты начала периода судебных неустоек
-      date_court_penalty_to[i][j] = date_court_penalty_tos[i - 1][j - 1].value; // получение значения даты конца периода судебных неустоек
-      court_without_period[i][j] = court_without_periods[i - 1][j - 1].value; // получение значения неустоек без периода
-
-      //редактирование значений взысканных сумм
-      court_claim_summ[i][j] = court_claim_summ[i][j].replace(/\s+/g, '');
-      court_claim_summ[i][j] = Number(court_claim_summ[i][j]);
-      //редактирование значений даты начала периода судебных неустоек
-      date_court_penalty_from[i][j] = changeDateType(date_court_penalty_from[i][j]);
-      date_court_penalty_from[i][j] = Date.parse(date_court_penalty_from[i][j] + 'T00:00:00');
-      //редактирование значений даты начала периода судебных неустоек
-      date_court_penalty_to[i][j] = changeDateType(date_court_penalty_to[i][j]);
-      date_court_penalty_to[i][j] = Date.parse(date_court_penalty_to[i][j] + 'T00:00:00');
-
-      str_test = str_test + " Требование " + j + ": " + court_claims[i - 1][j - 1].value +
-                            " Сумма: " + makeRubText_2(court_claim_summ[i][j]);
-      if (court_claim[i][j] == 4) {
-        str_test = str_test + " Период с " + formatDate(new Date(date_court_penalty_from[i][j])) + " по " + formatDate(new Date(date_court_penalty_to[i][j]));
-      }
-      str_test = str_test + "\n";
-    }
-    str_test = str_test + "\n";
-
-
-
-  }
-  alert(str_test);
-
   //Цикл для присваивание общих значений добровольных выплат
   for (var i = 1; i <= number_of_payments; i++) {
     payment_not_in_time_paragraf_court[i] = "";
@@ -619,6 +575,7 @@ document.getElementById('btn_desicion').onclick = function(){
     //   fu_if[i] = '';
     // }
 
+    //Присваивание переменных для абзаца с анализом сроков 21го дня
     switch (pay[i]) {
       case 0: //Страховое возмещение
         date_penalty_day[i] = date_sv_penalty_day;
@@ -711,7 +668,6 @@ document.getElementById('btn_desicion').onclick = function(){
       total_ndfl = total_ndfl + penalty_ndfl_summ[i];
       penalty_ndfl_persent[i] = Math.round(penalty_ndfl_summ[i] * 100 / pay_text[i]);
       penalty_ndfl_persents[i - 1].innerHTML = penalty_ndfl_persent[i] + " %";
-      //alert(penalty_ndfl_persent[i] + " %");
     }
 
     //Удаление абзаца с анализом сроков 20 и 21 дней в случае его повторения
@@ -721,11 +677,251 @@ document.getElementById('btn_desicion').onclick = function(){
       }
     }
 
-  } // завершение for
+  } // завершение цикла для присваивание общих значений добровольных выплат
+
+
+
+
+
+
+
+
+  //Цикл для присваивание общих значений выплат по решению суда
+  for (var i = 1; i <= number_of_courts; i++) {
+
+    court_without_period_text[i] = "";
+    court_decision_N[i] = "";
+
+    if (number_of_courts > 1) {
+      court_decision_N[i] = " № " + i;
+    }
+
+    court[i] = court_names[i - 1].value; //получение значения наименования суда
+    court_number[i] = court_numbers[i - 1].value; // получение значения номера дела
+    court_date[i] = court_dates[i - 1].value; // получение значения даты решения суда
+    court_pay_date[i] = court_pay_dates[i - 1].value; // получение значения даты исполнения решения
+    court_in_force_date[i] = court_in_force_dates[i - 1].value; // получение значения даты вступления в силу решения
+    court_claim[i] = [];
+    court_claim_summ[i] = [];
+    date_court_penalty_from[i] = [];
+    date_court_penalty_to[i] = [];
+    court_without_period[i] = [];
+    court_penalty_period_paragraph[i] = [];
+    str_court_claim[i] = [];
+
+    date_court_penalty_day[i] = [];
+    date_court_sv_uts_ev_stor[i] = [];
+    date_court_sv_uts_ev_stor_last_day[i] = [];
+    claim_court_name[i] = [];
+    claim_court_name_short[i] = [];
+    claim_court_add_motivation[i] = [];
+    analize_court_period_paragraf[i] = [];
+
+
+    //редактирование значений даты решения суда
+    court_date[i] = changeDateType(court_date[i]);
+    court_date[i] = Date.parse(court_date[i] + 'T00:00:00');
+    //редактирование значений даты исполнения решения
+    court_pay_date[i] = changeDateType(court_pay_date[i]);
+    court_pay_date[i] = Date.parse(court_pay_date[i] + 'T00:00:00');
+    //редактирование значений даты вступления в силу решения
+    court_in_force_date[i] = changeDateType(court_in_force_date[i]);
+    court_in_force_date[i] = Date.parse(court_in_force_date[i] + 'T00:00:00');
+
+    // str_test = str_test + "Суд " + i + ": " + court[i] +
+    //                       ".№: " + court_number[i] +
+    //                       ".Дата решения: " + formatDate(new Date(court_date[i])) +
+    //                       ".Дата исполнения: " + formatDate(new Date(court_pay_date[i])) +
+    //                       ".Дата вступления в силу: " + formatDate(new Date(court_in_force_date[i])) +
+    //                       "\n";
+
+    //Присчаивание значений форм переменным
+    for (var j = 1; j <= number_of_claims[i - 1]; j++) {
+
+      court_claim[i][j] = court_claims[i - 1][j - 1].options.selectedIndex; // получение значения требования
+      court_claim_summ[i][j] = court_claim_summs[i - 1][j - 1].value; // получение значения взысканных сумм
+      date_court_penalty_from[i][j] = date_court_penalty_froms[i - 1][j - 1].value; // получение значения даты начала периода судебных неустоек
+      date_court_penalty_to[i][j] = date_court_penalty_tos[i - 1][j - 1].value; // получение значения даты конца периода судебных неустоек
+      court_without_period[i][j] = court_without_periods[i - 1][j - 1].checked; // получение значения неустоек без периода
+
+      //редактирование значений взысканных сумм
+      court_claim_summ[i][j] = court_claim_summ[i][j].replace(/\s+/g, '');
+      court_claim_summ[i][j] = Number(court_claim_summ[i][j]);
+      //редактирование значений даты начала периода судебных неустоек
+      date_court_penalty_from[i][j] = changeDateType(date_court_penalty_from[i][j]);
+      date_court_penalty_from[i][j] = Date.parse(date_court_penalty_from[i][j] + 'T00:00:00');
+      //редактирование значений даты начала периода судебных неустоек
+      date_court_penalty_to[i][j] = changeDateType(date_court_penalty_to[i][j]);
+      date_court_penalty_to[i][j] = Date.parse(date_court_penalty_to[i][j] + 'T00:00:00');
+
+      // str_test = str_test + " Требование " + j + ": " + court_claims[i - 1][j - 1].value +
+      //                       " Сумма: " + makeRubText_2(court_claim_summ[i][j]);
+    //   if (court_claim[i][j] == 4) {
+    //     str_test = str_test + " Период с " + formatDate(new Date(date_court_penalty_from[i][j])) + " по " + formatDate(new Date(date_court_penalty_to[i][j]));
+    //   }
+    //   str_test = str_test + "\n";
+    }
+
+    //Собирание абзаца со всеми требованиями, взысканными судом
+    for (var j = 1; j <= number_of_claims[i - 1]; j++) {
+
+      court_penalty_period_paragraph[i][j] = "";
+
+      switch (court_claim[i][j]) {
+        case 0: //Страховое возмещение
+          str_court_claim[i][j] = "страховое возмещение по Договору ОСАГО";
+          str_court_collect_test = "взыскано ";
+          date_court_penalty_day[i][j] = date_sv_penalty_day;
+          date_court_sv_uts_ev_stor[i][j] = date_sv;
+          date_court_sv_uts_ev_stor_last_day[i][j] = date_sv_last_day;
+          claim_court_name[i][j] = ' с заявлением о выплате страхового возмещения ';
+          claim_court_name_short[i][j] = ' страхового возмещения ';
+          claim_court_add_motivation[i][j] = '';
+          break;
+        case 1: //УТС
+          str_court_claim[i][j] = "страховое возмещение по Договору ОСАГО в части УТС";
+          str_court_collect_test = "взыскано ";
+          date_court_penalty_day[i][j] = date_uts_penalty_day;
+          date_court_sv_uts_ev_stor[i][j] = date_uts;
+          date_court_sv_uts_ev_stor_last_day[i][j] = date_uts_last_day;
+          claim_court_name[i][j] = ' с заявлением о выплате УТС ';
+          claim_court_name_short[i][j] = ' УТС ';
+          claim_court_add_motivation[i][j] = 'Согласно пункту 20 Постановление Пленума № ' +
+          '58 при наступлении страхового случая потерпевший обязан не только уведомить ' +
+          'страховщика о его наступлении в сроки, установленные Правилами ОСАГО, ' +
+          'но и направить страховщику заявление о страховом возмещении и документы, ' +
+          'предусмотренные Правилами ОСАГО. В заявлении о страховом возмещении потерпевший ' +
+          'должен также сообщить о другом известном ему на момент подачи заявления ущербе, ' +
+          'кроме расходов на восстановление поврежденного имущества, который подлежит ' +
+          'возмещению  (например, об утрате товарной стоимости, о расходах на эвакуацию ' +
+          'транспортного средства с места дорожно-транспортного происшествия и т.п.).<br>' +
+          'Согласно пункту 37 Постановление Пленума № 58 к реальному ущербу, возникшему ' +
+          'в результате дорожно-транспортного происшествия, наряду со стоимостью ремонта ' +
+          'и запасных частей относится также утрата товарной стоимости, которая представляет ' +
+          'собой уменьшение стоимости транспортного средства, вызванное преждевременным ' +
+          'ухудшением товарного (внешнего) вида транспортного средства и его эксплуатационных ' +
+          'качеств в результате снижения прочности и долговечности отдельных деталей, узлов ' +
+          'и агрегатов, соединений и защитных покрытий вследствие дорожно-транспортного ' +
+          'происшествия и последующего ремонта.<br>';
+          break;
+        case 2: //Эвакуатор
+          str_court_claim[i][j] = "расходы на эвакуацию Транспортного средства";
+          str_court_collect_test = "взысканы ";
+          date_court_penalty_day[i] = date_ev_penalty_day;
+          date_court_sv_uts_ev_stor[i] = date_ev;
+          date_court_sv_uts_ev_stor_last_day[i] = date_ev_last_day;
+          claim_court_name[i][j] = ' с заявлением о выплате расходов на эвакуацию Транспортного средства ';
+          claim_court_name_short[i][j] = ' расходов на эвакуацию Транспортного средства ';
+          claim_court_add_motivation[i][j] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+          'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+          'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+          'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+          'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+          'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+          'приходит к выводу о том, что расходы на эвакуацию Транспортного средства относятся '+
+          'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты страхового '+
+          'возмещения подлежит начислению на сумму расходов на эвакуацию Транспортного средства.'+ '<br>';
+          break;
+        case 3: //Хранение
+          str_court_claim[i][j] = "расходы на хранение Транспортного средства";
+          str_court_collect_test = "взысканы ";
+          date_court_penalty_day[i][j] = date_stor_penalty_day;
+          date_court_sv_uts_ev_stor[i][j] = date_stor;
+          date_court_sv_uts_ev_stor_last_day[i][j] = date_stor_last_day;
+          claim_court_name[i][j] = ' с заявлением о выплате расходов на хранение Транспортного средства ';
+          claim_court_name_short[i][j] = ' расходов на хранение Транспортного средства ';
+          claim_court_add_motivation[i][j] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+          'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+          'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+          'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+          'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+          'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+          'приходит к выводу о том, что расходы на хранение Транспортного средства относятся '+
+          'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты страхового '+
+          'возмещения подлежит начислению на сумму расходов на хранение Транспортного средства.'+ '<br>';
+          break;
+        case 4: //Неустойка
+          str_court_claim[i][j] = "неустойка за несоблюдение сроков выплаты страхового возмещения по Договору ОСАГО";
+          str_court_collect_test = "взыскана ";
+          if (court_without_period[i][j]) {
+            court_penalty_period_paragraph[i][j] = "";
+            court_without_period_text[i] = "Заявителем и Финансовой организацией не предоставлены сведения, " +
+            "содержащие данные о периоде, за который взыскана неустойка по Решению суда" + court_decision_N[i] + ", в связи с чем, " +
+            "Финансовый уполномоченный приходит к выводу о наличии оснований для взыскания неустойки за " +
+            "несоблюдение срока выплаты страхового возмещения по Договору ОСАГО за период со дня, следующего " +
+            "за днем вынесения Решения суда" + court_decision_N[i] + ", по дату исполнения Финансовой организацией обязательства." + "<br>";
+          } else {
+            court_penalty_period_paragraph[i][j] = " за период с " + formatDate(new Date(date_court_penalty_from[i][j])) +
+            " по " + formatDate(new Date(date_court_penalty_to[i][j]));
+          }
+          court_penalty_boolean = true;
+          break;
+        case 5: //Экспертиза
+          str_court_claim[i][j] = "расходы на экспертизу";
+          str_court_collect_test = "взысканы ";
+          break;
+        case 6: //Юрист
+          str_court_claim[i][j] = "юридические расходы";
+          str_court_collect_test = "взысканы ";
+          break;
+        case 7: //Нотариус
+          str_court_claim[i][j] = "расходы на нотариальные услуги";
+          str_court_collect_test = "взысканы ";
+          break;
+        case 8: //Почта
+          str_court_claim[i][j] = "почтовые расходы";
+          str_court_collect_test = "взысканы ";
+          break;
+      }
+
+      //"Собираем" абзац про анализ сроков 20 и 21 дней
+      analize_court_period_paragraf[i][j] = claim_court_add_motivation[i][j] + 'Заявитель обратился в ' + fo_name_accusative + claim_court_name[i][j] +
+      formatDate(new Date(date_court_sv_uts_ev_stor[i][j])) + ', следовательно, последним днем срока осуществления '+
+      'выплаты' + claim_court_name_short[i][j] + 'является ' + formatDate(new Date(date_court_sv_uts_ev_stor_last_day[i][j])) + ', а неустойка подлежит начислению с '+
+      formatDate(new Date(date_court_penalty_day[i][j])) +'.<br>'
+
+      if (j == 1) {
+        court_claim_all[i] = str_court_claim[i][j] + court_penalty_period_paragraph[i][j] + " в размере " + makeRubText_1(court_claim_summ[i][j]);
+        str_court_collect = str_court_collect_test;
+      } else if (j > 1) {
+        court_claim_all[i] = court_claim_all[i] + ", " + str_court_claim[i][j] + court_penalty_period_paragraph[i][j] + " в размере " + makeRubText_1(court_claim_summ[i][j]);
+      }
+    }
+
+    for (var j = 1; j < number_of_claims[i - 1]; j++) {
+      for (var k = 1; k < j; k++) {
+        if ((!court_claim_summ[i][j] == "" && court_claim[i][j] == court_claim[i][k])) {
+            analize_court_period_paragraf[i][j] = "";
+        }
+      }
+    }
+    for (var j = 1; j <= number_of_claims[i - 1]; j++) {
+      total_analize_court_period_paragraf = total_analize_court_period_paragraf + analize_court_period_paragraf[i][j];
+    }
+
+    court_paragraph_main[i] = formatDate(new Date(court_date[i])) + " Решением суда" + court_decision_N[i] + " с Финансовой организации " +
+    "в пользу Заявителя " + str_court_collect + court_claim_all[i] + "<br>.";
+
+    court_paragraph_payment[i] = "Решение Суда" + court_decision_N[i] + " было исполнено в полном объеме " + formatDate(new Date(court_pay_date[i])) + ".";
+    str_test = str_test + court_paragraph_main[i] + "<br>" + court_paragraph_payment[i] + "<br>" + court_without_period_text[i] + "<br>.";
+
+    if (isNaN(court_date[i])) {
+      court_paragraph_main[i] = "";
+      court_paragraph_payment[i] = "";
+    }
+
+    total_courts_paragraph = total_courts_paragraph + total_analize_court_period_paragraf + court_paragraph_main[i] + court_paragraph_payment[i];
+
+  }//Завершение цикла для присваивание общих значений выплат по решению суда
+
+
+
+
+
 
   //"Собираем" текст решения
   //Если суда не было
-  if (court[1] == "") {
+  if (!court_penalty_boolean) {
 
     //Выведение заголовка таблицы на экран
     str_payment_dataled_header = '<tr>' +
@@ -1087,7 +1283,6 @@ document.getElementById('btn_desicion').onclick = function(){
       payment_not_in_time_paragraf[i] + payment_not_in_time_paragraf_court[i];
     } //конец цикла for
 
-    //TODO: добавить сложение сумм
     //Формирование абзаца со сложением нескольких неустоек
     //добавление открывающейся скобки и первой выплаты, в случае, если количество выплат больше 1
     let stop_ind_1 = 1;
@@ -1230,7 +1425,7 @@ document.getElementById('btn_desicion').onclick = function(){
     ' × 13%)' + '.<br>';
   }
 
-  decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + total_count_paragraf + max_summ_paragraf + total_penalty_payments_paragraf + ndfl_motivation + total_penalty_paragraf + summary_paragraf;
+  decision = first_paragraf + standart_motivation + article_191 + holly + total_analize_paragraf + total_courts_paragraph + total_count_paragraf + max_summ_paragraf + total_penalty_payments_paragraf + ndfl_motivation + total_penalty_paragraf + summary_paragraf;
 
   total_count = total_count - total_penalty;
   document.querySelector('#total_count').innerHTML = "Общий размер неустойки: " + makeRubText_2(total_count);
@@ -1506,11 +1701,13 @@ document.getElementById('btn_desicion').onclick = function(){
 
   total_analize_paragraf = "";
   total_penalty_payments_paragraf = "";
-  total_penalty_paragraf
+  total_penalty_paragraf = "";
+  total_courts_paragraph = "";
   holly = "";
   ndfl_motivation = "";
   max_summ_paragraf = "";
   str_test = "";
+  analize_court_period_paragraf = "";
 }
 
 //Function for find 20th day from start day without hollidays (14 days from 112 labor code article)
