@@ -12,11 +12,6 @@ let make_a_payment,fulfill, keep;
 //Переменная с тестом всего решения в части неустойки
 let decision;
 var str_test = "";
-// var canvas = document.getElementById("penalty_graph");
-// var penalty_graph = canvas.getContext("2d");
-// penalty_graph.translate(0, canvas.height);
-// penalty_graph.scale(1, -1);
-// var penalty_rect = [];
 
 var swg_graph = SVG().addTo('#div_svg').size('100%', '100%');
 var line_svg_payment = [];
@@ -54,11 +49,6 @@ let pay_text = [];
 let payment_order = [];
 let pay_count = [];
 let pay_summ = [];
-// let voluntary_if = [];
-// let fu_if = [];
-// let court_if = [];
-// let date_court = [];
-// let date_fu = [];
 let penalty_ndfl = [];
 let penalty_ndfl_persent = [];
 let penalty_ndfl_summ = [];
@@ -84,6 +74,7 @@ let claim_court_name_short = [];
 let claim_court_add_motivation = [];
 let analize_court_period_paragraf = [];
 let analize_court_period_paragraf_help_str;
+let analize_period_paragraf_help_str;
 let court_set = new Set();
 court_set.add(1); //Добавляестя для того, чтобы первое строка не разбивалась на символы
 let total_analize_court_period_paragraf = [];
@@ -325,8 +316,6 @@ $('#app_date_4').focusout(function analizeDate(){
 //Основная функция для анализа введенных значений и собирания текста решения
 document.getElementById('btn_desicion').onclick = function(){
 
-  // penalty_graph.clearRect(0, 0, canvas.width, canvas.height);
-
   holly = "";
   decision = "";
   total_courts_paragraph = "";
@@ -337,17 +326,13 @@ document.getElementById('btn_desicion').onclick = function(){
   total_ndfl = 0;
   pay_summ_y_all = 0;
   max_days_delay = 0;
+  court_set.clear();
 
   //Получение массива значений всех переменных добровольных выплат
   var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
   var payments_names = $('.payments_names'); //Получение массива видов выплат
   var payments_dates = $('.payments_dates'); //Получение массива дат выплат
   var payments_summs = $('.payments_summs'); //Получение массива сумм выплат
-  // var voluntary_ifs = $('.voluntary_ifs'); //Получение массива значений добровольных выплат
-  // var fu_ifs = $('.fu_ifs'); //Получение массива значений выплат по решению ФУ
-  // var court_ifs = $('.court_ifs'); //Получение массива значений выплат по решению суда
-  // var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
-  // var court_dates = $('.court_dates'); //Получение массива дат решений суда
   var penalty_ndfls = $('.penalty_ndfls'); //Получение массива выплат неустойки с НДФЛ
   var penalty_ndfl_summs = $('.penalty_ndfl_summs'); //Получение массива сумм удержанного НДФЛ
   var penalty_ndfl_persents = $('.penalty_ndfl_persents'); //Получение массива процентов НДФЛ
@@ -373,22 +358,6 @@ document.getElementById('btn_desicion').onclick = function(){
     date_court_penalty_tos[i - 1] = $('.date_court_penalty_to_' + i); //Получение массива дат конца периода судебных неустоек
     court_without_periods[i - 1] = $('.court_without_period_' + i); //Получение массива неустоек без периода
   }
-
-  // //Получение значения даты судебного взыскания неустойки
-  // //Дата начала периода
-  // date_court_from = document.querySelector('#date_court_from').value;
-  // date_court_from = changeDateType(date_court_from);
-  // date_court_from = Date.parse(date_court_from + 'T00:00:00');
-  // //Дата конца периода
-  // date_court_to = document.querySelector('#date_court_to').value;
-  // date_court_to = changeDateType(date_court_to);
-  // date_court_to = Date.parse(date_court_to + 'T00:00:00');
-  // //Дата решения суда
-  // court_date = document.querySelector('#court_date').value;
-  // court_date = changeDateType(court_date);
-  // court_date = Date.parse(court_date + 'T00:00:00');
-  // //Получение случая отсутствия указания в решении суда на конкретный период взыскания неустойки
-  // court_without_period = document.querySelector('#court_without_period').checked;
 
   //Удаление всплывающей подсказки 193 ГК РФ
   document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
@@ -543,11 +512,6 @@ document.getElementById('btn_desicion').onclick = function(){
     pay[i] = payments_names[i - 1].options.selectedIndex; //получение значения наименования выплаты
     pay_date[i] = payments_dates[i - 1].value; // получение значения даты выплаты
     pay_text[i] = payments_summs[i - 1].value; // получение значения суммы выплаты
-    // court_if[i] = court_ifs[i - 1]; // получение значения "выплата на основании решения суда"
-    // fu_if[i] = fu_ifs[i - 1]; // получение значения "выплата на основании решения ФУ"
-    // voluntary_if[i] = voluntary_ifs[i - 1]; // получение значения "добровольная выплата"
-    // date_court[i] = court_dates[i - 1].value; // получение значения даты решения суда
-    // date_fu[i] = fu_dates[i - 1].value; // получение значения даты решения ФУ
     penalty_ndfl[i] = penalty_ndfls[i - 1]; // получение значения "удержан НДФЛ (checkbox)"
     penalty_ndfl_summ[i] = penalty_ndfl_summs[i - 1].value; // получение значения "удержан НДФЛ (сумма)"
 
@@ -558,27 +522,9 @@ document.getElementById('btn_desicion').onclick = function(){
     pay_text[i] = pay_text[i].replace(/\s+/g, '');
     pay_text[i] = Number(pay_text[i]);
     // //редактирование значения даты решения суда
-    // date_court[i] = changeDateType(date_court[i]);
-    // date_court[i] = Date.parse(date_court[i] + 'T00:00:00');
-    // //редактирование значения даты решения ФУ
-    // date_fu[i] = changeDateType(date_fu[i]);
-    // date_fu[i] = Date.parse(date_fu[i] + 'T00:00:00');
     //редактирование значения суммы НДФЛ
     penalty_ndfl_summ[i] = penalty_ndfl_summ[i].replace(/\s+/g, '');
     penalty_ndfl_summ[i] = Number(penalty_ndfl_summ[i]);
-
-    // присваивание текстового значения для выплаты по суду
-    // if (court_if[i].checked) {
-    //   court_if[i] = ', на основании Решения суда,';
-    // } else {
-    //   court_if[i] = '';
-    // }
-    //
-    // if (fu_if[i].checked) {
-    //   fu_if[i] = ', на основании Решения Финансового уполномоченного,';
-    // } else {
-    //   fu_if[i] = '';
-    // }
 
     //Присваивание переменных для абзаца с анализом сроков 21го дня
     switch (pay[i]) {
@@ -652,17 +598,25 @@ document.getElementById('btn_desicion').onclick = function(){
     } // завершение switch
 
     //"Собираем" абзац про анализ сроков 20 и 21 дней
-    analize_period_paragraf[i] = claim_add_motivation[i] + 'Заявитель обратился в ' + fo_name_accusative + claim_name[i] +
+    analize_period_paragraf_help_str = claim_add_motivation[i] + 'Заявитель обратился в ' + fo_name_accusative + claim_name[i] +
     formatDate(new Date(date_sv_uts_ev_stor[i])) + ', следовательно, последним днем срока осуществления '+
     'выплаты' + claim_name_short[i] + 'является ' + formatDate(new Date(date_sv_uts_ev_stor_last_day[i])) + ', а неустойка подлежит начислению с '+
     formatDate(new Date(date_penalty_day[i])) +'.<br>'
 
+    if (!court_set.has(analize_period_paragraf_help_str)) {
+      court_set.add(analize_period_paragraf_help_str);
+      analize_period_paragraf[i] = analize_period_paragraf_help_str;
+    } else {
+      analize_period_paragraf[i] = "";
+    }
+
     //"Собираем" абзац про выплату
-    payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name_nominative + /**fu_if[i] + court_if[i] +*/ make_a_payment + ' выплату' + claim_name_short[i] + 'в размере '+
+    payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name_nominative + make_a_payment + ' выплату' + claim_name_short[i] + 'в размере '+
     makeRubText_1(pay_text[i]) +
     // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
     '.<br>'
 
+    //Если при выплате неустойки был удержан НДФЛ
     if (pay[i] == 4 && penalty_ndfl[i].checked) {
       payment_paragraf[i] = formatDate(new Date(pay_date[i])) + ' ' + fo_name_nominative + make_a_payment + ' выплату' + claim_name_short[i] + 'исходя из суммы '+
       makeRubText_1(pay_text[i] + penalty_ndfl_summ[i]) + ' (с учетом удержания 13% НДФЛ), в связи с чем Заявителю было перечислено ' +
@@ -674,13 +628,13 @@ document.getElementById('btn_desicion').onclick = function(){
       penalty_ndfl_persent[i] = Math.round(penalty_ndfl_summ[i] * 100 / pay_text[i]);
       penalty_ndfl_persents[i - 1].innerHTML = penalty_ndfl_persent[i] + " %";
     }
-
-    //Удаление абзаца с анализом сроков 20 и 21 дней в случае его повторения
-    for (var j = 1; j < i; j++) {
-      if ((!isNaN(pay_date[i]) && pay[i] == pay[j])) {
-          analize_period_paragraf[i] = "";
-      }
-    }
+    //
+    // //Удаление абзаца с анализом сроков 20 и 21 дней в случае его повторения
+    // for (var j = 1; j < i; j++) {
+    //   if ((!isNaN(pay_date[i]) && pay[i] == pay[j])) {
+    //       analize_period_paragraf[i] = "";
+    //   }
+    // }
 
   } // завершение цикла для присваивание общих значений добровольных выплат
 
@@ -901,19 +855,6 @@ document.getElementById('btn_desicion').onclick = function(){
       }
     }
 
-    // for (var l = 1; l <= i; l++) {
-    //   for (var j = 1; j <= number_of_claims[i - 1]; j++) {
-    //     if (!court_claim_summ[i][j] == "" && court_claim[i][j] == court_claim[l][j]) {
-    //         analize_court_period_paragraf[i][j] = "";
-    //     }
-    //     for (var k = 1; k < j; k++) {
-    //       if (!court_claim_summ[i][j] == "" && court_claim[i][j] == court_claim[l][k]) {
-    //           analize_court_period_paragraf[i][j] = "";
-    //       }
-    //     }
-    //   }
-    // }
-
     for (var j = 1; j <= number_of_claims[i - 1]; j++) {
       total_analize_court_period_paragraf[i] = total_analize_court_period_paragraf[i] + analize_court_period_paragraf[i][j];
     }
@@ -922,10 +863,10 @@ document.getElementById('btn_desicion').onclick = function(){
     "в пользу Заявителя " + str_court_collect + court_claim_all[i] + ".<br>";
 
     court_paragraph_payment[i] = "Решение Суда" + court_decision_N[i] + " было исполнено в полном объеме " + formatDate(new Date(court_pay_date[i])) + ".<br>";
-    str_test = str_test + court_paragraph_main[i] + "<br>" + court_paragraph_payment[i] + "<br>" + court_without_period_text[i] + "<br>.";
+    // str_test = str_test + court_paragraph_main[i] + "<br>" + court_paragraph_payment[i] + "<br>" + court_without_period_text[i] + "<br>.";
 
     if (isNaN(court_date[i])) {
-      total_analize_court_period_paragraf = "";
+      total_analize_court_period_paragraf[i] = "";
       court_paragraph_main[i] = "";
       court_paragraph_payment[i] = "";
     }
@@ -940,7 +881,7 @@ document.getElementById('btn_desicion').onclick = function(){
 
 
   //"Собираем" текст решения
-  //Если суда не было
+  //Если судом неустйоки не взысканы
   if (!court_penalty_boolean) {
 
     //Выведение заголовка таблицы на экран
@@ -1732,6 +1673,7 @@ document.getElementById('btn_desicion').onclick = function(){
   str_test = "";
   total_analize_court_period_paragraf = "";
   analize_court_period_paragraf_help_str = "";
+  analize_period_paragraf_help_str = "";
 
   court_set.clear();
 }
