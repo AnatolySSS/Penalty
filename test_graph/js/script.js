@@ -83,7 +83,10 @@ let claim_court_name = [];
 let claim_court_name_short = [];
 let claim_court_add_motivation = [];
 let analize_court_period_paragraf = [];
-let total_analize_court_period_paragraf;
+let analize_court_period_paragraf_help_str;
+let court_set = new Set();
+court_set.add(1); //Добавляестя для того, чтобы первое строка не разбивалась на символы
+let total_analize_court_period_paragraf = [];
 
 let court_penalty_boolean;
 
@@ -325,6 +328,8 @@ document.getElementById('btn_desicion').onclick = function(){
   // penalty_graph.clearRect(0, 0, canvas.width, canvas.height);
 
   holly = "";
+  decision = "";
+  total_courts_paragraph = "";
   holly_boolen = false;
   court_penalty_boolean = false;
   total_count = 0;
@@ -689,6 +694,9 @@ document.getElementById('btn_desicion').onclick = function(){
   //Цикл для присваивание общих значений выплат по решению суда
   for (var i = 1; i <= number_of_courts; i++) {
 
+    total_analize_court_period_paragraf[i] = "";
+    court_paragraph_main[i] = "";
+    court_paragraph_payment[i] = "";
     court_without_period_text[i] = "";
     court_decision_N[i] = "";
 
@@ -758,6 +766,7 @@ document.getElementById('btn_desicion').onclick = function(){
     for (var j = 1; j <= number_of_claims[i - 1]; j++) {
 
       court_penalty_period_paragraph[i][j] = "";
+      analize_court_period_paragraf[i][j] = "";
 
       switch (court_claim[i][j]) {
         case 0: //Страховое возмещение
@@ -868,10 +877,18 @@ document.getElementById('btn_desicion').onclick = function(){
 
       //"Собираем" абзац про анализ сроков 20 и 21 дней
       if (court_claim[i][j] == 0 || court_claim[i][j] == 1 || court_claim[i][j] == 2 || court_claim[i][j] == 3) {
-        analize_court_period_paragraf[i][j] = claim_court_add_motivation[i][j] + 'Заявитель обратился в ' + fo_name_accusative + claim_court_name[i][j] +
+
+        analize_court_period_paragraf_help_str = claim_court_add_motivation[i][j] + 'Заявитель обратился в ' + fo_name_accusative + claim_court_name[i][j] +
         formatDate(new Date(date_court_sv_uts_ev_stor[i][j])) + ', следовательно, последним днем срока осуществления ' +
         'выплаты' + claim_court_name_short[i][j] + 'является ' + formatDate(new Date(date_court_sv_uts_ev_stor_last_day[i][j])) + ', а неустойка подлежит начислению с ' +
         formatDate(new Date(date_court_penalty_day[i][j])) + '.<br>';
+
+        if (!court_set.has(analize_court_period_paragraf_help_str)) {
+          court_set.add(analize_court_period_paragraf_help_str);
+          analize_court_period_paragraf[i][j] = analize_court_period_paragraf_help_str;
+        } else {
+          analize_court_period_paragraf[i][j] = "";
+        }
       } else {
         analize_court_period_paragraf[i][j] = "";
       }
@@ -884,21 +901,21 @@ document.getElementById('btn_desicion').onclick = function(){
       }
     }
 
-    for (var l = 1; l <= i; l++) {
-      for (var j = 1; j <= number_of_claims[i - 1]; j++) {
-        if (!court_claim_summ[i][j] == "" && court_claim[i][j] == court_claim[l][j]) {
-            analize_court_period_paragraf[i][j] = "";
-        }
-        for (var k = 1; k < j; k++) {
-          if (!court_claim_summ[i][j] == "" && court_claim[i][j] == court_claim[l][k]) {
-              analize_court_period_paragraf[i][j] = "";
-          }
-        }
-      }
-    }
-    
+    // for (var l = 1; l <= i; l++) {
+    //   for (var j = 1; j <= number_of_claims[i - 1]; j++) {
+    //     if (!court_claim_summ[i][j] == "" && court_claim[i][j] == court_claim[l][j]) {
+    //         analize_court_period_paragraf[i][j] = "";
+    //     }
+    //     for (var k = 1; k < j; k++) {
+    //       if (!court_claim_summ[i][j] == "" && court_claim[i][j] == court_claim[l][k]) {
+    //           analize_court_period_paragraf[i][j] = "";
+    //       }
+    //     }
+    //   }
+    // }
+
     for (var j = 1; j <= number_of_claims[i - 1]; j++) {
-      total_analize_court_period_paragraf = total_analize_court_period_paragraf + analize_court_period_paragraf[i][j];
+      total_analize_court_period_paragraf[i] = total_analize_court_period_paragraf[i] + analize_court_period_paragraf[i][j];
     }
 
     court_paragraph_main[i] = formatDate(new Date(court_date[i])) + " Решением суда" + court_decision_N[i] + " с Финансовой организации " +
@@ -908,11 +925,12 @@ document.getElementById('btn_desicion').onclick = function(){
     str_test = str_test + court_paragraph_main[i] + "<br>" + court_paragraph_payment[i] + "<br>" + court_without_period_text[i] + "<br>.";
 
     if (isNaN(court_date[i])) {
+      total_analize_court_period_paragraf = "";
       court_paragraph_main[i] = "";
       court_paragraph_payment[i] = "";
     }
 
-    total_courts_paragraph = total_courts_paragraph + total_analize_court_period_paragraf + court_paragraph_main[i] + court_paragraph_payment[i];
+    total_courts_paragraph = total_courts_paragraph + total_analize_court_period_paragraf[i] + court_paragraph_main[i] + court_paragraph_payment[i];
 
   }//Завершение цикла для присваивание общих значений выплат по решению суда
 
@@ -1684,6 +1702,9 @@ document.getElementById('btn_desicion').onclick = function(){
     court_period_after[i] = undefined;
     court_summ_before[i] = undefined;
     court_summ_after[i] = undefined;
+      for (var j = 0; i < array.length; i++) {
+        analize_court_period_paragraf[i][j] = "";
+      }
     }
 
   date_sv = undefined;
@@ -1710,6 +1731,9 @@ document.getElementById('btn_desicion').onclick = function(){
   max_summ_paragraf = "";
   str_test = "";
   total_analize_court_period_paragraf = "";
+  analize_court_period_paragraf_help_str = "";
+
+  court_set.clear();
 }
 
 //Function for find 20th day from start day without hollidays (14 days from 112 labor code article)
