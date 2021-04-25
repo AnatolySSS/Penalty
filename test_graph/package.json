@@ -1,0 +1,28 @@
+{
+  "name": "Penalty",
+  "version": "1.0.0",
+  "description": "Penalty calculator for inssurance",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack -w"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/AnatolySSS/Penalty.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/AnatolySSS/Penalty/issues"
+  },
+  "homepage": "https://github.com/AnatolySSS/Penalty#readme",
+  "devDependencies": {
+    "webpack": "^5.35.0",
+    "webpack-cli": "^4.6.0"
+  }
+}
