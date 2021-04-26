@@ -8,6 +8,12 @@ module.exports = {
     filename: 'bundle.js'
   },
   module: {
-    rules: [{ test: /\.txt$/, use: 'raw-loader' }],
-  },
+    rules: [
+      {
+        test: /\.(js)$/,
+        include: path.resolve(__dirname, 'js'),
+        loader: 'babel-loader'
+      }
+    ]
+  }
 };
