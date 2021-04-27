@@ -1,4 +1,5 @@
 import { findLastDay } from './findLastDay.js';
+import { changeDateType } from './changeDateType.js';
 import { formatDate } from './formatDate.js';
 import { DAY, COLUMN_NAME_20, COLUMN_NAME_21} from './variables.js';
 import { holly_boolen } from './findLastDay.js';
@@ -15,6 +16,8 @@ export class AppDate {
     this.date_penalty_day_id = date_penalty_day_id;
   }
 
+  getAppDate() {return Date.parse(changeDateType(this.date_id.val()) + 'T00:00:00') }
+  getAppDateFormatted() { return formatDate(new Date(this.getAppDate())); }
   getLastDay() { return findLastDay(this.date_id.val()); }
   getLastDayFormatted() { return formatDate(new Date(this.getLastDay())); }
   getPenaltyDay() { return this.getLastDay() + DAY; }

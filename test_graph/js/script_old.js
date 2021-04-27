@@ -254,21 +254,21 @@ document.getElementById('btn_desicion').onclick = function(){
     court_without_periods[i - 1] = $('.court_without_period_' + i); //Получение массива неустоек без периода
   }
 
-  //Удаление всплывающей подсказки 193 ГК РФ
-  document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
-  document.querySelector('#date_uts_last_day').removeAttribute('tooltip');
-  document.querySelector('#date_ev_last_day').removeAttribute('tooltip');
-  document.querySelector('#date_stor_last_day').removeAttribute('tooltip');
+  // //Удаление всплывающей подсказки 193 ГК РФ
+  // document.querySelector('#date_sv_last_day').removeAttribute('tooltip');
+  // document.querySelector('#date_uts_last_day').removeAttribute('tooltip');
+  // document.querySelector('#date_ev_last_day').removeAttribute('tooltip');
+  // document.querySelector('#date_stor_last_day').removeAttribute('tooltip');
 
-  //стирание значений дат
-  document.querySelector('#date_sv_last_day').innerHTML = "";
-  document.querySelector('#date_sv_penalty_day').innerHTML = "";
-  document.querySelector('#date_uts_last_day').innerHTML = "";
-  document.querySelector('#date_uts_penalty_day').innerHTML = "";
-  document.querySelector('#date_ev_last_day').innerHTML = "";
-  document.querySelector('#date_ev_penalty_day').innerHTML = "";
-  document.querySelector('#date_stor_last_day').innerHTML = "";
-  document.querySelector('#date_stor_penalty_day').innerHTML = "";
+  // //стирание значений дат
+  // document.querySelector('#date_sv_last_day').innerHTML = "";
+  // document.querySelector('#date_sv_penalty_day').innerHTML = "";
+  // document.querySelector('#date_uts_last_day').innerHTML = "";
+  // document.querySelector('#date_uts_penalty_day').innerHTML = "";
+  // document.querySelector('#date_ev_last_day').innerHTML = "";
+  // document.querySelector('#date_ev_penalty_day').innerHTML = "";
+  // document.querySelector('#date_stor_last_day').innerHTML = "";
+  // document.querySelector('#date_stor_penalty_day').innerHTML = "";
 
   //Удаление значений в таблице результатов
   for (var i = 1; i <= number_of_payments; i++) {
@@ -277,11 +277,11 @@ document.getElementById('btn_desicion').onclick = function(){
     court_period_text[i] = "";
   }
 
-  //Перекрашивание 21го дня в серый цвет
-  document.querySelector('#date_sv_last_day').style.color = '#595b5e';
-  document.querySelector('#date_uts_last_day').style.color = '#595b5e';
-  document.querySelector('#date_ev_last_day').style.color = '#595b5e';
-  document.querySelector('#date_stor_last_day').style.color = '#595b5e';
+  // //Перекрашивание 21го дня в серый цвет
+  // document.querySelector('#date_sv_last_day').style.color = '#595b5e';
+  // document.querySelector('#date_uts_last_day').style.color = '#595b5e';
+  // document.querySelector('#date_ev_last_day').style.color = '#595b5e';
+  // document.querySelector('#date_stor_last_day').style.color = '#595b5e';
 
   //Получение значения наименования ФО
   fo_name = document.querySelector("#fo_name").value;
@@ -338,64 +338,64 @@ document.getElementById('btn_desicion').onclick = function(){
     document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
   }
 
-  //Получение значений даты обращений с требованиями и исчисление 20го дня
-  date_sv = document.querySelector('#app_date_1').value;
-  date_sv = changeDateType(date_sv);
-  date_sv = Date.parse(date_sv + 'T00:00:00');
-  date_sv_last_day = findLastDay(date_sv);
-  if (holly_boolen) {
-    document.querySelector('#date_sv_last_day').style.color = '#b00000';
-    document.querySelector('#date_sv_last_day').setAttribute('tooltip', '193 ГК РФ');
-  }
-  date_sv_penalty_day = date_sv_last_day + day;
-
-  date_uts = document.querySelector('#app_date_2').value;
-  date_uts = changeDateType(date_uts);
-  date_uts = Date.parse(date_uts + 'T00:00:00');
-  date_uts_last_day = findLastDay(date_uts);
-  if (holly_boolen) {
-    document.querySelector('#date_uts_last_day').style.color = '#b00000';
-    document.querySelector('#date_uts_last_day').setAttribute('tooltip', '193 ГК РФ');
-  }
-  date_uts_penalty_day = date_uts_last_day + day;
-
-  date_ev = document.querySelector('#app_date_3').value;
-  date_ev = changeDateType(date_ev);
-  date_ev = Date.parse(date_ev + 'T00:00:00');
-  date_ev_last_day = findLastDay(date_ev);
-  if (holly_boolen) {
-    document.querySelector('#date_ev_last_day').style.color = '#b00000';
-    document.querySelector('#date_ev_last_day').setAttribute('tooltip', '193 ГК РФ');
-  }
-  date_ev_penalty_day = date_ev_last_day + day;
-
-  date_stor = document.querySelector('#app_date_4').value;
-  date_stor = changeDateType(date_stor);
-  date_stor = Date.parse(date_stor + 'T00:00:00');
-  date_stor_last_day = findLastDay(date_stor);
-  if (holly_boolen) {
-    document.querySelector('#date_stor_last_day').style.color = '#b00000';
-    document.querySelector('#date_stor_last_day').setAttribute('tooltip', '193 ГК РФ');
-  }
-  date_stor_penalty_day = date_stor_last_day + day;
+  // //Получение значений даты обращений с требованиями и исчисление 20го дня
+  // date_sv = document.querySelector('#app_date_1').value;
+  // date_sv = changeDateType(date_sv);
+  // date_sv = Date.parse(date_sv + 'T00:00:00');
+  // date_sv_last_day = findLastDay(date_sv);
+  // if (holly_boolen) {
+  //   document.querySelector('#date_sv_last_day').style.color = '#b00000';
+  //   document.querySelector('#date_sv_last_day').setAttribute('tooltip', '193 ГК РФ');
+  // }
+  // date_sv_penalty_day = date_sv_last_day + day;
+  //
+  // date_uts = document.querySelector('#app_date_2').value;
+  // date_uts = changeDateType(date_uts);
+  // date_uts = Date.parse(date_uts + 'T00:00:00');
+  // date_uts_last_day = findLastDay(date_uts);
+  // if (holly_boolen) {
+  //   document.querySelector('#date_uts_last_day').style.color = '#b00000';
+  //   document.querySelector('#date_uts_last_day').setAttribute('tooltip', '193 ГК РФ');
+  // }
+  // date_uts_penalty_day = date_uts_last_day + day;
+  //
+  // date_ev = document.querySelector('#app_date_3').value;
+  // date_ev = changeDateType(date_ev);
+  // date_ev = Date.parse(date_ev + 'T00:00:00');
+  // date_ev_last_day = findLastDay(date_ev);
+  // if (holly_boolen) {
+  //   document.querySelector('#date_ev_last_day').style.color = '#b00000';
+  //   document.querySelector('#date_ev_last_day').setAttribute('tooltip', '193 ГК РФ');
+  // }
+  // date_ev_penalty_day = date_ev_last_day + day;
+  //
+  // date_stor = document.querySelector('#app_date_4').value;
+  // date_stor = changeDateType(date_stor);
+  // date_stor = Date.parse(date_stor + 'T00:00:00');
+  // date_stor_last_day = findLastDay(date_stor);
+  // if (holly_boolen) {
+  //   document.querySelector('#date_stor_last_day').style.color = '#b00000';
+  //   document.querySelector('#date_stor_last_day').setAttribute('tooltip', '193 ГК РФ');
+  // }
+  // date_stor_penalty_day = date_stor_last_day + day;
 
   //выведение значений 20го и 21го дня на экран
-  if (!isNaN(date_sv_last_day)) {
-    document.querySelector('#date_sv_last_day').innerHTML = formatDate(new Date(date_sv_last_day));
-    document.querySelector('#date_sv_penalty_day').innerHTML = formatDate(new Date(date_sv_penalty_day));
-  }
-  if (!isNaN(date_uts_last_day)) {
-    document.querySelector('#date_uts_last_day').innerHTML = formatDate(new Date(date_uts_last_day));
-    document.querySelector('#date_uts_penalty_day').innerHTML = formatDate(new Date(date_uts_penalty_day));
-  }
-  if (!isNaN(date_ev_last_day)) {
-    document.querySelector('#date_ev_last_day').innerHTML = formatDate(new Date(date_ev_last_day));
-    document.querySelector('#date_ev_penalty_day').innerHTML = formatDate(new Date(date_ev_penalty_day));
-  }
-  if (!isNaN(date_stor_last_day)) {
-    document.querySelector('#date_stor_last_day').innerHTML = formatDate(new Date(date_stor_last_day));
-    document.querySelector('#date_stor_penalty_day').innerHTML = formatDate(new Date(date_stor_penalty_day));
-  }
+  // if (!isNaN(date_sv_last_day)) {
+  //   document.querySelector('#date_sv_last_day').innerHTML = formatDate(new Date(date_sv_last_day));
+  //   document.querySelector('#date_sv_penalty_day').innerHTML = formatDate(new Date(date_sv_penalty_day));
+  // }
+  // if (!isNaN(date_uts_last_day)) {
+  //   document.querySelector('#date_uts_last_day').innerHTML = formatDate(new Date(date_uts_last_day));
+  //   document.querySelector('#date_uts_penalty_day').innerHTML = formatDate(new Date(date_uts_penalty_day));
+  // }
+  // if (!isNaN(date_ev_last_day)) {
+  //   document.querySelector('#date_ev_last_day').innerHTML = formatDate(new Date(date_ev_last_day));
+  //   document.querySelector('#date_ev_penalty_day').innerHTML = formatDate(new Date(date_ev_penalty_day));
+  // }
+  // if (!isNaN(date_stor_last_day)) {
+  //   document.querySelector('#date_stor_last_day').innerHTML = formatDate(new Date(date_stor_last_day));
+  //   document.querySelector('#date_stor_penalty_day').innerHTML = formatDate(new Date(date_stor_penalty_day));
+  // }
 
   //Цикл для присваивание общих значений добровольных выплат
   for (var i = 1; i <= number_of_payments; i++) {
@@ -410,15 +410,12 @@ document.getElementById('btn_desicion').onclick = function(){
     penalty_ndfl[i] = penalty_ndfls[i - 1]; // получение значения "удержан НДФЛ (checkbox)"
     penalty_ndfl_summ[i] = penalty_ndfl_summs[i - 1].value; // получение значения "удержан НДФЛ (сумма)"
 
-    const payment_voluntary = new Payment_voluntary(pay[i], pay_date[i], pay_text[i], penalty_ndfl[i], penalty_ndfl_summ[i]);
-    // const payment_voluntary[i] = new Payment_voluntary(1, '28.04.2019', '15 000.00', false, '4 000.00');
-
     //редактирвоание значений даты выплаты
-    // pay_date[i] = changeDateType(pay_date[i]);
-    // pay_date[i] = Date.parse(pay_date[i] + 'T00:00:00');
-    // //редактирвоание значений суммы выплаты
-    // pay_text[i] = pay_text[i].replace(/\s+/g, '');
-    // pay_text[i] = Number(pay_text[i]);
+    pay_date[i] = changeDateType(pay_date[i]);
+    pay_date[i] = Date.parse(pay_date[i] + 'T00:00:00');
+    //редактирвоание значений суммы выплаты
+    pay_text[i] = pay_text[i].replace(/\s+/g, '');
+    pay_text[i] = Number(pay_text[i]);
     // //редактирование значения суммы НДФЛ
     // penalty_ndfl_summ[i] = penalty_ndfl_summ[i].replace(/\s+/g, '');
     // penalty_ndfl_summ[i] = Number(penalty_ndfl_summ[i]);

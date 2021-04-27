@@ -45,3 +45,15 @@ export var pay_summ_y_all = 0; //Сложение всех предыдущих 
 export var pay_date_x = [], pay_summ_y = [];
 
 export let payment_voluntary = [];
+
+//Сборка заголовка таблицы (без суда)
+export let STR_PAYMENT_DETALED_HEADER = '<tr>' +
+  '<th scope="col"><span id="COLUMN_NAME_0">' + COLUMN_NAME_0 + '</span></th>' +
+  '<th scope="col"><span id="COLUMN_NAME_1">' + COLUMN_NAME_1 + '</span></th>' +
+  '<!-- <th scope="col"><span id="COLUMN_NAME_2"></span></th> -->' +
+  '<th scope="col"><span id="COLUMN_NAME_3">' + COLUMN_NAME_3 + '</span></th>' +
+  '<th scope="col"><span id="COLUMN_NAME_4">' + COLUMN_NAME_4 + '</span></th>' +
+  '<th scope="col"><span id="COLUMN_NAME_5">' + COLUMN_NAME_5 + '</span></th>' +
+  '<th scope="col"><span id="COLUMN_NAME_6">' + COLUMN_NAME_6 + '</span></th>' +
+  '<th scope="col"><span id="COLUMN_NAME_7">' + COLUMN_NAME_7 + '</span></th>' +
+'</tr>';
