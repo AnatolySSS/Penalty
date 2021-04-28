@@ -410,12 +410,12 @@ document.getElementById('btn_desicion').onclick = function(){
     penalty_ndfl[i] = penalty_ndfls[i - 1]; // получение значения "удержан НДФЛ (checkbox)"
     penalty_ndfl_summ[i] = penalty_ndfl_summs[i - 1].value; // получение значения "удержан НДФЛ (сумма)"
 
-    //редактирвоание значений даты выплаты
-    pay_date[i] = changeDateType(pay_date[i]);
-    pay_date[i] = Date.parse(pay_date[i] + 'T00:00:00');
-    //редактирвоание значений суммы выплаты
-    pay_text[i] = pay_text[i].replace(/\s+/g, '');
-    pay_text[i] = Number(pay_text[i]);
+    // //редактирвоание значений даты выплаты
+    // pay_date[i] = changeDateType(pay_date[i]);
+    // pay_date[i] = Date.parse(pay_date[i] + 'T00:00:00');
+    // //редактирвоание значений суммы выплаты
+    // pay_text[i] = pay_text[i].replace(/\s+/g, '');
+    // pay_text[i] = Number(pay_text[i]);
     // //редактирование значения суммы НДФЛ
     // penalty_ndfl_summ[i] = penalty_ndfl_summ[i].replace(/\s+/g, '');
     // penalty_ndfl_summ[i] = Number(penalty_ndfl_summ[i]);
@@ -772,31 +772,31 @@ document.getElementById('btn_desicion').onclick = function(){
   if (!court_penalty_boolean) {
 
     //Выведение заголовка таблицы на экран
-    str_payment_dataled_header = '<tr>' +
-      '<th scope="col"><span id="COLUMN_NAME_0">' + COLUMN_NAME_0 + '</span></th>' +
-      '<th scope="col"><span id="COLUMN_NAME_1">' + COLUMN_NAME_1 + '</span></th>' +
-      '<!-- <th scope="col"><span id="COLUMN_NAME_2"></span></th> -->' +
-      '<th scope="col"><span id="COLUMN_NAME_3">' + COLUMN_NAME_3 + '</span></th>' +
-      '<th scope="col"><span id="COLUMN_NAME_4">' + COLUMN_NAME_4 + '</span></th>' +
-      '<th scope="col"><span id="COLUMN_NAME_5">' + COLUMN_NAME_5 + '</span></th>' +
-      '<th scope="col"><span id="COLUMN_NAME_6">' + COLUMN_NAME_6 + '</span></th>' +
-      '<th scope="col"><span id="COLUMN_NAME_7">' + COLUMN_NAME_7 + '</span></th>' +
-    '</tr>';
+    // str_payment_dataled_header = '<tr>' +
+    //   '<th scope="col"><span id="COLUMN_NAME_0">' + COLUMN_NAME_0 + '</span></th>' +
+    //   '<th scope="col"><span id="COLUMN_NAME_1">' + COLUMN_NAME_1 + '</span></th>' +
+    //   '<!-- <th scope="col"><span id="COLUMN_NAME_2"></span></th> -->' +
+    //   '<th scope="col"><span id="COLUMN_NAME_3">' + COLUMN_NAME_3 + '</span></th>' +
+    //   '<th scope="col"><span id="COLUMN_NAME_4">' + COLUMN_NAME_4 + '</span></th>' +
+    //   '<th scope="col"><span id="COLUMN_NAME_5">' + COLUMN_NAME_5 + '</span></th>' +
+    //   '<th scope="col"><span id="COLUMN_NAME_6">' + COLUMN_NAME_6 + '</span></th>' +
+    //   '<th scope="col"><span id="COLUMN_NAME_7">' + COLUMN_NAME_7 + '</span></th>' +
+    // '</tr>';
+    //
+    // $('#str_payment_dataled_header').append(str_payment_dataled_header);
 
-    $('#str_payment_dataled_header').append(str_payment_dataled_header);
-
-    for (var i = 1; i <= number_of_payments; i++) {
-
-      //Вычисление количества дней между датой выплаты и 20м днем
-      pay_count[i] = pay_date[i] - date_sv_uts_ev_stor_last_day[i];
-
-      //Если выплата была в срок, то изменение отрицательного значения на нулевое
-      if (pay_count[i] < 0) {
-        pay_count[i] = 0;
-      }
-
-      //Вычисление суммы неустойки
-      pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
+    // for (var i = 1; i <= number_of_payments; i++) {
+    //
+    //   //Вычисление количества дней между датой выплаты и 20м днем
+    //   pay_count[i] = pay_date[i] - date_sv_uts_ev_stor_last_day[i];
+    //
+    //   //Если выплата была в срок, то изменение отрицательного значения на нулевое
+    //   if (pay_count[i] < 0) {
+    //     pay_count[i] = 0;
+    //   }
+    //
+    //   //Вычисление суммы неустойки
+    //   pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
 
       //Рисование графика
       pay_count[0] = 0;
@@ -824,12 +824,12 @@ document.getElementById('btn_desicion').onclick = function(){
 
       //Установление для количества дней и суммы нулевого значения, в случае,
       //если они не рассчитываются, чтобы не было ошибки
-      if (isNaN(pay_count[i])) {
-        pay_count[i] = 0;
-      }
-      if (isNaN(pay_summ[i])) {
-        pay_summ[i] = 0;
-      }
+      // if (isNaN(pay_count[i])) {
+      //   pay_count[i] = 0;
+      // }
+      // if (isNaN(pay_summ[i])) {
+      //   pay_summ[i] = 0;
+      // }
 
       //Вычисление общего размера неустойки
       total_count = total_count + pay_summ[i];
@@ -1594,24 +1594,24 @@ function selectText(containerid) {
 	}
 
 //Форматирование даты
-$('.datepicker-here').toArray().forEach(function(field){
-  new Cleave(field, {
-    date: true,
-    delimiter: '.',
-    datePattern: ['d', 'm', 'Y']
-  })
-});
-
-//Форматирование суммы
-$('.input-numeral').toArray().forEach(function(field){
-  new Cleave(field, {
-      numeral: true,
-      delimiter: ' ',
-      //numeralThousandsGroupStyle: 'none',
-      numeralPositiveOnly: true,
-      numeralIntegerScale: 8
-  })
-});
+// $('.datepicker-here').toArray().forEach(function(field){
+//   new Cleave(field, {
+//     date: true,
+//     delimiter: '.',
+//     datePattern: ['d', 'm', 'Y']
+//   })
+// });
+//
+// //Форматирование суммы
+// $('.input-numeral').toArray().forEach(function(field){
+//   new Cleave(field, {
+//       numeral: true,
+//       delimiter: ' ',
+//       //numeralThousandsGroupStyle: 'none',
+//       numeralPositiveOnly: true,
+//       numeralIntegerScale: 8
+//   })
+// });
 
 $(function () {
   $('[data-toggle="tooltip"]').tooltip();

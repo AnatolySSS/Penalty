@@ -306,21 +306,35 @@
               <div class="panel">
                 <div id="fus" class="fus ml-2">
                   <div class="fus_colunm_names form-row">
-                    <div class="form-group col-md-6">
-                      <h6>Наименование суда</h6>
+                    <div class="form-group col-md-4">
+                      <h6>Финансовый уполномоченный</h6>
                     </div>
-                    <div class="form-group col-md-3">
+                    <div class="form-group col-md-2">
+                      <h6>Дата решения</h6>
+                    </div>
+                    <div class="form-group col-md-4">
                       <h6>№ решения</h6>
                     </div>
                   </div>
                   <div id="fu_1">
                     <div id="fu_form_row_1" class="form-row">
-                      <div class="form-group col-md-6">
-                        <input id="fu_name_1" class="fu_names form-control" type="text" placeholder="Наименование суда" size="40">
+                      <div class="form-group col-md-4 form-inline">
+                        <select id="fu_name_1" class="fu_names custom-select col-md-12">
+                          <option>Воронин Ю.В.</option>
+                          <option>Климов В.В.</option>
+                          <option>Никитина С.В.</option>
+                          <option>Писаревский Е.Л.</option>
+                          <option>Савицкая Т.М.</option>
+                        </select>
                       </div>
-                      <div class="form-group col-md-3">
+                      <div class="form-group col-md-2">
                         <div class="input-group">
-                          <input id="fu_number_1" class = "fu_numbers form-control" placeholder="Номер" type="text" size="10">
+                          <input id = "fu_date_1" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                        </div>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <div class="input-group">
+                          <input id="fu_number_1" class = "fu_numbers form-control input-number-fu" placeholder="Номер" type="text" size="10">
                           <div class="input-group-append">
                             <span class="input-group-text">&#8470;</span>
                           </div>
@@ -561,11 +575,13 @@
                       <div class="container-fluid">
                         <div class="row">
                           <div class="table_result table-responsive">
-                            <table class="table table-striped">
+                            <table class="table table-striped table-hover table-sm">
                               <thead id="str_payment_dataled_header" class="thead-dark">
                               </thead>
                               <tbody id="str_payment_dataled" class="table-striped">
                               </tbody>
+                              <tfoot id="str_payment_dataled_footer" class="table-striped table-warning">
+                              </tfoot>
                             </table>
                           </div><!-- table_result -->
                         </div>

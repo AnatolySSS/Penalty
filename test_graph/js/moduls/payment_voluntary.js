@@ -7,13 +7,20 @@ import { AppDate } from './app_date.js';
 import { DAY } from './variables.js';
 
 /* Объект для добровольной выплаты
-    * pay_vol_type - тип выплаты
-    * pay_vol_date - дата выплаты
-    * pay_vol_summ - сумма выплаты
-    * pay_vol_order - № платежного поручения
-    * pay_vol_with_ndfl - булево значение, если при выплате неустойки был удержан НДФЛ
-    * pay_vol_ndfl_summ - сумма удержанного НДФЛ
-    * pay_vol_ndfl_percent - процент удержанного НДФЛ
+
+    * id - порядковый № выплаты
+    * type - тип выплаты
+    * date - дата выплаты
+    * summ - сумма выплаты
+    * order - № платежного поручения
+    * ndfl - булево значение, если при выплате неустойки был удержан НДФЛ
+    * ndfl_summ - сумма удержанного НДФЛ
+    * ndfl_percent - процент удержанного НДФЛ
+    * days_delay - количество дней просрочки
+    * penalty_summ - сумма неустойки
+
+    * last_day - последний день 20го срока
+    * penalty_day - первый день начисления неустойки (21й день)
 */
 const date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
 const date_uts = new AppDate($('#app_date_2'), $('#date_uts_last_day'), $('#date_uts_penalty_day'));
@@ -86,19 +93,28 @@ export class PaymentVoluntary {
 
   getDateFormatted() { return formatDate(new Date(this.date)); }
 
-  makeTable() {
-    let str_payment_dataled = '<tr>' +
-      '<th scope="row"><span>' + this.id + '</span></th>' +
-      '<td><span>' + this.type.value + '</span></td>' +
-      '<!-- <td><span>' + this.getDateFormatted() + '</span></td> -->' +
-      '<td><span>' + makeRubText_genitive(this.summ) + '</span></td>' +
-      '<td><span>' + this.penalty_day + '</span></td>' +
-      '<td><span>' + this.getDateFormatted() + '</span></td>' +
-      '<td><span>' + declinationDays(this.days_delay) + '</span></td>' +
-      '<td><span>' + makeRubText_nominative(this.penalty_summ) + '</span></td>' +
-    '</tr>';
+  fillPayments() {
+    if (this.type.selectedIndex != 4) {
+      let str_payment_dataled = '<tr>' +
+        '<th scope="row"><span>' + this.id + '</span></th>' +
+        '<td><span>' + this.type.value + '</span></td>' +
+        '<td><span>' + makeRubText_genitive(this.summ) + '</span></td>' +
+        '<td><span>' + this.penalty_day + '</span></td>' +
+        '<td><span>' + this.getDateFormatted() + '</span></td>' +
+        '<td><span>' + declinationDays(this.days_delay) + '</span></td>' +
+        '<td><span>' + makeRubText_nominative(this.penalty_summ) + '</span></td>' +
+      '</tr>';
 
-    $('#str_payment_dataled').append(str_payment_dataled);
+      $('#str_payment_dataled').append(str_payment_dataled);
+    } else {
+      let str_payment_dataled = '<tr>' +
+        '<th scope="row"><span>' + this.id + '</span></th>' +
+        '<td><span>' + this.type.value + ' (добровольная)</span></td>' +
+        '<td colspan="5"><span>' + makeRubText_nominative(this.summ) + '</span></td>' +
+      '</tr>';
+
+      $('#str_payment_dataled').append(str_payment_dataled);
+    }
   }
 
   toString() {

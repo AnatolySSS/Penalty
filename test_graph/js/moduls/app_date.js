@@ -39,8 +39,5 @@ export class AppDate {
         this.date_last_day_id.attr('tooltip', '193 ГК РФ');
       }
     }
-
-    //Функция добавление всплывающей подсказки 20-й и 21-й дни
-    $(function () { $('[data-toggle="tooltip"]').tooltip(); })
   }
 }

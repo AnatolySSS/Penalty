@@ -28,14 +28,11 @@ export let keep; // "удержало"/"удержала"
 //Переменная с тестом всего решения в части неустойки
 export let decision;
 
-// export let date_sv, date_sv_last_day, date_sv_penalty_day;
-
-
 //Переменные для рисования графика SWG
-export var swg_graph = SVG().addTo('#div_svg').size('100%', '100%');
-export var line_svg_payment = [];
-export var rect_svg_payment = [];
-export var text_svg_payment = [];
+export let swg_graph = SVG().addTo('#div_svg').size('100%', '100%');
+export let line_svg_payment = [];
+export let rect_svg_payment = [];
+export let text_svg_payment = [];
 
 //Переменные для canvas
 export var date_sv_penalty_day_x;
@@ -44,7 +41,11 @@ export var space = 10;
 export var pay_summ_y_all = 0; //Сложение всех предыдущих сумм выплат (для определения координат начала очередного прямоугольника)
 export var pay_date_x = [], pay_summ_y = [];
 
-export let payment_voluntary = [];
+//переменная для массива добровольных выплат
+export let paymentVoluntary = [];
+
+// export var total_penalty_summ_accrued;
+// export var total_penalty_summ_paid;
 
 //Сборка заголовка таблицы (без суда)
 export let STR_PAYMENT_DETALED_HEADER = '<tr>' +
