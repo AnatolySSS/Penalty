@@ -354,24 +354,24 @@
                       <div class="add_fu_info_dates">
                         <div class="form-row">
                           <div class="form-group col-md-3">
-                            <h6>Дата решения</h6>
-                          </div>
-                          <div class="form-group col-md-3">
                             <h6>Дата исполнения</h6>
                           </div>
-                          <div class="form-group col-md-4">
-                            <h6>Дата вступление в силу</h6>
+                          <div class="form-group col-md-3">
+                            <h6>Дата вступления в силу</h6>
+                          </div>
+                          <div class="form-group col-md-3">
+                            <h6>Дата окончания срока исполнения</h6>
                           </div>
                         </div>
                         <div class="form-row">
                           <div class="form-group col-md-3 form-inline">
-                            <input id = "fu_date_1" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                          </div>
-                          <div class="form-group col-md-3 form-inline">
                             <input id = "fu_pay_date_1" class = "fu_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
                           </div>
-                          <div class="form-group col-md-4 form-inline">
-                            <input id = "fu_in_force_date_1" class = "fu_in_force_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          <div class="form-group col-md-3 form-inline">
+                            <span id = "fu_in_force_date_1"></span>
+                          </div>
+                          <div class="form-group col-md-3 form-inline">
+                            <span id = "fu_last_day_for_pay_date_1"></span>
                           </div>
                         </div>
                       </div><!-- add_fu_info_dates -->
@@ -403,7 +403,7 @@
                           </div>
                         </div>
                         <div class="form-group col-ms-1">
-                          <button id="fu_claim_btn_1_1" class="fu_claim_btn_1 btn btn-outline-warning" onclick="addClaim(1)">+</button>
+                          <button id="fu_claim_btn_1_1" class="fu_claim_btn_1 btn btn-outline-warning" onclick="addFuClaim(1)">+</button>
                         </div>
                       </div><!-- add_court_info_row_1 -->
                       <div id="add_fu_claim_info_1_1" class="add_fu_claim_info_1 form-group ml-3" style="display:none">
@@ -415,7 +415,7 @@
                           <input id = "date_fu_from_1_1" class = "date_fu_penalty_from_1 date_court_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
                           <label for="date_fu_to_1_1" class="ml-2">по</label>
                           <input id = "date_fu_to_1_1" class = "date_fu_penalty_to_1 date_fu_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
-                          <input id="fu_without_period_1_1" class="fu_without_period_1 fu_without_periods ml-2" type="checkbox" onclick="block_court_date(1, 1)">
+                          <input id="fu_without_period_1_1" class="fu_without_period_1 fu_without_periods ml-2" type="checkbox" onclick="block_fu_date(1, 1)">
                           <label for="fu_without_period_1_1" class="ml-2 form-check-label">Период не указан</label>
                         </div>
                       </div><!-- add_court1_claim_info_1 -->
@@ -629,6 +629,7 @@
     <script type="text/javascript" src="js/button.js"></script>
     <script type="text/javascript" src="js/addrows.js"></script>
     <script type="text/javascript" src="js/addcourts.js"></script>
+    <script type="text/javascript" src="js/addfus.js"></script>
     <script type="text/javascript" src="js/autocomplete.js"></script>
     <script type="text/javascript" src="js/datapicker/datepicker.min.js"></script>
     <script type="text/javascript" src="js/izitoast/iziToast.min.js"></script>

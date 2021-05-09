@@ -6,21 +6,21 @@ import { formatDate } from './formatDate.js';
 import { AppDate } from './app_date.js';
 import { DAY } from './variables.js';
 
-/* Объект для добровольной выплаты
+/* Объект для выплаты по решению ФУ
 
     * id - порядковый № выплаты
-    * type - тип выплаты
-    * date - дата выплаты
-    * summ - сумма выплаты
-    * order - № платежного поручения
-    * ndfl - булево значение, если при выплате неустойки был удержан НДФЛ
-    * ndfl_summ - сумма удержанного НДФЛ
-    * ndfl_percent - процент удержанного НДФЛ
-    * days_delay - количество дней просрочки
-    * penalty_summ - сумма неустойки
-
-    * last_day - последний день 20го срока
-    * penalty_day - первый день начисления неустойки (21й день)
+    * fu - Финансовый уполномоченный
+    * date - дата решения
+    * number - № решения
+    // * order - № платежного поручения
+    // * ndfl - булево значение, если при выплате неустойки был удержан НДФЛ
+    // * ndfl_summ - сумма удержанного НДФЛ
+    // * ndfl_percent - процент удержанного НДФЛ
+    // * days_delay - количество дней просрочки
+    // * penalty_summ - сумма неустойки
+    //
+    // * last_day - последний день 20го срока
+    // * penalty_day - первый день начисления неустойки (21й день)
 */
 const date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
 const date_uts = new AppDate($('#app_date_2'), $('#date_uts_last_day'), $('#date_uts_penalty_day'));
