@@ -15,11 +15,6 @@ function addFu() {
 				'<option>Савицкая Т.М.</option>' +
 			'</select>' +
 	    '</div>' +
-	    '<div class="form-group col-md-2">' +
-	      '<div class="input-group">' +
-					'<input id = "fu_date_' + fuId + '" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-	      '</div>' +
-	    '</div>' +
 			'<div class="form-group col-md-4">' +
 				'<div class="input-group">' +
 					'<input id="fu_number_' + fuId + '" class = "fu_numbers form-control input-number-fu" placeholder="Номер" type="text" size="10">' +
@@ -37,28 +32,39 @@ function addFu() {
 	      '<button id="fu_btn_' + fuId + '" class="fu_btns btn btn-outline-danger" onclick="removeFu(' + fuId + ')">×</button>' +
 	    '</div>' +
 	  '</div><!-- fu_form_row_1 -->' +
+
 		'<div id="add_fu_info_' + fuId + '" class="ml-3" style="display:none">' +
 			'<div class="add_fu_info_dates">' +
 				'<div class="form-row">' +
-					'<div class="form-group col-md-3">' +
-						'<h6>Дата исполнения</h6>' +
+					'<div class="form-group col-md-3 form-inline justify-content-center">' +
+						'<input id = "fu_date_' + fuId + '" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
 					'</div>' +
-					'<div class="form-group col-md-4">' +
+					'<div class="form-group col-md-3 form-inline">' +
+						'<h6>Дата решения</h6>' +
+					'</div>' +
+				'</div>' +
+				'<div class="form-row">' +
+					'<div class="form-group col-md-3 form-inline justify-content-center">' +
+						'<span id = "fu_in_force_date_' + fuId + '" class="fu_in_force_dates"></span>' +
+					'</div>' +
+					'<div class="form-group col-md-4 form-inline">' +
 						'<h6>Дата вступления в силу</h6>' +
 					'</div>' +
-					'<div class="form-group col-md-5">' +
+				'</div>' +
+				'<div class="form-row">' +
+					'<div class="form-group col-md-3 form-inline justify-content-center">' +
+						'<span id = "fu_last_day_for_pay_date_' + fuId + '" class="fu_last_day_for_pay_dates"></span>' +
+					'</div>' +
+					'<div class="form-group col-md-5 form-inline">' +
 						'<h6>Дата окончания срока исполнения</h6>' +
 					'</div>' +
 				'</div>' +
 				'<div class="form-row">' +
-					'<div class="form-group col-md-3 form-inline">' +
+					'<div class="form-group col-md-3 form-inline justify-content-center">' +
 						'<input id = "fu_pay_date_' + fuId + '" class = "fu_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
 					'</div>' +
-					'<div class="form-group col-md-4 form-inline">' +
-						'<span id = "fu_in_force_date_' + fuId + '" class="fu_in_force_dates"></span>' +
-					'</div>' +
-					'<div class="form-group col-md-5 form-inline">' +
-						'<span id = "fu_last_day_for_pay_date_' + fuId + '" class="fu_last_day_for_pay_dates"></span>' +
+					'<div class="form-group col-md-3 form-inline">' +
+						'<h6>Дата исполнения</h6>' +
 					'</div>' +
 				'</div>' +
 			'</div><!-- add_fu_info_dates -->' +

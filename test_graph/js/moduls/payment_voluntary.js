@@ -95,10 +95,10 @@ export class PaymentVoluntary {
 
   fillPayments() {
     if (this.type.selectedIndex != 4) {
-      let str_payment_dataled = '<tr>' +
+      let str_payment_dataled = '<tr role="button">' +
         '<th scope="row"><span>' + this.id + '</span></th>' +
         '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
-        '<td><span>' + makeRubText_genitive(this.summ) + '</span></td>' +
+        '<td><span>' + makeRubText_nominative(this.summ) + '</span></td>' +
         '<td><span>' + this.penalty_day + '</span></td>' +
         '<td><span>' + this.getDateFormatted() + '</span></td>' +
         '<td><span>' + declinationDays(this.days_delay) + '</span></td>' +
@@ -107,7 +107,7 @@ export class PaymentVoluntary {
 
       $('#str_payment_dataled').append(str_payment_dataled);
     } else {
-      let str_payment_dataled = '<tr>' +
+      let str_payment_dataled = '<tr role="button">' +
         '<th scope="row"><span>' + this.id + '</span></th>' +
         '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
         '<td colspan="5"><span>' + makeRubText_nominative(this.summ) + '</span></td>' +

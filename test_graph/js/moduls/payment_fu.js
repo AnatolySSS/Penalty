@@ -34,13 +34,44 @@ class ClaimFu {
   to
   without
 
+  last_day
+  last_day_form
+  penalty_day_form
+
+  days_delay
+  penalty_summ
+
   constructor(id, name, summ, from, to, without) {
     this.id = id;
     this.name = name;
-    this.summ = summ;
+    this.summ = Number(summ.value.replace(/\s+/g, ''));
     this.from = from;
     this.to = to;
     this.without = without;
+
+    //Вычисление количества дней между датой выплаты и 20м днем
+    switch (this.name.options.selectedIndex) {
+      case 0:
+        this.last_day = date_sv.getLastDay();
+        this.last_day_form = date_sv.getLastDayFormatted();
+        this.penalty_day_form = date_sv.getPenaltyDayFormatted();
+        break;
+      case 1:
+        this.last_day = date_uts.getLastDay();
+        this.last_day_form = date_uts.getLastDayFormatted();
+        this.penalty_day_form = date_uts.getPenaltyDayFormatted();
+        break;
+      case 2:
+        this.last_day = date_ev.getLastDay();
+        this.last_day_form = date_ev.getLastDayFormatted();
+        this.penalty_day_form = date_ev.getPenaltyDayFormatted();
+        break;
+      case 3:
+        this.last_day = date_stor.getLastDay();
+        this.last_day_form = date_stor.getLastDayFormatted();
+        this.penalty_day_form = date_stor.getPenaltyDayFormatted();
+        break;
+    }
   }
 }
 
@@ -59,11 +90,7 @@ export class PaymentFu {
 
   claim = [];
 
-  days_delay
-  penalty_summ
-
-  last_day
-  penalty_day
+  total_penalty_summ_fu
 
   constructor(id, fu, date, number, pay_date, in_force_date, last_day_for_pay_date) {
 
@@ -77,13 +104,16 @@ export class PaymentFu {
     this.pay_date = pay_date;
     this.in_force_date = in_force_date;
     this.last_day_for_pay_date = last_day_for_pay_date;
+
+    this.total_penalty_summ_fu = 0;
     //Получение количества удовлетворенных требований для каждого решения
-    var number_of_claims = $('.fu_claim_' + id).length;
-    var names = $('.fu_claim_' + id); //Получение массива требований
-    var summs = $('.fu_claim_summ_' + id); //Получение массива дат решений
-    var froms = $('.date_fu_penalty_from_' + id); //Получение массива дат начала периода судебных неустоек
-    var tos = $('.date_fu_penalty_to_' + id); //Получение массива дат конца периода судебных неустоек
-    var without_periods = $('.fu_without_period_' + id); //Получение массива неустоек без периода
+    var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
+    var number_of_claims = $('.fu_claim_' + (id - number_of_payments)).length;
+    var names = $('.fu_claim_' + (id - number_of_payments)); //Получение массива требований
+    var summs = $('.fu_claim_summ_' + (id - number_of_payments)); //Получение массива дат решений
+    var froms = $('.date_fu_penalty_from_' + (id - number_of_payments)); //Получение массива дат начала периода судебных неустоек
+    var tos = $('.date_fu_penalty_to_' + (id - number_of_payments)); //Получение массива дат конца периода судебных неустоек
+    var without_periods = $('.fu_without_period_' + (id - number_of_payments)); //Получение массива неустоек без периода
     for (var i = 0; i < number_of_claims; i++) {
       this.claim[i] = new ClaimFu(i + 1,
                                   names[i],
@@ -91,81 +121,40 @@ export class PaymentFu {
                                   froms[i],
                                   tos[i],
                                   without_periods[i]);
+      //Если решение ФУ исполнено не в срок, то начисляется неустойка с 21го дня, если в срок, то неустойка равна 0
+      if (this.getPayDate() > this.getLastDayForPayFu()) {
+        this.claim[i].days_delay = (this.getPayDate() - this.claim[i].last_day) / DAY;
+      } else {
+        this.claim[i].days_delay = 0;
+      }
+
+
+      //Если выплата была в срок, то изменение отрицательного значения на нулевое
+      if (this.claim[i].days_delay < 0 || isNaN(this.claim[i].days_delay)) {
+        this.claim[i].days_delay = 0;
+      }
+
+      //Вычисление суммы неустойки
+      this.claim[i].penalty_summ = this.claim[i].summ * this.claim[i].days_delay * 0.01;
+      if (isNaN(this.claim[i].penalty_summ)) {
+        this.claim[i].penalty_summ = 0;
+      }
+      this.total_penalty_summ_fu = this.total_penalty_summ_fu + this.claim[i].penalty_summ;
     }
+
   }
-
-    //Вычисление количества дней между датой выплаты и 20м днем
-  //   switch (this.type.options.selectedIndex) {
-  //     case 0:
-  //       this.days_delay = (this.date - date_sv.getLastDay()) / DAY;
-  //       this.last_day = date_sv.getLastDayFormatted();
-  //       this.penalty_day = date_sv.getPenaltyDayFormatted();
-  //       break;
-  //     case 1:
-  //       this.days_delay = (this.date - date_uts.getLastDay()) / DAY;
-  //       this.last_day = date_uts.getLastDayFormatted();
-  //       this.penalty_day = date_uts.getPenaltyDayFormatted();
-  //       break;
-  //     case 2:
-  //       this.days_delay = (this.date - date_ev.getLastDay()) / DAY;
-  //       this.last_day = date_ev.getLastDayFormatted();
-  //       this.penalty_day = date_ev.getPenaltyDayFormatted();
-  //       break;
-  //     case 3:
-  //       this.days_delay = (this.date - date_stor.getLastDay()) / DAY;
-  //       this.last_day = date_stor.getLastDayFormatted();
-  //       this.penalty_day = date_stor.getPenaltyDayFormatted();
-  //       break;
-  //   }
-  //   //Если выплата была в срок, то изменение отрицательного значения на нулевое
-  //   if (this.days_delay < 0 || isNaN(this.days_delay)) {
-  //     this.days_delay = 0;
-  //   }
-  //   //Вычисление суммы неустойки
-  //   this.penalty_summ = this.summ * this.days_delay * 0.01;
-  //   if (isNaN(this.penalty_summ)) {
-  //     this.penalty_summ = 0;
-  //   }
-
-  //
-  // getDateFormatted() { return formatDate(new Date(this.date)); }
-  //
-  // fillPayments() {
-  //   if (this.type.selectedIndex != 4) {
-  //     let str_payment_dataled = '<tr>' +
-  //       '<th scope="row"><span>' + this.id + '</span></th>' +
-  //       '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
-  //       '<td><span>' + makeRubText_genitive(this.summ) + '</span></td>' +
-  //       '<td><span>' + this.penalty_day + '</span></td>' +
-  //       '<td><span>' + this.getDateFormatted() + '</span></td>' +
-  //       '<td><span>' + declinationDays(this.days_delay) + '</span></td>' +
-  //       '<td><span>' + makeRubText_nominative(this.penalty_summ) + '</span></td>' +
-  //     '</tr>';
-  //
-  //     $('#str_payment_dataled').append(str_payment_dataled);
-  //   } else {
-  //     let str_payment_dataled = '<tr>' +
-  //       '<th scope="row"><span>' + this.id + '</span></th>' +
-  //       '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
-  //       '<td colspan="5"><span>' + makeRubText_nominative(this.summ) + '</span></td>' +
-  //     '</tr>';
-  //
-  //     $('#str_payment_dataled').append(str_payment_dataled);
-  //   }
-  // }
-
-  // getInForceDate() {return findInForceFuDay(this.date); }
-  // getInForceDateFormatted() {return formatDate(new Date(this.getInForceDate())); }
-  // getLastDateForPayFu() {return findLastDayForPayFu(this.getInForceDate()); }
-  // getLastDateForPayFuFormatted() {return formatDate(new Date(this.getLastDateForPayFu())); }
 
   getDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
   getDateFormatted() { return formatDate(new Date(this.getDate())); }
+  getPayDate() {return Date.parse(changeDateType(this.pay_date.value) + 'T00:00:00');}
+  getPayDateFormatted() { return formatDate(new Date(this.getPayDate())); }
+
   getInForceDate(){ return findInForceFuDay(this.getDate()); }
   getInForceDateFormatted(){ return formatDate(new Date(this.getInForceDate()));}
   getLastDayForPayFu(){ return findLastDayForPayFu(this.getInForceDate()); }
   getLastDayForPayFuFormatted(){ return formatDate(new Date(this.getLastDayForPayFu())); }
 
+  //Вывод на экран значений дня вступления в силу и последнего дня для исполнения решения ФУ
   fillDates() {
     this.in_force_date.innerHTML = "";
     this.last_day_for_pay_date.innerHTML = "";
@@ -173,6 +162,27 @@ export class PaymentFu {
     if (!isNaN(findInForceFuDay(this.getDate()))) {
       this.in_force_date.innerHTML = this.getInForceDateFormatted();
       this.last_day_for_pay_date.innerHTML = this.getLastDayForPayFuFormatted();
+    }
+  }
+
+  fillPayments() {
+    for (var i = 0; i < this.claim.length; i++) {
+      if (this.claim[i].name.selectedIndex == 0 ||
+          this.claim[i].name.selectedIndex == 1 ||
+          this.claim[i].name.selectedIndex == 2 ||
+          this.claim[i].name.selectedIndex == 3) {
+        let str_payment_dataled = '<tr role="button">' +
+          '<th scope="row"><span>' + (this.id + i) + '</span></th>' +
+          '<td><span>' + this.claim[i].name.value + ' (на основании решения ФУ)</span></td>' +
+          '<td><span>' + makeRubText_nominative(this.claim[i].summ) + '</span></td>' +
+          '<td><span>' + this.claim[i].penalty_day_form + '</span></td>' +
+          '<td><span>' + this.getPayDateFormatted() + '</span></td>' +
+          '<td><span>' + declinationDays(this.claim[i].days_delay) + '</span></td>' +
+          '<td><span>' + makeRubText_nominative(this.claim[i].penalty_summ) + '</span></td>' +
+        '</tr>';
+
+        $('#str_payment_dataled').append(str_payment_dataled);
+      }
     }
   }
 

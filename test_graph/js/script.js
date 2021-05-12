@@ -35,6 +35,31 @@ $('#app_date_4').focusout(function(){
   date_stor.fillLastDate();
 });
 
+//Обработка события потери фокуса даты решения ФУ
+$(document).on("focusout", ".fu_dates", function(){
+  //Получение массива значений всех переменных решений ФУ
+  var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
+  var fu_names = $('.fu_names'); //Получение массива ФУ
+  var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
+  var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
+  var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
+  var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
+  var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
+
+  //Создание экземпляров решений ФУ
+  for (var i = 0; i < number_of_fus; i++) {
+    paymentFu[i] = new PaymentFu(i + 1,
+                                 fu_names[i],
+                                 fu_dates[i],
+                                 fu_numbers[i],
+                                 fu_pay_dates[i],
+                                 fu_in_force_dates[i],
+                                 fu_last_day_for_pay_dates[i]);
+    paymentFu[i].fillDates();
+  }
+  // paymentFu[$(this).index('.fu_dates')].fillDates();
+});
+
 $('#btn_desicion').click(function() {
 
   //Очистка таблицы вывода результатов
@@ -81,15 +106,13 @@ $('#btn_desicion').click(function() {
 
   //Создание экземпляров решений ФУ
   for (var i = 0; i < number_of_fus; i++) {
-    paymentFu[i] = new PaymentFu(i + 1,
+    paymentFu[i] = new PaymentFu(i + number_of_payments + 1,
                                  fu_names[i],
                                  fu_dates[i],
                                  fu_numbers[i],
                                  fu_pay_dates[i],
                                  fu_in_force_dates[i],
                                  fu_last_day_for_pay_dates[i]);
-   // fu_in_force_dates[i].innerHTML = paymentFu[i].getInForceDateFormatted();
-   // alert(paymentFu[i].toString());
   }
 
   for (var i = 0; i < number_of_payments; i++) {
@@ -97,6 +120,11 @@ $('#btn_desicion').click(function() {
       paymentVoluntary[i].fillPayments();
       total_penalty_summ_accrued = total_penalty_summ_accrued + paymentVoluntary[i].penalty_summ;
     }
+  }
+
+  for (var i = 0; i < number_of_fus; i++) {
+    paymentFu[i].fillPayments();
+    total_penalty_summ_accrued = total_penalty_summ_accrued + paymentFu[i].total_penalty_summ_fu;
   }
 
   let total_penalty_summ_accrued_row = '<tr class="table-danger">' +
@@ -160,29 +188,3 @@ $('.input-number-fu').toArray().forEach(function(field){
 
 //Функция добавление всплывающей подсказки 20-й и 21-й дни
 $(function () { $('[data-toggle="tooltip"]').tooltip(); })
-
-$(document).on("focusout", ".fu_dates", function(){
-
-  //Получение массива значений всех переменных решений ФУ
-  var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
-  var fu_names = $('.fu_names'); //Получение массива ФУ
-  var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
-  var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
-  var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
-  var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
-  var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
-
-  //Создание экземпляров решений ФУ
-  for (var i = 0; i < number_of_fus; i++) {
-    paymentFu[i] = new PaymentFu(i + 1,
-                                 fu_names[i],
-                                 fu_dates[i],
-                                 fu_numbers[i],
-                                 fu_pay_dates[i],
-                                 fu_in_force_dates[i],
-                                 fu_last_day_for_pay_dates[i]);
-  }
-  // alert(paymentFu[$(this).index('.fu_dates')].getInForceDateFormatted());
-  paymentFu[$(this).index('.fu_dates')].fillDates();
-
-});

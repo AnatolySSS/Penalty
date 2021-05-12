@@ -67,30 +67,31 @@ function addPay() {
     '</div>' +
   '</div><!-- pay_form_row -->' +
 
-  '<div id="add_info_pay_form_row_' + payId + '" class="add_info_pay_form form-row ml-2 mb-4" style="display:none">' +
-  '<div class="col">' +
-    '<div class="form-check">' +
-      '<input id="voluntary_if_' + payId + '" class="voluntary_ifs form-check-input" type="radio" name="payment_option_' + payId + '" value="option1" onclick="show_court_fu_date(' + payId + ')">' +
-      '<label for="voluntary_if_' + payId + '" class="form-check-label">Добровольная выплата</label>' +
-    '</div><!-- div_voluntary -->' +
-    '<div class="form-check">' +
-      '<input id="fu_if_' + payId + '" class="fu_ifs form-check-input" type="radio" name="payment_option_' + payId + '" value="option2" onclick="show_court_fu_date(' + payId + ')">' +
-      '<label for="fu_if_' + payId + '" class="form-check-label">Выплата на основании решения ФУ</label>' +
-    '</div><!-- div_FU -->' +
-    '<div class="form-check">' +
-      '<input id="court_if_' + payId + '" class="court_ifs form-check-input" type="radio" name="payment_option_' + payId + '" value="option3" onclick="show_court_fu_date(' + payId + ')">' +
-      '<label for="court_if_' + payId + '" class="form-check-label">Выплата на основании решения суда</label>' +
-    '</div><!-- div_court -->' +
-    '</div>' +
-    '<div id="div_date_court_' + payId + '" class="form-group col-md-6 form-inline mt-2" style="display:none">' +
-      '<label for="date_court_' + payId + '" class="mr-2">Дата решения суда</label>' +
-      '<input id = "date_court_' + payId + '" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-    '</div><!-- div_date_court -->' +
-    '<div id="div_date_fu_' + payId + '" class="form-group col-md-6 form-inline mt-2" style="display:none">' +
-      '<label for="date_fu_' + payId + '" class="mr-2">Дата решения ФУ</label>' +
-      '<input id = "date_fu_' + payId + '" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-    '</div><!-- div_date_court -->' +
-  '</div><!-- add_info_pay_form_row -->' +
+  // '<div id="add_info_pay_form_row_' + payId + '" class="add_info_pay_form form-row ml-2 mb-4" style="display:none">' +
+  // '<div class="col">' +
+  //   '<div class="form-check">' +
+  //     '<input id="voluntary_if_' + payId + '" class="voluntary_ifs form-check-input" type="radio" name="payment_option_' + payId + '" value="option1" onclick="show_court_fu_date(' + payId + ')">' +
+  //     '<label for="voluntary_if_' + payId + '" class="form-check-label">Добровольная выплата</label>' +
+  //   '</div><!-- div_voluntary -->' +
+  //   '<div class="form-check">' +
+  //     '<input id="fu_if_' + payId + '" class="fu_ifs form-check-input" type="radio" name="payment_option_' + payId + '" value="option2" onclick="show_court_fu_date(' + payId + ')">' +
+  //     '<label for="fu_if_' + payId + '" class="form-check-label">Выплата на основании решения ФУ</label>' +
+  //   '</div><!-- div_FU -->' +
+  //   '<div class="form-check">' +
+  //     '<input id="court_if_' + payId + '" class="court_ifs form-check-input" type="radio" name="payment_option_' + payId + '" value="option3" onclick="show_court_fu_date(' + payId + ')">' +
+  //     '<label for="court_if_' + payId + '" class="form-check-label">Выплата на основании решения суда</label>' +
+  //   '</div><!-- div_court -->' +
+  //   '</div>' +
+  //   '<div id="div_date_court_' + payId + '" class="form-group col-md-6 form-inline mt-2" style="display:none">' +
+  //     '<label for="date_court_' + payId + '" class="mr-2">Дата решения суда</label>' +
+  //     '<input id = "date_court_' + payId + '" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+  //   '</div><!-- div_date_court -->' +
+  //   '<div id="div_date_fu_' + payId + '" class="form-group col-md-6 form-inline mt-2" style="display:none">' +
+  //     '<label for="date_fu_' + payId + '" class="mr-2">Дата решения ФУ</label>' +
+  //     '<input id = "date_fu_' + payId + '" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+  //   '</div><!-- div_date_court -->' +
+  // '</div><!-- add_info_pay_form_row -->' +
+
   '<div id="add_info_penalty_form_row_' + payId + '" class="form-row" style="display:none">' +
       '<div class="form-group col-md-4 form-inline">' +
         '<div class="form-check">' +
