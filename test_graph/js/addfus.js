@@ -1,109 +1,119 @@
-var courtId = 1;
-var claimId = 1;
+var fuId = 1;
+var claimFuId = 1;
 
-function addCourt() {
-	courtId++;
-  var str = '<div id="court_' + courtId + '">' +
-	'<hr>' +
-	'<div id="court_form_row_' + courtId + '" class="form-row courts">' +
-    '<div class="form-group col-md-6">' +
-      '<input id="court_name_' + courtId + '" class="court_names form-control" type="text" placeholder="Наименование суда" size="40">' +
-    '</div>' +
-    '<div class="form-group col-md-3">' +
-      '<div class="input-group">' +
-        '<input id="court_number_' + courtId + '" class = "court_numbers form-control" placeholder="Номер" type="text" size="10">' +
-        '<div class="input-group-append">' +
-          '<span class="input-group-text">&#8470;</span>' +
-        '</div>' +
-      '</div>' +
-    '</div>' +
-    '<div class="form-group col-ms-1">' +
-      '<button id="add_court_info_btn_' + courtId + '" class="add_court_info_btns btn btn-outline-warning add_info">' +
-        '<i class="fa fa-chevron-down toggle"></i>' +
-      '</button>' +
-    '</div>' +
-    '<div class="form-group col-ms-1">' +
-      '<button id="court_btn_' + courtId + '" class="court_btns btn btn-outline-danger" onclick="removeCourt(' + courtId + ')">×</button>' +
-    '</div>' +
-  '</div><!-- court_form_row_1 -->' +
-	'<div id="add_court_info_' + courtId + '" class="ml-3" style="display:none">' +
-	'<div class="add_court_info_dates">' +
-		'<div class="form-row">' +
-			'<div class="form-group col-md-3">' +
-				'<h6>Дата решения</h6>' +
-			'</div>' +
-			'<div class="form-group col-md-3">' +
-				'<h6>Дата исполнения</h6>' +
-			'</div>' +
-			'<div class="form-group col-md-4">' +
-				'<h6>Дата вступление в силу</h6>' +
-			'</div>' +
-		'</div>' +
-		'<div class="form-row">' +
-			'<div class="form-group col-md-3 form-inline">' +
-				'<input id = "court_date_' + courtId + '" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-			'</div>' +
-			'<div class="form-group col-md-3 form-inline">' +
-				'<input id = "court_pay_date_' + courtId + '" class = "court_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-			'</div>' +
-			'<div class="form-group col-md-4 form-inline">' +
-				'<input id = "court_in_force_date_' + courtId + '" class = "court_in_force_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-			'</div>' +
-		'</div>' +
-	'</div><!-- add_court_info_dates -->' +
-	'<div class="form-row">' +
-		'<div class="form-group col-md-6">' +
-			'<h6>Удовлетворенные требования</h6>' +
-		'</div>' +
-	'</div>' +
-	'<div id="add_court_info_row_' + courtId + '_1" class="add_court_info_' + courtId + ' add_court_infos form-row">' +
-		'<div class="form-group col-md-4 form-inline">' +
-			'<select id="court_claim_' + courtId + '_1" class="court_claim_' + courtId + ' court_claims custom-select col-md-12">' +
-				'<option>Страховое возмещение</option>' +
-				'<option>УТС</option>' +
-				'<option>Эвакуатор</option>' +
-				'<option>Хранение</option>' +
-				'<option>Неустойка</option>' +
-				'<option>Экспертиза</option>' +
-				'<option>Юрист</option>' +
-				'<option>Нотариус</option>' +
-				'<option>Почта</option>' +
+function addFu() {
+	fuId++;
+  var str = '<div id="fu_' + fuId + '">' +
+		'<hr>' +
+		'<div id="fu_form_row_' + fuId + '" class="form-row fus">' +
+	    '<div class="form-group col-md-4">' +
+			'<select id="fu_name_' + fuId + '" class="fu_names custom-select col-md-12">' +
+				'<option>Воронин Ю.В.</option>' +
+				'<option>Климов В.В.</option>' +
+				'<option>Никитина С.В.</option>' +
+				'<option>Писаревский Е.Л.</option>' +
+				'<option>Савицкая Т.М.</option>' +
 			'</select>' +
-		'</div>' +
-		'<div class="form-group col-md-3">' +
-			'<div class="input-group">' +
-				'<input id="court_claim_summ_' + courtId + '_1" class = "court_claim_summ_' + courtId + ' court_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">' +
-				'<div class="input-group-append">' +
-					'<span class="input-group-text">&#8381;</span>' +
+	    '</div>' +
+	    '<div class="form-group col-md-2">' +
+	      '<div class="input-group">' +
+					'<input id = "fu_date_' + fuId + '" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+	      '</div>' +
+	    '</div>' +
+			'<div class="form-group col-md-4">' +
+				'<div class="input-group">' +
+					'<input id="fu_number_' + fuId + '" class = "fu_numbers form-control input-number-fu" placeholder="Номер" type="text" size="10">' +
+					'<div class="input-group-append">' +
+						'<span class="input-group-text">&#8470;</span>' +
+					'</div>' +
 				'</div>' +
 			'</div>' +
-		'</div>' +
-		'<div class="form-group col-ms-1">' +
-			'<button id="court_claim_btn_' + courtId + '_1" class="court_claim_btn_' + courtId + ' court_claim_btns btn btn-outline-warning" onclick="addFuClaim(' + courtId + ')">+</button>' +
-		'</div>' +
-	'</div><!-- add_court_info_row_1 -->' +
-	'<div id="add_court_claim_info_' + courtId + '_1" class="form-group  ml-3" style="display:none">' +
-		'<div class="form-group">' +
-			'<h6>Период неустойки</h6>' +
-		'</div>' +
-		'<div class="form-group form-inline ml-3">' +
-			'<label for="date_court_from_' + courtId + '_1">c</label>' +
-			'<input id = "date_court_from_' + courtId + '_1" class = "date_court_penalty_from_' + courtId + ' ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-			'<label for="date_court_to_' + courtId + '_1" class="ml-2">по</label>' +
-			'<input id = "date_court_to_' + courtId + '_1" class = "date_court_penalty_to_' + courtId + ' ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-			'<input id="court_without_period_' + courtId + '_1" class="court_without_period_' + courtId + ' ml-2" type="checkbox" onclick="block_court_date(' + courtId + ', 1)">' +
-			'<label for="court_without_period_' + courtId + '_1" class="ml-2 form-check-label">Период не указан</label>' +
-		'</div>' +
-	'</div><!-- add_court1_claim_info_1 -->' +
-	'</div><!-- add_court_info_1 -->' +
+	    '<div class="form-group col-ms-1">' +
+	      '<button id="add_fu_info_btn_' + fuId + '" class="add_fu_info_btns btn btn-outline-warning add_info">' +
+	        '<i class="fa fa-chevron-down toggle"></i>' +
+	      '</button>' +
+	    '</div>' +
+	    '<div class="form-group col-ms-1">' +
+	      '<button id="fu_btn_' + fuId + '" class="fu_btns btn btn-outline-danger" onclick="removeFu(' + fuId + ')">×</button>' +
+	    '</div>' +
+	  '</div><!-- fu_form_row_1 -->' +
+		'<div id="add_fu_info_' + fuId + '" class="ml-3" style="display:none">' +
+			'<div class="add_fu_info_dates">' +
+				'<div class="form-row">' +
+					'<div class="form-group col-md-3">' +
+						'<h6>Дата исполнения</h6>' +
+					'</div>' +
+					'<div class="form-group col-md-4">' +
+						'<h6>Дата вступления в силу</h6>' +
+					'</div>' +
+					'<div class="form-group col-md-5">' +
+						'<h6>Дата окончания срока исполнения</h6>' +
+					'</div>' +
+				'</div>' +
+				'<div class="form-row">' +
+					'<div class="form-group col-md-3 form-inline">' +
+						'<input id = "fu_pay_date_' + fuId + '" class = "fu_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+					'</div>' +
+					'<div class="form-group col-md-4 form-inline">' +
+						'<span id = "fu_in_force_date_' + fuId + '" class="fu_in_force_dates"></span>' +
+					'</div>' +
+					'<div class="form-group col-md-5 form-inline">' +
+						'<span id = "fu_last_day_for_pay_date_' + fuId + '" class="fu_last_day_for_pay_dates"></span>' +
+					'</div>' +
+				'</div>' +
+			'</div><!-- add_fu_info_dates -->' +
+			'<div class="form-row">' +
+				'<div class="form-group col-md-6">' +
+					'<h6>Удовлетворенные требования</h6>' +
+				'</div>' +
+			'</div>' +
+			'<div id="add_fu_info_row_' + fuId + '_1" class="add_fu_info_' + fuId + ' add_fu_infos form-row">' +
+				'<div class="form-group col-md-4 form-inline">' +
+					'<select id="fu_claim_' + fuId + '_1" class="fu_claim_' + fuId + ' fu_claims custom-select col-md-12">' +
+						'<option>Страховое возмещение</option>' +
+						'<option>УТС</option>' +
+						'<option>Эвакуатор</option>' +
+						'<option>Хранение</option>' +
+						'<option>Неустойка</option>' +
+						'<option>Экспертиза</option>' +
+						'<option>Юрист</option>' +
+						'<option>Нотариус</option>' +
+						'<option>Почта</option>' +
+					'</select>' +
+				'</div>' +
+				'<div class="form-group col-md-3">' +
+					'<div class="input-group">' +
+						'<input id="fu_claim_summ_' + fuId + '_1" class = "fu_claim_summ_' + fuId + ' fu_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">' +
+						'<div class="input-group-append">' +
+							'<span class="input-group-text">&#8381;</span>' +
+						'</div>' +
+					'</div>' +
+				'</div>' +
+				'<div class="form-group col-ms-1">' +
+					'<button id="fu_claim_btn_' + fuId + '_1" class="fu_claim_btn_' + fuId + ' btn btn-outline-warning" onclick="addFuClaim(' + fuId + ')">+</button>' +
+				'</div>' +
+			'</div><!-- add_court_info_row_1 -->' +
+			'<div id="add_fu_claim_info_' + fuId + '_1" class="add_fu_claim_info_' + fuId + ' form-group ml-3" style="display:none">' +
+				'<div class="form-group">' +
+					'<h6>Период неустойки</h6>' +
+				'</div>' +
+				'<div class="form-group form-inline">' +
+					'<label for="date_fu_from_' + fuId + '_1">c</label>' +
+					'<input id = "date_fu_from_' + fuId + '_1" class = "date_fu_penalty_from_' + fuId + ' date_court_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+					'<label for="date_fu_to_' + fuId + '_1" class="ml-2">по</label>' +
+					'<input id = "date_fu_to_' + fuId + '_1" class = "date_fu_penalty_to_' + fuId + ' date_fu_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+					'<input id="fu_without_period_' + fuId + '_1" class="fu_without_period_' + fuId + ' fu_without_periods ml-2" type="checkbox" onclick="block_fu_date(' + fuId + ', 1)">' +
+					'<label for="fu_without_period_' + fuId + '_1" class="ml-2 form-check-label">Период не указан</label>' +
+				'</div>' +
+			'</div><!-- add_court1_claim_info_1 -->' +
+		'</div><!-- add_FU_info_1 -->' +
 	'</div><!-- court_1 -->';
 
-	$('#courts').append(str);
-	$('#court_date_' + courtId).datepicker();
-	$('#court_pay_date_' + courtId).datepicker();
-	$('#court_in_force_date_' + courtId).datepicker();
-	$('#date_court_from_' + courtId + '_1').datepicker();
-	$('#date_court_to_' + courtId + '_1').datepicker();
+	$('#fus').append(str);
+	$('#fu_date_' + fuId).datepicker();
+	$('#fu_pay_date_' + fuId).datepicker();
+	$('#date_fu_from_' + fuId + '_1').datepicker();
+	$('#date_fu_to_' + fuId + '_1').datepicker();
 
   $('.datepicker-here').toArray().forEach(function(field){
     new Cleave(field, {
@@ -123,13 +133,20 @@ function addCourt() {
         numeralIntegerScale: 8
     })
   });
+
+	//Форматирование номера решения ФУ
+	$('.input-number-fu').toArray().forEach(function(field){
+	  new Cleave(field, {
+	      prefix: 'У-'
+	  })
+	});
 }
 
 function addFuClaim(id) {
-	claimId++;
-  var str = '<div id="add_fu_info_row_' + id + '_' + claimId + '" class="add_fu_info_' + id + ' add_fu_infos form-row">' +
+	claimFuId++;
+  var str = '<div id="add_fu_info_row_' + id + '_' + claimFuId + '" class="add_fu_info_' + id + ' add_fu_infos form-row">' +
 		'<div class="form-group col-md-4 form-inline">' +
-			'<select id="fu_claim_' + id + '_' + claimId + '" class="fu_claim_' + id + ' fu_claims custom-select col-md-12">' +
+			'<select id="fu_claim_' + id + '_' + claimFuId + '" class="fu_claim_' + id + ' fu_claims custom-select col-md-12">' +
 				'<option>Страховое возмещение</option>' +
 				'<option>УТС</option>' +
 				'<option>Эвакуатор</option>' +
@@ -143,35 +160,35 @@ function addFuClaim(id) {
 		'</div>' +
 		'<div class="form-group col-md-3">' +
 			'<div class="input-group">' +
-				'<input id="fu_claim_summ_' + id + '_' + claimId + '" class = "fu_claim_summ_' + id + ' fu_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">' +
+				'<input id="fu_claim_summ_' + id + '_' + claimFuId + '" class = "fu_claim_summ_' + id + ' fu_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">' +
 				'<div class="input-group-append">' +
 					'<span class="input-group-text">&#8381;</span>' +
 				'</div>' +
 			'</div>' +
 		'</div>' +
 		'<div class="form-group col-ms-1">' +
-			'<button id="fu_claim_btn_' + id + '_' + claimId + '" class="fu_claim_btn_' + id + ' btn btn-outline-danger" onclick="removeFuClaim(' + id + ', ' + claimId + ')">×</button>' +
+			'<button id="fu_claim_btn_' + id + '_' + claimFuId + '" class="fu_claim_btn_' + id + ' btn btn-outline-danger" onclick="removeFuClaim(' + id + ', ' + claimFuId + ')">×</button>' +
 		'</div>' +
 	'</div><!-- add_fu_info_row_1 -->' +
-	'<div id="add_fu_claim_info_' + id + '_' + claimId + '" class="add_fu_claim_info_' + id + ' form-group ml-3" style="display:none">' +
+	'<div id="add_fu_claim_info_' + id + '_' + claimFuId + '" class="add_fu_claim_info_' + id + ' form-group ml-3" style="display:none">' +
 		'<div class="form-group">' +
 			'<h6>Период неустойки</h6>' +
 		'</div>' +
 		'<div class="form-group form-inline">' +
-			'<label for="date_fu_from_' + id + '_' + claimId + '">c</label>' +
-			'<input id = "date_fu_from_' + id + '_' + claimId + '" class = "date_fu_penalty_from_' + id + ' date_fu_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-			'<label for="date_fu_to_' + id + '_' + claimId + '" class="ml-2">по</label>' +
-			'<input id = "date_fu_to_' + id + '_' + claimId + '" class = "date_fu_penalty_to_' + id + ' date_fu_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-			'<input id="fu_without_period_' + id + '_' + claimId + '" class="fu_without_period_' + id + ' fu_without_periods ml-2" type="checkbox" onclick="block_fu_date(' + id + ', ' + claimId + ')">' +
-			'<label for="fu_without_period_' + id + '_' + claimId + '" class="ml-2 form-check-label">Период не указан</label>' +
+			'<label for="date_fu_from_' + id + '_' + claimFuId + '">c</label>' +
+			'<input id = "date_fu_from_' + id + '_' + claimFuId + '" class = "date_fu_penalty_from_' + id + ' date_fu_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+			'<label for="date_fu_to_' + id + '_' + claimFuId + '" class="ml-2">по</label>' +
+			'<input id = "date_fu_to_' + id + '_' + claimFuId + '" class = "date_fu_penalty_to_' + id + ' date_fu_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+			'<input id="fu_without_period_' + id + '_' + claimFuId + '" class="fu_without_period_' + id + ' fu_without_periods ml-2" type="checkbox" onclick="block_fu_date(' + id + ', ' + claimFuId + ')">' +
+			'<label for="fu_without_period_' + id + '_' + claimFuId + '" class="ml-2 form-check-label">Период не указан</label>' +
 		'</div>' +
 	'</div><!-- add_fu1_claim_info_1 -->';
 
 
 
 	$('#add_fu_info_' + id).append(str);
-	$('#date_fu_from_' + id + '_' + claimId).datepicker();
-	$('#date_fu_to_' + id + '_' + claimId).datepicker();
+	$('#date_fu_from_' + id + '_' + claimFuId).datepicker();
+	$('#date_fu_to_' + id + '_' + claimFuId).datepicker();
 
   $('.datepicker-here').toArray().forEach(function(field){
     new Cleave(field, {
@@ -202,9 +219,9 @@ function removeFu(id) {
   }
 }
 
-function removeFuClaim(id, claimId) {
-	$('#add_fu_info_row_' + id + '_' + claimId).remove();
-  $('#add_fu_claim_info_' + id + '_' + claimId).remove();
+function removeFuClaim(id, claimFuId) {
+	$('#add_fu_info_row_' + id + '_' + claimFuId).remove();
+  $('#add_fu_claim_info_' + id + '_' + claimFuId).remove();
 }
 
 //Показать дополнительную информацию по решению ФУ
@@ -231,14 +248,14 @@ $(document).on("change", ".fu_claims", function (event) {
 });
 
 //Блокировать даты неустойки,взысканной ФУ при проставленной галочке "Период не указан"
-function block_fu_date(id, claimId){
-  if ($("#fu_without_period_" + id + "_" + claimId).prop('checked')) {
-    $("#date_fu_from_" + id + "_" + claimId).prop('disabled', true);
-    $("#date_fu_to_" + id + "_" + claimId).prop('disabled', true);
-    $("#date_fu_from_" + id + "_" + claimId).val('');
-    $("#date_fu_to_" + id + "_" + claimId).val('');
+function block_fu_date(id, claimFuId){
+  if ($("#fu_without_period_" + id + "_" + claimFuId).prop('checked')) {
+    $("#date_fu_from_" + id + "_" + claimFuId).prop('disabled', true);
+    $("#date_fu_to_" + id + "_" + claimFuId).prop('disabled', true);
+    $("#date_fu_from_" + id + "_" + claimFuId).val('');
+    $("#date_fu_to_" + id + "_" + claimFuId).val('');
   } else {
-    $("#date_fu_from_" + id + "_" + claimId).prop('disabled', false);
-    $("#date_fu_to_" + id + "_" + claimId).prop('disabled', false);
+    $("#date_fu_from_" + id + "_" + claimFuId).prop('disabled', false);
+    $("#date_fu_to_" + id + "_" + claimFuId).prop('disabled', false);
   }
 }

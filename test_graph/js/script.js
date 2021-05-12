@@ -1,10 +1,11 @@
 import { AppDate } from './moduls/app_date.js';
 import { PaymentVoluntary } from './moduls/payment_voluntary.js';
+import { PaymentFu } from './moduls/payment_fu.js';
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './moduls/variables.js';
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8, COLUMN_NAME_9 } from './moduls/variables.js';
 import { COLUMN_NAME_20, COLUMN_NAME_21 } from './moduls/variables.js';
 import { STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED } from './moduls/variables.js';
-import { paymentVoluntary } from './moduls/variables.js';
+import { paymentVoluntary, paymentFu } from './moduls/variables.js';
 import { makeRubText_nominative } from './moduls/makeRubText_nominative.js';
 import { makeRubText_genitive } from './moduls/makeRubText_genitive.js';
 import { declinationDays } from './moduls/declinationDays.js';
@@ -67,6 +68,30 @@ $('#btn_desicion').click(function() {
                                                penalty_ndfls[i],
                                                penalty_ndfl_summs[i]);
   }
+
+  //Получение массива значений всех переменных решений ФУ
+  var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
+  var fu_names = $('.fu_names'); //Получение массива ФУ
+  var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
+  var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
+  var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
+  var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
+  var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
+
+
+  //Создание экземпляров решений ФУ
+  for (var i = 0; i < number_of_fus; i++) {
+    paymentFu[i] = new PaymentFu(i + 1,
+                                 fu_names[i],
+                                 fu_dates[i],
+                                 fu_numbers[i],
+                                 fu_pay_dates[i],
+                                 fu_in_force_dates[i],
+                                 fu_last_day_for_pay_dates[i]);
+   // fu_in_force_dates[i].innerHTML = paymentFu[i].getInForceDateFormatted();
+   // alert(paymentFu[i].toString());
+  }
+
   for (var i = 0; i < number_of_payments; i++) {
     if (paymentVoluntary[i].type.options.selectedIndex != 4) {
       paymentVoluntary[i].fillPayments();
@@ -126,7 +151,7 @@ $('.input-numeral').toArray().forEach(function(field){
   })
 });
 
-//Форматирование суммы
+//Форматирование номера решения ФУ
 $('.input-number-fu').toArray().forEach(function(field){
   new Cleave(field, {
       prefix: 'У-'
@@ -135,3 +160,29 @@ $('.input-number-fu').toArray().forEach(function(field){
 
 //Функция добавление всплывающей подсказки 20-й и 21-й дни
 $(function () { $('[data-toggle="tooltip"]').tooltip(); })
+
+$(document).on("focusout", ".fu_dates", function(){
+
+  //Получение массива значений всех переменных решений ФУ
+  var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
+  var fu_names = $('.fu_names'); //Получение массива ФУ
+  var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
+  var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
+  var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
+  var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
+  var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
+
+  //Создание экземпляров решений ФУ
+  for (var i = 0; i < number_of_fus; i++) {
+    paymentFu[i] = new PaymentFu(i + 1,
+                                 fu_names[i],
+                                 fu_dates[i],
+                                 fu_numbers[i],
+                                 fu_pay_dates[i],
+                                 fu_in_force_dates[i],
+                                 fu_last_day_for_pay_dates[i]);
+  }
+  // alert(paymentFu[$(this).index('.fu_dates')].getInForceDateFormatted());
+  paymentFu[$(this).index('.fu_dates')].fillDates();
+
+});

@@ -28,17 +28,6 @@ function addrows(e) {
     document.querySelector('#date_stor_penalty_day').innerHTML = "";
     document.querySelector('#date_stor_last_day').style.color = '#595b5e';
   }
-
-  // if (target == court_if_1) {
-  //   $("#div_date_court_1").show();
-  //   $("#div_date_fu_1").hide();
-  // } else if (target == voluntary_if_1) {
-  //   $("#div_date_fu_1").hide();
-  //   $("#div_date_court_1").hide();
-  // } else if (target == fu_if_1) {
-  //   $("#div_date_fu_1").show();
-  //   $("#div_date_court_1").hide();
-  // }
 }
 
 document.addEventListener('click', addrows);
