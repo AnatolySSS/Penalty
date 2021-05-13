@@ -57,40 +57,15 @@ function addPay() {
         '</div>' +
       '</div>' +
     '</div>' +
-    '<div class="form-group col-ms-1">' +
-      '<button id="add_info_btn_' + payId + '" class="btn btn-outline-warning add_info" onclick="addInfo(' + payId + ')">' +
-        '<i class="fa fa-chevron-down toggle"></i>' +
-      '</button>' +
-    '</div>' +
+    // '<div class="form-group col-ms-1">' +
+    //   '<button id="add_info_btn_' + payId + '" class="btn btn-outline-warning add_info" onclick="addInfo(' + payId + ')">' +
+    //     '<i class="fa fa-chevron-down toggle"></i>' +
+    //   '</button>' +
+    // '</div>' +
     '<div class="form-group col-ms-1">' +
       '<button id="pay_btn_' + payId + '" class="btn btn-outline-danger" onclick="removePay(' + payId + ')">×</button>' +
     '</div>' +
   '</div><!-- pay_form_row -->' +
-
-  // '<div id="add_info_pay_form_row_' + payId + '" class="add_info_pay_form form-row ml-2 mb-4" style="display:none">' +
-  // '<div class="col">' +
-  //   '<div class="form-check">' +
-  //     '<input id="voluntary_if_' + payId + '" class="voluntary_ifs form-check-input" type="radio" name="payment_option_' + payId + '" value="option1" onclick="show_court_fu_date(' + payId + ')">' +
-  //     '<label for="voluntary_if_' + payId + '" class="form-check-label">Добровольная выплата</label>' +
-  //   '</div><!-- div_voluntary -->' +
-  //   '<div class="form-check">' +
-  //     '<input id="fu_if_' + payId + '" class="fu_ifs form-check-input" type="radio" name="payment_option_' + payId + '" value="option2" onclick="show_court_fu_date(' + payId + ')">' +
-  //     '<label for="fu_if_' + payId + '" class="form-check-label">Выплата на основании решения ФУ</label>' +
-  //   '</div><!-- div_FU -->' +
-  //   '<div class="form-check">' +
-  //     '<input id="court_if_' + payId + '" class="court_ifs form-check-input" type="radio" name="payment_option_' + payId + '" value="option3" onclick="show_court_fu_date(' + payId + ')">' +
-  //     '<label for="court_if_' + payId + '" class="form-check-label">Выплата на основании решения суда</label>' +
-  //   '</div><!-- div_court -->' +
-  //   '</div>' +
-  //   '<div id="div_date_court_' + payId + '" class="form-group col-md-6 form-inline mt-2" style="display:none">' +
-  //     '<label for="date_court_' + payId + '" class="mr-2">Дата решения суда</label>' +
-  //     '<input id = "date_court_' + payId + '" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-  //   '</div><!-- div_date_court -->' +
-  //   '<div id="div_date_fu_' + payId + '" class="form-group col-md-6 form-inline mt-2" style="display:none">' +
-  //     '<label for="date_fu_' + payId + '" class="mr-2">Дата решения ФУ</label>' +
-  //     '<input id = "date_fu_' + payId + '" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-  //   '</div><!-- div_date_court -->' +
-  // '</div><!-- add_info_pay_form_row -->' +
 
   '<div id="add_info_penalty_form_row_' + payId + '" class="form-row" style="display:none">' +
       '<div class="form-group col-md-4 form-inline">' +
@@ -144,46 +119,20 @@ function removePay(id) {
   }
 }
 
-function addInfo(id) {
-  if (document.getElementById("pay" + id).options.selectedIndex == 4) {
-    if (!($('#add_info_btn_' + id).find(".toggle").hasClass("rotate"))) {
-      $('#add_info_penalty_form_row_' + id).show('fast');
-      $('#add_info_btn_' + id).find(".toggle").addClass("rotate");
-    } else {
-      $('#add_info_btn_' + id).parent().parent().next().next().hide('fast');
-      $('#add_info_btn_' + id).find(".toggle").removeClass("rotate");
-    }
-  } else {
-    if (!($('#add_info_btn_' + id).find(".toggle").hasClass("rotate"))) {
-      $('#add_info_pay_form_row_' + id).show('fast');
-      $('#add_info_btn_' + id).find(".toggle").addClass("rotate");
-    } else {
-      $('#add_info_btn_' + id).parent().parent().next().hide('fast');
-      $('#add_info_btn_' + id).find(".toggle").removeClass("rotate");
-    }
-  }
-}
+//Добавляет период взыскания неустойки ФУ
+$(document).on("change", ".payments_names", function (event) {
+	if ($(this).find(':selected').text() == "Неустойка") {
+		$(this).parent().parent().next().show('fast');
+	} else {
+    $(this).parent().parent().next().hide('fast');
+	}
+});
 
 function addPenalty_ndfl_summ_form(id) {
   if ($('#penalty_ndfl_' + id).is(':checked')) {
     $('#penalty_ndfl_summ_form_' + id).show();
   } else {
     $('#penalty_ndfl_summ_form_' + id).hide();
+    $('#penalty_ndfl_summ_' + id).val('');
   }
 }
-
-//Добавление даты решения ФУ и суда
-function show_court_fu_date(id) {
-//   if ($('input[name=payment_option_' + id + ']:checked').val() == 'option1') {
-//     $("#div_date_court_" + id).hide();
-//     $("#div_date_fu_" + id).hide();
-//   } else if ($('input[name=payment_option_' + id + ']:checked').val() == 'option2') {
-//     $("#div_date_fu_" + id).show();
-//     $("#div_date_court_" + id).hide();
-//   } else if ($('input[name=payment_option_' + id + ']:checked').val() == 'option3') {
-//     $("#div_date_fu_" + id).hide();
-//     $("#div_date_court_" + id).show();
-//   }
-//  }
-
- }

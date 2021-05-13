@@ -25,7 +25,7 @@ const date_uts = new AppDate($('#app_date_2'), $('#date_uts_last_day'), $('#date
 const date_ev = new AppDate($('#app_date_3'), $('#date_ev_last_day'), $('#date_ev_penalty_day'));
 const date_stor = new AppDate($('#app_date_4'), $('#date_stor_last_day'), $('#date_stor_penalty_day'));
 
-class ClaimFu {
+class ClaimCourt {
   id
 
   name
@@ -75,59 +75,50 @@ class ClaimFu {
   }
 }
 
-export class PaymentFu {
+export class PaymentCourt {
 
   id
 
-  fu
-  date
+  court
   number
   order
 
-  pay_date
+  date
   in_force_date
-  last_day_for_pay_date
+  pay_date
 
   claim = [];
 
-  total_penalty_summ_fu
+  total_penalty_summ_court
 
-  constructor(id, fu, date, number, pay_date, in_force_date, last_day_for_pay_date) {
+  constructor(id, court, number, date, in_force_date, pay_date) {
 
     this.id = id;
-    this.fu = fu;
-    //обработка значения даты решения ФУ (преобразование в количество миллисекунд)
-    this.date = date;
-    //редактирвоание значений суммы выплаты (удаление пробелов, преобразование к числовому типу)
+    this.court = court;
     this.number = number;
-    //обработка значения даты исполнения решения ФУ (преобразование в количество миллисекунд)
-    this.pay_date = pay_date;
+    this.date = date;
     this.in_force_date = in_force_date;
-    this.last_day_for_pay_date = last_day_for_pay_date;
+    this.pay_date = pay_date;
 
-    this.total_penalty_summ_fu = 0;
+    this.total_penalty_summ_court = 0;
     //Получение количества удовлетворенных требований для каждого решения
     var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
-    var number_of_claims = $('.fu_claim_' + id).length;
-    var names = $('.fu_claim_' + id); //Получение массива требований
-    var summs = $('.fu_claim_summ_' + id); //Получение массива дат решений
-    var froms = $('.date_fu_penalty_from_' + id); //Получение массива дат начала периода судебных неустоек
-    var tos = $('.date_fu_penalty_to_' + id); //Получение массива дат конца периода судебных неустоек
-    var without_periods = $('.fu_without_period_' + id); //Получение массива неустоек без периода
+    var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
+    var number_of_claims = $('.court_claim_' + id).length;
+    var names = $('.court_claim_' + id); //Получение массива требований
+    var summs = $('.court_claim_summ_' + id); //Получение массива дат решений
+    var froms = $('.date_court_penalty_from_' + id); //Получение массива дат начала периода судебных неустоек
+    var tos = $('.date_court_penalty_to_' + id); //Получение массива дат конца периода судебных неустоек
+    var without_periods = $('.court_without_period_' + id); //Получение массива неустоек без периода
     for (var i = 0; i < number_of_claims; i++) {
-      this.claim[i] = new ClaimFu(i + 1,
+      this.claim[i] = new ClaimCourt(i + 1,
                                   names[i],
                                   summs[i],
                                   froms[i],
                                   tos[i],
                                   without_periods[i]);
-      //Если решение ФУ исполнено не в срок, то начисляется неустойка с 21го дня, если в срок, то неустойка равна 0
-      if (this.getPayDate() > this.getLastDayForPayFu()) {
+      //Вычисление периода задержки
         this.claim[i].days_delay = (this.getPayDate() - this.claim[i].last_day) / DAY;
-      } else {
-        this.claim[i].days_delay = 0;
-      }
-
 
       //Если выплата была в срок, то изменение отрицательного значения на нулевое
       if (this.claim[i].days_delay < 0 || isNaN(this.claim[i].days_delay)) {
@@ -139,31 +130,14 @@ export class PaymentFu {
       if (isNaN(this.claim[i].penalty_summ)) {
         this.claim[i].penalty_summ = 0;
       }
-      this.total_penalty_summ_fu = this.total_penalty_summ_fu + this.claim[i].penalty_summ;
+      this.total_penalty_summ_court = this.total_penalty_summ_court + this.claim[i].penalty_summ;
     }
-
   }
 
   getDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
   getDateFormatted() { return formatDate(new Date(this.getDate())); }
   getPayDate() {return Date.parse(changeDateType(this.pay_date.value) + 'T00:00:00');}
   getPayDateFormatted() { return formatDate(new Date(this.getPayDate())); }
-
-  getInForceDate(){ return findInForceFuDay(this.getDate()); }
-  getInForceDateFormatted(){ return formatDate(new Date(this.getInForceDate()));}
-  getLastDayForPayFu(){ return findLastDayForPayFu(this.getInForceDate()); }
-  getLastDayForPayFuFormatted(){ return formatDate(new Date(this.getLastDayForPayFu())); }
-
-  //Вывод на экран значений дня вступления в силу и последнего дня для исполнения решения ФУ
-  fillDates() {
-    this.in_force_date.innerHTML = "";
-    this.last_day_for_pay_date.innerHTML = "";
-
-    if (!isNaN(findInForceFuDay(this.getDate()))) {
-      this.in_force_date.innerHTML = this.getInForceDateFormatted();
-      this.last_day_for_pay_date.innerHTML = this.getLastDayForPayFuFormatted();
-    }
-  }
 
   fillPayments() {
     for (var i = 0; i < this.claim.length; i++) {
@@ -175,7 +149,7 @@ export class PaymentFu {
           let number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
           let str_payment_dataled = '<tr role="button" class = "payment_row">' +
             '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
-            '<td><span>' + this.claim[i].name.value + ' (на основании решения ФУ № ' + this.id + ')</span></td>' +
+            '<td><span>' + this.claim[i].name.value + ' (на основании решения суда № ' + this.id + ')</span></td>' +
             '<td><span>' + makeRubText_nominative(this.claim[i].summ) + '</span></td>' +
             '<td><span>' + this.claim[i].penalty_day_form + '</span></td>' +
             '<td><span>' + this.getPayDateFormatted() + '</span></td>' +

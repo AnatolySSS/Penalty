@@ -44,7 +44,7 @@ export var pay_date_x = [], pay_summ_y = [];
 //переменная для массива добровольных выплат
 export let paymentVoluntary = [];
 export let paymentFu = [];
-
+export let paymentCourt = [];
 
 // export var total_penalty_summ_accrued;
 // export var total_penalty_summ_paid;

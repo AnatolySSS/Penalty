@@ -3,7 +3,7 @@ var claimId = 1;
 
 function addCourt() {
 	courtId++;
-  var str = '<div id="court_' + courtId + '">' +
+  var str = '<div id="court_' + courtId + '" class="courts">' +
 	'<hr>' +
 	'<div id="court_form_row_' + courtId + '" class="form-row courts">' +
     '<div class="form-group col-md-6">' +
@@ -27,30 +27,32 @@ function addCourt() {
     '</div>' +
   '</div><!-- court_form_row_1 -->' +
 	'<div id="add_court_info_' + courtId + '" class="ml-3" style="display:none">' +
-	'<div class="add_court_info_dates">' +
-		'<div class="form-row">' +
-			'<div class="form-group col-md-3">' +
-				'<h6>Дата решения</h6>' +
+		'<div class="add_court_info_dates">' +
+			'<div class="form-row">' +
+				'<div class="form-group col-md-3 form-inline justify-content-center">' +
+					'<input id = "court_date_' + courtId + '" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+				'</div>' +
+				'<div class="form-group col-md-3 form-inline">' +
+					'<h6>Дата решения</h6>' +
+				'</div>' +
 			'</div>' +
-			'<div class="form-group col-md-3">' +
-				'<h6>Дата исполнения</h6>' +
+			'<div class="form-row">' +
+				'<div class="form-group col-md-3 form-inline justify-content-center">' +
+					'<input id = "court_in_force_date_' + courtId + '" class = "court_in_force_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+				'</div>' +
+				'<div class="form-group col-md-4 form-inline">' +
+					'<h6>Дата вступления в силу</h6>' +
+				'</div>' +
 			'</div>' +
-			'<div class="form-group col-md-4">' +
-				'<h6>Дата вступление в силу</h6>' +
+			'<div class="form-row">' +
+				'<div class="form-group col-md-3 form-inline justify-content-center">' +
+					'<input id = "court_pay_date_' + courtId + '" class = "court_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+				'</div>' +
+				'<div class="form-group col-md-3 form-inline">' +
+					'<h6>Дата исполнения</h6>' +
+				'</div>' +
 			'</div>' +
-		'</div>' +
-		'<div class="form-row">' +
-			'<div class="form-group col-md-3 form-inline">' +
-				'<input id = "court_date_' + courtId + '" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-			'</div>' +
-			'<div class="form-group col-md-3 form-inline">' +
-				'<input id = "court_pay_date_' + courtId + '" class = "court_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-			'</div>' +
-			'<div class="form-group col-md-4 form-inline">' +
-				'<input id = "court_in_force_date_' + courtId + '" class = "court_in_force_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
-			'</div>' +
-		'</div>' +
-	'</div><!-- add_court_info_dates -->' +
+		'</div><!-- add_court_info_dates -->' +
 	'<div class="form-row">' +
 		'<div class="form-group col-md-6">' +
 			'<h6>Удовлетворенные требования</h6>' +

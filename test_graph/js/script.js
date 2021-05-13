@@ -1,11 +1,12 @@
 import { AppDate } from './moduls/app_date.js';
 import { PaymentVoluntary } from './moduls/payment_voluntary.js';
 import { PaymentFu } from './moduls/payment_fu.js';
+import { PaymentCourt } from './moduls/payment_court.js';
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './moduls/variables.js';
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8, COLUMN_NAME_9 } from './moduls/variables.js';
 import { COLUMN_NAME_20, COLUMN_NAME_21 } from './moduls/variables.js';
 import { STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED } from './moduls/variables.js';
-import { paymentVoluntary, paymentFu } from './moduls/variables.js';
+import { paymentVoluntary, paymentFu, paymentCourt } from './moduls/variables.js';
 import { makeRubText_nominative } from './moduls/makeRubText_nominative.js';
 import { makeRubText_genitive } from './moduls/makeRubText_genitive.js';
 import { declinationDays } from './moduls/declinationDays.js';
@@ -95,7 +96,7 @@ $('#btn_desicion').click(function() {
   }
 
   //Получение массива значений всех переменных решений ФУ
-  var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
+  var number_of_fus = $('.fus').length; //Получение количества строк с выплатами
   var fu_names = $('.fu_names'); //Получение массива ФУ
   var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
   var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
@@ -106,7 +107,7 @@ $('#btn_desicion').click(function() {
 
   //Создание экземпляров решений ФУ
   for (var i = 0; i < number_of_fus; i++) {
-    paymentFu[i] = new PaymentFu(i + number_of_payments + 1,
+    paymentFu[i] = new PaymentFu(i + 1,
                                  fu_names[i],
                                  fu_dates[i],
                                  fu_numbers[i],
@@ -114,6 +115,25 @@ $('#btn_desicion').click(function() {
                                  fu_in_force_dates[i],
                                  fu_last_day_for_pay_dates[i]);
   }
+
+  //Получение массива значений всех переменных решений судов
+  var number_of_courts = $('.courts').length; //Получение количества строк с выплатами
+  var court_names = $('.court_names'); //Получение массива наименований судов
+  var court_numbers = $('.court_numbers'); //Получение массива номеров решений судов
+  var court_dates = $('.court_dates'); //Получение массива дат решений судов
+  var court_in_force_dates = $('.court_in_force_dates'); //Получение массива дат решений судов
+  var court_pay_dates = $('.court_pay_dates'); //Получение массива дат решений судов
+
+  //Создание экземпляров решений ФУ
+  for (var i = 0; i < number_of_courts; i++) {
+    paymentCourt[i] = new PaymentCourt(i + 1,
+                                 court_names[i],
+                                 court_numbers[i],
+                                 court_dates[i],
+                                 court_in_force_dates[i],
+                                 court_pay_dates[i]);
+  }
+
 
   for (var i = 0; i < number_of_payments; i++) {
     if (paymentVoluntary[i].type.options.selectedIndex != 4) {
@@ -125,6 +145,11 @@ $('#btn_desicion').click(function() {
   for (var i = 0; i < number_of_fus; i++) {
     paymentFu[i].fillPayments();
     total_penalty_summ_accrued = total_penalty_summ_accrued + paymentFu[i].total_penalty_summ_fu;
+  }
+
+  for (var i = 0; i < number_of_courts; i++) {
+    paymentCourt[i].fillPayments();
+    total_penalty_summ_accrued = total_penalty_summ_accrued + paymentCourt[i].total_penalty_summ_court;
   }
 
   let total_penalty_summ_accrued_row = '<tr class="table-danger">' +

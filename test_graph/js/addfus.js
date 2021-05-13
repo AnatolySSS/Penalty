@@ -3,9 +3,9 @@ var claimFuId = 1;
 
 function addFu() {
 	fuId++;
-  var str = '<div id="fu_' + fuId + '">' +
+  var str = '<div id="fu_' + fuId + '" class = "fus">' +
 		'<hr>' +
-		'<div id="fu_form_row_' + fuId + '" class="form-row fus">' +
+		'<div id="fu_form_row_' + fuId + '" class="form-row">' +
 	    '<div class="form-group col-md-4">' +
 			'<select id="fu_name_' + fuId + '" class="fu_names custom-select col-md-12">' +
 				'<option>Воронин Ю.В.</option>' +
