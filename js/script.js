@@ -1379,6 +1379,40 @@ while (date == Date.parse(new Date(2015, 0, 1, 0)) ||
      'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
      holly_boolen = true;
 }
+
+switch (new Date(date).getDay()) {
+  case 6:
+    if (date != Date.parse(new Date(2016, 1, 20, 0)) &&
+        date != Date.parse(new Date(2018, 3, 28, 0)) &&
+        date != Date.parse(new Date(2018, 5, 9, 0)) &&
+        date != Date.parse(new Date(2018, 11, 29, 0)) &&
+        date != Date.parse(new Date(2021, 1, 20, 0))
+      ) {
+
+      off_days[k] = date;
+      k++;
+      off_days[k] = date + day;
+      k++;
+
+      date = date + day * 2;
+      holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
+      'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
+      holly_boolen = true;
+      break;
+    }
+    break;
+  case 0:
+    off_days[k] = date;
+    k++;
+
+    date = date + day;
+    holly = 'В соответствии со статьей 193 ГК РФ если последний день срока '+
+    'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.'+'<br>';
+    holly_boolen = true;
+    break;
+  default:
+}
+
   j = 0;
   misteryDays = 0;
   return date;
