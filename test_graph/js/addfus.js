@@ -6,7 +6,7 @@ function addFu() {
   var str = '<div id="fu_' + fuId + '" class = "fus">' +
 		'<hr>' +
 		'<div id="fu_form_row_' + fuId + '" class="form-row">' +
-	    '<div class="form-group col-md-4">' +
+	    '<div class="form-group col-md-3">' +
 			'<select id="fu_name_' + fuId + '" class="fu_names custom-select col-md-12">' +
 				'<option>Воронин Ю.В.</option>' +
 				'<option>Климов В.В.</option>' +
@@ -15,6 +15,15 @@ function addFu() {
 				'<option>Савицкая Т.М.</option>' +
 			'</select>' +
 	    '</div>' +
+			'<div class="form-group col-md-3">' +
+				'<div class="input-group">' +
+					'<select id="fu_type_1' + fuId + '" class="fu_types custom-select col-md-12">' +
+						'<option>Об удовлетворении</option>' +
+						'<option>Об отказе</option>' +
+						'<option>О прекращении</option>' +
+					'</select>' +
+				'</div>' +
+			'</div>' +
 			'<div class="form-group col-md-4">' +
 				'<div class="input-group">' +
 					'<input id="fu_number_' + fuId + '" class = "fu_numbers form-control input-number-fu" placeholder="Номер" type="text" size="10">' +

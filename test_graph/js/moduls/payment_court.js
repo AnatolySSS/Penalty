@@ -4,6 +4,8 @@ import { declinationDays } from './declinationDays.js';
 import { changeDateType } from './changeDateType.js';
 import { formatDate } from './formatDate.js';
 import { findInForceFuDay, findLastDayForPayFu } from './findInForceFuDay.js';
+import { paymentFu } from './variables.js';
+import { PaymentFu } from './payment_fu.js';
 import { AppDate } from './app_date.js';
 import { DAY } from './variables.js';
 
@@ -93,6 +95,33 @@ export class PaymentCourt {
 
   constructor(id, court, number, date, in_force_date, pay_date) {
 
+    //Получение массива значений всех переменных решений ФУ
+    var number_of_fus = $('.fus').length; //Получение количества строк с выплатами
+    var fu_names = $('.fu_names'); //Получение массива ФУ
+    var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
+    var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
+    var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
+    var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
+    var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
+    var fu_claim_set = new Set();
+    fu_claim_set.clear();
+
+    //Создание экземпляров решений ФУ
+    for (var i = 0; i < number_of_fus; i++) {
+      paymentFu[i] = new PaymentFu(i + 1,
+                                   fu_names[i],
+                                   fu_dates[i],
+                                   fu_numbers[i],
+                                   fu_pay_dates[i],
+                                   fu_in_force_dates[i],
+                                   fu_last_day_for_pay_dates[i]);
+      for (var j = 0; j < paymentFu[i].claim.length; j++) {
+        if (!fu_claim_set.has(paymentFu[i].claim[j].name.options.selectedIndex) && paymentFu[i].claim[j].summ != "") {
+          fu_claim_set.add(paymentFu[i].claim[j].name.options.selectedIndex);
+        }
+      }
+    }
+
     this.id = id;
     this.court = court;
     this.number = number;
@@ -118,7 +147,12 @@ export class PaymentCourt {
                                   tos[i],
                                   without_periods[i]);
       //Вычисление периода задержки
+      if (fu_claim_set.has(this.claim[i].name.options.selectedIndex)) {
+        this.claim[i].days_delay = (this.getPayDate() - this.getInForceDate()) / DAY;
+        this.claim[i].penalty_day_form = this.getInForceDateFormatted();
+      } else {
         this.claim[i].days_delay = (this.getPayDate() - this.claim[i].last_day) / DAY;
+      }
 
       //Если выплата была в срок, то изменение отрицательного значения на нулевое
       if (this.claim[i].days_delay < 0 || isNaN(this.claim[i].days_delay)) {
@@ -136,6 +170,8 @@ export class PaymentCourt {
 
   getDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
   getDateFormatted() { return formatDate(new Date(this.getDate())); }
+  getInForceDate() {return Date.parse(changeDateType(this.in_force_date.value) + 'T00:00:00');}
+  getInForceDateFormatted() { return formatDate(new Date(this.getInForceDate())); }
   getPayDate() {return Date.parse(changeDateType(this.pay_date.value) + 'T00:00:00');}
   getPayDateFormatted() { return formatDate(new Date(this.getPayDate())); }
 
