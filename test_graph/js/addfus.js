@@ -79,7 +79,7 @@ function addFu() {
 			'</div><!-- add_fu_info_dates -->' +
 			'<div class="form-row">' +
 				'<div class="form-group col-md-6">' +
-					'<h6>Удовлетворенные требования</h6>' +
+					'<h6>Требования</h6>' +
 				'</div>' +
 			'</div>' +
 			'<div id="add_fu_info_row_' + fuId + '_1" class="add_fu_info_' + fuId + ' add_fu_infos form-row">' +
@@ -95,6 +95,15 @@ function addFu() {
 						'<option>Нотариус</option>' +
 						'<option>Почта</option>' +
 					'</select>' +
+				'</div>' +
+				'<div class="form-group col-md-3">' +
+					'<div class="input-group">' +
+						'<select id="fu_claim_type_' + fuId + '_1" class="fu_claim_type_' + fuId + ' fu_claim_types custom-select col-md-12">' +
+							'<option>Удовлетворено</option>' +
+							'<option>Отказано</option>' +
+							'<option>Без рассмотрения</option>' +
+						'</select>' +
+					'</div>' +
 				'</div>' +
 				'<div class="form-group col-md-3">' +
 					'<div class="input-group">' +
@@ -172,6 +181,15 @@ function addFuClaim(id) {
 				'<option>Нотариус</option>' +
 				'<option>Почта</option>' +
 			'</select>' +
+		'</div>' +
+		'<div class="form-group col-md-3">' +
+			'<div class="input-group">' +
+				'<select id="fu_claim_type_' + id + '_' + claimFuId + '" class="fu_claim_type_' + id + ' fu_claim_types custom-select col-md-12">' +
+					'<option>Удовлетворено</option>' +
+					'<option>Отказано</option>' +
+					'<option>Без рассмотрения</option>' +
+				'</select>' +
+			'</div>' +
 		'</div>' +
 		'<div class="form-group col-md-3">' +
 			'<div class="input-group">' +
@@ -274,3 +292,13 @@ function block_fu_date(id, claimFuId){
     $("#date_fu_to_" + id + "_" + claimFuId).prop('disabled', false);
   }
 }
+
+//Блокирует суммы, в случае отказа или БР
+$(document).on("change", ".fu_claim_types", function (event) {
+	if ($(this).find(':selected').text() == "Удовлетворено") {
+		$(this).parent().parent().next().children().first().children().first().prop('disabled', false);
+	} else {
+    $(this).parent().parent().next().children().first().children().first().prop('disabled', true);
+		$(this).parent().parent().next().children().first().children().first().val('');
+	}
+});

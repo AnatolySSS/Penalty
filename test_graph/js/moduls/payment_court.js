@@ -31,6 +31,7 @@ class ClaimCourt {
   id
 
   name
+  type
   summ
   from
   to
@@ -43,9 +44,10 @@ class ClaimCourt {
   days_delay
   penalty_summ
 
-  constructor(id, name, summ, from, to, without) {
+  constructor(id, name, type, summ, from, to, without) {
     this.id = id;
     this.name = name;
+    this.type = type;
     this.summ = Number(summ.value.replace(/\s+/g, ''));
     this.from = from;
     this.to = to;
@@ -116,7 +118,8 @@ export class PaymentCourt {
                                    fu_in_force_dates[i],
                                    fu_last_day_for_pay_dates[i]);
       for (var j = 0; j < paymentFu[i].claim.length; j++) {
-        if (!fu_claim_set.has(paymentFu[i].claim[j].name.options.selectedIndex) && paymentFu[i].claim[j].summ != "") {
+        if ((!fu_claim_set.has(paymentFu[i].claim[j].name.options.selectedIndex) && paymentFu[i].claim[j].summ != "") ||
+              paymentFu[i].claim[j].type.options.selectedIndex == 1) {
           fu_claim_set.add(paymentFu[i].claim[j].name.options.selectedIndex);
         }
       }
@@ -135,6 +138,7 @@ export class PaymentCourt {
     var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
     var number_of_claims = $('.court_claim_' + id).length;
     var names = $('.court_claim_' + id); //Получение массива требований
+    var types = $('.court_claim_type_' + id); //Получение массива требований
     var summs = $('.court_claim_summ_' + id); //Получение массива дат решений
     var froms = $('.date_court_penalty_from_' + id); //Получение массива дат начала периода судебных неустоек
     var tos = $('.date_court_penalty_to_' + id); //Получение массива дат конца периода судебных неустоек
@@ -142,6 +146,7 @@ export class PaymentCourt {
     for (var i = 0; i < number_of_claims; i++) {
       this.claim[i] = new ClaimCourt(i + 1,
                                   names[i],
+                                  types[i],
                                   summs[i],
                                   froms[i],
                                   tos[i],

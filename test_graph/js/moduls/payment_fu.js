@@ -29,6 +29,7 @@ class ClaimFu {
   id
 
   name
+  type
   summ
   from
   to
@@ -41,9 +42,10 @@ class ClaimFu {
   days_delay
   penalty_summ
 
-  constructor(id, name, summ, from, to, without) {
+  constructor(id, name, type, summ, from, to, without) {
     this.id = id;
     this.name = name;
+    this.type = type;
     this.summ = Number(summ.value.replace(/\s+/g, ''));
     this.from = from;
     this.to = to;
@@ -110,6 +112,7 @@ export class PaymentFu {
     var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
     var number_of_claims = $('.fu_claim_' + id).length;
     var names = $('.fu_claim_' + id); //Получение массива требований
+    var types = $('.fu_claim_type_' + id); //Получение массива требований
     var summs = $('.fu_claim_summ_' + id); //Получение массива дат решений
     var froms = $('.date_fu_penalty_from_' + id); //Получение массива дат начала периода судебных неустоек
     var tos = $('.date_fu_penalty_to_' + id); //Получение массива дат конца периода судебных неустоек
@@ -117,6 +120,7 @@ export class PaymentFu {
     for (var i = 0; i < number_of_claims; i++) {
       this.claim[i] = new ClaimFu(i + 1,
                                   names[i],
+                                  types[i],
                                   summs[i],
                                   froms[i],
                                   tos[i],
