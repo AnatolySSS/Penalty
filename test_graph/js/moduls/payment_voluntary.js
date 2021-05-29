@@ -113,6 +113,19 @@ export class PaymentVoluntary {
         '</tr>';
 
         $('#str_payment_dataled').append(str_payment_dataled);
+
+        //Добавление подсказки для даты и количества днея просрочки
+        if (this.days_delay <= 0) {
+          $('#str_payment_dataled').children().last().css({"color" : "#28a745"});
+          $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip-green', '21й день');
+          $('#str_payment_dataled').children().last().children().eq(4).attr('tooltip-green', 'Дата осуществления выплаты');
+          $('#str_payment_dataled').children().last().children().eq(5).attr('tooltip-green', 'Выплата осуществлена в срок');
+        } else {
+          $('#str_payment_dataled').children().last().css({"color" : "#dc3545"});
+          $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip', '21й день');
+          $('#str_payment_dataled').children().last().children().eq(4).attr('tooltip', 'Дата осуществления выплаты');
+          $('#str_payment_dataled').children().last().children().eq(5).attr('tooltip', 'Количество дней просрочки');
+        }
       } else {
         let number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
         let str_payment_dataled = '<tr role="button" class = "payment_row">' +
