@@ -145,7 +145,6 @@ export class PaymentFu {
       }
       this.total_penalty_summ_fu = this.total_penalty_summ_fu + this.claim[i].penalty_summ;
     }
-
   }
 
   getDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
