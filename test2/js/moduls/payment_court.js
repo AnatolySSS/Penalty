@@ -31,6 +31,7 @@ class ClaimCourt {
   id
 
   name
+  type
   summ
   from
   to
@@ -43,9 +44,10 @@ class ClaimCourt {
   days_delay
   penalty_summ
 
-  constructor(id, name, summ, from, to, without) {
+  constructor(id, name, type, summ, from, to, without) {
     this.id = id;
     this.name = name;
+    this.type = type;
     this.summ = Number(summ.value.replace(/\s+/g, ''));
     this.from = from;
     this.to = to;
@@ -98,6 +100,7 @@ export class PaymentCourt {
     //Получение массива значений всех переменных решений ФУ
     var number_of_fus = $('.fus').length; //Получение количества строк с выплатами
     var fu_names = $('.fu_names'); //Получение массива ФУ
+    var fu_types = $('.fu_types'); //Получение массива типов решений ФУ
     var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
     var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
     var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
@@ -110,13 +113,16 @@ export class PaymentCourt {
     for (var i = 0; i < number_of_fus; i++) {
       paymentFu[i] = new PaymentFu(i + 1,
                                    fu_names[i],
+                                   fu_types[i],
                                    fu_dates[i],
                                    fu_numbers[i],
                                    fu_pay_dates[i],
                                    fu_in_force_dates[i],
                                    fu_last_day_for_pay_dates[i]);
       for (var j = 0; j < paymentFu[i].claim.length; j++) {
-        if (!fu_claim_set.has(paymentFu[i].claim[j].name.options.selectedIndex) && paymentFu[i].claim[j].summ != "") {
+        if (paymentFu[i].claim[j].summ != "" ||
+            paymentFu[i].claim[j].type.options.selectedIndex == 1 ||
+            (paymentFu[i].type.options.selectedIndex == 1 && paymentFu[i].date != "")) {
           fu_claim_set.add(paymentFu[i].claim[j].name.options.selectedIndex);
         }
       }
@@ -135,6 +141,7 @@ export class PaymentCourt {
     var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
     var number_of_claims = $('.court_claim_' + id).length;
     var names = $('.court_claim_' + id); //Получение массива требований
+    var types = $('.court_claim_type_' + id); //Получение массива требований
     var summs = $('.court_claim_summ_' + id); //Получение массива дат решений
     var froms = $('.date_court_penalty_from_' + id); //Получение массива дат начала периода судебных неустоек
     var tos = $('.date_court_penalty_to_' + id); //Получение массива дат конца периода судебных неустоек
@@ -142,6 +149,7 @@ export class PaymentCourt {
     for (var i = 0; i < number_of_claims; i++) {
       this.claim[i] = new ClaimCourt(i + 1,
                                   names[i],
+                                  types[i],
                                   summs[i],
                                   froms[i],
                                   tos[i],
@@ -177,7 +185,8 @@ export class PaymentCourt {
 
   fillPayments() {
     for (var i = 0; i < this.claim.length; i++) {
-      if (this.date.value != "") {
+      if (this.date.value != "" &&
+          this.claim[i].type.selectedIndex == 0) {
         if (this.claim[i].name.selectedIndex == 0 ||
             this.claim[i].name.selectedIndex == 1 ||
             this.claim[i].name.selectedIndex == 2 ||
@@ -194,6 +203,15 @@ export class PaymentCourt {
           '</tr>';
 
           $('#str_payment_dataled').append(str_payment_dataled);
+          //Добавление подсказки для даты и количества днея просрочки
+          $('#str_payment_dataled').children().last().css({"color" : "#dc3545"});
+          $('#str_payment_dataled').children().last().children().eq(4).attr('tooltip', 'Дата исполнения решения суда');
+          $('#str_payment_dataled').children().last().children().eq(5).attr('tooltip', 'Количество дней просрочки');
+          if (this.claim[i].penalty_day_form == this.getInForceDateFormatted()) {
+            $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip', 'Дата вступления в силу решения суда');
+          } else {
+            $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip', '21й день');
+          }
         }
       }
     }

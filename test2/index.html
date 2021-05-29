@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="css/tables.css">
     <link rel="stylesheet" href="css/button.css">
     <link rel="stylesheet" href="css/193.css">
+    <link rel="stylesheet" href="css/tooltip_green.css">
     <link rel="stylesheet" href="css/accordion.css">
     <link rel="stylesheet" href="css/datapicker/datepicker.min.css" type="text/css">
     <link rel="stylesheet" href="css/izitoast/iziToast.min.css" type="text/css">
@@ -305,7 +306,7 @@
                       </div>
                       <div class="form-group col-md-3">
                         <div class="input-group">
-                          <select id="fu_type_1" class="fu_types custom-select col-md-12">
+                          <select id="fu_type_1" class="fu_types custom-select col-md-12" onclick="delete_fu_claims_add_info(1)">
                             <option>Об удовлетворении</option>
                             <option>Об отказе</option>
                             <option>О прекращении</option>
@@ -367,7 +368,7 @@
                       </div><!-- add_fu_info_dates -->
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <h6>Удовлетворенные требования</h6>
+                          <h6>Требования</h6>
                         </div>
                       </div>
                       <div id="add_fu_info_row_1_1" class="add_fu_info_1 add_fu_infos form-row">
@@ -383,6 +384,15 @@
                             <option>Нотариус</option>
                             <option>Почта</option>
                           </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <div class="input-group">
+                            <select id="fu_claim_type_1_1" class="fu_claim_type_1 fu_claim_types custom-select col-md-12">
+                              <option>Удовлетворено</option>
+                              <option>Отказано</option>
+                              <option>Без рассмотрения</option>
+                            </select>
+                          </div>
                         </div>
                         <div class="form-group col-md-3">
                           <div class="input-group">
@@ -487,7 +497,7 @@
 
                       <div class="form-row">
                         <div class="form-group col-md-6">
-                          <h6>Удовлетворенные требования</h6>
+                          <h6>Требования</h6>
                         </div>
                       </div>
                       <div id="add_court_info_row_1_1" class="add_court_info_1 add_court_infos form-row">
@@ -503,6 +513,14 @@
                             <option>Нотариус</option>
                             <option>Почта</option>
                           </select>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <div class="input-group">
+                            <select id="court_claim_type_1_1" class="court_claim_type_1 court_claim_types custom-select col-md-12">
+                              <option>Удовлетворено</option>
+                              <option>Отказано</option>
+                            </select>
+                          </div>
                         </div>
                         <div class="form-group col-md-3">
                           <div class="input-group">

@@ -55,7 +55,7 @@ function addCourt() {
 		'</div><!-- add_court_info_dates -->' +
 	'<div class="form-row">' +
 		'<div class="form-group col-md-6">' +
-			'<h6>Удовлетворенные требования</h6>' +
+			'<h6>Требования</h6>' +
 		'</div>' +
 	'</div>' +
 	'<div id="add_court_info_row_' + courtId + '_1" class="add_court_info_' + courtId + ' add_court_infos form-row">' +
@@ -71,6 +71,14 @@ function addCourt() {
 				'<option>Нотариус</option>' +
 				'<option>Почта</option>' +
 			'</select>' +
+		'</div>' +
+		'<div class="form-group col-md-3">' +
+			'<div class="input-group">' +
+				'<select id="court_claim_type_' + courtId + '_1" class="court_claim_type_' + courtId + ' court_claim_types custom-select col-md-12">' +
+					'<option>Удовлетворено</option>' +
+					'<option>Отказано</option>' +
+				'</select>' +
+			'</div>' +
 		'</div>' +
 		'<div class="form-group col-md-3">' +
 			'<div class="input-group">' +
@@ -142,6 +150,14 @@ function addClaim(id) {
 				'<option>Нотариус</option>' +
 				'<option>Почта</option>' +
 			'</select>' +
+		'</div>' +
+		'<div class="form-group col-md-3">' +
+			'<div class="input-group">' +
+				'<select id="court_claim_type_' + id + '_' + claimId + '" class="court_claim_type_' + id + ' court_claim_types custom-select col-md-12">' +
+					'<option>Удовлетворено</option>' +
+					'<option>Отказано</option>' +
+				'</select>' +
+			'</div>' +
 		'</div>' +
 		'<div class="form-group col-md-3">' +
 			'<div class="input-group">' +
@@ -245,3 +261,13 @@ function block_court_date(id, claimId){
     $("#date_court_to_" + id + "_" + claimId).prop('disabled', false);
   }
 }
+
+//Блокирует суммы, в случае отказа
+$(document).on("change", ".court_claim_types", function (event) {
+	if ($(this).find(':selected').text() == "Удовлетворено") {
+		$(this).parent().parent().next().children().first().children().first().prop('disabled', false);
+	} else {
+    $(this).parent().parent().next().children().first().children().first().prop('disabled', true);
+		$(this).parent().parent().next().children().first().children().first().val('');
+	}
+});

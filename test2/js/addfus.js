@@ -17,7 +17,7 @@ function addFu() {
 	    '</div>' +
 			'<div class="form-group col-md-3">' +
 				'<div class="input-group">' +
-					'<select id="fu_type_1' + fuId + '" class="fu_types custom-select col-md-12">' +
+					'<select id="fu_type_' + fuId + '" class="fu_types custom-select col-md-12" onclick="delete_fu_claims_add_info(' + fuId + ')">' +
 						'<option>Об удовлетворении</option>' +
 						'<option>Об отказе</option>' +
 						'<option>О прекращении</option>' +
@@ -79,7 +79,7 @@ function addFu() {
 			'</div><!-- add_fu_info_dates -->' +
 			'<div class="form-row">' +
 				'<div class="form-group col-md-6">' +
-					'<h6>Удовлетворенные требования</h6>' +
+					'<h6>Требования</h6>' +
 				'</div>' +
 			'</div>' +
 			'<div id="add_fu_info_row_' + fuId + '_1" class="add_fu_info_' + fuId + ' add_fu_infos form-row">' +
@@ -95,6 +95,15 @@ function addFu() {
 						'<option>Нотариус</option>' +
 						'<option>Почта</option>' +
 					'</select>' +
+				'</div>' +
+				'<div class="form-group col-md-3">' +
+					'<div class="input-group">' +
+						'<select id="fu_claim_type_' + fuId + '_1" class="fu_claim_type_' + fuId + ' fu_claim_types custom-select col-md-12">' +
+							'<option>Удовлетворено</option>' +
+							'<option>Отказано</option>' +
+							'<option>Без рассмотрения</option>' +
+						'</select>' +
+					'</div>' +
 				'</div>' +
 				'<div class="form-group col-md-3">' +
 					'<div class="input-group">' +
@@ -129,6 +138,14 @@ function addFu() {
 	$('#fu_pay_date_' + fuId).datepicker();
 	$('#date_fu_from_' + fuId + '_1').datepicker();
 	$('#date_fu_to_' + fuId + '_1').datepicker();
+
+	if ($("#fu_type_" + fuId).find(':selected').text() != "Об удовлетворении") {
+		$(".fu_claim_type_" + fuId).parent().parent().hide();
+		$(".fu_claim_summ_" + fuId).parent().parent().hide();
+	} else {
+		$(".fu_claim_type_" + fuId).parent().parent().show();
+		$(".fu_claim_summ_" + fuId).parent().parent().show();
+	}
 
   $('.datepicker-here').toArray().forEach(function(field){
     new Cleave(field, {
@@ -175,6 +192,15 @@ function addFuClaim(id) {
 		'</div>' +
 		'<div class="form-group col-md-3">' +
 			'<div class="input-group">' +
+				'<select id="fu_claim_type_' + id + '_' + claimFuId + '" class="fu_claim_type_' + id + ' fu_claim_types custom-select col-md-12">' +
+					'<option>Удовлетворено</option>' +
+					'<option>Отказано</option>' +
+					'<option>Без рассмотрения</option>' +
+				'</select>' +
+			'</div>' +
+		'</div>' +
+		'<div class="form-group col-md-3">' +
+			'<div class="input-group">' +
 				'<input id="fu_claim_summ_' + id + '_' + claimFuId + '" class = "fu_claim_summ_' + id + ' fu_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">' +
 				'<div class="input-group-append">' +
 					'<span class="input-group-text">&#8381;</span>' +
@@ -199,11 +225,17 @@ function addFuClaim(id) {
 		'</div>' +
 	'</div><!-- add_fu1_claim_info_1 -->';
 
-
-
 	$('#add_fu_info_' + id).append(str);
 	$('#date_fu_from_' + id + '_' + claimFuId).datepicker();
 	$('#date_fu_to_' + id + '_' + claimFuId).datepicker();
+
+	if ($("#fu_type_" + id).find(':selected').text() != "Об удовлетворении") {
+		$(".fu_claim_type_" + id).parent().parent().hide();
+		$(".fu_claim_summ_" + id).parent().parent().hide();
+	} else {
+		$(".fu_claim_type_" + id).parent().parent().show();
+		$(".fu_claim_summ_" + id).parent().parent().show();
+	}
 
   $('.datepicker-here').toArray().forEach(function(field){
     new Cleave(field, {
@@ -274,3 +306,25 @@ function block_fu_date(id, claimFuId){
     $("#date_fu_to_" + id + "_" + claimFuId).prop('disabled', false);
   }
 }
+
+//Блокирует суммы, в случае отказа или БР
+$(document).on("change", ".fu_claim_types", function (event) {
+	if ($(this).find(':selected').text() == "Удовлетворено") {
+		$(this).parent().parent().next().children().first().children().first().prop('disabled', false);
+	} else {
+    $(this).parent().parent().next().children().first().children().first().prop('disabled', true);
+		$(this).parent().parent().next().children().first().children().first().val('');
+	}
+});
+
+//Удаляет тип и суммы требования, в случае, если тип решения - отказ или прекращение
+function delete_fu_claims_add_info(id){
+	if ($("#fu_type_" + id).find(':selected').text() != "Об удовлетворении") {
+		$(".fu_claim_type_" + id).parent().parent().hide();
+		$(".fu_claim_summ_" + id).parent().parent().hide();
+		$(".fu_claim_summ_" + id).val('');
+	} else {
+    $(".fu_claim_type_" + id).parent().parent().show();
+		$(".fu_claim_summ_" + id).parent().parent().show();
+	}
+};

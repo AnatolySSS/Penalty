@@ -29,6 +29,7 @@ class ClaimFu {
   id
 
   name
+  type
   summ
   from
   to
@@ -41,9 +42,10 @@ class ClaimFu {
   days_delay
   penalty_summ
 
-  constructor(id, name, summ, from, to, without) {
+  constructor(id, name, type, summ, from, to, without) {
     this.id = id;
     this.name = name;
+    this.type = type;
     this.summ = Number(summ.value.replace(/\s+/g, ''));
     this.from = from;
     this.to = to;
@@ -80,6 +82,7 @@ export class PaymentFu {
   id
 
   fu
+  type
   date
   number
   order
@@ -92,15 +95,13 @@ export class PaymentFu {
 
   total_penalty_summ_fu
 
-  constructor(id, fu, date, number, pay_date, in_force_date, last_day_for_pay_date) {
+  constructor(id, fu, type, date, number, pay_date, in_force_date, last_day_for_pay_date) {
 
     this.id = id;
     this.fu = fu;
-    //обработка значения даты решения ФУ (преобразование в количество миллисекунд)
+    this.type = type;
     this.date = date;
-    //редактирвоание значений суммы выплаты (удаление пробелов, преобразование к числовому типу)
     this.number = number;
-    //обработка значения даты исполнения решения ФУ (преобразование в количество миллисекунд)
     this.pay_date = pay_date;
     this.in_force_date = in_force_date;
     this.last_day_for_pay_date = last_day_for_pay_date;
@@ -110,6 +111,7 @@ export class PaymentFu {
     var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
     var number_of_claims = $('.fu_claim_' + id).length;
     var names = $('.fu_claim_' + id); //Получение массива требований
+    var types = $('.fu_claim_type_' + id); //Получение массива требований
     var summs = $('.fu_claim_summ_' + id); //Получение массива дат решений
     var froms = $('.date_fu_penalty_from_' + id); //Получение массива дат начала периода судебных неустоек
     var tos = $('.date_fu_penalty_to_' + id); //Получение массива дат конца периода судебных неустоек
@@ -117,6 +119,7 @@ export class PaymentFu {
     for (var i = 0; i < number_of_claims; i++) {
       this.claim[i] = new ClaimFu(i + 1,
                                   names[i],
+                                  types[i],
                                   summs[i],
                                   froms[i],
                                   tos[i],
@@ -127,7 +130,6 @@ export class PaymentFu {
       } else {
         this.claim[i].days_delay = 0;
       }
-
 
       //Если выплата была в срок, то изменение отрицательного значения на нулевое
       if (this.claim[i].days_delay < 0 || isNaN(this.claim[i].days_delay)) {
@@ -141,7 +143,6 @@ export class PaymentFu {
       }
       this.total_penalty_summ_fu = this.total_penalty_summ_fu + this.claim[i].penalty_summ;
     }
-
   }
 
   getDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
@@ -167,11 +168,14 @@ export class PaymentFu {
 
   fillPayments() {
     for (var i = 0; i < this.claim.length; i++) {
-      if (this.date.value != "") {
+      if (this.date.value != "" &&
+          this.type.selectedIndex == 0 &&
+          this.claim[i].type.selectedIndex == 0) {
         if (this.claim[i].name.selectedIndex == 0 ||
             this.claim[i].name.selectedIndex == 1 ||
             this.claim[i].name.selectedIndex == 2 ||
             this.claim[i].name.selectedIndex == 3) {
+
           let number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
           let str_payment_dataled = '<tr role="button" class = "payment_row">' +
             '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
@@ -184,6 +188,20 @@ export class PaymentFu {
           '</tr>';
 
           $('#str_payment_dataled').append(str_payment_dataled);
+
+          //Добавление подсказки для даты и количества днея просрочки
+          if (this.getPayDate() <= this.getLastDayForPayFu()) {
+            $('#str_payment_dataled').children().last().css({"color" : "#28a745"});
+            $('#str_payment_dataled').children().last().children().eq(3).children().first().text(this.getLastDayForPayFuFormatted());
+            $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip-green', 'Дата окончания срока исполнения');
+            $('#str_payment_dataled').children().last().children().eq(4).attr('tooltip-green', 'Дата исполнения решения ФУ');
+            $('#str_payment_dataled').children().last().children().eq(5).attr('tooltip-green', 'Решение ФУ исполнено в срок');
+          } else {
+            $('#str_payment_dataled').children().last().css({"color" : "#dc3545"});
+            $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip', '21й день');
+            $('#str_payment_dataled').children().last().children().eq(4).attr('tooltip', 'Дата исполнения решения ФУ');
+            $('#str_payment_dataled').children().last().children().eq(5).attr('tooltip', 'Количество дней просрочки');
+          }
         }
       }
     }

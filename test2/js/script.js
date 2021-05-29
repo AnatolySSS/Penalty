@@ -41,6 +41,7 @@ $(document).on("focusout", ".fu_dates", function(){
   //Получение массива значений всех переменных решений ФУ
   var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
   var fu_names = $('.fu_names'); //Получение массива ФУ
+  var fu_types = $('.fu_types'); //Получение массива дат решений ФУ
   var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
   var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
   var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
@@ -51,6 +52,7 @@ $(document).on("focusout", ".fu_dates", function(){
   for (var i = 0; i < number_of_fus; i++) {
     paymentFu[i] = new PaymentFu(i + 1,
                                  fu_names[i],
+                                 fu_types[i],
                                  fu_dates[i],
                                  fu_numbers[i],
                                  fu_pay_dates[i],
@@ -98,6 +100,7 @@ $('#btn_desicion').click(function() {
   //Получение массива значений всех переменных решений ФУ
   var number_of_fus = $('.fus').length; //Получение количества строк с выплатами
   var fu_names = $('.fu_names'); //Получение массива ФУ
+  var fu_types = $('.fu_types'); //Получение массива типов решений ФУ
   var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
   var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
   var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
@@ -109,6 +112,7 @@ $('#btn_desicion').click(function() {
   for (var i = 0; i < number_of_fus; i++) {
     paymentFu[i] = new PaymentFu(i + 1,
                                  fu_names[i],
+                                 fu_types[i],
                                  fu_dates[i],
                                  fu_numbers[i],
                                  fu_pay_dates[i],
