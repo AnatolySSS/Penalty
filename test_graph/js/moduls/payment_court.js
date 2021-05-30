@@ -39,6 +39,7 @@ class ClaimCourt {
 
   last_day
   last_day_form
+  penalty_day
   penalty_day_form
 
   days_delay
@@ -49,8 +50,8 @@ class ClaimCourt {
     this.name = name;
     this.type = type;
     this.summ = Number(summ.value.replace(/\s+/g, ''));
-    this.from = from;
-    this.to = to;
+    this.from = Date.parse(changeDateType(from.value) + 'T00:00:00');
+    this.to = Date.parse(changeDateType(to.value) + 'T00:00:00');
     this.without = without;
 
     //Вычисление количества дней между датой выплаты и 20м днем
@@ -154,6 +155,12 @@ export class PaymentCourt {
                                   froms[i],
                                   tos[i],
                                   without_periods[i]);
+
+      if (this.claim[i].without) {
+        this.claim[i].from = this.claim[i].penalty_day;
+        this.claim[i].to = this.getDate();
+      }
+
       //Вычисление периода задержки
       if (fu_claim_set.has(this.claim[i].name.options.selectedIndex)) {
         this.claim[i].days_delay = (this.getPayDate() - this.getInForceDate()) / DAY;

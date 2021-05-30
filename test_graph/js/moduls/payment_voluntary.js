@@ -3,6 +3,8 @@ import { makeRubText_genitive } from './makeRubText_genitive.js';
 import { declinationDays } from './declinationDays.js';
 import { changeDateType } from './changeDateType.js';
 import { formatDate } from './formatDate.js';
+import { paymentFu } from './variables.js';
+import { PaymentFu } from './payment_fu.js';
 import { AppDate } from './app_date.js';
 import { DAY } from './variables.js';
 
@@ -27,6 +29,29 @@ const date_uts = new AppDate($('#app_date_2'), $('#date_uts_last_day'), $('#date
 const date_ev = new AppDate($('#app_date_3'), $('#date_ev_last_day'), $('#date_ev_penalty_day'));
 const date_stor = new AppDate($('#app_date_4'), $('#date_stor_last_day'), $('#date_stor_penalty_day'));
 
+class PenaltyCourtPeriod {
+  start_date
+  end_date
+
+  constructor(start_date, end_date){
+    this.start_date = start_date;
+    this.end_date = end_date;
+  }
+}
+
+class PenaltyPeriod {
+  start_date
+  end_date
+  days_delay
+  penalty_summ
+
+  constructor(start_date, end_date){
+    this.start_date = start_date;
+    this.end_date = end_date;
+    this.days_delay = (this.end_date - this.start_date) / DAY;
+  }
+}
+
 export class PaymentVoluntary {
 
   id
@@ -44,9 +69,40 @@ export class PaymentVoluntary {
   penalty_summ
 
   last_day
+  last_day_form
   penalty_day
+  penalty_day_form
+
+  penalty_period = [];
+  penalty_court_period = [];
 
   constructor(id, type, date, summ, ndfl, ndfl_summ){
+
+    //Получение массива значений всех переменных решений судов
+    var number_of_courts = $('.courts').length; //Получение количества строк с выплатами
+    var court_names = $('.court_names'); //Получение массива наименований судов
+    var court_numbers = $('.court_numbers'); //Получение массива номеров решений судов
+    var court_dates = $('.court_dates'); //Получение массива дат решений судов
+    var court_in_force_dates = $('.court_in_force_dates'); //Получение массива дат решений судов
+    var court_pay_dates = $('.court_pay_dates'); //Получение массива дат решений судов
+    var numberOfPenaltyCourtPeriod = 0;
+    var numberOfPenaltyPeriod = 0;
+    //Создание экземпляров решений ФУ
+    for (var i = 0; i < number_of_courts; i++) {
+      paymentCourt[i] = new PaymentCourt(i + 1,
+                                   court_names[i],
+                                   court_numbers[i],
+                                   court_dates[i],
+                                   court_in_force_dates[i],
+                                   court_pay_dates[i]);
+     for (var j = 0; j < paymentCourt[i].claim.length; j++) {
+       if (paymentCourt[i].claim[j].type.options.selectedIndex == 4) {
+         this.penalty_court_period[numberOfPenaltyCourtPeriod] = new PenaltyCourtPeriod(paymentCourt[i].claim[j].from,
+                                                                       paymentCourt[i].claim[j].to);
+         numberOfPenaltyCourtPeriod++;
+       }
+     }
+    }
 
     this.id = id;
     this.type = type;
@@ -60,26 +116,31 @@ export class PaymentVoluntary {
     //Вычисление количества дней между датой выплаты и 20м днем
     switch (this.type.options.selectedIndex) {
       case 0:
-        this.days_delay = (this.date - date_sv.getLastDay()) / DAY;
-        this.last_day = date_sv.getLastDayFormatted();
-        this.penalty_day = date_sv.getPenaltyDayFormatted();
+        this.last_day = date_sv.getLastDay();
+        this.last_day_form = date_sv.getLastDayFormatted();
+        this.penalty_day = date_sv.getPenaltyDay();
+        this.penalty_day_form = date_sv.getPenaltyDayFormatted();
         break;
       case 1:
-        this.days_delay = (this.date - date_uts.getLastDay()) / DAY;
-        this.last_day = date_uts.getLastDayFormatted();
-        this.penalty_day = date_uts.getPenaltyDayFormatted();
+        this.last_day = date_uts.getLastDay();
+        this.last_day_form = date_uts.getLastDayFormatted();
+        this.penalty_day = date_uts.getPenaltyDay();
+        this.penalty_day_form = date_uts.getPenaltyDayFormatted();
         break;
       case 2:
-        this.days_delay = (this.date - date_ev.getLastDay()) / DAY;
-        this.last_day = date_ev.getLastDayFormatted();
-        this.penalty_day = date_ev.getPenaltyDayFormatted();
+        this.last_day = date_ev.getLastDay();
+        this.last_day_form = date_ev.getLastDayFormatted();
+        this.penalty_day = date_ev.getPenaltyDay();
+        this.penalty_day_form = date_ev.getPenaltyDayFormatted();
         break;
       case 3:
-        this.days_delay = (this.date - date_stor.getLastDay()) / DAY;
-        this.last_day = date_stor.getLastDayFormatted();
-        this.penalty_day = date_stor.getPenaltyDayFormatted();
+        this.last_day = date_stor.getLastDay();
+        this.last_day_form = date_stor.getLastDayFormatted();
+        this.penalty_day = date_stor.getPenaltyDay();
+        this.penalty_day_form = date_stor.getPenaltyDayFormatted();
         break;
     }
+    this.days_delay = (this.date - this.last_day) / DAY;
     //Если выплата была в срок, то изменение отрицательного значения на нулевое
     if (this.days_delay < 0 || isNaN(this.days_delay)) {
       this.days_delay = 0;
@@ -94,6 +155,23 @@ export class PaymentVoluntary {
       this.summ = this.summ + this.ndfl_summ;
     }
 
+    if (this.penalty_court_period.length > 0) {
+      for (var i = 0; i < this.penalty_court_period.length; i++) {
+        if (this.penalty_court_period.start_date > this.penalty_day) {
+          this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_day,
+                                                                        this.penalty_court_period[i].start_date - DAY);
+          this.penalty_period[numberOfPenaltyPeriod].penalty_summ = this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
+          numberOfPenaltyPeriod++;
+        }
+        if (this.penalty_court_period.end_date < this.date) {
+          this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period.end_date + DAY,
+                                                                        this.date);
+          this.penalty_period[numberOfPenaltyPeriod].penalty_summ = this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
+
+          numberOfPenaltyPeriod++;
+        } 
+      }
+    }
   }
 
   getDateFormatted() { return formatDate(new Date(this.date)); }
@@ -106,7 +184,7 @@ export class PaymentVoluntary {
           '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
           '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
           '<td><span>' + makeRubText_nominative(this.summ) + '</span></td>' +
-          '<td><span>' + this.penalty_day + '</span></td>' +
+          '<td><span>' + this.penalty_day_form + '</span></td>' +
           '<td><span>' + this.getDateFormatted() + '</span></td>' +
           '<td><span>' + declinationDays(this.days_delay) + '</span></td>' +
           '<td><span>' + makeRubText_nominative(this.penalty_summ) + '</span></td>' +
