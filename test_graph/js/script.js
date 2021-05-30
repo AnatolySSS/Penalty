@@ -3,7 +3,7 @@ import { PaymentVoluntary } from './moduls/payment_voluntary.js';
 import { PaymentFu } from './moduls/payment_fu.js';
 import { PaymentCourt } from './moduls/payment_court.js';
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './moduls/variables.js';
-import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8, COLUMN_NAME_9 } from './moduls/variables.js';
+import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './moduls/variables.js';
 import { COLUMN_NAME_20, COLUMN_NAME_21 } from './moduls/variables.js';
 import { STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED } from './moduls/variables.js';
 import { paymentVoluntary, paymentFu, paymentCourt } from './moduls/variables.js';

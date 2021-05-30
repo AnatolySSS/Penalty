@@ -13,8 +13,7 @@ export let COLUMN_NAME_5 = "Конец";
 export let COLUMN_NAME_6 = "Дней";
 export let COLUMN_NAME_7 = "Неустойка";
 
-export let COLUMN_NAME_8 = "Период ДО суда";
-export let COLUMN_NAME_9 = "Период ПОСЛЕ суда";
+export let COLUMN_NAME_8 = "Период № ";
 
 export let COLUMN_NAME_20 = "20-й день";
 export let COLUMN_NAME_21 = "21-й день";

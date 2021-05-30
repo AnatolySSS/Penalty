@@ -3,9 +3,11 @@ import { makeRubText_genitive } from './makeRubText_genitive.js';
 import { declinationDays } from './declinationDays.js';
 import { changeDateType } from './changeDateType.js';
 import { formatDate } from './formatDate.js';
-import { paymentFu } from './variables.js';
-import { PaymentFu } from './payment_fu.js';
+import { paymentCourt } from './variables.js';
+import { PaymentCourt } from './payment_court.js';
 import { AppDate } from './app_date.js';
+import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './variables.js';
+import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './variables.js';
 import { DAY } from './variables.js';
 
 /* Объект для добровольной выплаты
@@ -180,48 +182,26 @@ export class PaymentVoluntary {
               delete this.penalty_period[numberOfPenaltyPeriod]
             }
           }
-          //Вычисление второго периода невзысканной судом неустойки
-          if (this.penalty_court_period[i].end_date < this.date) {
-            this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[i].end_date + DAY,
-                                                                          this.date);
-            //Определение самого раннего начала следующего за первым судебного периода взыскания неустойки
-            for (var j = 1; j < this.penalty_court_period.length; j++) {
-              if (this.penalty_court_period[j].start_date <= this.penalty_period[numberOfPenaltyPeriod].end_date) {
-                this.penalty_period[numberOfPenaltyPeriod].end_date = this.penalty_court_period[j].start_date - DAY;
-              }
-            }
-            //Если период количество дней просрочки равно или больше 0,
-            //то происводится расчет периода и суммы неустойки,
-            //в противном случае элемент массива с невзысканным периодом неустойки удаляется
-            if (this.penalty_period[numberOfPenaltyPeriod].days_delay > 0) {
-              this.penalty_period[numberOfPenaltyPeriod].penalty_summ =
-              this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
-              numberOfPenaltyPeriod++;
-            } else {
-              delete this.penalty_period[numberOfPenaltyPeriod]
+        }
+        //Вычисление второго и последующих периодов невзысканной судом неустойки
+        if (this.penalty_court_period[i].end_date < this.date) {
+          this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[i].end_date + DAY,
+                                                                        this.date);
+          //Определение самого раннего начала следующего за первым судебного периода взыскания неустойки
+          for (var j = 1; j < this.penalty_court_period.length; j++) {
+            if (this.penalty_court_period[j].start_date <= this.penalty_period[numberOfPenaltyPeriod].end_date) {
+              this.penalty_period[numberOfPenaltyPeriod].end_date = this.penalty_court_period[j].start_date - DAY;
             }
           }
-        //алгоритм для последующих периодов взыскания судебной неустойки
-        } else {
-          if (this.penalty_court_period[i].end_date < this.date) {
-            this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[i].end_date + DAY,
-                                                                          this.date);
-            //Определение самого раннего начала следующего за первым судебного периода взыскания неустойки
-            for (var j = 1; j < this.penalty_court_period.length; j++) {
-              if (this.penalty_court_period[j].start_date <= this.penalty_period[numberOfPenaltyPeriod].end_date) {
-                this.penalty_period[numberOfPenaltyPeriod].end_date = this.penalty_court_period[j].start_date - DAY;
-              }
-            }
-            //Если период количество дней просрочки равно или больше 0,
-            //то происводится расчет периода и суммы неустойки,
-            //в противном случае элемент массива с невзысканным периодом неустойки удаляется
-            if (this.penalty_period[numberOfPenaltyPeriod].days_delay > 0) {
-              this.penalty_period[numberOfPenaltyPeriod].penalty_summ =
-              this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
-              numberOfPenaltyPeriod++;
-            } else {
-              delete this.penalty_period[numberOfPenaltyPeriod]
-            }
+          //Если период количество дней просрочки равно или больше 0,
+          //то происводится расчет периода и суммы неустойки,
+          //в противном случае элемент массива с невзысканным периодом неустойки удаляется
+          if (this.penalty_period[numberOfPenaltyPeriod].days_delay > 0) {
+            this.penalty_period[numberOfPenaltyPeriod].penalty_summ =
+            this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
+            numberOfPenaltyPeriod++;
+          } else {
+            delete this.penalty_period[numberOfPenaltyPeriod]
           }
         }
       }
@@ -231,18 +211,61 @@ export class PaymentVoluntary {
   getDateFormatted() { return formatDate(new Date(this.date)); }
 
   fillPayments() {
+    var str_payment_dataled_header = '';
+    var str_payment_dataled_header_1 = '';
+    var str_payment_dataled_header_2 = '';
+    var str_payment_dataled_helper = '';
+    for (var i = 0; i < this.penalty_period.length; i++) {
+      str_payment_dataled_header_1 = str_payment_dataled_header_1 + '<th colspan="4" scope="col"><span id="COLUMN_NAME_3">' + COLUMN_NAME_8 + (i + 1) + '</span></th>'
+      str_payment_dataled_header_2 = str_payment_dataled_header_2 +
+      '<th scope="col"><span id="COLUMN_NAME_4">' + COLUMN_NAME_4 + '</span></th>' +
+      '<th scope="col"><span id="COLUMN_NAME_5">' + COLUMN_NAME_5 + '</span></th>' +
+      '<th scope="col"><span id="COLUMN_NAME_6">' + COLUMN_NAME_6 + '</span></th>' +
+      '<th scope="col"><span id="COLUMN_NAME_7">' + COLUMN_NAME_7 + '</span></th>';
+    }
+
+    str_payment_dataled_header = '<tr align="center" class="table-bordered">' +
+      '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_0">' + COLUMN_NAME_0 + '</span></th>' +
+      '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_1">' + COLUMN_NAME_1 + '</span></th>' +
+      '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_3">' + COLUMN_NAME_3 + '</span></th>' +
+      str_payment_dataled_header_1 +
+    '</tr>' +
+    '<tr class="table-bordered">' +
+      str_payment_dataled_header_2 +
+    '</tr>';
+    //Выведение заголовка таблицы на экран
+    if (this.penalty_period.length > 0) {
+      $('#str_payment_dataled_header').append(str_payment_dataled_header);
+    }
+
     if (!isNaN(this.date)) {
       if (this.type.selectedIndex != 4) {
         let number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
-        let str_payment_dataled = '<tr role="button" class = "payment_row">' +
-          '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
-          '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
-          '<td><span>' + makeRubText_nominative(this.summ) + '</span></td>' +
-          '<td><span>' + this.penalty_day_form + '</span></td>' +
-          '<td><span>' + this.getDateFormatted() + '</span></td>' +
-          '<td><span>' + declinationDays(this.days_delay) + '</span></td>' +
-          '<td><span>' + makeRubText_nominative(this.penalty_summ) + '</span></td>' +
-        '</tr>';
+        if (this.penalty_period.length > 0) {
+          for (var i = 0; i < this.penalty_period.length; i++) {
+            str_payment_dataled_helper = str_payment_dataled_helper +
+            '<td><span>' + this.penalty_day_form + '</span></td>' +
+            '<td><span>' + formatDate(new Date(this.penalty_period[i].start_date)) + '</span></td>' +
+            '<td><span>' + declinationDays(this.penalty_period[i].days_delay) + '</span></td>' +
+            '<td><span>' + makeRubText_nominative(this.penalty_period[i].penalty_summ) + '</span></td>';
+          }
+          let str_payment_dataled = '<tr role="button" class = "payment_row">' +
+            '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
+            '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
+            '<td><span>' + makeRubText_nominative(this.summ) + '</span></td>' +
+            str_payment_dataled_helper +
+          '</tr>';
+        } else {
+          let str_payment_dataled = '<tr role="button" class = "payment_row">' +
+            '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
+            '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
+            '<td><span>' + makeRubText_nominative(this.summ) + '</span></td>' +
+            '<td><span>' + this.penalty_day_form + '</span></td>' +
+            '<td><span>' + this.getDateFormatted() + '</span></td>' +
+            '<td><span>' + declinationDays(this.days_delay) + '</span></td>' +
+            '<td><span>' + makeRubText_nominative(this.penalty_summ) + '</span></td>' +
+          '</tr>';
+        }
 
         $('#str_payment_dataled').append(str_payment_dataled);
 
