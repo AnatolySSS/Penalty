@@ -48,7 +48,7 @@ class PenaltyPeriod {
   constructor(start_date, end_date){
     this.start_date = start_date;
     this.end_date = end_date;
-    this.days_delay = (this.end_date - this.start_date) / DAY;
+    this.days_delay = (this.end_date - this.start_date + DAY) / DAY;
   }
 }
 
@@ -157,19 +157,73 @@ export class PaymentVoluntary {
 
     if (this.penalty_court_period.length > 0) {
       for (var i = 0; i < this.penalty_court_period.length; i++) {
-        if (this.penalty_court_period.start_date > this.penalty_day) {
-          this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_day,
-                                                                        this.penalty_court_period[i].start_date - DAY);
-          this.penalty_period[numberOfPenaltyPeriod].penalty_summ = this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
-          numberOfPenaltyPeriod++;
+        //алгоритм для первого судебного периода вызскания неустойки
+        if (i == 0) {
+          //Вычисление самого первого периода невзысканной судом неустойки (с 21го дня)
+          if (this.penalty_court_period[i].start_date > this.penalty_day) {
+            this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_day,
+                                                                          this.penalty_court_period[i].start_date - DAY);
+            //Определение самого раннего начала судебного периода взыскания неустойки
+            for (var j = 1; j < this.penalty_court_period.length; j++) {
+              if (this.penalty_court_period[j].start_date <= this.penalty_period[numberOfPenaltyPeriod].end_date) {
+                this.penalty_period[numberOfPenaltyPeriod].end_date = this.penalty_court_period[j].start_date - DAY;
+              }
+            }
+            //Если период количество дней просрочки равно или больше 0,
+            //то происводится расчет периода и суммы неустойки,
+            //в противном случае элемент массива с невзысканным периодом неустойки удаляется
+            if (this.penalty_period[numberOfPenaltyPeriod].days_delay > 0) {
+              this.penalty_period[numberOfPenaltyPeriod].penalty_summ =
+              this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
+              numberOfPenaltyPeriod++;
+            } else {
+              delete this.penalty_period[numberOfPenaltyPeriod]
+            }
+          }
+          //Вычисление второго периода невзысканной судом неустойки
+          if (this.penalty_court_period[i].end_date < this.date) {
+            this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[i].end_date + DAY,
+                                                                          this.date);
+            //Определение самого раннего начала следующего за первым судебного периода взыскания неустойки
+            for (var j = 1; j < this.penalty_court_period.length; j++) {
+              if (this.penalty_court_period[j].start_date <= this.penalty_period[numberOfPenaltyPeriod].end_date) {
+                this.penalty_period[numberOfPenaltyPeriod].end_date = this.penalty_court_period[j].start_date - DAY;
+              }
+            }
+            //Если период количество дней просрочки равно или больше 0,
+            //то происводится расчет периода и суммы неустойки,
+            //в противном случае элемент массива с невзысканным периодом неустойки удаляется
+            if (this.penalty_period[numberOfPenaltyPeriod].days_delay > 0) {
+              this.penalty_period[numberOfPenaltyPeriod].penalty_summ =
+              this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
+              numberOfPenaltyPeriod++;
+            } else {
+              delete this.penalty_period[numberOfPenaltyPeriod]
+            }
+          }
+        //алгоритм для последующих периодов взыскания судебной неустойки
+        } else {
+          if (this.penalty_court_period[i].end_date < this.date) {
+            this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[i].end_date + DAY,
+                                                                          this.date);
+            //Определение самого раннего начала следующего за первым судебного периода взыскания неустойки
+            for (var j = 1; j < this.penalty_court_period.length; j++) {
+              if (this.penalty_court_period[j].start_date <= this.penalty_period[numberOfPenaltyPeriod].end_date) {
+                this.penalty_period[numberOfPenaltyPeriod].end_date = this.penalty_court_period[j].start_date - DAY;
+              }
+            }
+            //Если период количество дней просрочки равно или больше 0,
+            //то происводится расчет периода и суммы неустойки,
+            //в противном случае элемент массива с невзысканным периодом неустойки удаляется
+            if (this.penalty_period[numberOfPenaltyPeriod].days_delay > 0) {
+              this.penalty_period[numberOfPenaltyPeriod].penalty_summ =
+              this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
+              numberOfPenaltyPeriod++;
+            } else {
+              delete this.penalty_period[numberOfPenaltyPeriod]
+            }
+          }
         }
-        if (this.penalty_court_period.end_date < this.date) {
-          this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period.end_date + DAY,
-                                                                        this.date);
-          this.penalty_period[numberOfPenaltyPeriod].penalty_summ = this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
-
-          numberOfPenaltyPeriod++;
-        } 
       }
     }
   }
