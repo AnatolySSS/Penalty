@@ -37,6 +37,7 @@ class ClaimFu {
 
   last_day
   last_day_form
+  penalty_day
   penalty_day_form
 
   days_delay
@@ -56,21 +57,25 @@ class ClaimFu {
       case 0:
         this.last_day = date_sv.getLastDay();
         this.last_day_form = date_sv.getLastDayFormatted();
+        this.penalty_day = date_sv.getPenaltyDay();
         this.penalty_day_form = date_sv.getPenaltyDayFormatted();
         break;
       case 1:
         this.last_day = date_uts.getLastDay();
         this.last_day_form = date_uts.getLastDayFormatted();
+        this.penalty_day = date_uts.getPenaltyDay();
         this.penalty_day_form = date_uts.getPenaltyDayFormatted();
         break;
       case 2:
         this.last_day = date_ev.getLastDay();
         this.last_day_form = date_ev.getLastDayFormatted();
+        this.penalty_day = date_ev.getPenaltyDay();
         this.penalty_day_form = date_ev.getPenaltyDayFormatted();
         break;
       case 3:
         this.last_day = date_stor.getLastDay();
         this.last_day_form = date_stor.getLastDayFormatted();
+        this.penalty_day = date_stor.getPenaltyDay();
         this.penalty_day_form = date_stor.getPenaltyDayFormatted();
         break;
     }

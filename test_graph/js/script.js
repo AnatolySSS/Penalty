@@ -15,7 +15,8 @@ import { declinationDays } from './moduls/declinationDays.js';
 var total_penalty_summ_accrued; //Общая сумма начисленной неустойки
 var total_penalty_summ_paid; //Общая сумма выплаченной неустойки
 var total_penalty; //Общая подлежаащей взысканию неустойки
-
+var max_penalty_period_length; // Максимальное количество периодов между периодами судебной неутсойки (индекс добровольной выплаты)
+var max_penalty_period; // Максимальное количество периодов между периодами судебной неутсойки (количество элементов массива)
 $('#app_date_1').focusout(function(){
   const date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
   date_sv.fillLastDate();
@@ -74,6 +75,8 @@ $('#btn_desicion').click(function() {
   total_penalty_summ_accrued = 0;
   total_penalty_summ_paid = 0;
   total_penalty = 0;
+  max_penalty_period_length = 0;
+  max_penalty_period = 0;
 
   //Получение массива значений всех переменных добровольных выплат
   var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
@@ -83,10 +86,6 @@ $('#btn_desicion').click(function() {
   var penalty_ndfls = $('.penalty_ndfls'); //Получение массива выплат неустойки с НДФЛ
   var penalty_ndfl_summs = $('.penalty_ndfl_summs'); //Получение массива сумм удержанного НДФЛ
   var penalty_ndfl_persents = $('.penalty_ndfl_persents'); //Получение массива процентов НДФЛ
-
-  //Выведение заголовка таблицы на экран
-  $('#str_payment_dataled_header').append(STR_PAYMENT_DETALED_HEADER);
-
   //Создание экземпляров добровольных выплат
   for (var i = 0; i < number_of_payments; i++) {
     paymentVoluntary[i] = new PaymentVoluntary(i + 1,
@@ -95,6 +94,18 @@ $('#btn_desicion').click(function() {
                                                payments_summs[i],
                                                penalty_ndfls[i],
                                                penalty_ndfl_summs[i]);
+    if (paymentVoluntary[i].penalty_period.length > max_penalty_period_length) {
+      max_penalty_period_length = i
+      max_penalty_period = paymentVoluntary[i].penalty_period.length
+    }
+  }
+
+  //Выведение заголовка таблицы на экран
+  if (max_penalty_period_length > 0) {
+    paymentVoluntary[max_penalty_period_length].fillHeader();
+  } else {
+    $('#str_payment_dataled_header').append(STR_PAYMENT_DETALED_HEADER);
+    max_penalty_period = 1;
   }
 
   //Получение массива значений всех переменных решений ФУ
@@ -157,7 +168,7 @@ $('#btn_desicion').click(function() {
   }
 
   let total_penalty_summ_accrued_row = '<tr class="table-danger">' +
-    '<th scope="row" colspan="6"><span>Общий размер начисленной неустойки</span></th>' +
+    '<th scope="row" colspan="' + (max_penalty_period * 4 + 2) + '"><span>Общий размер начисленной неустойки</span></th>' +
     '<td scope="row"><span><b>' + makeRubText_nominative(total_penalty_summ_accrued) + '</b></span></td>' +
   '</tr>';
 
@@ -171,7 +182,7 @@ $('#btn_desicion').click(function() {
   }
 
   let total_penalty_summ_paid_row = '<tr class="table-success">' +
-    '<th scope="row" colspan="6"><span>Общий размер выплаченной неустойки</span></th>' +
+    '<th scope="row" colspan="' + (max_penalty_period * 4 + 2) + '"><span>Общий размер выплаченной неустойки</span></th>' +
     '<td scope="row"><span><b>' + makeRubText_nominative(total_penalty_summ_paid) + '</b></span></td>' +
   '</tr>';
 
@@ -180,7 +191,7 @@ $('#btn_desicion').click(function() {
   total_penalty = total_penalty_summ_accrued - total_penalty_summ_paid;
 
   let total_penalty_row = '<tr>' +
-    '<th scope="row" colspan="6"><span>Общий размер подлежащей взысканию неустойки (' + makeRubText_nominative(total_penalty_summ_accrued) + ' - ' + makeRubText_nominative(total_penalty_summ_paid) + ')</span></th>' +
+    '<th scope="row" colspan="' + (max_penalty_period * 4 + 2) + '"><span>Общий размер подлежащей взысканию неустойки (' + makeRubText_nominative(total_penalty_summ_accrued) + ' - ' + makeRubText_nominative(total_penalty_summ_paid) + ')</span></th>' +
     '<td scope="row"><span><b>' + makeRubText_nominative(total_penalty) + '</b></span></td>' +
   '</tr>';
 

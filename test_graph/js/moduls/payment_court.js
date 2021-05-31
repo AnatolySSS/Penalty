@@ -57,23 +57,28 @@ class ClaimCourt {
     //Вычисление количества дней между датой выплаты и 20м днем
     switch (this.name.options.selectedIndex) {
       case 0:
+      case 4:
         this.last_day = date_sv.getLastDay();
         this.last_day_form = date_sv.getLastDayFormatted();
+        this.penalty_day = date_sv.getPenaltyDay();
         this.penalty_day_form = date_sv.getPenaltyDayFormatted();
         break;
       case 1:
         this.last_day = date_uts.getLastDay();
         this.last_day_form = date_uts.getLastDayFormatted();
+        this.penalty_day = date_uts.getPenaltyDay();
         this.penalty_day_form = date_uts.getPenaltyDayFormatted();
         break;
       case 2:
         this.last_day = date_ev.getLastDay();
         this.last_day_form = date_ev.getLastDayFormatted();
+        this.penalty_day = date_ev.getPenaltyDay();
         this.penalty_day_form = date_ev.getPenaltyDayFormatted();
         break;
       case 3:
         this.last_day = date_stor.getLastDay();
         this.last_day_form = date_stor.getLastDayFormatted();
+        this.penalty_day = date_stor.getPenaltyDay();
         this.penalty_day_form = date_stor.getPenaltyDayFormatted();
         break;
     }
@@ -156,14 +161,14 @@ export class PaymentCourt {
                                   tos[i],
                                   without_periods[i]);
 
-      if (this.claim[i].without) {
+      if (this.claim[i].without.checked) {
         this.claim[i].from = this.claim[i].penalty_day;
         this.claim[i].to = this.getDate();
       }
 
       //Вычисление периода задержки
       if (fu_claim_set.has(this.claim[i].name.options.selectedIndex)) {
-        this.claim[i].days_delay = (this.getPayDate() - this.getInForceDate()) / DAY;
+        this.claim[i].days_delay = (this.getPayDate() - this.getInForceDate() + DAY) / DAY;
         this.claim[i].penalty_day_form = this.getInForceDateFormatted();
       } else {
         this.claim[i].days_delay = (this.getPayDate() - this.claim[i].last_day) / DAY;

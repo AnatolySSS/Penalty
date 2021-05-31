@@ -49,7 +49,7 @@ export let paymentCourt = [];
 // export var total_penalty_summ_paid;
 
 //Сборка заголовка таблицы (без суда)
-export let STR_PAYMENT_DETALED_HEADER = '<tr>' +
+export let STR_PAYMENT_DETALED_HEADER = '<tr align="center">' +
   '<th scope="col"><span id="COLUMN_NAME_0">' + COLUMN_NAME_0 + '</span></th>' +
   '<th scope="col"><span id="COLUMN_NAME_1">' + COLUMN_NAME_1 + '</span></th>' +
   '<!-- <th scope="col"><span id="COLUMN_NAME_2"></span></th> -->' +
