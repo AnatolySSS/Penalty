@@ -94,14 +94,14 @@ $('#btn_desicion').click(function() {
                                                payments_summs[i],
                                                penalty_ndfls[i],
                                                penalty_ndfl_summs[i]);
-    if (paymentVoluntary[i].penalty_period.length > max_penalty_period_length) {
+    if (paymentVoluntary[i].penalty_period.length > max_penalty_period) {
       max_penalty_period_length = i
       max_penalty_period = paymentVoluntary[i].penalty_period.length
     }
   }
 
   //Выведение заголовка таблицы на экран
-  if (max_penalty_period_length > 0) {
+  if (max_penalty_period > 0) {
     paymentVoluntary[max_penalty_period_length].fillHeader();
   } else {
     $('#str_payment_dataled_header').append(STR_PAYMENT_DETALED_HEADER);

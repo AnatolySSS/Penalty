@@ -45,6 +45,8 @@ export let paymentVoluntary = [];
 export let paymentFu = [];
 export let paymentCourt = [];
 
+export let courtPenalty = [];
+
 // export var total_penalty_summ_accrued;
 // export var total_penalty_summ_paid;
 

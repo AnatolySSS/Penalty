@@ -3,8 +3,8 @@ import { makeRubText_genitive } from './makeRubText_genitive.js';
 import { declinationDays } from './declinationDays.js';
 import { changeDateType } from './changeDateType.js';
 import { formatDate } from './formatDate.js';
-import { paymentCourt } from './variables.js';
-import { PaymentCourt } from './payment_court.js';
+import { courtPenalty } from './variables.js';
+import { CourtPenalty } from './court_penalty.js';
 import { AppDate } from './app_date.js';
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './variables.js';
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './variables.js';
@@ -66,13 +66,13 @@ export class PaymentVoluntary {
   ndfl_summ
   ndfl_percent
 
-  days_delay
-  penalty_summ
-
   last_day
   last_day_form
   penalty_day
   penalty_day_form
+
+  days_delay
+  penalty_summ
 
   penalty_period = [];
   penalty_court_period = [];
@@ -81,25 +81,17 @@ export class PaymentVoluntary {
 
     //Получение массива значений всех переменных решений судов
     var number_of_courts = $('.courts').length; //Получение количества строк с выплатами
-    var court_names = $('.court_names'); //Получение массива наименований судов
-    var court_numbers = $('.court_numbers'); //Получение массива номеров решений судов
     var court_dates = $('.court_dates'); //Получение массива дат решений судов
-    var court_in_force_dates = $('.court_in_force_dates'); //Получение массива дат решений судов
-    var court_pay_dates = $('.court_pay_dates'); //Получение массива дат решений судов
     var numberOfPenaltyCourtPeriod = 0;
     var numberOfPenaltyPeriod = 0;
     //Создание экземпляров решений ФУ
     for (var i = 0; i < number_of_courts; i++) {
-      paymentCourt[i] = new PaymentCourt(i + 1,
-                                   court_names[i],
-                                   court_numbers[i],
-                                   court_dates[i],
-                                   court_in_force_dates[i],
-                                   court_pay_dates[i]);
-     for (var j = 0; j < paymentCourt[i].claim.length; j++) {
-       if (paymentCourt[i].claim[j].name.options.selectedIndex == 4) {
-         this.penalty_court_period[numberOfPenaltyCourtPeriod] = new PenaltyCourtPeriod(paymentCourt[i].claim[j].from,
-                                                                       paymentCourt[i].claim[j].to);
+      courtPenalty[i] = new CourtPenalty(i + 1,
+                                   court_dates[i]);
+     for (var j = 0; j < courtPenalty[i].claim.length; j++) {
+       if (courtPenalty[i].claim[j].name.options.selectedIndex == 4) {
+         this.penalty_court_period[numberOfPenaltyCourtPeriod] = new PenaltyCourtPeriod(courtPenalty[i].claim[j].from,
+                                                                       courtPenalty[i].claim[j].to);
          numberOfPenaltyCourtPeriod++;
        }
      }

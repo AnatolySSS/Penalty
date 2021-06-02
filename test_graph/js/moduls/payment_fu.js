@@ -4,7 +4,11 @@ import { declinationDays } from './declinationDays.js';
 import { changeDateType } from './changeDateType.js';
 import { formatDate } from './formatDate.js';
 import { findInForceFuDay, findLastDayForPayFu } from './findInForceFuDay.js';
+import { courtPenalty } from './variables.js';
+import { CourtPenalty } from './court_penalty.js';
 import { AppDate } from './app_date.js';
+import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './variables.js';
+import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './variables.js';
 import { DAY } from './variables.js';
 
 /* Объект для выплаты по решению ФУ
@@ -25,6 +29,28 @@ const date_uts = new AppDate($('#app_date_2'), $('#date_uts_last_day'), $('#date
 const date_ev = new AppDate($('#app_date_3'), $('#date_ev_last_day'), $('#date_ev_penalty_day'));
 const date_stor = new AppDate($('#app_date_4'), $('#date_stor_last_day'), $('#date_stor_penalty_day'));
 
+class PenaltyCourtPeriod {
+  start_date
+  end_date
+
+  constructor(start_date, end_date){
+    this.start_date = start_date;
+    this.end_date = end_date;
+  }
+}
+
+class PenaltyPeriod {
+  start_date
+  end_date
+  days_delay
+  penalty_summ
+
+  constructor(start_date, end_date){
+    this.start_date = start_date;
+    this.end_date = end_date;
+  }
+}
+
 class ClaimFu {
   id
 
@@ -44,6 +70,7 @@ class ClaimFu {
   penalty_summ
 
   constructor(id, name, type, summ, from, to, without) {
+
     this.id = id;
     this.name = name;
     this.type = type;
@@ -100,7 +127,28 @@ export class PaymentFu {
 
   total_penalty_summ_fu
 
+  penalty_period = [];
+  penalty_court_period = [];
+
   constructor(id, fu, type, date, number, pay_date, in_force_date, last_day_for_pay_date) {
+
+    //Получение массива значений всех переменных решений судов
+    var number_of_courts = $('.courts').length; //Получение количества строк с выплатами
+    var court_dates = $('.court_dates'); //Получение массива дат решений судов
+    var numberOfPenaltyCourtPeriod = 0;
+    var numberOfPenaltyPeriod = 0;
+    //Создание экземпляров решений ФУ
+    for (var i = 0; i < number_of_courts; i++) {
+      courtPenalty[i] = new CourtPenalty(i + 1,
+                                   court_dates[i]);
+     for (var j = 0; j < courtPenalty[i].claim.length; j++) {
+       if (courtPenalty[i].claim[j].name.options.selectedIndex == 4) {
+         this.penalty_court_period[numberOfPenaltyCourtPeriod] = new PenaltyCourtPeriod(courtPenalty[i].claim[j].from,
+                                                                       courtPenalty[i].claim[j].to);
+         numberOfPenaltyCourtPeriod++;
+       }
+     }
+    }
 
     this.id = id;
     this.fu = fu;
@@ -147,6 +195,63 @@ export class PaymentFu {
         this.claim[i].penalty_summ = 0;
       }
       this.total_penalty_summ_fu = this.total_penalty_summ_fu + this.claim[i].penalty_summ;
+
+      //Алгоритм для определения периодов судебного взыскания неустойки
+      if (this.penalty_court_period.length > 0) {
+        for (var i = 0; i < this.penalty_court_period.length; i++) {
+          //алгоритм для первого судебного периода вызскания неустойки
+          if (i == 0) {
+            //Вычисление самого первого периода невзысканной судом неустойки (с 21го дня)
+            if (this.penalty_court_period[i].start_date > this.claim[i].penalty_day) {
+              this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.claim[i].penalty_day,
+                                                                            this.penalty_court_period[i].start_date - DAY);
+              //Определение самого раннего начала судебного периода взыскания неустойки
+              for (var j = i + 1; j < this.penalty_court_period.length; j++) {
+                if (this.penalty_court_period[j].start_date <= this.penalty_period[numberOfPenaltyPeriod].end_date) {
+                  this.penalty_period[numberOfPenaltyPeriod].end_date = this.penalty_court_period[j].start_date - DAY;
+                }
+              }
+              //Определение количества дней просрочки
+              this.penalty_period[numberOfPenaltyPeriod].days_delay =
+              (this.penalty_period[numberOfPenaltyPeriod].end_date - this.penalty_period[numberOfPenaltyPeriod].start_date + DAY) / DAY;
+              //Если количество дней просрочки равно или больше 0,
+              //то происводится расчет суммы неустойки,
+              //в противном случае элемент массива с невзысканным периодом неустойки удаляется
+              if (this.penalty_period[numberOfPenaltyPeriod].days_delay > 0) {
+                this.penalty_period[numberOfPenaltyPeriod].penalty_summ =
+                this.claim[i].summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
+                numberOfPenaltyPeriod++;
+              } else {
+                delete this.penalty_period[numberOfPenaltyPeriod]
+              }
+            }
+          }
+          //Вычисление второго и последующих периодов невзысканной судом неустойки
+          if (this.penalty_court_period[i].end_date < this.getPayDate()) {
+            this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[i].end_date + DAY,
+                                                                          this.getPayDate());
+            //Определение самого раннего начала следующего за первым судебного периода взыскания неустойки
+            for (var j = i + 1; j < this.penalty_court_period.length; j++) {
+              if (this.penalty_court_period[j].start_date <= this.penalty_period[numberOfPenaltyPeriod].end_date) {
+                this.penalty_period[numberOfPenaltyPeriod].end_date = this.penalty_court_period[j].start_date - DAY;
+              }
+            }
+            //Определение количества дней просрочки
+            this.penalty_period[numberOfPenaltyPeriod].days_delay =
+            (this.penalty_period[numberOfPenaltyPeriod].end_date - this.penalty_period[numberOfPenaltyPeriod].start_date + DAY) / DAY;
+            //Если количество дней просрочки равно или больше 0,
+            //то происводится расчет суммы неустойки,
+            //в противном случае элемент массива с невзысканным периодом неустойки удаляется
+            if (this.penalty_period[numberOfPenaltyPeriod].days_delay > 0) {
+              this.penalty_period[numberOfPenaltyPeriod].penalty_summ =
+              this.claim[i].summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
+              numberOfPenaltyPeriod++;
+            } else {
+              delete this.penalty_period[numberOfPenaltyPeriod]
+            }
+          }
+        }
+      }
     }
   }
 
@@ -171,7 +276,36 @@ export class PaymentFu {
     }
   }
 
+  fillHeader(){
+    var str_payment_dataled_header = '';
+    var str_payment_dataled_header_1 = '';
+    var str_payment_dataled_header_2 = '';
+    for (var i = 0; i < this.penalty_period.length; i++) {
+      str_payment_dataled_header_1 = str_payment_dataled_header_1 + '<th colspan="4" scope="col"><span id="COLUMN_NAME_3">' + COLUMN_NAME_8 + (i + 1) + '</span></th>'
+      str_payment_dataled_header_2 = str_payment_dataled_header_2 +
+      '<th scope="col"><span id="COLUMN_NAME_4">' + COLUMN_NAME_4 + '</span></th>' +
+      '<th scope="col"><span id="COLUMN_NAME_5">' + COLUMN_NAME_5 + '</span></th>' +
+      '<th scope="col"><span id="COLUMN_NAME_6">' + COLUMN_NAME_6 + '</span></th>' +
+      '<th scope="col"><span id="COLUMN_NAME_7">' + COLUMN_NAME_7 + '</span></th>';
+    }
+    str_payment_dataled_header = '<tr align="center" class="table-bordered">' +
+      '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_0">' + COLUMN_NAME_0 + '</span></th>' +
+      '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_1">' + COLUMN_NAME_1 + '</span></th>' +
+      '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_3">' + COLUMN_NAME_3 + '</span></th>' +
+      str_payment_dataled_header_1 +
+    '</tr>' +
+    '<tr align="center" class="table-bordered">' +
+      str_payment_dataled_header_2 +
+    '</tr>';
+    //Выведение заголовка таблицы на экран
+    if (this.penalty_period.length > 0) {
+      $('#str_payment_dataled_header').append(str_payment_dataled_header);
+    }
+  }
+
   fillPayments() {
+    var str_payment_dataled_helper = '';
+    var str_payment_dataled = '';
     for (var i = 0; i < this.claim.length; i++) {
       if (this.date.value != "" &&
           this.type.selectedIndex == 0 &&
@@ -182,16 +316,31 @@ export class PaymentFu {
             this.claim[i].name.selectedIndex == 3) {
 
           let number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
-          let str_payment_dataled = '<tr role="button" class = "payment_row">' +
-            '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
-            '<td><span>' + this.claim[i].name.value + ' (на основании решения ФУ № ' + this.id + ')</span></td>' +
-            '<td><span>' + makeRubText_nominative(this.claim[i].summ) + '</span></td>' +
-            '<td><span>' + this.claim[i].penalty_day_form + '</span></td>' +
-            '<td><span>' + this.getPayDateFormatted() + '</span></td>' +
-            '<td><span>' + declinationDays(this.claim[i].days_delay) + '</span></td>' +
-            '<td><span>' + makeRubText_nominative(this.claim[i].penalty_summ) + '</span></td>' +
-          '</tr>';
-
+          if (this.penalty_period.length > 0 && this.claim[i].days_delay > 0) {
+            for (var j = 0; j < this.penalty_period.length; j++) {
+              str_payment_dataled_helper = str_payment_dataled_helper +
+              '<td><span>' + formatDate(new Date(this.penalty_period[j].start_date)) + '</span></td>' +
+              '<td><span>' + formatDate(new Date(this.penalty_period[j].end_date)) + '</span></td>' +
+              '<td><span>' + declinationDays(this.penalty_period[j].days_delay) + '</span></td>' +
+              '<td><span>' + makeRubText_nominative(this.penalty_period[j].penalty_summ) + '</span></td>';
+            }
+            str_payment_dataled = '<tr role="button" class = "payment_row">' +
+              '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
+              '<td><span>' + this.claim[i].name.value + ' (на основании решения ФУ № ' + this.id + ')</span></td>' +
+              '<td><span>' + makeRubText_nominative(this.claim[i].summ) + '</span></td>' +
+              str_payment_dataled_helper +
+            '</tr>';
+          } else {
+            str_payment_dataled = '<tr role="button" class = "payment_row">' +
+              '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
+              '<td><span>' + this.claim[i].name.value + ' (на основании решения ФУ № ' + this.id + ')</span></td>' +
+              '<td><span>' + makeRubText_nominative(this.claim[i].summ) + '</span></td>' +
+              '<td><span>' + this.claim[i].penalty_day_form + '</span></td>' +
+              '<td><span>' + this.getPayDateFormatted() + '</span></td>' +
+              '<td><span>' + declinationDays(this.claim[i].days_delay) + '</span></td>' +
+              '<td><span>' + makeRubText_nominative(this.claim[i].penalty_summ) + '</span></td>' +
+            '</tr>';
+          }
           $('#str_payment_dataled').append(str_payment_dataled);
 
           //Добавление подсказки для даты и количества днея просрочки
