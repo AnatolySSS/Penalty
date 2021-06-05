@@ -20,8 +20,8 @@
 }
 
 .form_grup {
-         position: relative; # Положение элемента устанавливается относительно его исходного места.
-         margin-bottom: 32px;# Внешний отступ снизу элемента
+  position: relative; # Положение элемента устанавливается относительно его исходного места.
+  margin-bottom: 32px;# Внешний отступ снизу элемента
 }
 
 select, input, button, .form_label {
@@ -31,10 +31,6 @@ select, input, button, .form_label {
 
 input {
   text-align-last: center;
-}
-
-.table_of_payments{
-  overflow-x: auto;
 }
 
 .table {
@@ -81,15 +77,6 @@ thead {
   /*when navigating through the items using the arrow keys:*/
   background-color: DodgerBlue !important;
   color: #ffffff;
-}
-
-.table_1 > tr {
-  border: 1px solid black;
-}
-
-.td_main {
-  padding-left: 10px;
-  padding-right: 10px;
 }
 
 .input-numeral:focus {

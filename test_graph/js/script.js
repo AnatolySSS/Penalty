@@ -200,7 +200,11 @@ $('#btn_desicion').click(function() {
 
   $('#str_payment_dataled_footer').append(total_penalty_row);
 
-  $('#scroll_table_body').fixedHeaderTable('show', 1000);
+  // $('#exampleModal').one('shown.bs.modal', function (e) {
+  //   $(this).find(".table_result").freezeTable({
+  //     'container': '.modal-body',
+  //   });
+  // });
 });
 
 function fillHeader(length){

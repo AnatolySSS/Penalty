@@ -215,9 +215,10 @@ export class PaymentVoluntary {
   fillPayments() {
     var str_payment_dataled_helper = '';
     var str_payment_dataled = '';
+    var number_of_payment_rows;
     if (!isNaN(this.date)) {
       if (this.type.selectedIndex != 4) {
-        let number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
+        number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
         if (this.penalty_period.length > 0 && this.days_delay > 0) {
           for (var i = 0; i < this.penalty_period.length; i++) {
             str_payment_dataled_helper = str_payment_dataled_helper +
@@ -269,7 +270,7 @@ export class PaymentVoluntary {
           }
         }
       } else {
-        let number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
+        number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
         str_payment_dataled = '<tr role="button" class = "payment_row">' +
           '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
           '<td><span>' + this.type.value + ' <b>(добровольно)</b></span></td>' +
