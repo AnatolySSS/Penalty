@@ -15,8 +15,9 @@ import { declinationDays } from './moduls/declinationDays.js';
 var total_penalty_summ_accrued; //Общая сумма начисленной неустойки
 var total_penalty_summ_paid; //Общая сумма выплаченной неустойки
 var total_penalty; //Общая подлежаащей взысканию неустойки
-var max_penalty_period_length; // Максимальное количество периодов между периодами судебной неутсойки (индекс добровольной выплаты)
 var max_penalty_period; // Максимальное количество периодов между периодами судебной неутсойки (количество элементов массива)
+var number_of_penalty_periods; // Количество периодов для начисления неустойки
+
 $('#app_date_1').focusout(function(){
   const date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
   date_sv.fillLastDate();
@@ -75,7 +76,6 @@ $('#btn_desicion').click(function() {
   total_penalty_summ_accrued = 0;
   total_penalty_summ_paid = 0;
   total_penalty = 0;
-  max_penalty_period_length = 0;
   max_penalty_period = 0;
 
   //Получение массива значений всех переменных добровольных выплат
@@ -95,17 +95,8 @@ $('#btn_desicion').click(function() {
                                                penalty_ndfls[i],
                                                penalty_ndfl_summs[i]);
     if (paymentVoluntary[i].penalty_period.length > max_penalty_period) {
-      max_penalty_period_length = i
       max_penalty_period = paymentVoluntary[i].penalty_period.length
     }
-  }
-
-  //Выведение заголовка таблицы на экран
-  if (max_penalty_period > 0) {
-    paymentVoluntary[max_penalty_period_length].fillHeader();
-  } else {
-    $('#str_payment_dataled_header').append(STR_PAYMENT_DETALED_HEADER);
-    max_penalty_period = 1;
   }
 
   //Получение массива значений всех переменных решений ФУ
@@ -118,7 +109,6 @@ $('#btn_desicion').click(function() {
   var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
   var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
 
-
   //Создание экземпляров решений ФУ
   for (var i = 0; i < number_of_fus; i++) {
     paymentFu[i] = new PaymentFu(i + 1,
@@ -129,6 +119,9 @@ $('#btn_desicion').click(function() {
                                  fu_pay_dates[i],
                                  fu_in_force_dates[i],
                                  fu_last_day_for_pay_dates[i]);
+    if (paymentFu[i].max_penalty_period > max_penalty_period) {
+     max_penalty_period = paymentFu[i].max_penalty_period;
+    }
   }
 
   //Получение массива значений всех переменных решений судов
@@ -147,8 +140,18 @@ $('#btn_desicion').click(function() {
                                  court_dates[i],
                                  court_in_force_dates[i],
                                  court_pay_dates[i]);
+    if (paymentCourt[i].max_penalty_period > max_penalty_period) {
+    max_penalty_period = paymentCourt[i].max_penalty_period;
+    }
   }
 
+  //Выведение заголовка таблицы на экран
+  if (max_penalty_period > 0) {
+    fillHeader(max_penalty_period);
+  } else {
+    $('#str_payment_dataled_header').append(STR_PAYMENT_DETALED_HEADER);
+    max_penalty_period = 1;
+  }
 
   for (var i = 0; i < number_of_payments; i++) {
     if (paymentVoluntary[i].type.options.selectedIndex != 4) {
@@ -197,7 +200,33 @@ $('#btn_desicion').click(function() {
 
   $('#str_payment_dataled_footer').append(total_penalty_row);
 
+  $('#scroll_table_body').fixedHeaderTable('show', 1000);
 });
+
+function fillHeader(length){
+  var str_payment_dataled_header = '';
+  var str_payment_dataled_header_1 = '';
+  var str_payment_dataled_header_2 = '';
+  for (var i = 0; i < length; i++) {
+    str_payment_dataled_header_1 = str_payment_dataled_header_1 + '<th colspan="4" scope="col"><span id="COLUMN_NAME_3">' + COLUMN_NAME_8 + (i + 1) + '</span></th>'
+    str_payment_dataled_header_2 = str_payment_dataled_header_2 +
+    '<th scope="col"><span id="COLUMN_NAME_4">' + COLUMN_NAME_4 + '</span></th>' +
+    '<th scope="col"><span id="COLUMN_NAME_5">' + COLUMN_NAME_5 + '</span></th>' +
+    '<th scope="col"><span id="COLUMN_NAME_6">' + COLUMN_NAME_6 + '</span></th>' +
+    '<th scope="col"><span id="COLUMN_NAME_7">' + COLUMN_NAME_7 + '</span></th>';
+  }
+  str_payment_dataled_header = '<tr align="center" class="table-bordered">' +
+    '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_0">' + COLUMN_NAME_0 + '</span></th>' +
+    '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_1">' + COLUMN_NAME_1 + '</span></th>' +
+    '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_3">' + COLUMN_NAME_3 + '</span></th>' +
+    str_payment_dataled_header_1 +
+  '</tr>' +
+  '<tr align="center" class="table-bordered">' +
+    str_payment_dataled_header_2 +
+  '</tr>';
+  //Выведение заголовка таблицы на экран
+  $('#str_payment_dataled_header').append(str_payment_dataled_header);
+}
 
 //Форматирование даты
 $('.datepicker-here').toArray().forEach(function(field){

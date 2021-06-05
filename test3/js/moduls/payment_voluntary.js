@@ -149,7 +149,8 @@ export class PaymentVoluntary {
     }
 
     //Алгоритм для определения периодов судебного взыскания неустойки
-    if (this.penalty_court_period.length > 0) {
+    if (this.penalty_court_period.length > 0 && this.days_delay > 0) {
+      this.penalty_summ = 0;
       for (var i = 0; i < this.penalty_court_period.length; i++) {
         //алгоритм для первого судебного периода вызскания неустойки
         if (i == 0) {
@@ -203,37 +204,13 @@ export class PaymentVoluntary {
           }
         }
       }
+      for (var i = 0; i < this.penalty_period.length; i++) {
+        this.penalty_summ = this.penalty_summ + this.penalty_period[i].penalty_summ;
+      }
     }
   }
 
   getDateFormatted() { return formatDate(new Date(this.date)); }
-
-  fillHeader(){
-    var str_payment_dataled_header = '';
-    var str_payment_dataled_header_1 = '';
-    var str_payment_dataled_header_2 = '';
-    for (var i = 0; i < this.penalty_period.length; i++) {
-      str_payment_dataled_header_1 = str_payment_dataled_header_1 + '<th colspan="4" scope="col"><span id="COLUMN_NAME_3">' + COLUMN_NAME_8 + (i + 1) + '</span></th>'
-      str_payment_dataled_header_2 = str_payment_dataled_header_2 +
-      '<th scope="col"><span id="COLUMN_NAME_4">' + COLUMN_NAME_4 + '</span></th>' +
-      '<th scope="col"><span id="COLUMN_NAME_5">' + COLUMN_NAME_5 + '</span></th>' +
-      '<th scope="col"><span id="COLUMN_NAME_6">' + COLUMN_NAME_6 + '</span></th>' +
-      '<th scope="col"><span id="COLUMN_NAME_7">' + COLUMN_NAME_7 + '</span></th>';
-    }
-    str_payment_dataled_header = '<tr align="center" class="table-bordered">' +
-      '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_0">' + COLUMN_NAME_0 + '</span></th>' +
-      '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_1">' + COLUMN_NAME_1 + '</span></th>' +
-      '<th rowspan="2" scope="col" style="vertical-align: middle;"><span id="COLUMN_NAME_3">' + COLUMN_NAME_3 + '</span></th>' +
-      str_payment_dataled_header_1 +
-    '</tr>' +
-    '<tr align="center" class="table-bordered">' +
-      str_payment_dataled_header_2 +
-    '</tr>';
-    //Выведение заголовка таблицы на экран
-    if (this.penalty_period.length > 0) {
-      $('#str_payment_dataled_header').append(str_payment_dataled_header);
-    }
-  }
 
   fillPayments() {
     var str_payment_dataled_helper = '';
@@ -247,45 +224,55 @@ export class PaymentVoluntary {
             '<td><span>' + formatDate(new Date(this.penalty_period[i].start_date)) + '</span></td>' +
             '<td><span>' + formatDate(new Date(this.penalty_period[i].end_date)) + '</span></td>' +
             '<td><span>' + declinationDays(this.penalty_period[i].days_delay) + '</span></td>' +
-            '<td><span>' + makeRubText_nominative(this.penalty_period[i].penalty_summ) + '</span></td>';
+            '<td><span><b>' + makeRubText_nominative(this.penalty_period[i].penalty_summ) + '</b></span></td>';
           }
           str_payment_dataled = '<tr role="button" class = "payment_row">' +
             '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
-            '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
+            '<td><span>' + this.type.value + ' <b>(добровольно)</b></span></td>' +
             '<td><span>' + makeRubText_nominative(this.summ) + '</span></td>' +
             str_payment_dataled_helper +
           '</tr>';
+
+          $('#str_payment_dataled').append(str_payment_dataled);
+
+         //Добавление подсказки для даты и количества днея просрочки
+          $('#str_payment_dataled').children().last().css({"color" : "#dc3545"});
+          for (var i = 0; i < this.penalty_period.length; i++) {
+            $('#str_payment_dataled').children().last().children().eq(3 + i * 4).attr('tooltip', 'Начало периода № ' + (i + 1));
+            $('#str_payment_dataled').children().last().children().eq(4 + i * 4).attr('tooltip', 'Конец периода № ' + (i + 1));
+            $('#str_payment_dataled').children().last().children().eq(5 + i * 4).attr('tooltip', 'Количество дней просрочки');
+          }
         } else {
           str_payment_dataled = '<tr role="button" class = "payment_row">' +
             '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
-            '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
+            '<td><span>' + this.type.value + ' <b>(добровольно)</b></span></td>' +
             '<td><span>' + makeRubText_nominative(this.summ) + '</span></td>' +
             '<td><span>' + this.penalty_day_form + '</span></td>' +
             '<td><span>' + this.getDateFormatted() + '</span></td>' +
             '<td><span>' + declinationDays(this.days_delay) + '</span></td>' +
-            '<td><span>' + makeRubText_nominative(this.penalty_summ) + '</span></td>' +
+            '<td><span><b>' + makeRubText_nominative(this.penalty_summ) + '</b></span></td>' +
           '</tr>';
-        }
 
-        $('#str_payment_dataled').append(str_payment_dataled);
+          $('#str_payment_dataled').append(str_payment_dataled);
 
-        //Добавление подсказки для даты и количества днея просрочки
-        if (this.days_delay <= 0) {
-          $('#str_payment_dataled').children().last().css({"color" : "#28a745"});
-          $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip-green', '21й день');
-          $('#str_payment_dataled').children().last().children().eq(4).attr('tooltip-green', 'Дата осуществления выплаты');
-          $('#str_payment_dataled').children().last().children().eq(5).attr('tooltip-green', 'Выплата осуществлена в срок');
-        } else {
-          $('#str_payment_dataled').children().last().css({"color" : "#dc3545"});
-          $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip', '21й день');
-          $('#str_payment_dataled').children().last().children().eq(4).attr('tooltip', 'Дата осуществления выплаты');
-          $('#str_payment_dataled').children().last().children().eq(5).attr('tooltip', 'Количество дней просрочки');
+          //Добавление подсказки для даты и количества днея просрочки
+          if (this.days_delay <= 0) {
+            $('#str_payment_dataled').children().last().css({"color" : "#28a745"});
+            $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip-green', '21й день');
+            $('#str_payment_dataled').children().last().children().eq(4).attr('tooltip-green', 'Дата осуществления выплаты');
+            $('#str_payment_dataled').children().last().children().eq(5).attr('tooltip-green', 'Выплата осуществлена в срок');
+          } else {
+            $('#str_payment_dataled').children().last().css({"color" : "#dc3545"});
+            $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip', '21й день');
+            $('#str_payment_dataled').children().last().children().eq(4).attr('tooltip', 'Дата осуществления выплаты');
+            $('#str_payment_dataled').children().last().children().eq(5).attr('tooltip', 'Количество дней просрочки');
+          }
         }
       } else {
         let number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
         str_payment_dataled = '<tr role="button" class = "payment_row">' +
           '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
-          '<td><span>' + this.type.value + ' (добровольно)</span></td>' +
+          '<td><span>' + this.type.value + ' <b>(добровольно)</b></span></td>' +
           '<td colspan="5"><span>' + makeRubText_nominative(this.summ) + '</span></td>' +
         '</tr>';
 
