@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="css/accordion.css">
     <link rel="stylesheet" href="css/datapicker/datepicker.min.css" type="text/css">
     <link rel="stylesheet" href="css/izitoast/iziToast.min.css" type="text/css">
+    <link rel="stylesheet" href="css/fixedHeaderTable/defaultTheme.css" type="text/css">
     <link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css" type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="js/cleave/cleave.min.js"></script>
@@ -23,6 +24,7 @@
     <script type="text/javascript" src="https://unpkg.com/docx@5.0.2/build/index.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
     <script type="text/javascript" src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
+    <script type="text/javascript" src="js/fixedHeaderTable/jquery.fixedheadertable.js"></script>
   </head>
   <body>
     <div class="container-lg mt-5">
@@ -573,7 +575,7 @@
               </div>
               <!-- <br> -->
               <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-scrollable modal-xl">
+                <div class="modal-dialog modal-dialog-scrollable modal-full">
                   <div class="modal-content">
                     <div class="modal-header">
                       <h5 class="modal-title" id="exampleModalLabel">
@@ -587,22 +589,22 @@
                       <div class="container-fluid">
                         <div class="row">
                           <div class="table_result table-responsive">
-                            <table class="table table-striped table-hover table-sm">
+                            <table id="scroll_table_body" class="table table-striped table-hover table-bordered table-sm">
                               <thead id="str_payment_dataled_header" class="thead-dark">
                               </thead>
-                              <tbody id="str_payment_dataled" class="table-striped">
-                              </tbody>
                               <tfoot id="str_payment_dataled_footer" class="table-striped table-warning">
                               </tfoot>
+                              <tbody id="str_payment_dataled" class="table-striped">
+                              </tbody>
                             </table>
                           </div><!-- table_result -->
                         </div>
-                        <br>
+
                         <div id="div_svg" class="row" style="display:none"></div>
                         <!-- <div class="row">
                           <canvas id="penalty_graph" width="1000" height="500" style="display:none"></canvas>
                         </div> -->
-                        <br>
+
                         <div class="row">
                           <div class="col">
                             <span id="decision" style="display:none"></span>

@@ -10,6 +10,15 @@
   margin-right: auto; */
 }
 
+.modal-full {
+  max-width: none !important;
+  margin: 10px !important;
+}
+
+#exampleModal {
+  padding: 0px !important;
+}
+
 .form_grup {
          position: relative; # Положение элемента устанавливается относительно его исходного места.
          margin-bottom: 32px;# Внешний отступ снизу элемента
