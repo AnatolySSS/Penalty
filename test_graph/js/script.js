@@ -205,6 +205,7 @@ $('#btn_desicion').click(function() {
   //     'container': '.modal-body',
   //   });
   // });
+  // $('#scroll_table_body').fixedHeaderTable('show', 1000);
 });
 
 function fillHeader(length){
