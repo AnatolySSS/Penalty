@@ -129,6 +129,8 @@ export class PaymentFu {
   total_penalty_summ_fu
   penalty_court_period = [];
   max_penalty_period
+  max_days_delay
+  count_days
 
   constructor(id, fu, type, date, number, pay_date, in_force_date, last_day_for_pay_date) {
 
@@ -161,6 +163,9 @@ export class PaymentFu {
 
     this.total_penalty_summ_fu = 0;
     this.max_penalty_period = 0;
+    this.max_days_delay = 0;
+    //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
+    this.count_days = (this.getPayDate() - date_sv.getAppDate()) / DAY;
     //Получение количества удовлетворенных требований для каждого решения
     var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
     var number_of_claims = $('.fu_claim_' + id).length;
@@ -189,6 +194,10 @@ export class PaymentFu {
       //Если выплата была в срок, то изменение отрицательного значения на нулевое
       if (this.claim[i].days_delay < 0 || isNaN(this.claim[i].days_delay)) {
         this.claim[i].days_delay = 0;
+      }
+      //Вычисление максимального периода задержки
+      if (this.claim[i].days_delay > this.max_days_delay) {
+        this.max_days_delay = this.claim[i].days_delay; //Получение значения самой большой задержки
       }
 
       //Вычисление суммы неустойки

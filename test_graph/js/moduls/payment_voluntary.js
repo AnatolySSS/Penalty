@@ -77,6 +77,8 @@ export class PaymentVoluntary {
   penalty_period = [];
   penalty_court_period = [];
 
+  count_days
+
   constructor(id, type, date, summ, ndfl, ndfl_summ){
 
     //Получение массива значений всех переменных решений судов
@@ -133,7 +135,10 @@ export class PaymentVoluntary {
         this.penalty_day_form = date_stor.getPenaltyDayFormatted();
         break;
     }
+    //количество дней задержки выплаты
     this.days_delay = (this.date - this.last_day) / DAY;
+    //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
+    this.count_days = (this.date - date_sv.getAppDate()) / DAY;
     //Если выплата была в срок, то изменение отрицательного значения на нулевое
     if (this.days_delay < 0 || isNaN(this.days_delay)) {
       this.days_delay = 0;
