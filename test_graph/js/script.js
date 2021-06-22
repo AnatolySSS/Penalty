@@ -10,6 +10,7 @@ import { paymentVoluntary, paymentFu, paymentCourt } from './moduls/variables.js
 import { makeRubText_nominative } from './moduls/makeRubText_nominative.js';
 import { makeRubText_genitive } from './moduls/makeRubText_genitive.js';
 import { declinationDays } from './moduls/declinationDays.js';
+import { fillPenaltyGraph } from './moduls/graph.js';
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
 var total_penalty_summ_accrued; //Общая сумма начисленной неустойки
@@ -25,6 +26,9 @@ var payment_vol_types = [];
 var count_fu_days = [];
 var payment_fu_last_days = [];
 var count_court_days = [];
+var payment_vol_summs = [];
+var payment_fu_summs = [];
+var payment_fu_types = [];
 var date_sv, date_uts, date_ev, date_stor;
 var number_of_payments, number_of_fus, number_of_courts;
 
@@ -97,6 +101,9 @@ $('#btn_desicion').click(function() {
   count_fu_days.length = 0;
   payment_fu_last_days.length = 0;
   count_court_days.length = 0;
+  payment_vol_summs.length = 0;
+  payment_fu_summs.length = 0;
+  payment_fu_types.length = 0;
 
   if ($('#app_date_1').val() == "") {
     count_days[0] = NaN;
@@ -129,6 +136,7 @@ $('#btn_desicion').click(function() {
                                                penalty_ndfl_summs[i]);
     count_vol_days[i] = paymentVoluntary[i].count_days;
     payment_vol_types[i] = paymentVoluntary[i].type.options.selectedIndex;
+    payment_vol_summs[i] = paymentVoluntary[i].summ / 1000;
     if (paymentVoluntary[i].penalty_period.length > max_penalty_period) {
       max_penalty_period = paymentVoluntary[i].penalty_period.length
     }
@@ -159,6 +167,15 @@ $('#btn_desicion').click(function() {
                                  fu_last_day_for_pay_dates[i]);
     count_fu_days[i] = paymentFu[i].count_days;
     payment_fu_last_days[i] = (paymentFu[i].getLastDayForPayFu() - date_sv.getAppDate()) / DAY;
+    for (var j = 0; j < paymentFu[i].claim.length; j++) {
+      if (paymentFu[i].claim[j].name.options.selectedIndex == 0 ||
+          paymentFu[i].claim[j].name.options.selectedIndex == 1 ||
+          paymentFu[i].claim[j].name.options.selectedIndex == 2 ||
+          paymentFu[i].claim[j].name.options.selectedIndex == 3) {
+        payment_fu_summs[i] = paymentFu[i].claim[j].summ / 1000;
+        payment_fu_types[i] = paymentFu[i].claim[j].name.options.selectedIndex;
+      }
+    }
 
     if (paymentFu[i].max_penalty_period > max_penalty_period) {
      max_penalty_period = paymentFu[i].max_penalty_period;
@@ -329,9 +346,17 @@ document.getElementById('show_graph').onclick = function show_graph(){
   if ($('#show_graph').html() == "Показать график неустоек") {
     $('#div_svg').show();
     $('#show_graph').html("Скрыть график неустоек");
-    for (var i = 0; i < number_of_payments; i++) {
-      fillPenaltyGraph(swg_graph, max_days_delay, count_days, count_vol_days, payment_vol_types, count_fu_days, payment_fu_last_days, count_court_days);
-    }
+      fillPenaltyGraph(swg_graph,
+                       max_days_delay,
+                       count_days,
+                       count_vol_days,
+                       payment_vol_types,
+                       payment_vol_summs,
+                       count_fu_days,
+                       payment_fu_last_days,
+                       payment_fu_summs,
+                       payment_fu_types,
+                       count_court_days);
   } else {
     $('#div_svg').hide();
     $('#show_graph').html("Показать график неустоек");
