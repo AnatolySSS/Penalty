@@ -13,7 +13,9 @@ export function fillPenaltyGraph(swg_graph,
                  payment_fu_last_days,
                  payment_fu_summs,
                  payment_fu_types,
-                 count_court_days) {
+                 count_court_days,
+                 payment_court_summs,
+                 payment_court_types) {
   swg_graph.clear();
   var line_svg_payment = [];
   var rect_svg_payment = [];
@@ -96,11 +98,11 @@ export function fillPenaltyGraph(swg_graph,
                    .font({ fill: 'black', family: 'Inconsolata', size: '10pt', weight: 'bold' });
 
      last_days_name[i].mouseover(function() {
-        this.animate({when: 'now'}).stroke({size: '15pt'});
+        this.animate({when: 'now'}).stroke({color: 'red'});
         $('#total_count').html(text_21[last_days_name.indexOf(this)]);
       });
      last_days_name[i].mouseout(function() {
-        this.animate({when: 'now'}).stroke({size: '10pt'});
+        this.animate({when: 'now'}).stroke({color: 'red'});
         $('#total_count').html('');
       });
     }
@@ -179,6 +181,7 @@ export function fillPenaltyGraph(swg_graph,
           $('#total_count').html('');
         });
         rect_index = rect_index + 1;
+        line_index = line_index + 1;
       }
       current_summ = current_summ + payment_vol_summs[i];
     }
@@ -246,6 +249,7 @@ export function fillPenaltyGraph(swg_graph,
             $('#total_count').html('');
           });
           rect_index = rect_index + 1;
+          line_index = line_index + 1;
         }
         current_summ = current_summ + payment_fu_summs[i][j];
       }
@@ -255,78 +259,48 @@ export function fillPenaltyGraph(swg_graph,
   //Отрисовка выплат по решению суда
   for (var i = 0; i < count_court_days.length; i++) {
     if (!isNaN(count_court_days[i])) {
-      line_payment[line_index] = swg_graph.line(indent + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
-                                    0,
-                                    indent + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
-                                    div_svg_height - indent - 1)
-                              .stroke({color: 'red', width: 5, opacity: 0.5 });
+      for (var j = 0; j < payment_court_types[i].length; j++) {
+        switch (payment_court_types[i][j]) {
+          case 0:
+            type = 0;
+            break;
+          case 1:
+            type = 1;
+            break;
+          case 2:
+            type = 2;
+            break;
+          case 3:
+            type = 3;
+            break;
+          default:
+          type = 0;
+        }
+        line_payment[line_index] = swg_graph.line(indent + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
+                                      div_svg_height - indent - 1 - current_summ - payment_court_summs[i][j],
+                                      indent + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
+                                      div_svg_height - indent - 1 - current_summ)
+                                .stroke({color: 'red', width: 5, opacity: 1 });
+
+        rect_payment[rect_index] = swg_graph.rect((count_court_days[i] - count_days[type]) * div_svg_width * time_index / max_days_delay,
+                                                  payment_court_summs[i][j])
+                                            .move(indent + (count_days[type] * div_svg_width * time_index / max_days_delay),
+                                                  div_svg_height - indent - 1 - current_summ - payment_court_summs[i][j])
+                                            .fill({color: 'red', opacity: 0.2})
+                                            .stroke({color: 'red', width: 1, opacity: 1 });
+        text_rect[rect_index] = "" + makeRubText_nominative(payment_court_summs[i][j] * 1000) + " × " + declinationDays(count_court_days[i] - count_days[type] + 1) + " × 1% = " + makeRubText_nominative(payment_court_summs[i][j] * (count_court_days[i] - count_days[type] + 1) * 10);
+        rect_payment[rect_index].mouseover(function() {
+          this.animate({when: 'now'}).fill({opacity: 1});
+          $('#total_count').html(text_rect[rect_payment.indexOf(this)]);
+        });
+        rect_payment[rect_index].mouseout(function() {
+          this.animate({when: 'now'}).fill({opacity: 0.2});
+          $('#total_count').html('');
+        });
+        rect_index = rect_index + 1;
+        line_index = line_index + 1;
+        current_summ = current_summ + payment_court_summs[i][j];
+      }
     }
   }
-
-
-
-
-
-
-
-
-
-
-
-  // for (var i = 1; i <= number_of_payments; i++) {
-  //   pay_summ_y[0] = 0;
-  //   pay_date_x[i] = pay_count[i] / day;
-  //   pay_summ_y[i] = pay_text[i] / 1000;
-  //   pay_summ_y_all = pay_summ_y_all + pay_summ_y[i - 1];
-  //
-  //   //Отрисовска прямоугольников с неустойками
-  //   if (pay_count[i] == 0) {
-  //     line_svg_payment[i] = swg_graph.line(((pay_date[i] - date_sv) / day) * div_svg_width * 0.9 / max_days_delay - 3,
-  //                                         div_svg_height - pay_summ_y_all,
-  //                                         ((pay_date[i] - date_sv) / day) * div_svg_width * 0.9 / max_days_delay - 3,
-  //                                         div_svg_height - pay_summ_y_all - pay_summ_y[i])
-  //                                    .stroke({color: 'green', width: 6 });
-  //   } else {
-  //     line_svg_payment[i] = swg_graph.line((date_sv_penalty_day_x + pay_date_x[i]) * div_svg_width * 0.9 / max_days_delay - 3,
-  //                                         div_svg_height - pay_summ_y_all,
-  //                                         (date_sv_penalty_day_x + pay_date_x[i]) * div_svg_width * 0.9 / max_days_delay - 3,
-  //                                         div_svg_height - pay_summ_y_all - pay_summ_y[i])
-  //                                    .stroke({color: 'red', width: 6 });
-  //     rect_svg_payment[i] = swg_graph.rect((pay_date_x[i]) * div_svg_width * 0.9 / max_days_delay,
-  //                                           pay_summ_y[i])
-  //                                    .move((date_sv_penalty_day_x) * div_svg_width * 0.9 / max_days_delay,
-  //                                           div_svg_height - pay_summ_y_all - pay_summ_y[i])
-  //                                    .stroke({color: 'red', width: 1, opacity: 1})
-  //                                    .fill({color: 'red', opacity: 0.2});
-  //
-  //    rect_svg_payment[i].mouseover(function() {
-  //      this.animate({when: 'now'}).fill({opacity: 1});
-  //    });
-  //    rect_svg_payment[i].mouseout(function() {
-  //      this.animate({when: 'now'}).fill({opacity: 0.2});
-  //    });
-  //   }
-  // }
-  //
-  // if (!isNaN(date_court_from) || court_without_period) {
-  //   var court_swg_rect = swg_graph.rect(((date_court_to - date_court_from) / day + 1) * div_svg_width * 0.9 / max_days_delay,
-  //                                         div_svg_height)
-  //                                  .move(((date_court_from - date_sv) / day) * div_svg_width * 0.9 / max_days_delay,
-  //                                         0)
-  //                                 // .stroke({color: 'red', width: 1, opacity: 1})
-  //                                  .fill({color: 'grey', opacity: 0.6});
-  // }
-  //
-  // court_swg_rect.mouseover(function() {
-  //   this.animate({when: 'now'}).fill({opacity: 1});
-  //   for (var i = 1; i <= number_of_payments; i++) {
-  //     rect_svg_payment[i].animate({when: 'now'}).fill({opacity: 0.6});
-  //   }
-  // });
-  // court_swg_rect.mouseout(function() {
-  //   this.animate({when: 'now'}).fill({opacity: 0.6});
-  //   for (var i = 1; i <= number_of_payments; i++) {
-  //     rect_svg_payment[i].animate({when: 'now'}).fill({opacity: 0.2});
-  //   }
-  // });
 }

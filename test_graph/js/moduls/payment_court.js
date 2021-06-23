@@ -361,7 +361,7 @@ export class PaymentCourt {
           } else {
             str_payment_dataled = '<tr role="button" class = "payment_row">' +
               '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
-              '<td><span>' + this.claim[i].name.value + ' (на основании решения суда № ' + this.id + ')</span></td>' +
+              '<td><span>' + this.claim[i].name.value + ' <b>(на основании решения суда № ' + this.id + ')</b></span></td>' +
               '<td><span>' + makeRubText_nominative(this.claim[i].summ) + '</span></td>' +
               '<td><span>' + this.claim[i].penalty_day_form + '</span></td>' +
               '<td><span>' + this.getPayDateFormatted() + '</span></td>' +
