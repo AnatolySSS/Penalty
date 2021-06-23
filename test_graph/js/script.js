@@ -167,13 +167,15 @@ $('#btn_desicion').click(function() {
                                  fu_last_day_for_pay_dates[i]);
     count_fu_days[i] = paymentFu[i].count_days;
     payment_fu_last_days[i] = (paymentFu[i].getLastDayForPayFu() - date_sv.getAppDate()) / DAY;
+    payment_fu_summs[i] = [];
+    payment_fu_types[i] = [];
     for (var j = 0; j < paymentFu[i].claim.length; j++) {
       if (paymentFu[i].claim[j].name.options.selectedIndex == 0 ||
           paymentFu[i].claim[j].name.options.selectedIndex == 1 ||
           paymentFu[i].claim[j].name.options.selectedIndex == 2 ||
           paymentFu[i].claim[j].name.options.selectedIndex == 3) {
-        payment_fu_summs[i] = paymentFu[i].claim[j].summ / 1000;
-        payment_fu_types[i] = paymentFu[i].claim[j].name.options.selectedIndex;
+        payment_fu_summs[i][j] = paymentFu[i].claim[j].summ / 1000;
+        payment_fu_types[i][j] = paymentFu[i].claim[j].name.options.selectedIndex;
       }
     }
 
