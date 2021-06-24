@@ -31,8 +31,10 @@ var payment_fu_summs = [];
 var payment_fu_types = [];
 var payment_court_summs = [];
 var payment_court_types = [];
+var payment_court_in_force_dates = [];
 var date_sv, date_uts, date_ev, date_stor;
 var number_of_payments, number_of_fus, number_of_courts;
+var fu_claim_set = new Set();
 
 $('#app_date_1').focusout(function(){
   date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
@@ -108,6 +110,8 @@ $('#btn_desicion').click(function() {
   payment_fu_types.length = 0;
   payment_court_summs.length = 0;
   payment_court_types.length = 0;
+  payment_court_in_force_dates.length = 0;
+  fu_claim_set.clear();
 
   if ($('#app_date_1').val() == "") {
     count_days[0] = NaN;
@@ -208,7 +212,8 @@ $('#btn_desicion').click(function() {
                                  court_in_force_dates[i],
                                  court_pay_dates[i]);
     count_court_days[i] = paymentCourt[i].count_days;
-
+    payment_court_in_force_dates[i] = (paymentCourt[i].getInForceDate() - date_sv.getAppDate()) / DAY;
+    fu_claim_set = paymentCourt[i].fu_claim_set;
     payment_court_summs[i] = [];
     payment_court_types[i] = [];
     for (var j = 0; j < paymentCourt[i].claim.length; j++) {
@@ -376,7 +381,9 @@ document.getElementById('show_graph').onclick = function show_graph(){
                        payment_fu_types,
                        count_court_days,
                        payment_court_summs,
-                       payment_court_types);
+                       payment_court_types,
+                       payment_court_in_force_dates,
+                       fu_claim_set);
   } else {
     $('#div_svg').hide();
     $('#show_graph').html("Показать график неустоек");

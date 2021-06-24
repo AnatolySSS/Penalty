@@ -131,6 +131,7 @@ export class PaymentCourt {
   max_penalty_period
   max_days_delay
   count_days
+  fu_claim_set
 
   constructor(id, court, number, date, in_force_date, pay_date) {
 
@@ -143,8 +144,8 @@ export class PaymentCourt {
     var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
     var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
     var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
-    var fu_claim_set = new Set();
-    fu_claim_set.clear();
+    this.fu_claim_set = new Set();
+    this.fu_claim_set.clear();
 
     //Создание экземпляров решений ФУ
     for (var i = 0; i < number_of_fus; i++) {
@@ -160,7 +161,7 @@ export class PaymentCourt {
         if (paymentFu[i].claim[j].summ != "" ||
             paymentFu[i].claim[j].type.options.selectedIndex == 1 ||
             (paymentFu[i].type.options.selectedIndex == 1 && paymentFu[i].date != "")) {
-          fu_claim_set.add(paymentFu[i].claim[j].name.options.selectedIndex);
+          this.fu_claim_set.add(paymentFu[i].claim[j].name.options.selectedIndex);
         }
       }
     }
@@ -216,7 +217,7 @@ export class PaymentCourt {
                                   without_periods[i]);
 
       //Вычисление периода задержки
-      if (fu_claim_set.has(this.claim[i].name.options.selectedIndex)) {
+      if (this.fu_claim_set.has(this.claim[i].name.options.selectedIndex)) {
         this.claim[i].days_delay = (this.getPayDate() - this.getInForceDate() + DAY) / DAY;
         this.claim[i].penalty_day = this.getInForceDate();
         this.claim[i].penalty_day_form = this.getInForceDateFormatted();
