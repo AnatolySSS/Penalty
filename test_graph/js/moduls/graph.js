@@ -6,6 +6,7 @@ import { declinationDays } from './declinationDays.js';
 export function fillPenaltyGraph(swg_graph,
                  max_days_delay,
                  count_days,
+                 penalty_day,
                  count_vol_days,
                  payment_vol_types,
                  payment_vol_summs,
@@ -17,7 +18,10 @@ export function fillPenaltyGraph(swg_graph,
                  payment_court_summs,
                  payment_court_types,
                  payment_court_in_force_dates,
-                 fu_claim_set) {
+                 fu_claim_set,
+                 paymentVoluntary,
+                 paymentFu,
+                 paymentCourt) {
   swg_graph.clear();
   var line_svg_payment = [];
   var rect_svg_payment = [];
@@ -26,6 +30,7 @@ export function fillPenaltyGraph(swg_graph,
   var time_index = 0.9; // доля от общей длины по горизонтали
   var line_21_day = [];
   var line_fu_day = [];
+  var line_court_in_force_day = [];
   var line_payment = [];
   var line_payment_time = [];
   var line_payment_$ = [];
@@ -37,6 +42,12 @@ export function fillPenaltyGraph(swg_graph,
   var type;
   var last_days_name = [];
   var text_21 = [];
+  var vol_pay_date = [];
+  var fu_pay_date = [];
+  var court_pay_date = [];
+  var last_day_for_pay_fu = [];
+  var court_in_force_date = [];
+  var penalty_day_name = [];
 
   var div_svg_width = $('#div_svg').width();
   var div_svg_height = $('#div_svg').height();
@@ -53,7 +64,7 @@ export function fillPenaltyGraph(swg_graph,
            .stroke({ color: 'black', width: 2, linecap: 'round', linejoin: 'round' });
   swg_graph.polyline([div_svg_width - 20, div_svg_height - indent - 5, div_svg_width, div_svg_height - indent, div_svg_width - 20, div_svg_height - indent + 5])
            .fill('black')
-           .stroke({ color: 'black', width: 2, linecap: 'round', linejoin: 'round' });
+           .stroke({ color: 'black', width: 3, linecap: 'round', linejoin: 'round' });
 
   //рисование наименования координатных прямых
   var x_name = swg_graph.text('days');
@@ -72,58 +83,50 @@ export function fillPenaltyGraph(swg_graph,
     if (!isNaN(count_days[i])) {
       switch (i) {
         case 0:
-          last_days_name[i] = swg_graph.text('СВ');
-          text_21[i] = "21-й день с даты заявления о страховом возмещении";
+          penalty_day_name[i] = penalty_day[0] + ' (21-й день с даты заявления о страховом возмещении)';
+          // text_21[i] = "21-й день с даты заявления о страховом возмещении";
           break;
         case 1:
-          last_days_name[i] = swg_graph.text('УТС');
-          text_21[i] = "21-й день с даты заявления о выплате УТС";
+          penalty_day_name[i] = penalty_day[1] + ' (21-й день с даты заявления о выплате УТС)';
+          // text_21[i] = "21-й день с даты заявления о выплате УТС";
           break;
         case 2:
-          last_days_name[i] = swg_graph.text('ЭВ');
-          text_21[i] = "21-й день с даты заявления о выплате расходов на эвакуатор";
+          penalty_day_name[i] = penalty_day[2] + ' (21-й день с даты заявления о выплате расходов на эвакуатор)';
+          // text_21[i] = "21-й день с даты заявления о выплате расходов на эвакуатор";
           break;
         case 3:
-          last_days_name[i] = swg_graph.text('ХР');
-          text_21[i] = "21-й день с даты заявления о выплате расходов на хранение";
+          penalty_day_name[i] = penalty_day[3] + ' (21-й день с даты заявления о выплате расходов на хранение)';
+          // text_21[i] = "21-й день с даты заявления о выплате расходов на хранение";
           break;
         default:
-        last_days_name[i] = swg_graph.text('СВ');
+          penalty_day_name[i] = penalty_day[0] + ' (21-й день с даты заявления о страховом возмещении)';
       }
+      last_days_name[i] = swg_graph.text(penalty_day_name[i]);
       line_21_day[i] = swg_graph.line(indent + (count_days[i] * div_svg_width * time_index / max_days_delay),
                                        0,
                                        indent + (count_days[i] * div_svg_width * time_index / max_days_delay),
                                        div_svg_height - indent - 1)
-                                 .stroke({ color: 'blue', width: 1, opacity: 0.1 })
+                                 .stroke({ color: 'blue', width: 2, opacity: 0.1 })
                                  .css({ border: 'dashed' });
-     last_days_name[i].move(indent - 10 + (count_days[i] * div_svg_width * time_index / max_days_delay),
-                         div_svg_height - indent - 1)
-                   .font({ fill: 'black', family: 'Inconsolata', size: '10pt', weight: 'bold' })
-                   .css({ cursor: 'pointer', opacity: 0.1 });
+     last_days_name[i].move(indent + (count_days[i] * div_svg_width * time_index / max_days_delay),
+                            div_svg_height - indent - 1)
+                      .font({ fill: 'black', family: 'Inconsolata', size: '10pt', weight: 'bold' })
+                      .css({ opacity: 0 });
 
-     last_days_name[i].mouseover(function() {
-        this.animate({ when: 'now' }).css({ opacity: 1 });
-        $('#total_count').html(text_21[last_days_name.indexOf(this)]);
-        line_21_day[last_days_name.indexOf(this)].stroke({ opacity: 1 });
+     line_21_day[i].mouseover(function() {
+        this.animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
+        // last_days_name[line_21_day.indexOf(this)].text(penalty_day[line_21_day.indexOf(this)]);
+        // $('#total_count').html(text_21[line_21_day.indexOf(this)]);
+        last_days_name[line_21_day.indexOf(this)].css({ opacity: 0.5 });
       });
-     last_days_name[i].mouseout(function() {
-        this.animate({ when: 'now'}).css({ opacity: 0.1 });
-        $('#total_count').html('');
-        line_21_day[last_days_name.indexOf(this)].stroke({ opacity: 0.1 });
+     line_21_day[i].mouseout(function() {
+        this.animate({ duration: 1000, when: 'now'}).stroke({ opacity: 0.1 });
+        // last_days_name[line_21_day.indexOf(this)].text(penalty_day_name[line_21_day.indexOf(this)]);
+        // $('#total_count').html('');
+        last_days_name[line_21_day.indexOf(this)].css({ opacity: 0 });
       });
     }
   }
-  //Отрисовка линий для последней даты исполнения решения ФУ
-  // for (var i = 0; i < payment_fu_last_days.length; i++) {
-  //   if (!isNaN(payment_fu_last_days[i])) {
-  //     line_fu_day[i] = swg_graph.line(indent + (payment_fu_last_days[i] * div_svg_width * time_index / max_days_delay),
-  //                                     0,
-  //                                     indent + (payment_fu_last_days[i] * div_svg_width * time_index / max_days_delay),
-  //                                     div_svg_height - indent - 1)
-  //                               .stroke({ color: 'grey', width: 1, opacity: 0.1 })
-  //                               .css({ border: 'dashed' });
-  //   }
-  // }
 
   //отрисовка добровольных выплат
   for (var i = 0; i < count_vol_days.length; i++) {
@@ -144,6 +147,13 @@ export function fillPenaltyGraph(swg_graph,
         default:
         type = 0;
       }
+
+      vol_pay_date[line_index] = swg_graph.text(paymentVoluntary[i].getDateFormatted() + ' (дата выплаты)');
+      vol_pay_date[line_index].move(indent + (count_vol_days[i] * div_svg_width * time_index / max_days_delay),
+                                  div_svg_height - indent)
+                            .font({ fill: 'black', family: 'Inconsolata', size: '10pt', weight: 'bold' })
+                            .css({ opacity: 0 });
+
       if (count_vol_days[i] < count_days[type]) {
         line_payment[line_index] = swg_graph.line(indent - 2 + (count_vol_days[i] * div_svg_width * time_index / max_days_delay),
                                       div_svg_height - indent - 1 - current_summ - payment_vol_summs[i],
@@ -164,19 +174,21 @@ export function fillPenaltyGraph(swg_graph,
                                               .stroke({ color: 'green', width: 1, opacity: 0 });
 
 
-        text_line[line_index] = "Выплата в размере " + makeRubText_nominative(payment_vol_summs[i] * 1000) + " осуществлена в срок";
+        text_line[line_index] = "Добровольная выплата № " + (line_index + 1) + " (" + paymentVoluntary[line_index].type.value + ")" + " в размере " + makeRubText_nominative(payment_vol_summs[i] * 1000) + " осуществлена в срок";
 
         line_payment[line_index].mouseover(function() {
           this.animate({ when: 'now' }).stroke({ opacity: 1 });
           $('#total_count').html(text_line[line_payment.indexOf(this)]);
           line_payment_time[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
           line_payment_$[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
+          vol_pay_date[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0.5 });
         });
         line_payment[line_index].mouseout(function() {
           this.animate({ when: 'now' }).stroke({ opacity: 0.5 });
           $('#total_count').html('');
           line_payment_time[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
           line_payment_$[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
+          vol_pay_date[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0 });
         });
         line_index = line_index + 1;
 
@@ -206,19 +218,21 @@ export function fillPenaltyGraph(swg_graph,
                                 .stroke({ color: 'red', width: 1, opacity: 1 })
                                 .css({ cursor: 'pointer'});
 
-        text_rect[line_index] = "" + makeRubText_nominative(payment_vol_summs[i] * 1000) + " × " + declinationDays(count_vol_days[i] - count_days[type] + 1) + " × 1% = " + makeRubText_nominative(payment_vol_summs[i] * (count_vol_days[i] - count_days[type] + 1) * 10);
+        text_rect[line_index] = "Добровольная выплата № " + (line_index + 1) + " (" + paymentVoluntary[line_index].type.value + ")" + " в размере " + makeRubText_nominative(payment_vol_summs[i] * 1000) + " осуществлена с нарушением срока" + "<br>" +
+                                "Расчет неустойки: " + makeRubText_nominative(payment_vol_summs[i] * 1000) + " × " + declinationDays(count_vol_days[i] - count_days[type] + 1) + " × 1% = <b>" + makeRubText_nominative(payment_vol_summs[i] * (count_vol_days[i] - count_days[type] + 1) * 10) + "</b>";
         rect_payment[line_index].mouseover(function() {
           this.animate({ when: 'now' }).fill({ opacity: 1 });
           $('#total_count').html(text_rect[rect_payment.indexOf(this)]);
           line_payment_time[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
           line_payment_$[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
+          vol_pay_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0.5 });
         });
         rect_payment[line_index].mouseout(function() {
           this.animate({ when: 'now' }).fill({ opacity: 0.2 });
           $('#total_count').html('');
           line_payment_time[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
           line_payment_$[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
-
+          vol_pay_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0 });
         });
         line_index = line_index + 1;
       }
@@ -250,9 +264,21 @@ export function fillPenaltyGraph(swg_graph,
         line_fu_day[line_index] = swg_graph.line(indent + (payment_fu_last_days[i] * div_svg_width * time_index / max_days_delay),
                                                  0,
                                                  indent + (payment_fu_last_days[i] * div_svg_width * time_index / max_days_delay),
-                                                 div_svg_height - indent - 1)
+                                                 div_svg_height - indent + 32)
                                            .stroke({ color: 'grey', width: 1, opacity: 0 })
                                            .css({ border: 'dashed' });
+
+        last_day_for_pay_fu[line_index] = swg_graph.text(paymentFu[i].getLastDayForPayFuFormatted() + ' (дата окончания срока исполнения решения ФУ № ' + (i + 1) + ')');
+        last_day_for_pay_fu[line_index].move(indent + 2 + (payment_fu_last_days[i] * div_svg_width * time_index / max_days_delay),
+                                    div_svg_height - indent + 18)
+                              .font({ fill: 'black', family: 'Inconsolata', size: '10pt', weight: 'bold' })
+                              .css({ opacity: 0 });
+
+        fu_pay_date[line_index] = swg_graph.text(paymentFu[i].getPayDateFormatted() + ' (дата исполнения решения ФУ № ' + (i + 1) + ')');
+        fu_pay_date[line_index].move(indent + (count_fu_days[i] * div_svg_width * time_index / max_days_delay),
+                                    div_svg_height - indent)
+                              .font({ fill: 'black', family: 'Inconsolata', size: '10pt', weight: 'bold' })
+                              .css({ opacity: 0 });
 
         if (count_fu_days[i] < payment_fu_last_days[i]) {
           line_payment[line_index] = swg_graph.line(indent - 2 + (count_fu_days[i] * div_svg_width * time_index / max_days_delay),
@@ -273,7 +299,7 @@ export function fillPenaltyGraph(swg_graph,
                                                       div_svg_height - indent - 1 - current_summ - payment_fu_summs[i][j])
                                                 .stroke({ color: 'green', width: 1, opacity: 0 });
 
-          text_line[line_index] = "Решение ФУ о взыскании " + makeRubText_genitive(payment_fu_summs[i][j] * 1000) + " исполнено в срок";
+          text_line[line_index] = "Решение ФУ № " + (i + 1) + " исполнено в срок. " + paymentFu[i].claim[j].name.value + " в размере " + makeRubText_genitive(payment_fu_summs[i][j] * 1000);
 
           line_payment[line_index].mouseover(function() {
             this.animate({ when: 'now' }).stroke({ opacity: 1 });
@@ -281,6 +307,8 @@ export function fillPenaltyGraph(swg_graph,
             line_payment_time[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
             line_payment_$[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
             line_fu_day[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
+            last_day_for_pay_fu[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0.5 });
+            fu_pay_date[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0.5 });
           });
           line_payment[line_index].mouseout(function() {
             this.animate({ when: 'now' }).stroke({ opacity: 0.5 });
@@ -288,6 +316,8 @@ export function fillPenaltyGraph(swg_graph,
             line_payment_time[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
             line_payment_$[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
             line_fu_day[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
+            last_day_for_pay_fu[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0 });
+            fu_pay_date[line_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0 });
           });
           line_index = line_index + 1;
 
@@ -318,13 +348,17 @@ export function fillPenaltyGraph(swg_graph,
                                               .stroke({ color: 'red', width: 1, opacity: 1 })
                                               .css({ cursor: 'pointer'});
 
-          text_rect[line_index] = "" + makeRubText_nominative(payment_fu_summs[i][j] * 1000) + " × " + declinationDays(count_fu_days[i] - count_days[type] + 1) + " × 1% = " + makeRubText_nominative(payment_fu_summs[i][j] * (count_fu_days[i] - count_days[type] + 1) * 10);
+          text_rect[line_index] = "Решение ФУ № " + (i + 1) + " исполнено с нарушением срока (" + paymentFu[i].claim[j].name.value + ")<br>" +
+                                  "Расчет неустойки: " + makeRubText_nominative(payment_fu_summs[i][j] * 1000) + " × " + declinationDays(count_fu_days[i] - count_days[type] + 1) + " × 1% = <b>" + makeRubText_nominative(payment_fu_summs[i][j] * (count_fu_days[i] - count_days[type] + 1) * 10) + "</b>";
+
           rect_payment[line_index].mouseover(function() {
             this.animate({ when: 'now' }).fill({ opacity: 1 });
             $('#total_count').html(text_rect[rect_payment.indexOf(this)]);
             line_payment_time[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
             line_payment_$[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
             line_fu_day[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
+            last_day_for_pay_fu[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0.5 });
+            fu_pay_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0.5 });
           });
           rect_payment[line_index].mouseout(function() {
             this.animate({ when: 'now' }).fill({ opacity: 0.2 });
@@ -332,6 +366,8 @@ export function fillPenaltyGraph(swg_graph,
             line_payment_time[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
             line_payment_$[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
             line_fu_day[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
+            last_day_for_pay_fu[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0 });
+            fu_pay_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0 });
           });
           line_index = line_index + 1;
         }
@@ -361,6 +397,24 @@ export function fillPenaltyGraph(swg_graph,
           type = 0;
         }
 
+        line_court_in_force_day[line_index] = swg_graph.line(indent + (payment_court_in_force_dates[i] * div_svg_width * time_index / max_days_delay),
+                                                             0,
+                                                             indent + (payment_court_in_force_dates[i] * div_svg_width * time_index / max_days_delay),
+                                                             div_svg_height - indent + 32)
+                                                       .stroke({ color: 'grey', width: 1, opacity: 0 })
+                                                       .css({ border: 'dashed' });
+
+        court_in_force_date[line_index] = swg_graph.text(paymentCourt[i].getInForceDateFormatted() + ' (дата вступления в силу решения суда)');
+        court_in_force_date[line_index].move(indent + 2 + (payment_court_in_force_dates[i] * div_svg_width * time_index / max_days_delay),
+                                             div_svg_height - indent + 18)
+                                       .font({ fill: 'black', family: 'Inconsolata', size: '10pt', weight: 'bold' })
+                                       .css({ opacity: 0 });
+        court_pay_date[line_index] = swg_graph.text(paymentCourt[i].getPayDateFormatted() + ' (дата исполнения решения суда № ' + (i + 1) + ')');
+        court_pay_date[line_index].move(indent + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
+                                        div_svg_height - indent)
+                                  .font({ fill: 'black', family: 'Inconsolata', size: '10pt', weight: 'bold' })
+                                  .css({ opacity: 0 });
+
         line_payment_time[line_index] = swg_graph.line(indent + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
                                                        div_svg_height - indent - 1 - current_summ,
                                                        indent + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
@@ -374,10 +428,10 @@ export function fillPenaltyGraph(swg_graph,
 
         if (fu_claim_set.has(payment_court_types[i][j])) {
           line_payment[line_index] = swg_graph.line(indent - 2 + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
-                                        div_svg_height - indent - 1 - current_summ - payment_court_summs[i][j],
-                                        indent - 2 + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
-                                        div_svg_height - indent - 1 - current_summ)
-                                  .stroke({ color: 'red', width: 5, opacity: 1 });
+                                                    div_svg_height - indent - 1 - current_summ - payment_court_summs[i][j],
+                                                    indent - 2 + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
+                                                    div_svg_height - indent - 1 - current_summ)
+                                              .stroke({ color: 'red', width: 5, opacity: 1 });
 
           rect_payment[line_index] = swg_graph.rect((count_court_days[i] - payment_court_in_force_dates[i]) * div_svg_width * time_index / max_days_delay,
                                                     payment_court_summs[i][j])
@@ -387,18 +441,26 @@ export function fillPenaltyGraph(swg_graph,
                                               .stroke({ color: 'red', width: 1, opacity: 1 })
                                               .css({ cursor: 'pointer'});
 
-          text_rect[line_index] = "" + makeRubText_nominative(payment_court_summs[i][j] * 1000) + " × " + declinationDays(count_court_days[i] - payment_court_in_force_dates[i] + 1) + " × 1% = " + makeRubText_nominative(payment_court_summs[i][j] * (count_court_days[i] - payment_court_in_force_dates[i] + 1) * 10);
+          text_rect[line_index] = "Расчет неустойки по решению суда № " + (i + 1) + " (" + paymentCourt[i].claim[j].name.value + ")<br>" +
+                                  makeRubText_nominative(payment_court_summs[i][j] * 1000) + " × " + declinationDays(count_court_days[i] - payment_court_in_force_dates[i] + 1) + " × 1% = <b>" + makeRubText_nominative(payment_court_summs[i][j] * (count_court_days[i] - payment_court_in_force_dates[i] + 1) * 10) + "</b>";
+
           rect_payment[line_index].mouseover(function() {
             this.animate({ when: 'now' }).fill({ opacity: 1 });
             $('#total_count').html(text_rect[rect_payment.indexOf(this)]);
             line_payment_time[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
             line_payment_$[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
+            line_court_in_force_day[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
+            court_in_force_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0.5 });
+            court_pay_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0.5 });
           });
           rect_payment[line_index].mouseout(function() {
             this.animate({ when: 'now' }).fill({ opacity: 0.2 });
             $('#total_count').html('');
             line_payment_time[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
             line_payment_$[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
+            line_court_in_force_day[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
+            court_in_force_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0 });
+            court_pay_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0 });
           });
           line_index = line_index + 1;
           current_summ = current_summ + payment_court_summs[i][j];
@@ -417,18 +479,21 @@ export function fillPenaltyGraph(swg_graph,
                                               .stroke({ color: 'red', width: 1, opacity: 1 })
                                               .css({ cursor: 'pointer'});
 
-          text_rect[line_index] = "" + makeRubText_nominative(payment_court_summs[i][j] * 1000) + " × " + declinationDays(count_court_days[i] - count_days[type] + 1) + " × 1% = " + makeRubText_nominative(payment_court_summs[i][j] * (count_court_days[i] - count_days[type] + 1) * 10);
+          text_rect[line_index] = "Расчет неустойки по решению суда № " + (i + 1) + " (" + paymentCourt[i].claim[j].name.value + ")<br>" +
+                                  makeRubText_nominative(payment_court_summs[i][j] * 1000) + " × " + declinationDays(count_court_days[i] - count_days[type] + 1) + " × 1% = <b>" + makeRubText_nominative(payment_court_summs[i][j] * (count_court_days[i] - count_days[type] + 1) * 10) + "</b>";
           rect_payment[line_index].mouseover(function() {
             this.animate({ when: 'now' }).fill({ opacity: 1 });
             $('#total_count').html(text_rect[rect_payment.indexOf(this)]);
             line_payment_time[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
             line_payment_$[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
+            court_pay_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0.5 });
           });
           rect_payment[line_index].mouseout(function() {
             this.animate({ when: 'now' }).fill({ opacity: 0.2 });
             $('#total_count').html('');
             line_payment_time[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
             line_payment_$[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0 });
+            court_pay_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0 });
           });
           line_index = line_index + 1;
           current_summ = current_summ + payment_court_summs[i][j];

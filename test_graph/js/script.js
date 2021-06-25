@@ -21,6 +21,7 @@ var number_of_penalty_periods; // Количество периодов для �
 var max_days_delay; // максимальное количество дней просрочки
 var swg_graph = SVG().addTo('#div_svg').size('100%', '100%');
 var count_days = [];
+var penalty_day = [];
 var count_vol_days = [];
 var payment_vol_types = [];
 var count_fu_days = [];
@@ -40,24 +41,28 @@ $('#app_date_1').focusout(function(){
   date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
   date_sv.fillLastDate();
   count_days[0] = date_sv.count_days;
+  penalty_day[0] = date_sv.getPenaltyDayFormatted();
 });
 
 $('#app_date_2').focusout(function(){
   date_uts = new AppDate($('#app_date_2'), $('#date_uts_last_day'), $('#date_uts_penalty_day'));
   date_uts.fillLastDate();
   count_days[1] = (date_uts.getPenaltyDay() - date_sv.getAppDate()) / DAY;
+  penalty_day[1] = date_uts.getPenaltyDayFormatted();
 });
 
 $('#app_date_3').focusout(function(){
   date_ev = new AppDate($('#app_date_3'), $('#date_ev_last_day'), $('#date_ev_penalty_day'));
   date_ev.fillLastDate();
   count_days[2] = (date_ev.getPenaltyDay() - date_sv.getAppDate()) / DAY;
+  penalty_day[2] = date_ev.getPenaltyDayFormatted();
 });
 
 $('#app_date_4').focusout(function(){
   date_stor = new AppDate($('#app_date_4'), $('#date_stor_last_day'), $('#date_stor_penalty_day'));
   date_stor.fillLastDate();
   count_days[3] = (date_stor.getPenaltyDay() - date_sv.getAppDate()) / DAY;
+  penalty_day[3] = date_stor.getPenaltyDayFormatted();
 });
 
 //Обработка события потери фокуса даты решения ФУ
@@ -372,6 +377,7 @@ document.getElementById('show_graph').onclick = function show_graph(){
       fillPenaltyGraph(swg_graph,
                        max_days_delay,
                        count_days,
+                       penalty_day,
                        count_vol_days,
                        payment_vol_types,
                        payment_vol_summs,
@@ -383,7 +389,10 @@ document.getElementById('show_graph').onclick = function show_graph(){
                        payment_court_summs,
                        payment_court_types,
                        payment_court_in_force_dates,
-                       fu_claim_set);
+                       fu_claim_set,
+                       paymentVoluntary,
+                       paymentFu,
+                       paymentCourt);
   } else {
     $('#div_svg').hide();
     $('#show_graph').html("Показать график неустоек");
