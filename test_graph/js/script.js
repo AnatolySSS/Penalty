@@ -390,6 +390,7 @@ document.getElementById('show_graph').onclick = function show_graph(){
                        payment_court_types,
                        payment_court_in_force_dates,
                        fu_claim_set,
+                       date_sv,
                        paymentVoluntary,
                        paymentFu,
                        paymentCourt);

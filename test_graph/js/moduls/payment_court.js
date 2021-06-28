@@ -39,6 +39,8 @@ class PenaltyCourtPeriod {
     this.start_date = start_date;
     this.end_date = end_date;
   }
+  getStartDateFormatted() { return formatDate(new Date(this.start_date)); }
+  getEndDateFormatted() { return formatDate(new Date(this.end_date)); }
 }
 
 class PenaltyPeriod {

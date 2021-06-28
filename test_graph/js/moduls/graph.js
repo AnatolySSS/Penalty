@@ -2,6 +2,7 @@
 import { makeRubText_nominative } from './makeRubText_nominative.js';
 import { makeRubText_genitive } from './makeRubText_genitive.js';
 import { declinationDays } from './declinationDays.js';
+import { DAY } from './variables.js';
 
 export function fillPenaltyGraph(swg_graph,
                  max_days_delay,
@@ -19,6 +20,7 @@ export function fillPenaltyGraph(swg_graph,
                  payment_court_types,
                  payment_court_in_force_dates,
                  fu_claim_set,
+                 date_sv,
                  paymentVoluntary,
                  paymentFu,
                  paymentCourt) {
@@ -35,6 +37,7 @@ export function fillPenaltyGraph(swg_graph,
   var line_payment_time = [];
   var line_payment_$ = [];
   var rect_payment = [];
+  var rect_penalty_court_period = [];
   var text_rect = [];
   var text_line = [];
   var line_index = 0;
@@ -75,56 +78,6 @@ export function fillPenaltyGraph(swg_graph,
   for (var i = 0; i < count_days.length; i++) {
     if (count_days[i] > max_days_delay) {
       max_days_delay = count_days[i];
-    }
-  }
-
-  //Отрисовка пунктирных прямых (21й день)
-  for (var i = 0; i < count_days.length; i++) {
-    if (!isNaN(count_days[i])) {
-      switch (i) {
-        case 0:
-          penalty_day_name[i] = penalty_day[0] + ' (21-й день с даты заявления о страховом возмещении)';
-          // text_21[i] = "21-й день с даты заявления о страховом возмещении";
-          break;
-        case 1:
-          penalty_day_name[i] = penalty_day[1] + ' (21-й день с даты заявления о выплате УТС)';
-          // text_21[i] = "21-й день с даты заявления о выплате УТС";
-          break;
-        case 2:
-          penalty_day_name[i] = penalty_day[2] + ' (21-й день с даты заявления о выплате расходов на эвакуатор)';
-          // text_21[i] = "21-й день с даты заявления о выплате расходов на эвакуатор";
-          break;
-        case 3:
-          penalty_day_name[i] = penalty_day[3] + ' (21-й день с даты заявления о выплате расходов на хранение)';
-          // text_21[i] = "21-й день с даты заявления о выплате расходов на хранение";
-          break;
-        default:
-          penalty_day_name[i] = penalty_day[0] + ' (21-й день с даты заявления о страховом возмещении)';
-      }
-      last_days_name[i] = swg_graph.text(penalty_day_name[i]);
-      line_21_day[i] = swg_graph.line(indent + (count_days[i] * div_svg_width * time_index / max_days_delay),
-                                       0,
-                                       indent + (count_days[i] * div_svg_width * time_index / max_days_delay),
-                                       div_svg_height - indent - 1)
-                                 .stroke({ color: 'blue', width: 2, opacity: 0.1 })
-                                 .css({ border: 'dashed' });
-     last_days_name[i].move(indent + (count_days[i] * div_svg_width * time_index / max_days_delay),
-                            div_svg_height - indent - 1)
-                      .font({ fill: 'black', family: 'Inconsolata', size: '10pt', weight: 'bold' })
-                      .css({ opacity: 0 });
-
-     line_21_day[i].mouseover(function() {
-        this.animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
-        // last_days_name[line_21_day.indexOf(this)].text(penalty_day[line_21_day.indexOf(this)]);
-        // $('#total_count').html(text_21[line_21_day.indexOf(this)]);
-        last_days_name[line_21_day.indexOf(this)].css({ opacity: 0.5 });
-      });
-     line_21_day[i].mouseout(function() {
-        this.animate({ duration: 1000, when: 'now'}).stroke({ opacity: 0.1 });
-        // last_days_name[line_21_day.indexOf(this)].text(penalty_day_name[line_21_day.indexOf(this)]);
-        // $('#total_count').html('');
-        last_days_name[line_21_day.indexOf(this)].css({ opacity: 0 });
-      });
     }
   }
 
@@ -496,9 +449,76 @@ export function fillPenaltyGraph(swg_graph,
             court_pay_date[rect_payment.indexOf(this)].animate({ duration: 1000, when: 'now' }).css({ opacity: 0 });
           });
           line_index = line_index + 1;
-          current_summ = current_summ + payment_court_summs[i][j];
         }
+        current_summ = current_summ + payment_court_summs[i][j];
       }
+    }
+  }
+  for (var i = 0; i < paymentCourt[0].penalty_court_period.length; i++) {
+    rect_penalty_court_period[i] = swg_graph.rect(((paymentCourt[0].penalty_court_period[i].end_date - paymentCourt[0].penalty_court_period[i].start_date) / DAY) * div_svg_width * time_index / max_days_delay,
+                                              div_svg_height - indent - 1)
+                                        .move(indent + ((paymentCourt[0].penalty_court_period[i].start_date - date_sv.getAppDate()) / DAY * div_svg_width * time_index / max_days_delay),
+                                              0)
+                                        .fill({ color: 'grey', opacity: 0.2 })
+                                        // .stroke({ color: 'red', width: 1, opacity: 1 })
+                                        .css({ cursor: 'pointer'});
+
+    rect_penalty_court_period[i].mouseover(function() {
+      this.animate({ when: 'now' }).fill({ opacity: 0.6 });
+    });
+    rect_penalty_court_period[i].mouseout(function() {
+      this.animate({ when: 'now' }).fill({ opacity: 0.2 });
+    });
+
+  }
+
+  //Отрисовка пунктирных прямых (21й день)
+  for (var i = 0; i < count_days.length; i++) {
+    if (!isNaN(count_days[i])) {
+      switch (i) {
+        case 0:
+          penalty_day_name[i] = penalty_day[0] + ' (21-й день с даты заявления о страховом возмещении)';
+          // text_21[i] = "21-й день с даты заявления о страховом возмещении";
+          break;
+        case 1:
+          penalty_day_name[i] = penalty_day[1] + ' (21-й день с даты заявления о выплате УТС)';
+          // text_21[i] = "21-й день с даты заявления о выплате УТС";
+          break;
+        case 2:
+          penalty_day_name[i] = penalty_day[2] + ' (21-й день с даты заявления о выплате расходов на эвакуатор)';
+          // text_21[i] = "21-й день с даты заявления о выплате расходов на эвакуатор";
+          break;
+        case 3:
+          penalty_day_name[i] = penalty_day[3] + ' (21-й день с даты заявления о выплате расходов на хранение)';
+          // text_21[i] = "21-й день с даты заявления о выплате расходов на хранение";
+          break;
+        default:
+          penalty_day_name[i] = penalty_day[0] + ' (21-й день с даты заявления о страховом возмещении)';
+      }
+      last_days_name[i] = swg_graph.text(penalty_day_name[i]);
+      line_21_day[i] = swg_graph.line(indent + (count_days[i] * div_svg_width * time_index / max_days_delay),
+                                       0,
+                                       indent + (count_days[i] * div_svg_width * time_index / max_days_delay),
+                                       div_svg_height - indent - 1)
+                                 .stroke({ color: 'blue', width: 2, opacity: 0.1 })
+                                 .css({ border: 'dashed' });
+     last_days_name[i].move(indent + (count_days[i] * div_svg_width * time_index / max_days_delay),
+                            div_svg_height - indent - 1)
+                      .font({ fill: 'black', family: 'Inconsolata', size: '10pt', weight: 'bold' })
+                      .css({ opacity: 0 });
+
+     line_21_day[i].mouseover(function() {
+        this.animate({ duration: 1000, when: 'now' }).stroke({ opacity: 0.5 });
+        // last_days_name[line_21_day.indexOf(this)].text(penalty_day[line_21_day.indexOf(this)]);
+        // $('#total_count').html(text_21[line_21_day.indexOf(this)]);
+        last_days_name[line_21_day.indexOf(this)].css({ opacity: 0.5 });
+      });
+     line_21_day[i].mouseout(function() {
+        this.animate({ duration: 1000, when: 'now'}).stroke({ opacity: 0.1 });
+        // last_days_name[line_21_day.indexOf(this)].text(penalty_day_name[line_21_day.indexOf(this)]);
+        // $('#total_count').html('');
+        last_days_name[line_21_day.indexOf(this)].css({ opacity: 0 });
+      });
     }
   }
 }
