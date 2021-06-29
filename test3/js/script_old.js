@@ -798,12 +798,6 @@ document.getElementById('btn_desicion').onclick = function(){
     //   //Вычисление суммы неустойки
     //   pay_summ[i] = pay_text[i] * (pay_count[i] / day) * 0.01;
 
-      //Рисование графика
-      pay_count[0] = 0;
-      if (pay_count[i] > pay_count[i - 1]) {
-        max_days_delay = (pay_count[i] + 21 * day) / day; //Получение значения самой большой задержки
-      }
-
       //canvas.width = max_days_delay + 50;
 
       //Выведение выплат на экран
@@ -1303,85 +1297,85 @@ document.getElementById('btn_desicion').onclick = function(){
 
   //Получение количества календарных дней с даты заявления до 21го дня
 
-  date_sv_penalty_day_x = (date_sv_penalty_day - date_sv) / day;
+  // date_sv_penalty_day_x = (date_sv_penalty_day - date_sv) / day;
 
   //Отрисовка графика
   //SVG
   //Отрисовка системы координат
-  var div_svg_width = $('#div_svg').width();
-  var div_svg_height = $('#div_svg').height();
-  if (max_days_delay == 0) {
-    max_days_delay = 500;
-  }
+  // var div_svg_width = $('#div_svg').width();
+  // var div_svg_height = $('#div_svg').height();
+  // if (max_days_delay == 0) {
+  //   max_days_delay = 500;
+  // }
 
-  swg_graph.clear();
-  var coordinate_system = swg_graph.polyline([0, 0, 0, div_svg_height, div_svg_width,div_svg_height])
-                                   .fill('none')
-                                   .stroke({ color: 'black', width: 7, linecap: 'round', linejoin: 'round' });
-  //Отрисовка пунктирной прямой (21й день)
-  var line_21_day = swg_graph.line(date_sv_penalty_day_x * div_svg_width * 0.9 / max_days_delay,
-                                   0,
-                                   date_sv_penalty_day_x * div_svg_width * 0.9 / max_days_delay,
-                                   div_svg_height)
-                             .stroke({color: 'red', width: 1 })
-                             .css({border: 'dashed'});
-
-  for (var i = 1; i <= number_of_payments; i++) {
-    pay_summ_y[0] = 0;
-    pay_date_x[i] = pay_count[i] / day;
-    pay_summ_y[i] = pay_text[i] / 1000;
-    pay_summ_y_all = pay_summ_y_all + pay_summ_y[i - 1];
-
-    //Отрисовска прямоугольников с неустойками
-    if (pay_count[i] == 0) {
-      line_svg_payment[i] = swg_graph.line(((pay_date[i] - date_sv) / day) * div_svg_width * 0.9 / max_days_delay - 3,
-                                          div_svg_height - pay_summ_y_all,
-                                          ((pay_date[i] - date_sv) / day) * div_svg_width * 0.9 / max_days_delay - 3,
-                                          div_svg_height - pay_summ_y_all - pay_summ_y[i])
-                                     .stroke({color: 'green', width: 6 });
-    } else {
-      line_svg_payment[i] = swg_graph.line((date_sv_penalty_day_x + pay_date_x[i]) * div_svg_width * 0.9 / max_days_delay - 3,
-                                          div_svg_height - pay_summ_y_all,
-                                          (date_sv_penalty_day_x + pay_date_x[i]) * div_svg_width * 0.9 / max_days_delay - 3,
-                                          div_svg_height - pay_summ_y_all - pay_summ_y[i])
-                                     .stroke({color: 'red', width: 6 });
-      rect_svg_payment[i] = swg_graph.rect((pay_date_x[i]) * div_svg_width * 0.9 / max_days_delay,
-                                            pay_summ_y[i])
-                                     .move((date_sv_penalty_day_x) * div_svg_width * 0.9 / max_days_delay,
-                                            div_svg_height - pay_summ_y_all - pay_summ_y[i])
-                                     .stroke({color: 'red', width: 1, opacity: 1})
-                                     .fill({color: 'red', opacity: 0.2});
-
-     rect_svg_payment[i].mouseover(function() {
-       this.animate({when: 'now'}).fill({opacity: 1});
-     });
-     rect_svg_payment[i].mouseout(function() {
-       this.animate({when: 'now'}).fill({opacity: 0.2});
-     });
-    }
-  }
-
-  if (!isNaN(date_court_from) || court_without_period) {
-    var court_swg_rect = swg_graph.rect(((date_court_to - date_court_from) / day + 1) * div_svg_width * 0.9 / max_days_delay,
-                                          div_svg_height)
-                                   .move(((date_court_from - date_sv) / day) * div_svg_width * 0.9 / max_days_delay,
-                                          0)
-                                  // .stroke({color: 'red', width: 1, opacity: 1})
-                                   .fill({color: 'grey', opacity: 0.6});
-  }
-
-  court_swg_rect.mouseover(function() {
-    this.animate({when: 'now'}).fill({opacity: 1});
-    for (var i = 1; i <= number_of_payments; i++) {
-      rect_svg_payment[i].animate({when: 'now'}).fill({opacity: 0.6});
-    }
-  });
-  court_swg_rect.mouseout(function() {
-    this.animate({when: 'now'}).fill({opacity: 0.6});
-    for (var i = 1; i <= number_of_payments; i++) {
-      rect_svg_payment[i].animate({when: 'now'}).fill({opacity: 0.2});
-    }
-  });
+  // swg_graph.clear();
+  // var coordinate_system = swg_graph.polyline([0, 0, 0, div_svg_height, div_svg_width,div_svg_height])
+  //                                  .fill('none')
+  //                                  .stroke({ color: 'black', width: 7, linecap: 'round', linejoin: 'round' });
+  // //Отрисовка пунктирной прямой (21й день)
+  // var line_21_day = swg_graph.line(date_sv_penalty_day_x * div_svg_width * 0.9 / max_days_delay,
+  //                                  0,
+  //                                  date_sv_penalty_day_x * div_svg_width * 0.9 / max_days_delay,
+  //                                  div_svg_height)
+  //                            .stroke({color: 'red', width: 1 })
+  //                            .css({border: 'dashed'});
+  //
+  // for (var i = 1; i <= number_of_payments; i++) {
+  //   pay_summ_y[0] = 0;
+  //   pay_date_x[i] = pay_count[i] / day;
+  //   pay_summ_y[i] = pay_text[i] / 1000;
+  //   pay_summ_y_all = pay_summ_y_all + pay_summ_y[i - 1];
+  //
+  //   //Отрисовска прямоугольников с неустойками
+  //   if (pay_count[i] == 0) {
+  //     line_svg_payment[i] = swg_graph.line(((pay_date[i] - date_sv) / day) * div_svg_width * 0.9 / max_days_delay - 3,
+  //                                         div_svg_height - pay_summ_y_all,
+  //                                         ((pay_date[i] - date_sv) / day) * div_svg_width * 0.9 / max_days_delay - 3,
+  //                                         div_svg_height - pay_summ_y_all - pay_summ_y[i])
+  //                                    .stroke({color: 'green', width: 6 });
+  //   } else {
+  //     line_svg_payment[i] = swg_graph.line((date_sv_penalty_day_x + pay_date_x[i]) * div_svg_width * 0.9 / max_days_delay - 3,
+  //                                         div_svg_height - pay_summ_y_all,
+  //                                         (date_sv_penalty_day_x + pay_date_x[i]) * div_svg_width * 0.9 / max_days_delay - 3,
+  //                                         div_svg_height - pay_summ_y_all - pay_summ_y[i])
+  //                                    .stroke({color: 'red', width: 6 });
+  //     rect_svg_payment[i] = swg_graph.rect((pay_date_x[i]) * div_svg_width * 0.9 / max_days_delay,
+  //                                           pay_summ_y[i])
+  //                                    .move((date_sv_penalty_day_x) * div_svg_width * 0.9 / max_days_delay,
+  //                                           div_svg_height - pay_summ_y_all - pay_summ_y[i])
+  //                                    .stroke({color: 'red', width: 1, opacity: 1})
+  //                                    .fill({color: 'red', opacity: 0.2});
+  //
+  //    rect_svg_payment[i].mouseover(function() {
+  //      this.animate({when: 'now'}).fill({opacity: 1});
+  //    });
+  //    rect_svg_payment[i].mouseout(function() {
+  //      this.animate({when: 'now'}).fill({opacity: 0.2});
+  //    });
+  //   }
+  // }
+  //
+  // if (!isNaN(date_court_from) || court_without_period) {
+  //   var court_swg_rect = swg_graph.rect(((date_court_to - date_court_from) / day + 1) * div_svg_width * 0.9 / max_days_delay,
+  //                                         div_svg_height)
+  //                                  .move(((date_court_from - date_sv) / day) * div_svg_width * 0.9 / max_days_delay,
+  //                                         0)
+  //                                 // .stroke({color: 'red', width: 1, opacity: 1})
+  //                                  .fill({color: 'grey', opacity: 0.6});
+  // }
+  //
+  // court_swg_rect.mouseover(function() {
+  //   this.animate({when: 'now'}).fill({opacity: 1});
+  //   for (var i = 1; i <= number_of_payments; i++) {
+  //     rect_svg_payment[i].animate({when: 'now'}).fill({opacity: 0.6});
+  //   }
+  // });
+  // court_swg_rect.mouseout(function() {
+  //   this.animate({when: 'now'}).fill({opacity: 0.6});
+  //   for (var i = 1; i <= number_of_payments; i++) {
+  //     rect_svg_payment[i].animate({when: 'now'}).fill({opacity: 0.2});
+  //   }
+  // });
 
 
 
@@ -1613,10 +1607,10 @@ function selectText(containerid) {
 //   })
 // });
 
-$(function () {
-  $('[data-toggle="tooltip"]').tooltip();
-})
-
+// $(function () {
+//   $('[data-toggle="tooltip"]').tooltip();
+// })
+//
 document.getElementById('show_decision').onclick = function show_decision(){
   if ($('#show_decision').html() == "Показать текст решения") {
     $('#decision').show();
@@ -1629,12 +1623,12 @@ document.getElementById('show_decision').onclick = function show_decision(){
   }
 }
 
-document.getElementById('show_graph').onclick = function show_graph(){
-  if ($('#show_graph').html() == "Показать график неустоек") {
-    $('#div_svg').show();
-    $('#show_graph').html("Скрыть график неустоек");
-  } else {
-    $('#div_svg').hide();
-    $('#show_graph').html("Показать график неустоек");
-  }
-}
+// document.getElementById('show_graph').onclick = function show_graph(){
+//   if ($('#show_graph').html() == "Показать график неустоек") {
+//     $('#div_svg').show();
+//     $('#show_graph').html("Скрыть график неустоек");
+//   } else {
+//     $('#div_svg').hide();
+//     $('#show_graph').html("Показать график неустоек");
+//   }
+// }

@@ -27,18 +27,12 @@ export let keep; // "удержало"/"удержала"
 //Переменная с тестом всего решения в части неустойки
 export let decision;
 
-//Переменные для рисования графика SWG
-export let swg_graph = SVG().addTo('#div_svg').size('100%', '100%');
-export let line_svg_payment = [];
-export let rect_svg_payment = [];
-export let text_svg_payment = [];
-
-//Переменные для canvas
-export var date_sv_penalty_day_x;
-export var max_days_delay = 0;
-export var space = 10;
-export var pay_summ_y_all = 0; //Сложение всех предыдущих сумм выплат (для определения координат начала очередного прямоугольника)
-export var pay_date_x = [], pay_summ_y = [];
+// //Переменные для canvas
+// export var date_sv_penalty_day_x;
+//export let max_days_delay; // максимальное количество дней просрочки
+// export var space = 10;
+// export var pay_summ_y_all = 0; //Сложение всех предыдущих сумм выплат (для определения координат начала очередного прямоугольника)
+// export var pay_date_x = [], pay_summ_y = [];
 
 //переменная для массива добровольных выплат
 export let paymentVoluntary = [];

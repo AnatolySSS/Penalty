@@ -39,6 +39,8 @@ class PenaltyCourtPeriod {
     this.start_date = start_date;
     this.end_date = end_date;
   }
+  getStartDateFormatted() { return formatDate(new Date(this.start_date)); }
+  getEndDateFormatted() { return formatDate(new Date(this.end_date)); }
 }
 
 class PenaltyPeriod {
@@ -51,6 +53,8 @@ class PenaltyPeriod {
     this.start_date = start_date;
     this.end_date = end_date;
   }
+  getStartDateFormatted() { return formatDate(new Date(this.start_date)); }
+  getEndDateFormatted() { return formatDate(new Date(this.end_date)); }
 }
 
 class ClaimCourt {
@@ -129,6 +133,9 @@ export class PaymentCourt {
   total_penalty_summ_court
   penalty_court_period = [];
   max_penalty_period
+  max_days_delay
+  count_days
+  fu_claim_set
 
   constructor(id, court, number, date, in_force_date, pay_date) {
 
@@ -141,8 +148,8 @@ export class PaymentCourt {
     var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
     var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
     var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
-    var fu_claim_set = new Set();
-    fu_claim_set.clear();
+    this.fu_claim_set = new Set();
+    this.fu_claim_set.clear();
 
     //Создание экземпляров решений ФУ
     for (var i = 0; i < number_of_fus; i++) {
@@ -158,7 +165,7 @@ export class PaymentCourt {
         if (paymentFu[i].claim[j].summ != "" ||
             paymentFu[i].claim[j].type.options.selectedIndex == 1 ||
             (paymentFu[i].type.options.selectedIndex == 1 && paymentFu[i].date != "")) {
-          fu_claim_set.add(paymentFu[i].claim[j].name.options.selectedIndex);
+          this.fu_claim_set.add(paymentFu[i].claim[j].name.options.selectedIndex);
         }
       }
     }
@@ -190,6 +197,9 @@ export class PaymentCourt {
 
     this.total_penalty_summ_court = 0;
     this.max_penalty_period = 0;
+    this.max_days_delay = 0;
+    //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
+    this.count_days = (this.getPayDate() - date_sv.getAppDate()) / DAY;
     //Получение количества удовлетворенных требований для каждого решения
     var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
     var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
@@ -211,7 +221,7 @@ export class PaymentCourt {
                                   without_periods[i]);
 
       //Вычисление периода задержки
-      if (fu_claim_set.has(this.claim[i].name.options.selectedIndex)) {
+      if (this.fu_claim_set.has(this.claim[i].name.options.selectedIndex)) {
         this.claim[i].days_delay = (this.getPayDate() - this.getInForceDate() + DAY) / DAY;
         this.claim[i].penalty_day = this.getInForceDate();
         this.claim[i].penalty_day_form = this.getInForceDateFormatted();
@@ -222,6 +232,11 @@ export class PaymentCourt {
       //Если выплата была в срок, то изменение отрицательного значения на нулевое
       if (this.claim[i].days_delay < 0 || isNaN(this.claim[i].days_delay)) {
         this.claim[i].days_delay = 0;
+      }
+
+      //Вычисление максимального периода задержки
+      if (this.claim[i].days_delay > this.max_days_delay) {
+        this.max_days_delay = this.claim[i].days_delay; //Получение значения самой большой задержки
       }
 
       //Вычисление суммы неустойки
@@ -257,7 +272,7 @@ export class PaymentCourt {
                 this.claim[i].summ * this.claim[i].penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
                 numberOfPenaltyPeriod++;
               } else {
-                delete this.claim[i].penalty_period[numberOfPenaltyPeriod]
+                this.claim[i].penalty_period.splice(numberOfPenaltyPeriod, 1);
               }
             }
           }
@@ -351,7 +366,7 @@ export class PaymentCourt {
           } else {
             str_payment_dataled = '<tr role="button" class = "payment_row">' +
               '<th scope="row"><span>' + (number_of_payment_rows + 1) + '</span></th>' +
-              '<td><span>' + this.claim[i].name.value + ' (на основании решения суда № ' + this.id + ')</span></td>' +
+              '<td><span>' + this.claim[i].name.value + ' <b>(на основании решения суда № ' + this.id + ')</b></span></td>' +
               '<td><span>' + makeRubText_nominative(this.claim[i].summ) + '</span></td>' +
               '<td><span>' + this.claim[i].penalty_day_form + '</span></td>' +
               '<td><span>' + this.getPayDateFormatted() + '</span></td>' +

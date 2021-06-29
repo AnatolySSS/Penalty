@@ -9,11 +9,13 @@ export class AppDate {
   date_id
   date_last_day_id
   date_penalty_day_id
+  count_days
 
   constructor(date_id, date_last_day_id, date_penalty_day_id){
     this.date_id = date_id;
     this.date_last_day_id = date_last_day_id;
     this.date_penalty_day_id = date_penalty_day_id;
+    this.count_days = (this.getPenaltyDay() - this.getAppDate()) / DAY;
   }
 
   getAppDate() {return Date.parse(changeDateType(this.date_id.val()) + 'T00:00:00') }
