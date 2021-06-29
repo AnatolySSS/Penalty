@@ -53,6 +53,8 @@ class PenaltyPeriod {
     this.start_date = start_date;
     this.end_date = end_date;
   }
+  getStartDateFormatted() { return formatDate(new Date(this.start_date)); }
+  getEndDateFormatted() { return formatDate(new Date(this.end_date)); }
 }
 
 class ClaimCourt {
@@ -270,7 +272,7 @@ export class PaymentCourt {
                 this.claim[i].summ * this.claim[i].penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
                 numberOfPenaltyPeriod++;
               } else {
-                delete this.claim[i].penalty_period[numberOfPenaltyPeriod]
+                this.claim[i].penalty_period.splice(numberOfPenaltyPeriod, 1);
               }
             }
           }

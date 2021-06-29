@@ -51,6 +51,8 @@ class PenaltyPeriod {
     this.start_date = start_date;
     this.end_date = end_date;
   }
+  getStartDateFormatted() { return formatDate(new Date(this.start_date)); }
+  getEndDateFormatted() { return formatDate(new Date(this.end_date)); }
 }
 
 export class PaymentVoluntary {
@@ -157,7 +159,7 @@ export class PaymentVoluntary {
     if (this.penalty_court_period.length > 0 && this.days_delay > 0) {
       this.penalty_summ = 0;
       for (var i = 0; i < this.penalty_court_period.length; i++) {
-        //алгоритм для первого судебного периода вызскания неустойки
+        //алгоритм для первого судебного периода взыскания неустойки
         if (i == 0) {
           //Вычисление самого первого периода невзысканной судом неустойки (с 21го дня)
           if (this.penalty_court_period[i].start_date > this.penalty_day) {
@@ -186,8 +188,14 @@ export class PaymentVoluntary {
         }
         //Вычисление второго и последующих периодов невзысканной судом неустойки
         if (this.penalty_court_period[i].end_date < this.date) {
-          this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[i].end_date + DAY,
-                                                                        this.date);
+          if (this.penalty_court_period[i].end_date < this.penalty_day) {
+            this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_day,
+                                                                          this.date);
+          } else {
+            this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[i].end_date + DAY,
+                                                                          this.date);
+          }
+
           //Определение самого раннего начала следующего за первым судебного периода взыскания неустойки
           for (var j = i + 1; j < this.penalty_court_period.length; j++) {
             if (this.penalty_court_period[j].start_date <= this.penalty_period[numberOfPenaltyPeriod].end_date) {
@@ -205,7 +213,7 @@ export class PaymentVoluntary {
             this.summ * this.penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
             numberOfPenaltyPeriod++;
           } else {
-            delete this.penalty_period[numberOfPenaltyPeriod]
+            this.penalty_period.splice(numberOfPenaltyPeriod, 1);
           }
         }
       }

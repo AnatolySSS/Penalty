@@ -49,6 +49,8 @@ class PenaltyPeriod {
     this.start_date = start_date;
     this.end_date = end_date;
   }
+  getStartDateFormatted() { return formatDate(new Date(this.start_date)); }
+  getEndDateFormatted() { return formatDate(new Date(this.end_date)); }
 }
 
 class ClaimFu {
@@ -239,8 +241,13 @@ export class PaymentFu {
           }
           //Вычисление второго и последующих периодов невзысканной судом неустойки
           if (this.penalty_court_period[j].end_date < this.getPayDate()) {
-            this.claim[i].penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[j].end_date + DAY,
-                                                                          this.getPayDate());
+            if (this.penalty_court_period[j].end_date < this.claim[i].penalty_day) {
+              this.claim[i].penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.claim[i].penalty_day,
+                                                                            this.getPayDate());
+            } else {
+              this.claim[i].penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[j].end_date + DAY,
+                                                                            this.getPayDate());
+            }
             //Определение самого раннего начала следующего за первым судебного периода взыскания неустойки
             for (var k = j + 1; k < this.penalty_court_period.length; k++) {
               if (this.penalty_court_period[k].start_date <= this.claim[i].penalty_period[numberOfPenaltyPeriod].end_date) {
@@ -258,7 +265,7 @@ export class PaymentFu {
               this.claim[i].summ * this.claim[i].penalty_period[numberOfPenaltyPeriod].days_delay * 0.01;
               numberOfPenaltyPeriod++;
             } else {
-              delete this.claim[i].penalty_period[numberOfPenaltyPeriod]
+              this.claim[i].penalty_period.splice(numberOfPenaltyPeriod, 1);
             }
           }
         }

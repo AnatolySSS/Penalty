@@ -5,7 +5,7 @@ function addCourt() {
 	courtId++;
   var str = '<div id="court_' + courtId + '" class="courts">' +
 	'<hr>' +
-	'<div id="court_form_row_' + courtId + '" class="form-row courts">' +
+	'<div id="court_form_row_' + courtId + '" class="form-row">' +
     '<div class="form-group col-md-6">' +
       '<input id="court_name_' + courtId + '" class="court_names form-control" type="text" placeholder="Наименование суда" size="40">' +
     '</div>' +
