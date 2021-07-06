@@ -11,6 +11,7 @@ import { makeRubText_nominative } from './moduls/makeRubText_nominative.js';
 import { makeRubText_genitive } from './moduls/makeRubText_genitive.js';
 import { declinationDays } from './moduls/declinationDays.js';
 import { fillPenaltyGraph } from './moduls/graph.js';
+import { makeTextDecision } from './moduls/makeTextDecision.js';
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
 var total_penalty_summ_accrued; //Общая сумма начисленной неустойки
@@ -36,6 +37,7 @@ var payment_court_in_force_dates = [];
 var date_sv, date_uts, date_ev, date_stor;
 var number_of_payments, number_of_fus, number_of_courts;
 var fu_claim_set = new Set();
+var decision = '';
 
 $('#app_date_1').focusout(function(){
   date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
@@ -358,17 +360,18 @@ $('.input-number-fu').toArray().forEach(function(field){
 //Функция добавление всплывающей подсказки 20-й и 21-й дни
 $(function () { $('[data-toggle="tooltip"]').tooltip(); })
 
-// document.getElementById('show_decision').onclick = function show_decision(){
-//   if ($('#show_decision').html() == "Показать текст решения") {
-//     $('#decision').show();
-//     $('#show_decision').html("Скрыть текст решения");
-//     document.querySelector('#decision').innerHTML = decision;
-//     selectText('decision');
-//   } else {
-//     $('#decision').hide();
-//     $('#show_decision').html("Показать текст решения");
-//   }
-// }
+document.getElementById('show_decision').onclick = function show_decision(){
+  if ($('#show_decision').html() == "Показать текст решения") {
+    $('#decision').show();
+    $('#show_decision').html("Скрыть текст решения");
+    decision = makeTextDecision(paymentVoluntary, paymentFu, paymentCourt);
+    document.querySelector('#decision').innerHTML = decision;
+    selectText('decision');
+  } else {
+    $('#decision').hide();
+    $('#show_decision').html("Показать текст решения");
+  }
+}
 
 document.getElementById('show_graph').onclick = function show_graph(){
   if ($('#show_graph').html() == "Показать график неустоек") {
@@ -406,3 +409,30 @@ document.getElementById('close_modal').onclick = function (){
   $('#decision').hide();
   $('#show_decision').html("Показать текст решения");
 }
+
+function selectText(containerid) {
+		if (document.selection) { // IE
+			var range = document.body.createTextRange();
+			range.moveToElementText(document.getElementById(containerid));
+			range.select();
+		} else if (window.getSelection) {
+			var range = document.createRange();
+			range.selectNode(document.getElementById(containerid));
+			window.getSelection().removeAllRanges();
+			window.getSelection().addRange(range);
+		}
+    document.execCommand('copy');
+
+    if (window.getSelection) {
+      window.getSelection().removeAllRanges();
+    } else { // старый IE
+      document.selection.empty();
+    }
+
+    iziToast.show({
+        timeout: 3000,
+        color: '#F5E1A6',
+        //title: 'Hey',
+        message: 'Текст решения скопирован',
+    });
+	}
