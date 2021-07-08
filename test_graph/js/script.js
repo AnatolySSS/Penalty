@@ -5,10 +5,11 @@ import { PaymentCourt } from './moduls/payment_court.js';
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './moduls/variables.js';
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './moduls/variables.js';
 import { COLUMN_NAME_20, COLUMN_NAME_21 } from './moduls/variables.js';
-import { DAY, STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED } from './moduls/variables.js';
+import { DAY, STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED, DATE_EURO_START } from './moduls/variables.js';
 import { paymentVoluntary, paymentFu, paymentCourt } from './moduls/variables.js';
 import { makeRubText_nominative } from './moduls/makeRubText_nominative.js';
 import { makeRubText_genitive } from './moduls/makeRubText_genitive.js';
+import { changeDateType } from './moduls/changeDateType.js';
 import { declinationDays } from './moduls/declinationDays.js';
 import { fillPenaltyGraph } from './moduls/graph.js';
 import { makeTextDecision } from './moduls/makeTextDecision.js';
@@ -38,6 +39,9 @@ var date_sv, date_uts, date_ev, date_stor;
 var number_of_payments, number_of_fus, number_of_courts;
 var fu_claim_set = new Set();
 var decision = '';
+var europrotocol;
+var date_dtp;
+var max_summ;
 
 $('#app_date_1').focusout(function(){
   date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
@@ -131,6 +135,32 @@ $('#btn_desicion').click(function() {
   }
   if ($('#app_date_4').val() == "") {
     count_days[3] = NaN;
+  }
+
+  //Расчет страховой суммы
+  europrotocol = document.querySelector('#europrotocol').checked;
+  date_dtp = document.querySelector('#date_dtp').value;
+  date_dtp = changeDateType(date_dtp);
+  date_dtp = Date.parse(date_dtp + 'T00:00:00');
+
+  if (date_dtp >= DATE_EURO_START && europrotocol) { // Если дата ДТП после 01.06.2018 И Европротокол
+    max_summ = 100000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
+  } else if (date_dtp >= DATE_EURO_START && !europrotocol){ // Если дата ДТП после 01.06.2018 И НЕ Европротокол
+    max_summ = 400000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
+  } else if (date_dtp < DATE_EURO_START && europrotocol) { // Если дата ДТП до 01.06.2018 И Европротокол
+    max_summ = 50000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 50 000₽";
+  } else if (date_dtp < DATE_EURO_START && !europrotocol) { // Если дата ДТП до 01.06.2018 И НЕ Европротокол
+    max_summ = 400000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
+  } else if (europrotocol) { //Если Европротокол (без указания даты)
+    max_summ = 100000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
+  } else { // остальные случаи
+    max_summ = 400000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
   }
 
   //Получение массива значений всех переменных добровольных выплат
@@ -364,7 +394,12 @@ document.getElementById('show_decision').onclick = function show_decision(){
   if ($('#show_decision').html() == "Показать текст решения") {
     $('#decision').show();
     $('#show_decision').html("Скрыть текст решения");
-    decision = makeTextDecision(paymentVoluntary, paymentFu, paymentCourt);
+    decision = makeTextDecision(paymentVoluntary,
+                                paymentFu,
+                                paymentCourt,
+                                total_penalty_summ_accrued,
+                                total_penalty_summ_paid,
+                                max_summ);
     document.querySelector('#decision').innerHTML = decision;
     selectText('decision');
   } else {

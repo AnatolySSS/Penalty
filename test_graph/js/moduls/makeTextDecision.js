@@ -5,10 +5,13 @@ import { declinationDays } from './declinationDays.js';
 import { declensions_by_cases } from './declensions_by_cases.js';
 
 // Формирование текста решения ФУ
-export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
+export function makeTextDecision(paymentVoluntary,
+                                 paymentFu,
+                                 paymentCourt,
+                                 total_penalty_summ_accrued,
+                                 total_penalty_summ_paid,
+                                 max_summ) {
   var article_193;
-  var total_analize_paragraf = "";
-  var total_payment_penalty_paragraf = "";
   var claim_name = [];
   var claim_name_short = [];
   var claim_add_motivation = [];
@@ -24,7 +27,11 @@ export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
   var payment_penalty_paragraf = [];
   var payment_conclusion_paragraf = [];
   var payment_fu_decision_in_time = [];
-  var payment_fu_decision = "";
+  var payment_voluntary_paragraf = "";
+  var payment_fu_paragraf = "";
+  var max_summ_paragraf = "";
+  var total_payment_penalty_paragraf = "";
+  var summary_paragraf = "";
   var court_set = new Set();
   court_set.clear();
   court_set.add(1); //Добавляестя для того, чтобы первое строка не разбивалась на символы
@@ -233,8 +240,8 @@ export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
 
         if (paymentVoluntary[i].ndfl.checked) {
           payment_penalty_paragraf[i] = paymentVoluntary[i].getDateFormatted() + ' ' + fo_name_nominative + make_a_payment + ' выплату' + claim_name_short[i] + 'исходя из суммы '+
-          makeRubText_genitive(paymentVoluntary[i].summ + paymentVoluntary[i].ndfl_summ) + ' (с учетом удержания 13% НДФЛ), в связи с чем Заявителю было перечислено ' +
-          makeRubText_genitive(paymentVoluntary[i].summ) + '.<br>' +
+          makeRubText_genitive(paymentVoluntary[i].summ) + ' (с учетом удержания 13% НДФЛ), в связи с чем Заявителю было перечислено ' +
+          makeRubText_genitive(paymentVoluntary[i].summ -  + paymentVoluntary[i].ndfl_summ) + '.<br>' +
           paymentVoluntary[i].getDateFormatted() + ' ' + fo_name_nominative + fulfill + ' свою обязанность как налогового агента по перечислению налога на доход физического лица (НДФЛ) в размере ' +
           makeRubText_genitive(paymentVoluntary[i].ndfl_summ) + '.<br>';
         } else {
@@ -245,7 +252,7 @@ export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
         }
       }
 
-      total_analize_paragraf = total_analize_paragraf + analize_period_paragraf[i] + payment_paragraf[i] + payment_conclusion_paragraf[i];
+      payment_voluntary_paragraf = payment_voluntary_paragraf + analize_period_paragraf[i] + payment_paragraf[i] + payment_conclusion_paragraf[i];
       total_payment_penalty_paragraf = total_payment_penalty_paragraf + payment_penalty_paragraf[i];
     }
   }
@@ -283,10 +290,47 @@ export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
       } else {
 
       }
-      payment_fu_decision = payment_fu_decision + payment_fu_decision_in_time[i];
+      payment_fu_paragraf = payment_fu_paragraf + payment_fu_decision_in_time[i];
     }
   }
 
+  if (total_penalty_summ_accrued > max_summ) {
+    total_penalty_summ_accrued = max_summ;
+    if (max_summ == 400000) {
+      max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
+      'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
+      'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
+      'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
+      'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
+      'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
+      'причиненного имуществу каждого потерпевшего, ' + makeRubText_nominative(max_summ) + '.'+'<br>';
+    } else {
+      max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
+      'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
+      'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
+      'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
+      'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
+      'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
+      'причиненного имуществу каждого потерпевшего, 400 000 рублей 00 копеек.' +'<br>'+
+      'В соответствии с пунктом 4 статьи 11.1 Закона № 40-ФЗ в случае оформления документов '+
+      'о дорожно-транспортном происшествии без участия уполномоченных на то сотрудников полиции '+
+      'размер страхового возмещения, причитающегося потерпевшему в счет возмещения вреда, '+
+      'причиненного его транспортному средству, не может превышать ' + makeRubText_nominative(max_summ) + '.'+'<br>';
+    }
+  }
 
-  return first_paragraf + standart_motivation + article_191 + article_193 + total_analize_paragraf + payment_fu_decision + total_payment_penalty_paragraf;
+  if ((total_penalty_summ_accrued > total_penalty_summ_paid) && (total_penalty_summ_paid > 0)) {
+    summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
+    'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
+    makeRubText_genitive(total_penalty_summ_accrued - total_penalty_summ_paid) + ' (' + makeRubText_genitive(total_penalty_summ_accrued) + ' - ' + makeRubText_genitive(total_penalty_summ_paid) + ').' + '<br>';
+  } else if (total_penalty_summ_accrued > total_penalty_summ_paid) {
+    summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
+    'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
+    makeRubText_genitive(total_penalty_summ_accrued) +'.' + '<br>';
+  } else {
+    summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
+    'неустойки за несоблюдение срока выплаты страхового возмещения не подлежит удовлетворению.' + '<br>';
+  }
+
+  return first_paragraf + standart_motivation + article_191 + article_193 + payment_voluntary_paragraf + payment_fu_paragraf + max_summ_paragraf + total_payment_penalty_paragraf + summary_paragraf;
 }

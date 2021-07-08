@@ -214,7 +214,7 @@ function addClaim(id) {
 
 function removeCourt(id) {
 	$('#court_' + id).remove();
-
+	courtId--;
   if ($("#add_court_info_btn_" + id).find(".toggle").hasClass("rotate")) {
     $("#add_court_info_btn_" + id).find(".toggle").removeClass("rotate");
   }

@@ -192,7 +192,7 @@ export function fillPenaltyGraph(swg_graph,
 
   //отрисовка добровольных выплат
   for (var i = 0; i < count_vol_days.length; i++) {
-    if (!isNaN(count_vol_days[i])) {
+    if (!isNaN(count_vol_days[i]) && paymentVoluntary[i].type.options.selectedIndex != 4) {
       switch (payment_vol_types[i]) {
         case 0:
           type = 0;
@@ -265,12 +265,12 @@ export function fillPenaltyGraph(swg_graph,
                                                        div_svg_height - indent - 1 - current_summ,
                                                        indent + (count_vol_days[i] * div_svg_width * time_index / max_days_delay),
                                                        div_svg_height - indent - 1)
-                                                 .stroke({ color: 'red', width: 1, opacity: 0 });
+                                                 .stroke({ color: '#ffca28', width: 1, opacity: 0 });
         line_payment_$[line_index] = swg_graph.line(indent + 1,
                                                     div_svg_height - indent - 1 - current_summ - payment_vol_summs[i],
                                                     indent + (count_days[type] * div_svg_width * time_index / max_days_delay),
                                                     div_svg_height - indent - 1 - current_summ - payment_vol_summs[i])
-                                              .stroke({ color: 'red', width: 1, opacity: 0 });
+                                              .stroke({ color: '#ffca28', width: 1, opacity: 0 });
         rect_payment[line_index] = swg_graph.rect((count_vol_days[i] - count_days[type]) * div_svg_width * time_index / max_days_delay,
                                       payment_vol_summs[i])
                                 .move(indent + (count_days[type] * div_svg_width * time_index / max_days_delay),
@@ -446,12 +446,12 @@ export function fillPenaltyGraph(swg_graph,
                                                          div_svg_height - indent - 1 - current_summ,
                                                          indent + (count_fu_days[i] * div_svg_width * time_index / max_days_delay),
                                                          div_svg_height - indent - 1)
-                                                   .stroke({ color: 'red', width: 1, opacity: 0 });
+                                                   .stroke({ color: '#f44336', width: 1, opacity: 0 });
           line_payment_$[line_index] = swg_graph.line(indent + 1,
                                                       div_svg_height - indent - 1 - current_summ - payment_fu_summs[i][j],
                                                       indent + (count_days[type] * div_svg_width * time_index / max_days_delay),
                                                       div_svg_height - indent - 1 - current_summ - payment_fu_summs[i][j])
-                                                .stroke({ color: 'red', width: 1, opacity: 0 });
+                                                .stroke({ color: '#f44336', width: 1, opacity: 0 });
 
 
           rect_payment[line_index] = swg_graph.rect((count_fu_days[i] - count_days[type]) * div_svg_width * time_index / max_days_delay,
@@ -592,12 +592,12 @@ export function fillPenaltyGraph(swg_graph,
                                                        div_svg_height - indent - 1 - current_summ,
                                                        indent + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
                                                        div_svg_height - indent - 1)
-                                                 .stroke({ color: 'red', width: 1, opacity: 0 });
+                                                 .stroke({ color: '#5e35b1', width: 1, opacity: 0 });
         line_payment_$[line_index] = swg_graph.line(indent + 1,
                                                     div_svg_height - indent - 1 - current_summ - payment_court_summs[i][j],
                                                     indent + (count_court_days[i] * div_svg_width * time_index / max_days_delay),
                                                     div_svg_height - indent - 1 - current_summ - payment_court_summs[i][j])
-                                              .stroke({ color: 'red', width: 1, opacity: 0 });
+                                              .stroke({ color: '#5e35b1', width: 1, opacity: 0 });
 
         if (fu_claim_set.has(payment_court_types[i][j])) {
           rect_payment[line_index] = swg_graph.rect((count_court_days[i] - payment_court_in_force_dates[i]) * div_svg_width * time_index / max_days_delay,

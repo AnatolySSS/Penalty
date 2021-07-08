@@ -6,7 +6,7 @@ export function makeRubText_nominative(sum){
 
   rub = Math.floor(sum);
   kop = sum - rub;
-  kop = Math.round(kop * 100);
+  kop = Math.floor(kop * 100);
   if (kop == 0) {
     kop = "00";
   } else if (kop < 10) {
