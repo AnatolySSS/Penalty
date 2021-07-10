@@ -30,7 +30,7 @@ function addrows(e) {
   }
 }
 
-document.addEventListener('click', addrows);
+$(document).on("click", ".app_form_rows", addrows);
 
 var payId = 1;
 

@@ -1192,21 +1192,21 @@ document.getElementById('btn_desicion').onclick = function(){
 
   } //конец ветки судебного взыскания неустойки
 
-  //Абзац про общий размер начисленной неустойки
-  if (total_count > 0) {
-    total_count_paragraf = 'Таким образом, общий размер начисленной неустойки составляет ' +
-    makeRubText_genitive(total_count) + total_count_string + '.' + '<br>';
-  } else {
-    total_count_paragraf = '';
-  }
-
-    //Абзац про общий размер выплаченной неустойки
-  if (total_penalty > 0) {
-    total_penalty_paragraf = 'Таким образом, общий размер неустойки, добровольно выплаченной ' + fo_name_instrumental + ', составляет ' +
-    makeRubText_genitive(total_penalty) + total_penalty_string + '.' + '<br>';
-  } else {
-    total_penalty_paragraf = '';
-  }
+  // //Абзац про общий размер начисленной неустойки
+  // if (total_count > 0) {
+  //   total_count_paragraf = 'Таким образом, общий размер начисленной неустойки составляет ' +
+  //   makeRubText_genitive(total_count) + total_count_string + '.' + '<br>';
+  // } else {
+  //   total_count_paragraf = '';
+  // }
+  //
+  //   //Абзац про общий размер выплаченной неустойки
+  // if (total_penalty > 0) {
+  //   total_penalty_paragraf = 'Таким образом, общий размер неустойки, добровольно выплаченной ' + fo_name_instrumental + ', составляет ' +
+  //   makeRubText_genitive(total_penalty) + total_penalty_string + '.' + '<br>';
+  // } else {
+  //   total_penalty_paragraf = '';
+  // }
 
   // if (total_count > max_summ) {
   //   total_count = max_summ;

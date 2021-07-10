@@ -17,6 +17,7 @@ import { makeTextDecision } from './moduls/makeTextDecision.js';
 
 var total_penalty_summ_accrued; //Общая сумма начисленной неустойки
 var total_penalty_summ_paid; //Общая сумма выплаченной неустойки
+var total_penalty_summ; //Общая сумма начисленной неустойки с учетом лимита 100 000 или 400 000
 var total_penalty; //Общая подлежаащей взысканию неустойки
 var max_penalty_period; // Максимальное количество периодов между периодами судебной неутсойки (количество элементов массива)
 var number_of_penalty_periods; // Количество периодов для начисления неустойки
@@ -27,14 +28,12 @@ var penalty_day = [];
 var count_vol_days = [];
 var payment_vol_types = [];
 var count_fu_days = [];
-var payment_fu_last_days = [];
 var count_court_days = [];
 var payment_vol_summs = [];
 var payment_fu_summs = [];
 var payment_fu_types = [];
 var payment_court_summs = [];
 var payment_court_types = [];
-var payment_court_in_force_dates = [];
 var date_sv, date_uts, date_ev, date_stor;
 var number_of_payments, number_of_fus, number_of_courts;
 var fu_claim_set = new Set();
@@ -114,14 +113,12 @@ $('#btn_desicion').click(function() {
   count_vol_days.length = 0;
   payment_vol_types.length = 0;
   count_fu_days.length = 0;
-  payment_fu_last_days.length = 0;
   count_court_days.length = 0;
   payment_vol_summs.length = 0;
   payment_fu_summs.length = 0;
   payment_fu_types.length = 0;
   payment_court_summs.length = 0;
   payment_court_types.length = 0;
-  payment_court_in_force_dates.length = 0;
   fu_claim_set.clear();
 
   if ($('#app_date_1').val() == "") {
@@ -211,7 +208,7 @@ $('#btn_desicion').click(function() {
                                  fu_in_force_dates[i],
                                  fu_last_day_for_pay_dates[i]);
     count_fu_days[i] = paymentFu[i].count_days;
-    payment_fu_last_days[i] = (paymentFu[i].getLastDayForPayFu() - date_sv.getAppDate()) / DAY;
+    // payment_fu_last_days[i] = (paymentFu[i].getLastDayForPayFu() - date_sv.getAppDate()) / DAY;
     payment_fu_summs[i] = [];
     payment_fu_types[i] = [];
     for (var j = 0; j < paymentFu[i].claim.length; j++) {
@@ -249,7 +246,7 @@ $('#btn_desicion').click(function() {
                                  court_in_force_dates[i],
                                  court_pay_dates[i]);
     count_court_days[i] = paymentCourt[i].count_days;
-    payment_court_in_force_dates[i] = (paymentCourt[i].getInForceDate() - date_sv.getAppDate()) / DAY;
+    // payment_court_in_force_dates[i] = (paymentCourt[i].getInForceDate() - date_sv.getAppDate()) / DAY;
     fu_claim_set = paymentCourt[i].fu_claim_set;
     payment_court_summs[i] = [];
     payment_court_types[i] = [];
@@ -318,10 +315,16 @@ $('#btn_desicion').click(function() {
 
   $('#str_payment_dataled').append(total_penalty_summ_paid_row);
 
-  total_penalty = total_penalty_summ_accrued - total_penalty_summ_paid;
+  if (total_penalty_summ_accrued > max_summ) {
+    total_penalty_summ = max_summ;
+  } else {
+    total_penalty_summ = total_penalty_summ_accrued;
+  }
+
+  total_penalty = total_penalty_summ - total_penalty_summ_paid;
 
   let total_penalty_row = '<tr>' +
-    '<th scope="row" colspan="' + (max_penalty_period * 4 + 2) + '"><span>Общий размер подлежащей взысканию неустойки (' + makeRubText_nominative(total_penalty_summ_accrued) + ' - ' + makeRubText_nominative(total_penalty_summ_paid) + ')</span></th>' +
+    '<th scope="row" colspan="' + (max_penalty_period * 4 + 2) + '"><span>Общий размер подлежащей взысканию неустойки (' + makeRubText_nominative(total_penalty_summ) + ' - ' + makeRubText_nominative(total_penalty_summ_paid) + ')</span></th>' +
     '<td scope="row"><span><b>' + makeRubText_nominative(total_penalty) + '</b></span></td>' +
   '</tr>';
 
@@ -420,13 +423,11 @@ document.getElementById('show_graph').onclick = function show_graph(){
                        payment_vol_types,
                        payment_vol_summs,
                        count_fu_days,
-                       payment_fu_last_days,
                        payment_fu_summs,
                        payment_fu_types,
                        count_court_days,
                        payment_court_summs,
                        payment_court_types,
-                       payment_court_in_force_dates,
                        fu_claim_set,
                        date_sv,
                        paymentVoluntary,

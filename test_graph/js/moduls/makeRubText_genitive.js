@@ -6,7 +6,11 @@ export function makeRubText_genitive(sum){
 
   rub = Math.floor(sum);
   kop = sum - rub;
-  kop = Math.floor(kop * 100);
+  kop = Math.round(kop * 100);
+  if (kop == 100) {
+    kop = 0;
+    rub = rub + 1;
+  }
   if (kop == 0) {
     kop = "00";
   } else if (kop < 10) {

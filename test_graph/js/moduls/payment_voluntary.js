@@ -279,7 +279,7 @@ export class PaymentVoluntary {
 
           $('#str_payment_dataled').append(str_payment_dataled);
 
-          //Добавление подсказки для даты и количества днея просрочки
+          //Добавление подсказки для даты и количества дней просрочки
           if (this.days_delay <= 0) {
             $('#str_payment_dataled').children().last().css({"color" : "#28a745"});
             $('#str_payment_dataled').children().last().children().eq(3).attr('tooltip-green', '21й день');
