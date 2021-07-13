@@ -90,24 +90,32 @@ class ClaimCourt {
     switch (this.name.options.selectedIndex) {
       case 0:
       case 4:
+        this.app_day = date_sv.getAppDate();
+        this.app_day_form = date_sv.getAppDateFormatted();
         this.last_day = date_sv.getLastDay();
         this.last_day_form = date_sv.getLastDayFormatted();
         this.penalty_day = date_sv.getPenaltyDay();
         this.penalty_day_form = date_sv.getPenaltyDayFormatted();
         break;
       case 1:
+        this.app_day = date_uts.getAppDate();
+        this.app_day_form = date_uts.getAppDateFormatted();
         this.last_day = date_uts.getLastDay();
         this.last_day_form = date_uts.getLastDayFormatted();
         this.penalty_day = date_uts.getPenaltyDay();
         this.penalty_day_form = date_uts.getPenaltyDayFormatted();
         break;
       case 2:
+        this.app_day = date_ev.getAppDate();
+        this.app_day_form = date_ev.getAppDateFormatted();
         this.last_day = date_ev.getLastDay();
         this.last_day_form = date_ev.getLastDayFormatted();
         this.penalty_day = date_ev.getPenaltyDay();
         this.penalty_day_form = date_ev.getPenaltyDayFormatted();
         break;
       case 3:
+        this.app_day = date_stor.getAppDate();
+        this.app_day_form = date_stor.getAppDateFormatted();
         this.last_day = date_stor.getLastDay();
         this.last_day_form = date_stor.getLastDayFormatted();
         this.penalty_day = date_stor.getPenaltyDay();
@@ -136,6 +144,7 @@ export class PaymentCourt {
   max_days_delay
   count_days
   fu_claim_set
+  fu_claim_set_type
 
   constructor(id, court, number, date, in_force_date, pay_date) {
 
@@ -198,6 +207,7 @@ export class PaymentCourt {
     this.total_penalty_summ_court = 0;
     this.max_penalty_period = 0;
     this.max_days_delay = 0;
+    this.fu_claim_set_type = 0;
     //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
     this.count_days = (this.getPayDate() - date_sv.getAppDate()) / DAY;
     //Получение количества удовлетворенных требований для каждого решения
@@ -225,6 +235,7 @@ export class PaymentCourt {
         this.claim[i].days_delay = (this.getPayDate() - this.getInForceDate() + DAY) / DAY;
         this.claim[i].penalty_day = this.getInForceDate();
         this.claim[i].penalty_day_form = this.getInForceDateFormatted();
+        this.fu_claim_set_type = 1;
       } else {
         this.claim[i].days_delay = (this.getPayDate() - this.claim[i].last_day) / DAY;
       }

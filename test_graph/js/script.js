@@ -402,7 +402,8 @@ document.getElementById('show_decision').onclick = function show_decision(){
                                 paymentCourt,
                                 total_penalty_summ_accrued,
                                 total_penalty_summ_paid,
-                                max_summ);
+                                max_summ,
+                                fu_claim_set);
     document.querySelector('#decision').innerHTML = decision;
     selectText('decision');
   } else {
