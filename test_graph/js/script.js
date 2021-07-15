@@ -13,6 +13,7 @@ import { changeDateType } from './moduls/changeDateType.js';
 import { declinationDays } from './moduls/declinationDays.js';
 import { fillPenaltyGraph } from './moduls/graph.js';
 import { makeTextDecision } from './moduls/makeTextDecision.js';
+// import { makeDecisionFile } from './moduls/docx.js';
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
 var total_penalty_summ_accrued; //Общая сумма начисленной неустойки
@@ -404,6 +405,7 @@ document.getElementById('show_decision').onclick = function show_decision(){
                                 total_penalty_summ_paid,
                                 max_summ,
                                 fu_claim_set);
+    // makeDecisionFile(decision);
     document.querySelector('#decision').innerHTML = decision;
     selectText('decision');
   } else {

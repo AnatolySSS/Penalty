@@ -647,6 +647,8 @@ export function makeTextDecision(paymentVoluntary,
   let stop_ind_1 = 0;
   let fu_index = 0;
   let fu_claim_index = 0;
+  let court_index = 0;
+  let court_claim_index = 0;
   let stop_ind_2 = false;
   for (var i = 0; i < paymentVoluntary.length; i++) {
     if (paymentVoluntary[i].penalty_summ > 0) {
@@ -664,6 +666,7 @@ export function makeTextDecision(paymentVoluntary,
     }
   }
 
+  //Добавление выплат на оснвоании решения ФУ
   if (stop_ind_1 > 0) {
     for (var i = 0; i < paymentFu.length; i++) {
       for (var j = 0; j < paymentFu[i].claim.length; j++) {
@@ -680,6 +683,7 @@ export function makeTextDecision(paymentVoluntary,
           total_penalty_summ_accrued_string = ' (' + makeRubText_nominative(paymentFu[i].claim[j].penalty_summ);
           fu_index = i;
           fu_claim_index = j + 1;
+          stop_ind_1 = i + 1;
           break;
         }
       }
@@ -692,6 +696,41 @@ export function makeTextDecision(paymentVoluntary,
       for (var j = fu_claim_index; j < paymentFu[i].claim.length; j++) {
         if (paymentFu[i].claim[j].penalty_summ > 0) {
           total_penalty_summ_accrued_string = total_penalty_summ_accrued_string + ' + ' + makeRubText_nominative(paymentFu[i].claim[j].penalty_summ);
+          stop_ind_2 = true;
+        }
+      }
+    }
+  }
+
+  //Добавление выплат на оснвоании решения суда
+  if (stop_ind_1 > 0) {
+    for (var i = 0; i < paymentCourt.length; i++) {
+      for (var j = 0; j < paymentCourt[i].claim.length; j++) {
+        if (paymentCourt[i].claim[j].penalty_summ > 0) {
+          total_penalty_summ_accrued_string = total_penalty_summ_accrued_string + ' + ' + makeRubText_nominative(paymentCourt[i].claim[j].penalty_summ);
+          stop_ind_2 = true;
+        }
+      }
+    }
+  } else {
+    for (var i = 0; i < paymentCourt.length; i++) {
+      for (var j = 0; j < paymentCourt[i].claim.length; j++) {
+        if (paymentCourt[i].claim[j].penalty_summ > 0) {
+          total_penalty_summ_accrued_string = ' (' + makeRubText_nominative(paymentCourt[i].claim[j].penalty_summ);
+          court_index = i;
+          court_claim_index = j + 1;
+          break;
+        }
+      }
+      if (stop_ind_1 > 0) {
+        break;
+      }
+    }
+
+    for (var i = court_index; i < paymentCourt.length; i++) {
+      for (var j = court_claim_index; j < paymentCourt[i].claim.length; j++) {
+        if (paymentCourt[i].claim[j].penalty_summ > 0) {
+          total_penalty_summ_accrued_string = total_penalty_summ_accrued_string + ' + ' + makeRubText_nominative(paymentCourt[i].claim[j].penalty_summ);
           stop_ind_2 = true;
         }
       }
