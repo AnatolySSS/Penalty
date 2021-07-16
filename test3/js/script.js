@@ -5,17 +5,20 @@ import { PaymentCourt } from './moduls/payment_court.js';
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './moduls/variables.js';
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './moduls/variables.js';
 import { COLUMN_NAME_20, COLUMN_NAME_21 } from './moduls/variables.js';
-import { DAY, STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED } from './moduls/variables.js';
+import { DAY, STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED, DATE_EURO_START } from './moduls/variables.js';
 import { paymentVoluntary, paymentFu, paymentCourt } from './moduls/variables.js';
 import { makeRubText_nominative } from './moduls/makeRubText_nominative.js';
 import { makeRubText_genitive } from './moduls/makeRubText_genitive.js';
+import { changeDateType } from './moduls/changeDateType.js';
 import { declinationDays } from './moduls/declinationDays.js';
 import { fillPenaltyGraph } from './moduls/graph.js';
 import { makeTextDecision } from './moduls/makeTextDecision.js';
+// import { makeDecisionFile } from './moduls/docx.js';
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
 var total_penalty_summ_accrued; //Общая сумма начисленной неустойки
 var total_penalty_summ_paid; //Общая сумма выплаченной неустойки
+var total_penalty_summ; //Общая сумма начисленной неустойки с учетом лимита 100 000 или 400 000
 var total_penalty; //Общая подлежаащей взысканию неустойки
 var max_penalty_period; // Максимальное количество периодов между периодами судебной неутсойки (количество элементов массива)
 var number_of_penalty_periods; // Количество периодов для начисления неустойки
@@ -26,18 +29,19 @@ var penalty_day = [];
 var count_vol_days = [];
 var payment_vol_types = [];
 var count_fu_days = [];
-var payment_fu_last_days = [];
 var count_court_days = [];
 var payment_vol_summs = [];
 var payment_fu_summs = [];
 var payment_fu_types = [];
 var payment_court_summs = [];
 var payment_court_types = [];
-var payment_court_in_force_dates = [];
 var date_sv, date_uts, date_ev, date_stor;
 var number_of_payments, number_of_fus, number_of_courts;
 var fu_claim_set = new Set();
 var decision = '';
+var europrotocol;
+var date_dtp;
+var max_summ;
 
 $('#app_date_1').focusout(function(){
   date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
@@ -110,14 +114,12 @@ $('#btn_desicion').click(function() {
   count_vol_days.length = 0;
   payment_vol_types.length = 0;
   count_fu_days.length = 0;
-  payment_fu_last_days.length = 0;
   count_court_days.length = 0;
   payment_vol_summs.length = 0;
   payment_fu_summs.length = 0;
   payment_fu_types.length = 0;
   payment_court_summs.length = 0;
   payment_court_types.length = 0;
-  payment_court_in_force_dates.length = 0;
   fu_claim_set.clear();
 
   if ($('#app_date_1').val() == "") {
@@ -131,6 +133,32 @@ $('#btn_desicion').click(function() {
   }
   if ($('#app_date_4').val() == "") {
     count_days[3] = NaN;
+  }
+
+  //Расчет страховой суммы
+  europrotocol = document.querySelector('#europrotocol').checked;
+  date_dtp = document.querySelector('#date_dtp').value;
+  date_dtp = changeDateType(date_dtp);
+  date_dtp = Date.parse(date_dtp + 'T00:00:00');
+
+  if (date_dtp >= DATE_EURO_START && europrotocol) { // Если дата ДТП после 01.06.2018 И Европротокол
+    max_summ = 100000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
+  } else if (date_dtp >= DATE_EURO_START && !europrotocol){ // Если дата ДТП после 01.06.2018 И НЕ Европротокол
+    max_summ = 400000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
+  } else if (date_dtp < DATE_EURO_START && europrotocol) { // Если дата ДТП до 01.06.2018 И Европротокол
+    max_summ = 50000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 50 000₽";
+  } else if (date_dtp < DATE_EURO_START && !europrotocol) { // Если дата ДТП до 01.06.2018 И НЕ Европротокол
+    max_summ = 400000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
+  } else if (europrotocol) { //Если Европротокол (без указания даты)
+    max_summ = 100000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
+  } else { // остальные случаи
+    max_summ = 400000;
+    document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
   }
 
   //Получение массива значений всех переменных добровольных выплат
@@ -181,7 +209,7 @@ $('#btn_desicion').click(function() {
                                  fu_in_force_dates[i],
                                  fu_last_day_for_pay_dates[i]);
     count_fu_days[i] = paymentFu[i].count_days;
-    payment_fu_last_days[i] = (paymentFu[i].getLastDayForPayFu() - date_sv.getAppDate()) / DAY;
+    // payment_fu_last_days[i] = (paymentFu[i].getLastDayForPayFu() - date_sv.getAppDate()) / DAY;
     payment_fu_summs[i] = [];
     payment_fu_types[i] = [];
     for (var j = 0; j < paymentFu[i].claim.length; j++) {
@@ -219,7 +247,7 @@ $('#btn_desicion').click(function() {
                                  court_in_force_dates[i],
                                  court_pay_dates[i]);
     count_court_days[i] = paymentCourt[i].count_days;
-    payment_court_in_force_dates[i] = (paymentCourt[i].getInForceDate() - date_sv.getAppDate()) / DAY;
+    // payment_court_in_force_dates[i] = (paymentCourt[i].getInForceDate() - date_sv.getAppDate()) / DAY;
     fu_claim_set = paymentCourt[i].fu_claim_set;
     payment_court_summs[i] = [];
     payment_court_types[i] = [];
@@ -288,10 +316,16 @@ $('#btn_desicion').click(function() {
 
   $('#str_payment_dataled').append(total_penalty_summ_paid_row);
 
-  total_penalty = total_penalty_summ_accrued - total_penalty_summ_paid;
+  if (total_penalty_summ_accrued > max_summ) {
+    total_penalty_summ = max_summ;
+  } else {
+    total_penalty_summ = total_penalty_summ_accrued;
+  }
+
+  total_penalty = total_penalty_summ - total_penalty_summ_paid;
 
   let total_penalty_row = '<tr>' +
-    '<th scope="row" colspan="' + (max_penalty_period * 4 + 2) + '"><span>Общий размер подлежащей взысканию неустойки (' + makeRubText_nominative(total_penalty_summ_accrued) + ' - ' + makeRubText_nominative(total_penalty_summ_paid) + ')</span></th>' +
+    '<th scope="row" colspan="' + (max_penalty_period * 4 + 2) + '"><span>Общий размер подлежащей взысканию неустойки (' + makeRubText_nominative(total_penalty_summ) + ' - ' + makeRubText_nominative(total_penalty_summ_paid) + ')</span></th>' +
     '<td scope="row"><span><b>' + makeRubText_nominative(total_penalty) + '</b></span></td>' +
   '</tr>';
 
@@ -364,7 +398,14 @@ document.getElementById('show_decision').onclick = function show_decision(){
   if ($('#show_decision').html() == "Показать текст решения") {
     $('#decision').show();
     $('#show_decision').html("Скрыть текст решения");
-    decision = makeTextDecision(paymentVoluntary, paymentFu, paymentCourt);
+    decision = makeTextDecision(paymentVoluntary,
+                                paymentFu,
+                                paymentCourt,
+                                total_penalty_summ_accrued,
+                                total_penalty_summ_paid,
+                                max_summ,
+                                fu_claim_set);
+    // makeDecisionFile(decision);
     document.querySelector('#decision').innerHTML = decision;
     selectText('decision');
   } else {
@@ -385,13 +426,11 @@ document.getElementById('show_graph').onclick = function show_graph(){
                        payment_vol_types,
                        payment_vol_summs,
                        count_fu_days,
-                       payment_fu_last_days,
                        payment_fu_summs,
                        payment_fu_types,
                        count_court_days,
                        payment_court_summs,
                        payment_court_types,
-                       payment_court_in_force_dates,
                        fu_claim_set,
                        date_sv,
                        paymentVoluntary,

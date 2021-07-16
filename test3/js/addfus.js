@@ -260,7 +260,7 @@ function addFuClaim(id) {
 
 function removeFu(id) {
 	$('#fu_' + id).remove();
-
+	fuId--;
   if ($("#add_fu_info_btn_" + id).find(".toggle").hasClass("rotate")) {
     $("#add_fu_info_btn_" + id).find(".toggle").removeClass("rotate");
   }

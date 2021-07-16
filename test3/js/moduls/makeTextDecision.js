@@ -5,13 +5,36 @@ import { declinationDays } from './declinationDays.js';
 import { declensions_by_cases } from './declensions_by_cases.js';
 
 // Формирование текста решения ФУ
-export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
+export function makeTextDecision(paymentVoluntary,
+                                 paymentFu,
+                                 paymentCourt,
+                                 total_penalty_summ_accrued,
+                                 total_penalty_summ_paid,
+                                 max_summ,
+                                 fu_claim_set) {
+  var total_ndfl = 0;
   var article_193;
-  var total_analize_paragraf = "";
-  var total_payment_penalty_paragraf = "";
   var claim_name = [];
   var claim_name_short = [];
   var claim_add_motivation = [];
+
+  var claim_fu_name = [];
+  var claim_fu_name_short = [];
+  var claim_fu_add_motivation = [];
+  var analize_fu_period_paragraf = [];
+  var payment_fu_execution_paragraf = [];
+  var payment_fu_conclusion_paragraf = [];
+  var payment_fu_claims_paragraf = [];
+
+  var claim_court_name = [];
+  var claim_court_name_short = [];
+  var claim_court_add_motivation = [];
+  var analize_court_period_paragraf = [];
+  var payment_court_execution_paragraf = [];
+  var payment_court_conclusion_paragraf = [];
+  var payment_court_claims_paragraf = [];
+  var payment_court_claims_paragraf_without_analize = [];
+
   var fo_name;
   var fo_name_nominative;
   var fo_name_genitive;
@@ -23,8 +46,25 @@ export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
   var payment_paragraf = [];
   var payment_penalty_paragraf = [];
   var payment_conclusion_paragraf = [];
-  var payment_fu_decision_in_time = [];
-  var payment_fu_decision = "";
+  var payment_fu_decision = [];
+  var payment_court_decision = [];
+  var payment_voluntary_paragraf = "";
+  var payment_fu_paragraf = "";
+  var payment_court_paragraf = "";
+  var max_summ_paragraf = "";
+  var total_payment_penalty_paragraf = "";
+  var total_penalty_summ_accrued_paragraf = "";
+  var total_penalty_summ_paid_paragraf = "";
+  var total_penalty_summ_accrued_string = "";
+  var total_penalty_summ_paid_string = "";
+  var summary_paragraf = "";
+  var fu_claims_satisfied_string = "";
+  var fu_claims_satisfied_string_help = "";
+  var court_claims_satisfied_string = "";
+  var court_claims_satisfied_paragraph = [];
+  var court_claims_satisfied_paragraph_help = "";
+  var court_claims_satisfied_paragraph_all = "";
+  var ndfl_motivation = "";
   var court_set = new Set();
   court_set.clear();
   court_set.add(1); //Добавляестя для того, чтобы первое строка не разбивалась на символы
@@ -133,6 +173,7 @@ export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
   'В соответствии с пунктом 4 статьи 226 НК РФ налоговые агенты обязаны удержать начисленную '+
   'сумму налога непосредственно из доходов налогоплательщика при их фактической выплате.'+'<br>';
 
+  //Собирание абзацев с добровольными выплатами
   for (var i = 0; i < paymentVoluntary.length; i++) {
     if (!isNaN(paymentVoluntary[i].date)) {
       switch (paymentVoluntary[i].type.options.selectedIndex) {
@@ -199,7 +240,7 @@ export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
         analize_period_paragraf_help_str = claim_add_motivation[i] + 'Заявитель обратился в ' + fo_name_accusative + claim_name[i] +
         paymentVoluntary[i].app_day_form + ', следовательно, последним днем срока осуществления '+
         'выплаты' + claim_name_short[i] + 'является ' + paymentVoluntary[i].last_day_form + ', а неустойка подлежит начислению с '+
-        paymentVoluntary[i].penalty_day_form +'.<br>'
+        paymentVoluntary[i].penalty_day_form +'.<br>';
 
         if (!court_set.has(analize_period_paragraf_help_str)) {
           court_set.add(analize_period_paragraf_help_str);
@@ -233,10 +274,12 @@ export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
 
         if (paymentVoluntary[i].ndfl.checked) {
           payment_penalty_paragraf[i] = paymentVoluntary[i].getDateFormatted() + ' ' + fo_name_nominative + make_a_payment + ' выплату' + claim_name_short[i] + 'исходя из суммы '+
-          makeRubText_genitive(paymentVoluntary[i].summ + paymentVoluntary[i].ndfl_summ) + ' (с учетом удержания 13% НДФЛ), в связи с чем Заявителю было перечислено ' +
-          makeRubText_genitive(paymentVoluntary[i].summ) + '.<br>' +
+          makeRubText_genitive(paymentVoluntary[i].summ) + ' (с учетом удержания 13% НДФЛ), в связи с чем Заявителю было перечислено ' +
+          makeRubText_genitive(paymentVoluntary[i].summ -  + paymentVoluntary[i].ndfl_summ) + '.<br>' +
           paymentVoluntary[i].getDateFormatted() + ' ' + fo_name_nominative + fulfill + ' свою обязанность как налогового агента по перечислению налога на доход физического лица (НДФЛ) в размере ' +
           makeRubText_genitive(paymentVoluntary[i].ndfl_summ) + '.<br>';
+
+          total_ndfl = total_ndfl + paymentVoluntary[i].ndfl_summ;
         } else {
           payment_penalty_paragraf[i] = paymentVoluntary[i].getDateFormatted() + ' ' + fo_name_nominative + make_a_payment + ' выплату' + claim_name_short[i] + 'в размере '+
           makeRubText_genitive(paymentVoluntary[i].summ) +
@@ -245,20 +288,59 @@ export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
         }
       }
 
-      total_analize_paragraf = total_analize_paragraf + analize_period_paragraf[i] + payment_paragraf[i] + payment_conclusion_paragraf[i];
+      payment_voluntary_paragraf = payment_voluntary_paragraf + analize_period_paragraf[i] + payment_paragraf[i] + payment_conclusion_paragraf[i];
       total_payment_penalty_paragraf = total_payment_penalty_paragraf + payment_penalty_paragraf[i];
     }
   }
 
+  //Собирание абзацев с выплатами по решению ФУ
   for (var i = 0; i < paymentFu.length; i++) {
     //Если есть решение ФУ
     if (!isNaN(paymentFu[i].getDate())) {
       //Если решение ФУ о взыскании
       if (paymentFu[i].type.options.selectedIndex == 0) {
+        //Создание вспомогальной текстовой переменной, содержащей перечисление всех видов страхового возмещения, взысканных решением ФУ
+        fu_claims_satisfied_string_help = "указанную сумму";
+        fu_claims_satisfied_string = "суммы " + declensions_by_cases(paymentFu[i].claim[0].name.value) +
+                                     " в размере " +
+                                     makeRubText_genitive(paymentFu[i].claim[0].summ);
+        if (paymentFu[i].claim[0].type.options.selectedIndex == 0) {
+          court_claims_satisfied_paragraph_help = declensions_by_cases(paymentFu[i].claim[0].name.value) + " в размере " +
+          makeRubText_genitive(paymentFu[i].claim[0].summ);
+        }
+        for (var j = 1; j < paymentFu[i].claim.length; j++) {
+          if (paymentFu[i].claim[j].name.options.selectedIndex == 0 ||
+              paymentFu[i].claim[j].name.options.selectedIndex == 1 ||
+              paymentFu[i].claim[j].name.options.selectedIndex == 2 ||
+              paymentFu[i].claim[j].name.options.selectedIndex == 3) {
+                fu_claims_satisfied_string_help = "указанные суммы";
+                fu_claims_satisfied_string = fu_claims_satisfied_string + ", суммы " + declensions_by_cases(paymentFu[i].claim[j].name.value) +
+                                             " в размере " +
+                                             makeRubText_genitive(paymentFu[i].claim[j].summ);
+                if (paymentFu[i].claim[j].type.options.selectedIndex == 0) {
+                  court_claims_satisfied_paragraph_help = court_claims_satisfied_paragraph_help + ", "+ declensions_by_cases(paymentFu[i].claim[j].name.value) + " в размере " +
+                  makeRubText_genitive(paymentFu[i].claim[j].summ);
+                }
+          }
+        }
+
+        court_claims_satisfied_paragraph[i] = "Принимая Решение от " + paymentFu[i].getDateFormatted() + " о взыскании с " +
+                                           fo_name_genitive + " в пользу Заявителя " + court_claims_satisfied_paragraph_help +
+                                           ", Финансовый уполномоченный исходил из отсутствия у " + fo_name_genitive +
+                                           " обязательства по выплате страхового возмещения в большем размере.<br>" +
+                                           "Учитывая, что Решение от " + paymentFu[i].getDateFormatted() + " вынесено официальным " +
+                                           "должностным лицом в рамках предоставленных ему публичных полномочий, финансовая " +
+                                           "организация была вправе разумно полагаться на содержащиеся в нем выводы и ссылаться " +
+                                           "на них в своих взаимоотношениях с потребителем финансовых услуг.<br>" +
+                                           "При таких обстоятельствах Финансовый уполномоченный приходит к выводу, " +
+                                           "что в рассматриваемом случае взыскание неустойки в связи с частичной выплатой " +
+                                           "Заявителю страхового возмещения не основано на законе.<br>";
+        court_claims_satisfied_paragraph_all = court_claims_satisfied_paragraph_all + court_claims_satisfied_paragraph[i];
+
         //Если решение ФУ исполнено в срок
         if (paymentFu[i].getPayDate() <= paymentFu[i].getLastDayForPayFu()) {
-          payment_fu_decision_in_time[i] = "В соответствии с пунктом 1 статьи 23 Закона № 123-ФЗ решение финансового уполномоченного " +
-          "вступает в силу по истечении десяти рабочих дней после даты его подписания финансовым уполномоченным." +
+          payment_fu_decision[i] = "В соответствии с пунктом 1 статьи 23 Закона № 123-ФЗ решение финансового уполномоченного " +
+          "вступает в силу по истечении десяти рабочих дней после даты его подписания финансовым уполномоченным. " +
           "В соответствии с пунктом 2 статьи 23 Закона № 123-ФЗ решение финансового уполномоченного подлежит исполнению " +
           "финансовой организацией не позднее срока, указанного в данном решении, за исключением случаев приостановления " +
           "исполнения данного решения, предусмотренных настоящим Федеральным законом. Срок исполнения решения финансового уполномоченного " +
@@ -276,17 +358,491 @@ export function makeTextDecision(paymentVoluntary, paymentFu, paymentCourt) {
           "Согласно части 5 статьи 16.1 Закона № 40-ФЗ страховщик освобождается от обязанности уплаты неустойки (пени), суммы финансовой санкции и (или) " +
           "штрафа, если обязательства страховщика были исполнены в порядке и в сроки, которые установлены Законом № 40-ФЗ, " +
           "Законом № 123-ФЗ, а также если страховщик докажет, что нарушение сроков произошло вследствие непреодолимой силы или по вине потерпевшего.<br>" +
-          paymentFu[i].getPayDateFormatted() + " " + fo_name_nominative + "в добровольном порядке, в полном объеме и в установленный срок исполнила " +
-          "Решение от " + paymentFu[i].getDateFormatted() + " в части выплаты суммы " + declensions_by_cases(paymentFu[i].claim[0].name.value) + " в размере " + makeRubText_genitive(paymentFu[i].claim[0].summ) +
-          ", в связи с чем неустойка на указанную сумму не подлежит начислению и взысканию Финансовым уполномоченным.<br>"
-        }
-      } else {
+          paymentFu[i].getPayDateFormatted() + " " + fo_name_nominative + " в добровольном порядке, в полном объеме и в установленный срок исполнила " +
+          "Решение от " + paymentFu[i].getDateFormatted() + " в части выплаты " + fu_claims_satisfied_string +
+          ", в связи с чем неустойка на " + fu_claims_satisfied_string_help + " не подлежит начислению и взысканию Финансовым уполномоченным.<br>";
+        } else {
+          claim_fu_name[i] = [];
+          claim_fu_name_short[i] = [];
+          claim_fu_add_motivation[i] = [];
+          analize_fu_period_paragraf[i] = [];
+          payment_fu_execution_paragraf[i] = [];
+          payment_fu_conclusion_paragraf[i] = [];
+          payment_fu_claims_paragraf[i] = "";
+          for (var j = 0; j < paymentFu[i].claim.length; j++) {
+            if ((paymentFu[i].claim[j].name.options.selectedIndex == 0 ||
+                paymentFu[i].claim[j].name.options.selectedIndex == 1 ||
+                paymentFu[i].claim[j].name.options.selectedIndex == 2 ||
+                paymentFu[i].claim[j].name.options.selectedIndex == 3) &&
+                paymentFu[i].claim[j].type.options.selectedIndex == 0) {
+                  switch (paymentFu[i].claim[j].name.options.selectedIndex) {
+                    case 0:
+                      claim_fu_name[i][j] = ' с заявлением о выплате страхового возмещения ';
+                      claim_fu_name_short[i][j] = ' страхового возмещения ';
+                      claim_fu_add_motivation[i][j] = '';
+                      break;
+                    case 1:
+                      claim_fu_name[i][j] = ' с заявлением о выплате УТС ';
+                      claim_fu_name_short[i][j] = ' УТС ';
+                      claim_fu_add_motivation[i][j] = 'Согласно пункту 20 Постановление Пленума № ' +
+                      '58 при наступлении страхового случая потерпевший обязан не только уведомить ' +
+                      'страховщика о его наступлении в сроки, установленные Правилами ОСАГО, ' +
+                      'но и направить страховщику заявление о страховом возмещении и документы, ' +
+                      'предусмотренные Правилами ОСАГО. В заявлении о страховом возмещении потерпевший ' +
+                      'должен также сообщить о другом известном ему на момент подачи заявления ущербе, ' +
+                      'кроме расходов на восстановление поврежденного имущества, который подлежит ' +
+                      'возмещению  (например, об утрате товарной стоимости, о расходах на эвакуацию ' +
+                      'транспортного средства с места дорожно-транспортного происшествия и т.п.).<br>' +
+                      'Согласно пункту 37 Постановление Пленума № 58 к реальному ущербу, возникшему ' +
+                      'в результате дорожно-транспортного происшествия, наряду со стоимостью ремонта ' +
+                      'и запасных частей относится также утрата товарной стоимости, которая представляет ' +
+                      'собой уменьшение стоимости транспортного средства, вызванное преждевременным ' +
+                      'ухудшением товарного (внешнего) вида транспортного средства и его эксплуатационных ' +
+                      'качеств в результате снижения прочности и долговечности отдельных деталей, узлов ' +
+                      'и агрегатов, соединений и защитных покрытий вследствие дорожно-транспортного ' +
+                      'происшествия и последующего ремонта.<br>';
+                      break;
+                    case 2:
+                      claim_fu_name[i][j] = ' с заявлением о выплате расходов на эвакуацию Транспортного средства ';
+                      claim_fu_name_short[i][j] = ' расходов на эвакуацию Транспортного средства ';
+                      claim_fu_add_motivation[i][j] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+                      'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+                      'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+                      'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+                      'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+                      'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+                      'приходит к выводу о том, что расходы на эвакуацию Транспортного средства относятся '+
+                      'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты страхового '+
+                      'возмещения подлежит начислению на сумму расходов на эвакуацию Транспортного средства.'+ '<br>';
+                      break;
+                    case 3:
+                      claim_fu_name[i][j] = ' с заявлением о выплате расходов на хранение Транспортного средства ';
+                      claim_fu_name_short[i][j] = ' расходов на хранение Транспортного средства ';
+                      claim_fu_add_motivation[i][j] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+                      'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+                      'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+                      'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+                      'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+                      'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+                      'приходит к выводу о том, что расходы на хранение Транспортного средства относятся '+
+                      'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты страхового '+
+                      'возмещения подлежит начислению на сумму расходов на хранение Транспортного средства.'+ '<br>';
+                      break;
+                    case 4:
+                      claim_fu_name_short[i][j] = ' неустойки за несоблюдение сроков выплаты страхового возмещения по договору ОСАГО ';
+                      break;
+                    default:
+                  }
+                  //"Собираем" абзац про анализ сроков 20 и 21 дней
+                  analize_period_paragraf_help_str = claim_fu_add_motivation[i][j] + 'Заявитель обратился в ' + fo_name_accusative + claim_fu_name[i][j] +
+                  paymentFu[i].claim[j].app_day_form + ', следовательно, последним днем срока осуществления '+
+                  'выплаты' + claim_fu_name_short[i][j] + 'является ' + paymentFu[i].claim[j].last_day_form + ', а неустойка подлежит начислению с '+
+                  paymentFu[i].claim[j].penalty_day_form +'.<br>';
 
+                  if (!court_set.has(analize_period_paragraf_help_str)) {
+                    court_set.add(analize_period_paragraf_help_str);
+                    analize_fu_period_paragraf[i][j] = analize_period_paragraf_help_str;
+                  } else {
+                    analize_fu_period_paragraf[i][j] = "";
+                  }
+
+                  //"Собираем" абзац про выплату
+                  payment_fu_execution_paragraf[i][j] = paymentFu[i].getPayDateFormatted() + ' ' + fo_name_instrumental + ' исполнено Решение от ' + paymentFu[i].getDateFormatted() +
+                  " в части " + declensions_by_cases(paymentFu[i].claim[j].name.value) + ' в размере ' + makeRubText_genitive(paymentFu[i].claim[j].summ) +
+                  // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+                  '.<br>';
+
+                  //Собираем абзац с расчетом неустойки
+                  payment_fu_conclusion_paragraf[i][j] = 'Таким образом, неустойка на сумму ' + makeRubText_nominative(paymentFu[i].claim[j].summ) + ' подлежит расчету за период с ' +
+                  paymentFu[i].claim[j].penalty_day_form + ' по ' + paymentFu[i].getPayDateFormatted() + ' (' + declinationDays(paymentFu[i].claim[j].days_delay) + ').' + '<br>' +
+                  'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, '+
+                  'размер неустойки, подлежащий выплате за период с ' + paymentFu[i].claim[j].penalty_day_form + ' по ' + paymentFu[i].getPayDateFormatted() +
+                  ' составляет ' + makeRubText_nominative(paymentFu[i].claim[j].penalty_summ) + ' (' + makeRubText_nominative(paymentFu[i].claim[j].summ) + ' × ' +
+                  declinationDays(paymentFu[i].claim[j].days_delay) +' × 1%).' + '<br>';
+
+                  payment_fu_claims_paragraf[i] = payment_fu_claims_paragraf[i] + analize_fu_period_paragraf[i][j] + payment_fu_execution_paragraf[i][j] + payment_fu_conclusion_paragraf[i][j];
+            }
+          }
+          payment_fu_decision[i] = "В соответствии с пунктом 1 статьи 23 Закона № 123-ФЗ решение финансового уполномоченного " +
+          "вступает в силу по истечении десяти рабочих дней после даты его подписания финансовым уполномоченным. " +
+          "В соответствии с пунктом 2 статьи 23 Закона № 123-ФЗ решение финансового уполномоченного подлежит исполнению " +
+          "финансовой организацией не позднее срока, указанного в данном решении, за исключением случаев приостановления " +
+          "исполнения данного решения, предусмотренных настоящим Федеральным законом. Срок исполнения решения финансового уполномоченного " +
+          "устанавливается данным решением с учетом особенностей правоотношений, участником которых является потребитель финансовых услуг, " +
+          "направивший обращение, не может быть менее десяти рабочих дней после дня вступления в силу данного решения " +
+          "и не может превышать тридцать дней после дня вступления в силу данного решения.<br>" +
+          "В резолютивной части Решения от " + paymentFu[i].getDateFormatted() + " указано, что " +
+          "Решение от " + paymentFu[i].getDateFormatted() + " подлежит исполнению " + fo_name_instrumental + " в течение 10 рабочих дней после дня вступления в силу.<br>" +
+          "Таким образом, Решение от " + paymentFu[i].getDateFormatted() + " вступило в силу " + paymentFu[i].getInForceDateFormatted() +
+          " и подлежало исполнению Финансовой организацией до " + paymentFu[i].getLastDayForPayFuFormatted() + " включительно (в течение 10 рабочих дней после дня вступления в силу).<br>" +
+          paymentFu[i].getPayDateFormatted() + " Финансовая организация исполнила Решение от " + paymentFu[i].getDateFormatted() + ".<br>" +
+          "Согласно части 5 статьи 16.1 Закона № 40-ФЗ страховщик освобождается от обязанности уплаты неустойки (пени), суммы финансовой санкции и (или) " +
+          "штрафа, если обязательства страховщика были исполнены в порядке и в сроки, которые установлены Законом № 40-ФЗ, " +
+          "Законом № 123-ФЗ, а также если страховщик докажет, что нарушение сроков произошло вследствие непреодолимой силы или по вине потерпевшего.<br>" +
+          fo_name_nominative + " исполнила Решение от " + paymentFu[i].getDateFormatted() + " с нарушением срока, установленного Законом № 123-ФЗ, в связи " +
+          "с чем, Финансовый уполномоченный приходит к выводу об отсутствии оснований, предусмотренных частью 5 статьи 16.1 Закона № 40-ФЗ в части освобождения " +
+          fo_name_genitive + " от обязанности уплаты неустойки.<br>" + payment_fu_claims_paragraf[i];
+        }
+        payment_fu_paragraf = payment_fu_paragraf + payment_fu_decision[i];
       }
-      payment_fu_decision = payment_fu_decision + payment_fu_decision_in_time[i];
     }
   }
 
+  //Собирание абзацев с выплатами по решению судов
+  for (var i = 0; i < paymentCourt.length; i++) {
+    //Если есть решение суда
+    if (!isNaN(paymentCourt[i].getDate())) {
+      claim_court_name[i] = [];
+      claim_court_name_short[i] = [];
+      claim_court_add_motivation[i] = [];
+      analize_court_period_paragraf[i] = [];
+      payment_court_execution_paragraf[i] = [];
+      payment_court_conclusion_paragraf[i] = [];
+      payment_court_claims_paragraf[i] = "";
+      payment_court_claims_paragraf_without_analize[i] = "";
 
-  return first_paragraf + standart_motivation + article_191 + article_193 + total_analize_paragraf + payment_fu_decision + total_payment_penalty_paragraf;
+      court_claims_satisfied_string = declensions_by_cases(paymentCourt[i].claim[0].name.value) +
+                                   " в размере " +
+                                   makeRubText_genitive(paymentCourt[i].claim[0].summ);
+
+      for (var j = 1; j < paymentCourt[i].claim.length; j++) {
+        if ((paymentCourt[i].claim[j].name.options.selectedIndex == 0 ||
+            paymentCourt[i].claim[j].name.options.selectedIndex == 1 ||
+            paymentCourt[i].claim[j].name.options.selectedIndex == 2 ||
+            paymentCourt[i].claim[j].name.options.selectedIndex == 3) &&
+            paymentCourt[i].claim[j].type.options.selectedIndex == 0) {
+              court_claims_satisfied_string = court_claims_satisfied_string + ", сумма " + declensions_by_cases(paymentCourt[i].claim[j].name.value) +
+                                           " в размере " +
+                                           makeRubText_genitive(paymentCourt[i].claim[j].summ);
+        }
+      }
+
+      for (var j = 0; j < paymentCourt[i].claim.length; j++) {
+        if ((paymentCourt[i].claim[j].name.options.selectedIndex == 0 ||
+            paymentCourt[i].claim[j].name.options.selectedIndex == 1 ||
+            paymentCourt[i].claim[j].name.options.selectedIndex == 2 ||
+            paymentCourt[i].claim[j].name.options.selectedIndex == 3) &&
+            paymentCourt[i].claim[j].type.options.selectedIndex == 0) {
+              switch (paymentCourt[i].claim[j].name.options.selectedIndex) {
+                case 0:
+                  claim_court_name[i][j] = ' с заявлением о выплате страхового возмещения ';
+                  claim_court_name_short[i][j] = ' страхового возмещения ';
+                  claim_court_add_motivation[i][j] = '';
+                  break;
+                case 1:
+                  claim_court_name[i][j] = ' с заявлением о выплате УТС ';
+                  claim_court_name_short[i][j] = ' УТС ';
+                  claim_court_add_motivation[i][j] = 'Согласно пункту 20 Постановление Пленума № ' +
+                  '58 при наступлении страхового случая потерпевший обязан не только уведомить ' +
+                  'страховщика о его наступлении в сроки, установленные Правилами ОСАГО, ' +
+                  'но и направить страховщику заявление о страховом возмещении и документы, ' +
+                  'предусмотренные Правилами ОСАГО. В заявлении о страховом возмещении потерпевший ' +
+                  'должен также сообщить о другом известном ему на момент подачи заявления ущербе, ' +
+                  'кроме расходов на восстановление поврежденного имущества, который подлежит ' +
+                  'возмещению  (например, об утрате товарной стоимости, о расходах на эвакуацию ' +
+                  'транспортного средства с места дорожно-транспортного происшествия и т.п.).<br>' +
+                  'Согласно пункту 37 Постановление Пленума № 58 к реальному ущербу, возникшему ' +
+                  'в результате дорожно-транспортного происшествия, наряду со стоимостью ремонта ' +
+                  'и запасных частей относится также утрата товарной стоимости, которая представляет ' +
+                  'собой уменьшение стоимости транспортного средства, вызванное преждевременным ' +
+                  'ухудшением товарного (внешнего) вида транспортного средства и его эксплуатационных ' +
+                  'качеств в результате снижения прочности и долговечности отдельных деталей, узлов ' +
+                  'и агрегатов, соединений и защитных покрытий вследствие дорожно-транспортного ' +
+                  'происшествия и последующего ремонта.<br>';
+                  break;
+                case 2:
+                  claim_court_name[i][j] = ' с заявлением о выплате расходов на эвакуацию Транспортного средства ';
+                  claim_court_name_short[i][j] = ' расходов на эвакуацию Транспортного средства ';
+                  claim_court_add_motivation[i][j] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+                  'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+                  'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+                  'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+                  'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+                  'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+                  'приходит к выводу о том, что расходы на эвакуацию Транспортного средства относятся '+
+                  'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты страхового '+
+                  'возмещения подлежит начислению на сумму расходов на эвакуацию Транспортного средства.'+ '<br>';
+                  break;
+                case 3:
+                  claim_court_name[i][j] = ' с заявлением о выплате расходов на хранение Транспортного средства ';
+                  claim_court_name_short[i][j] = ' расходов на хранение Транспортного средства ';
+                  claim_court_add_motivation[i][j] = 'Согласно абзацу 2 пункта 4.12 Правил ОСАГО, '+
+                  'при причинении вреда имуществу потерпевшего возмещению в пределах страховой '+
+                  'суммы подлежат иные расходы, произведенные потерпевшим в связи с причиненным '+
+                  'вредом (в том числе эвакуация транспортного средства с места дорожно-транспортного '+
+                  'происшествия, хранение поврежденного транспортного средства, доставка пострадавших '+
+                  'в медицинскую организацию).'+ '<br>'+'Учитывая изложенное, Финансовый уполномоченный '+
+                  'приходит к выводу о том, что расходы на хранение Транспортного средства относятся '+
+                  'к страховому возмещению, в силу чего неустойка за несоблюдение сроков выплаты страхового '+
+                  'возмещения подлежит начислению на сумму расходов на хранение Транспортного средства.'+ '<br>';
+                  break;
+                case 4:
+                  claim_court_name_short[i][j] = ' неустойки за несоблюдение сроков выплаты страхового возмещения по договору ОСАГО ';
+                  break;
+                default:
+              }
+              //"Собираем" абзац про анализ сроков 20 и 21 дней
+              analize_period_paragraf_help_str = claim_court_add_motivation[i][j] + 'Заявитель обратился в ' + fo_name_accusative + claim_court_name[i][j] +
+              paymentCourt[i].claim[j].app_day_form + ', следовательно, последним днем срока осуществления '+
+              'выплаты' + claim_court_name_short[i][j] + 'является ' + paymentCourt[i].claim[j].last_day_form + ', а неустойка подлежит начислению с '+
+              paymentCourt[i].claim[j].penalty_day_form +'.<br>';
+
+              if (!court_set.has(analize_period_paragraf_help_str)) {
+                court_set.add(analize_period_paragraf_help_str);
+                analize_court_period_paragraf[i][j] = analize_period_paragraf_help_str;
+              } else {
+                analize_court_period_paragraf[i][j] = "";
+              }
+
+              //"Собираем" абзац про выплату
+              payment_court_execution_paragraf[i][j] = paymentCourt[i].getPayDateFormatted() + ' ' + fo_name_instrumental + ' исполнено Решение суда от ' + paymentCourt[i].getDateFormatted() +
+              " в части " + declensions_by_cases(paymentCourt[i].claim[j].name.value) + ' в размере ' + makeRubText_genitive(paymentCourt[i].claim[j].summ) +
+              // ', что подтверждается платежным поручением от ' + formatDate(new Date(pay_date[i])) + ' № ' + payment_order[i] +
+              '.<br>';
+
+              //Собираем абзац с расчетом неустойки
+              payment_court_conclusion_paragraf[i][j] = 'Таким образом, неустойка на сумму ' + makeRubText_nominative(paymentCourt[i].claim[j].summ) + ' подлежит расчету за период с ' +
+              paymentCourt[i].claim[j].penalty_day_form + ' по ' + paymentCourt[i].getPayDateFormatted() + ' (' + declinationDays(paymentCourt[i].claim[j].days_delay) + ').' + '<br>' +
+              'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, '+
+              'размер неустойки, подлежащий выплате за период с ' + paymentCourt[i].claim[j].penalty_day_form + ' по ' + paymentCourt[i].getPayDateFormatted() +
+              ' составляет ' + makeRubText_nominative(paymentCourt[i].claim[j].penalty_summ) + ' (' + makeRubText_nominative(paymentCourt[i].claim[j].summ) + ' × ' +
+              declinationDays(paymentCourt[i].claim[j].days_delay) +' × 1%).' + '<br>';
+
+              payment_court_claims_paragraf[i] = payment_court_claims_paragraf[i] + analize_court_period_paragraf[i][j] + payment_court_execution_paragraf[i][j] + payment_court_conclusion_paragraf[i][j];
+              payment_court_claims_paragraf_without_analize[i] = payment_court_claims_paragraf_without_analize[i] + payment_court_execution_paragraf[i][j] + payment_court_conclusion_paragraf[i][j];
+        }
+      }
+
+      if (paymentCourt[i].fu_claim_set_type == 0) {
+        payment_court_decision[i] = payment_court_claims_paragraf[i];
+      } else {
+        payment_court_decision[i] = "Неустойка является мерой гражданско-правовой ответственности, которая при наличии условий, необходимых для наступления гражданско-правовой " +
+        "ответственности, подлежит взысканию в случае неисполнения или ненадлежащего исполнения обязательства, то есть при наличии противоправного поведения.<br>" +
+        "В силу части 1 статьи 2 Закона № 123-ФЗ должность финансового уполномоченного учреждена для рассмотрения обращений потребителей финансовых услуг об " +
+        "удовлетворении требований имущественного характера, предъявляемых к финансовым организациям, оказавшим им финансовые услуги.<br>" +
+        "Финансовая организация, являясь участником обязательного взаимодействия с финансовым уполномоченным, в силу пункта 4 части 3 статьи 28 Закона № 123-ФЗ " +
+        "обязана добровольно исполнять решения финансового уполномоченного, основываясь на принятом им решении при установлении объема своих обязательств перед потребителем финансовых услуг.<br>" +
+        "В силу статьи 24 Закона № 123-ФЗ исполнение финансовой организацией вступившего в силу решения финансового уполномоченного признается надлежащим исполнением финансовой организацией " +
+        "обязанностей по соответствующему договору с потребителем финансовых услуг об оказании ему или в его пользу финансовой услуги.<br>" +
+        "В случае неисполнения финансовой организацией вступившего в силу решения финансового уполномоченного либо условий соглашения финансовый " +
+        "уполномоченный выдает потребителю финансовых услуг удостоверение, являющееся исполнительным документом, форма которого устанавливается " +
+        "Правительством Российской Федерации (часть 3 статьи 23 Закона № 123-ФЗ).<br>" +
+        court_claims_satisfied_paragraph_all +
+        "Вместе с тем, Решением Суда от " + paymentCourt[i].getDateFormatted() + " с " + fo_name_genitive + " в пользу Заявителя взыскана, в том числе, сумма " +
+        court_claims_satisfied_string + ". Решение Суда вступило в законную силу " + paymentCourt[i].getInForceDateFormatted() + ".<br>" +
+        "Согласно части 2 статьи 13 Гражданского процессуального кодекса Российской Федерации (далее - ГПК РФ), вступившие в законную силу судебные " +
+        "постановления, а также законные распоряжения, требования, поручения, вызовы и обращения судов являются обязательными для всех без исключения органов " +
+        "государственной власти, органов местного самоуправления, общественных объединений, должностных лиц, граждан, организаций и подлежат неукоснительному " +
+        "исполнению на всей территории Российской Федерации.<br>" +
+        "Таким образом, обязанность " + fo_name_genitive + " по выплате суммы " + court_claims_satisfied_string +
+        ", на основании Решения Суда от " + paymentCourt[i].getDateFormatted() + ", возникла с момента вступления решения суда в законную силу – " + paymentCourt[i].getInForceDateFormatted() + ".<br>" +
+        payment_court_claims_paragraf_without_analize[i];
+      }
+      payment_court_paragraf = payment_court_paragraf + payment_court_decision[i];
+    }
+  }
+
+  //Формирование вспомогательной подстроки строки со сложением нескольких НАЧИСЛЕННЫХ неустоек
+  //добавление открывающейся скобки и первой выплаты, в случае, если количество выплат больше 1
+  let stop_ind_1 = 0;
+  let fu_index = 0;
+  let fu_claim_index = 0;
+  let court_index = 0;
+  let court_claim_index = 0;
+  let stop_ind_2 = false;
+  for (var i = 0; i < paymentVoluntary.length; i++) {
+    if (paymentVoluntary[i].penalty_summ > 0) {
+      total_penalty_summ_accrued_string = ' (' + makeRubText_nominative(paymentVoluntary[i].penalty_summ);
+      stop_ind_1 = i + 1;
+      break;
+    }
+  }
+
+  // добавление выплат, в случае, если их было больше 1
+  for (var i = stop_ind_1; i < paymentVoluntary.length; i++) {
+    if (paymentVoluntary[i].penalty_summ > 0) {
+      total_penalty_summ_accrued_string = total_penalty_summ_accrued_string + ' + ' + makeRubText_nominative(paymentVoluntary[i].penalty_summ);
+      stop_ind_2 = true;
+    }
+  }
+
+  //Добавление выплат на оснвоании решения ФУ
+  if (stop_ind_1 > 0) {
+    for (var i = 0; i < paymentFu.length; i++) {
+      for (var j = 0; j < paymentFu[i].claim.length; j++) {
+        if (paymentFu[i].claim[j].penalty_summ > 0) {
+          total_penalty_summ_accrued_string = total_penalty_summ_accrued_string + ' + ' + makeRubText_nominative(paymentFu[i].claim[j].penalty_summ);
+          stop_ind_2 = true;
+        }
+      }
+    }
+  } else {
+    for (var i = 0; i < paymentFu.length; i++) {
+      for (var j = 0; j < paymentFu[i].claim.length; j++) {
+        if (paymentFu[i].claim[j].penalty_summ > 0) {
+          total_penalty_summ_accrued_string = ' (' + makeRubText_nominative(paymentFu[i].claim[j].penalty_summ);
+          fu_index = i;
+          fu_claim_index = j + 1;
+          stop_ind_1 = i + 1;
+          break;
+        }
+      }
+      if (stop_ind_1 > 0) {
+        break;
+      }
+    }
+
+    for (var i = fu_index; i < paymentFu.length; i++) {
+      for (var j = fu_claim_index; j < paymentFu[i].claim.length; j++) {
+        if (paymentFu[i].claim[j].penalty_summ > 0) {
+          total_penalty_summ_accrued_string = total_penalty_summ_accrued_string + ' + ' + makeRubText_nominative(paymentFu[i].claim[j].penalty_summ);
+          stop_ind_2 = true;
+        }
+      }
+    }
+  }
+
+  //Добавление выплат на оснвоании решения суда
+  if (stop_ind_1 > 0) {
+    for (var i = 0; i < paymentCourt.length; i++) {
+      for (var j = 0; j < paymentCourt[i].claim.length; j++) {
+        if (paymentCourt[i].claim[j].penalty_summ > 0) {
+          total_penalty_summ_accrued_string = total_penalty_summ_accrued_string + ' + ' + makeRubText_nominative(paymentCourt[i].claim[j].penalty_summ);
+          stop_ind_2 = true;
+        }
+      }
+    }
+  } else {
+    for (var i = 0; i < paymentCourt.length; i++) {
+      for (var j = 0; j < paymentCourt[i].claim.length; j++) {
+        if (paymentCourt[i].claim[j].penalty_summ > 0) {
+          total_penalty_summ_accrued_string = ' (' + makeRubText_nominative(paymentCourt[i].claim[j].penalty_summ);
+          court_index = i;
+          court_claim_index = j + 1;
+          break;
+        }
+      }
+      if (stop_ind_1 > 0) {
+        break;
+      }
+    }
+
+    for (var i = court_index; i < paymentCourt.length; i++) {
+      for (var j = court_claim_index; j < paymentCourt[i].claim.length; j++) {
+        if (paymentCourt[i].claim[j].penalty_summ > 0) {
+          total_penalty_summ_accrued_string = total_penalty_summ_accrued_string + ' + ' + makeRubText_nominative(paymentCourt[i].claim[j].penalty_summ);
+          stop_ind_2 = true;
+        }
+      }
+    }
+  }
+
+  //добавление закрывающейся скобки, если количество выплат больше 1
+  if (stop_ind_2) {
+    total_penalty_summ_accrued_string = total_penalty_summ_accrued_string + ')'
+  } else {
+    total_penalty_summ_accrued_string = '';
+  }
+
+  //Формирование вспомогательной подстроки строки со сложением нескольких ВЫПЛАЧЕННЫХ неустоек
+  //добавление открывающейся скобки и первой выплаты, в случае, если количество выплат больше 1
+  stop_ind_1 = 0;
+  stop_ind_2 = false;
+  for (var i = 0; i < paymentVoluntary.length; i++) {
+    if (paymentVoluntary[i].type.options.selectedIndex == 4) {
+      total_penalty_summ_paid_string = ' (' + makeRubText_nominative(paymentVoluntary[i].summ);
+      stop_ind_1 = i + 1;
+      break
+    }
+  }
+
+  // добавление выплат, в случае, если их было больше 1
+  for (var i = stop_ind_1; i < paymentVoluntary.length; i++) {
+    if (paymentVoluntary[i].type.options.selectedIndex == 4) {
+      total_penalty_summ_paid_string = total_penalty_summ_paid_string + ' + ' + makeRubText_nominative(paymentVoluntary[i].summ);
+      stop_ind_2 = true;
+    }
+  }
+
+  //добавление закрывающейся скобки, если количество выплат больше 1
+  if (stop_ind_2) {
+    total_penalty_summ_paid_string = total_penalty_summ_paid_string + ')'
+  } else {
+    total_penalty_summ_paid_string = '';
+  }
+
+  //Абзац про общий размер начисленной неустойки
+  if (total_penalty_summ_accrued > 0) {
+    total_penalty_summ_accrued_paragraf = 'Таким образом, общий размер начисленной неустойки составляет ' +
+    makeRubText_genitive(total_penalty_summ_accrued) + total_penalty_summ_accrued_string + '.' + '<br>';
+  } else {
+    total_penalty_summ_accrued_paragraf = '';
+  }
+
+    //Абзац про общий размер выплаченной неустойки
+  if (total_penalty_summ_paid > 0) {
+    total_penalty_summ_paid_paragraf = 'Таким образом, общий размер неустойки, добровольно выплаченной ' + fo_name_instrumental + ', составляет ' +
+    makeRubText_genitive(total_penalty_summ_paid) + total_penalty_summ_paid_string + '.' + '<br>';
+  } else {
+    total_penalty_summ_paid_paragraf = '';
+  }
+
+  if (total_penalty_summ_accrued > max_summ) {
+    total_penalty_summ_accrued = max_summ;
+    if (max_summ == 400000) {
+      max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
+      'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
+      'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
+      'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
+      'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
+      'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
+      'причиненного имуществу каждого потерпевшего, ' + makeRubText_nominative(max_summ) + '.'+'<br>';
+    } else {
+      max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
+      'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
+      'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
+      'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
+      'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
+      'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
+      'причиненного имуществу каждого потерпевшего, 400 000 рублей 00 копеек.' +'<br>'+
+      'В соответствии с пунктом 4 статьи 11.1 Закона № 40-ФЗ в случае оформления документов '+
+      'о дорожно-транспортном происшествии без участия уполномоченных на то сотрудников полиции '+
+      'размер страхового возмещения, причитающегося потерпевшему в счет возмещения вреда, '+
+      'причиненного его транспортному средству, не может превышать ' + makeRubText_nominative(max_summ) + '.'+'<br>';
+    }
+  }
+
+  if ((total_penalty_summ_accrued > total_penalty_summ_paid) && (total_penalty_summ_paid > 0)) {
+    summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
+    'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
+    makeRubText_genitive(total_penalty_summ_accrued - total_penalty_summ_paid) + ' (' + makeRubText_nominative(total_penalty_summ_accrued) + ' - ' + makeRubText_nominative(total_penalty_summ_paid) + ').' + '<br>';
+  } else if (total_penalty_summ_accrued > total_penalty_summ_paid) {
+    summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
+    'неустойки за несоблюдение срока выплаты страхового возмещения подлежит удовлетворению в размере '+
+    makeRubText_genitive(total_penalty_summ_accrued) +'.' + '<br>';
+  } else {
+    summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
+    'неустойки за несоблюдение срока выплаты страхового возмещения не подлежит удовлетворению.' + '<br>';
+  }
+
+  if (total_ndfl > 0) {
+    ndfl_motivation = ndfl_motivation_on + 'Следовательно, ' + fo_name_nominative + ' при выплате '+
+    'неустойки в связи с нарушением срока выплаты страхового возмещения в рамках договора ОСАГО '+
+    'обосновано' + keep + ' сумму НДФЛ в размере ' + makeRubText_genitive(total_ndfl) +
+    ', рассчитанную следующим образом: (' + makeRubText_genitive(total_penalty_summ_paid) +
+    ' × 13%)' + '.<br>';
+  }
+
+  return first_paragraf +
+         standart_motivation +
+         article_191 + article_193 +
+         payment_voluntary_paragraf +
+         payment_fu_paragraf +
+         payment_court_paragraf +
+         total_penalty_summ_accrued_paragraf +
+         max_summ_paragraf +
+         total_payment_penalty_paragraf +
+         ndfl_motivation +
+         total_penalty_summ_paid_paragraf +
+         summary_paragraf;
 }

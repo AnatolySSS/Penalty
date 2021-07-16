@@ -63,6 +63,8 @@ class ClaimFu {
   to
   without
 
+  app_day
+  app_day_form
   last_day
   last_day_form
   penalty_day
@@ -86,24 +88,32 @@ class ClaimFu {
     //Вычисление количества дней между датой выплаты и 20м днем
     switch (this.name.options.selectedIndex) {
       case 0:
+        this.app_day = date_sv.getAppDate();
+        this.app_day_form = date_sv.getAppDateFormatted();
         this.last_day = date_sv.getLastDay();
         this.last_day_form = date_sv.getLastDayFormatted();
         this.penalty_day = date_sv.getPenaltyDay();
         this.penalty_day_form = date_sv.getPenaltyDayFormatted();
         break;
       case 1:
+        this.app_day = date_uts.getAppDate();
+        this.app_day_form = date_uts.getAppDateFormatted();
         this.last_day = date_uts.getLastDay();
         this.last_day_form = date_uts.getLastDayFormatted();
         this.penalty_day = date_uts.getPenaltyDay();
         this.penalty_day_form = date_uts.getPenaltyDayFormatted();
         break;
       case 2:
+        this.app_day = date_ev.getAppDate();
+        this.app_day_form = date_ev.getAppDateFormatted();
         this.last_day = date_ev.getLastDay();
         this.last_day_form = date_ev.getLastDayFormatted();
         this.penalty_day = date_ev.getPenaltyDay();
         this.penalty_day_form = date_ev.getPenaltyDayFormatted();
         break;
       case 3:
+        this.app_day = date_stor.getAppDate();
+        this.app_day_form = date_stor.getAppDateFormatted();
         this.last_day = date_stor.getLastDay();
         this.last_day_form = date_stor.getLastDayFormatted();
         this.penalty_day = date_stor.getPenaltyDay();

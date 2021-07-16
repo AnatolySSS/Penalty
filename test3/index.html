@@ -124,7 +124,7 @@
                   <h6><span id="COLUMN_NAME_21" data-toggle="tooltip" title="Первый день начисления неустойки"></span></h6>
                 </div>
               </div><!-- first_app_colunm_names -->
-              <div id="app_form_row_1" class="form-row">
+              <div id="app_form_row_1" class="form-row app_form_rows">
                 <div class="form-group col-md-4 form-inline">
                   о страховом возмещении
                 </div>
@@ -132,7 +132,7 @@
                   <input id = "app_date_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
                 </div>
                 <div class="form-group col-md-1">
-                  <button id="app_btn_1" class="btn btn-outline-warning" onclick="addrows()">+</button>
+                  <button id="app_btn_1" class="btn btn-outline-warning" onclick="addrows(this)">+</button>
                 </div>
                 <div class="form-group col-md-2 form-inline">
                   <span id = "date_sv_last_day"></span>
@@ -141,7 +141,7 @@
                   <span id = "date_sv_penalty_day"></span>
                 </div>
               </div><!-- app_form_row_1 -->
-              <div id="app_form_row_2" class="form-row" style="display:none">
+              <div id="app_form_row_2" class="form-row app_form_rows" style="display:none">
                 <div class="form-group col-md-4 form-inline">
                   о выплате УТС
                 </div>
@@ -149,7 +149,7 @@
                   <input id = "app_date_2" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
                 </div>
                 <div class="form-group col-md-1">
-                  <button id="app_btn_2" class="btn btn-outline-danger" onclick="addrows()">×</button>
+                  <button id="app_btn_2" class="btn btn-outline-danger" onclick="addrows(this)">×</button>
                 </div>
                 <div class="form-group col-md-2 form-inline">
                   <span id = "date_uts_last_day"></span>
@@ -158,7 +158,7 @@
                   <span id = "date_uts_penalty_day"></span>
                 </div>
               </div><!-- app_form_row_2 -->
-              <div id="app_form_row_3" class="form-row" style="display:none">
+              <div id="app_form_row_3" class="form-row app_form_rows" style="display:none">
                 <div class="form-group col-md-4 form-inline">
                   о выплате расходов на эвакуатор
                 </div>
@@ -166,7 +166,7 @@
                   <input id = "app_date_3" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
                 </div>
                 <div class="form-group col-md-1">
-                  <button id="app_btn_3" class="btn btn-outline-danger" onclick="addrows()">×</button>
+                  <button id="app_btn_3" class="btn btn-outline-danger" onclick="addrows(this)">×</button>
                 </div>
                 <div class="form-group col-md-2 form-inline">
                   <span id = "date_ev_last_day"></span>
@@ -175,7 +175,7 @@
                   <span id = "date_ev_penalty_day"></span>
                 </div>
               </div><!-- app_form_row_3 -->
-              <div id="app_form_row_4" class="form-row" style="display:none">
+              <div id="app_form_row_4" class="form-row app_form_rows" style="display:none">
                 <div class="form-group col-md-4 form-inline">
                   о выплате расходов на хранение
                 </div>
@@ -183,7 +183,7 @@
                   <input id = "app_date_4" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
                 </div>
                 <div class="form-group col-md-1">
-                  <button id="app_btn_4" class="btn btn-outline-danger" onclick="addrows()">×</button>
+                  <button id="app_btn_4" class="btn btn-outline-danger" onclick="addrows(this)">×</button>
                 </div>
                 <div class="form-group col-md-2 form-inline">
                   <span id = "date_stor_last_day"></span>

@@ -100,9 +100,9 @@ let date_sv, date_sv_last_day, date_sv_penalty_day;
 let date_uts, date_uts_last_day, date_uts_penalty_day;
 let date_ev, date_ev_last_day, date_ev_penalty_day;
 let date_stor, date_stor_last_day, date_stor_penalty_day;
-let date_dtp;
-let max_summ;
-let europrotocol;
+// let date_dtp;
+// let max_summ;
+// let europrotocol;
 let total_count = 0;
 let total_penalty = 0;
 let total_ndfl = 0;
@@ -1053,46 +1053,46 @@ document.getElementById('btn_desicion').onclick = function(){
       }
 
       //обнуление значений, в случае, если периоды до или после суда меньше нуля
-      if (isNaN(court_period_before[i])) {
-        court_period_before[i] = 0;
-      }
-      if (isNaN(court_summ_before[i])) {
-        court_summ_before[i] = 0;
-      }
-      if (isNaN(court_period_after[i])) {
-        court_period_after[i] = 0;
-      }
-      if (isNaN(court_summ_after[i])) {
-        court_summ_after[i] = 0;
-      }
+      // if (isNaN(court_period_before[i])) {
+      //   court_period_before[i] = 0;
+      // }
+      // if (isNaN(court_summ_before[i])) {
+      //   court_summ_before[i] = 0;
+      // }
+      // if (isNaN(court_period_after[i])) {
+      //   court_period_after[i] = 0;
+      // }
+      // if (isNaN(court_summ_after[i])) {
+      //   court_summ_after[i] = 0;
+      // }
 
       //Выведение выплат на экран
-      if ((!isNaN(pay_date[i])) && pay[i] != 4) {
-        str_payment_dataled = '<tr>' +
-          '<th scope="row"><span>' + i + '</span></th>' +
-          '<td><span>' + payments_names[i - 1].value + '</span></td>' +
-          '<td><span>' + makeRubText_genitive(pay_text[i]) + '</span></td>';
-
-          // if (court_period_before[i] > 0) {
-            str_payment_dataled = str_payment_dataled +
-            '<td><span>' + formatDate(new Date(date_penalty_day[i])) + '</span></td>' +
-            '<td><span>' + formatDate(new Date(date_court_from - day)) + '</span></td>' +
-            '<td><span>' + declinationDays(court_period_before[i] / day) + '</span></td>' +
-            '<td><span>' + makeRubText_nominative(court_summ_before[i]) + '</span></td>';
-          // }
-
-          // if (court_period_after[i] > 0) {
-            str_payment_dataled = str_payment_dataled +
-            '<td><span>' + formatDate(new Date(date_court_to + day)) + '</span></td>' +
-            '<td><span>' + formatDate(new Date(pay_date[i])) + '</span></td>' +
-            '<td><span>' + declinationDays(court_period_after[i] / day) + '</span></td>' +
-            '<td><span>' + makeRubText_nominative(court_summ_after[i]) + '</span></td>';
-          // }
-
-          str_payment_dataled = str_payment_dataled + '</tr>'
-
-        $('#str_payment_dataled').append(str_payment_dataled);
-      }
+      // if ((!isNaN(pay_date[i])) && pay[i] != 4) {
+      //   str_payment_dataled = '<tr>' +
+      //     '<th scope="row"><span>' + i + '</span></th>' +
+      //     '<td><span>' + payments_names[i - 1].value + '</span></td>' +
+      //     '<td><span>' + makeRubText_genitive(pay_text[i]) + '</span></td>';
+      //
+      //     // if (court_period_before[i] > 0) {
+      //       str_payment_dataled = str_payment_dataled +
+      //       '<td><span>' + formatDate(new Date(date_penalty_day[i])) + '</span></td>' +
+      //       '<td><span>' + formatDate(new Date(date_court_from - day)) + '</span></td>' +
+      //       '<td><span>' + declinationDays(court_period_before[i] / day) + '</span></td>' +
+      //       '<td><span>' + makeRubText_nominative(court_summ_before[i]) + '</span></td>';
+      //     // }
+      //
+      //     // if (court_period_after[i] > 0) {
+      //       str_payment_dataled = str_payment_dataled +
+      //       '<td><span>' + formatDate(new Date(date_court_to + day)) + '</span></td>' +
+      //       '<td><span>' + formatDate(new Date(pay_date[i])) + '</span></td>' +
+      //       '<td><span>' + declinationDays(court_period_after[i] / day) + '</span></td>' +
+      //       '<td><span>' + makeRubText_nominative(court_summ_after[i]) + '</span></td>';
+      //     // }
+      //
+      //     str_payment_dataled = str_payment_dataled + '</tr>';
+      //
+      //   $('#str_payment_dataled').append(str_payment_dataled);
+      // }
 
       //добавление суммы неустойки до судебного вызскания и после к общему значению
       total_count = total_count + court_summ_before[i] + court_summ_after[i];
@@ -1192,59 +1192,46 @@ document.getElementById('btn_desicion').onclick = function(){
 
   } //конец ветки судебного взыскания неустойки
 
-  //Абзац про общий размер начисленной неустойки
-  if (total_count > 0) {
-    total_count_paragraf = 'Таким образом, общий размер начисленной неустойки составляет ' +
-    makeRubText_genitive(total_count) + total_count_string + '.' + '<br>';
-  } else {
-    total_count_paragraf = '';
-  }
+  // //Абзац про общий размер начисленной неустойки
+  // if (total_count > 0) {
+  //   total_count_paragraf = 'Таким образом, общий размер начисленной неустойки составляет ' +
+  //   makeRubText_genitive(total_count) + total_count_string + '.' + '<br>';
+  // } else {
+  //   total_count_paragraf = '';
+  // }
+  //
+  //   //Абзац про общий размер выплаченной неустойки
+  // if (total_penalty > 0) {
+  //   total_penalty_paragraf = 'Таким образом, общий размер неустойки, добровольно выплаченной ' + fo_name_instrumental + ', составляет ' +
+  //   makeRubText_genitive(total_penalty) + total_penalty_string + '.' + '<br>';
+  // } else {
+  //   total_penalty_paragraf = '';
+  // }
 
-    //Абзац про общий размер выплаченной неустойки
-  if (total_penalty > 0) {
-    total_penalty_paragraf = 'Таким образом, общий размер неустойки, добровольно выплаченной ' + fo_name_instrumental + ', составляет ' +
-    makeRubText_genitive(total_penalty) + total_penalty_string + '.' + '<br>';
-  } else {
-    total_penalty_paragraf = '';
-  }
-
-  if (total_count > max_summ) {
-    total_count = max_summ;
-    if (max_summ == 400000) {
-      max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
-      'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
-      'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
-      'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
-      'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
-      'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
-      'причиненного имуществу каждого потерпевшего, 400 000 рублей 00 копеек.'+'<br>';
-    } else if (max_summ == 100000) {
-      max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
-      'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
-      'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
-      'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
-      'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
-      'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
-      'причиненного имуществу каждого потерпевшего, 400 000 рублей 00 копеек.' +'<br>'+
-      'В соответствии с пунктом 4 статьи 11.1 Закона № 40-ФЗ в случае оформления документов '+
-      'о дорожно-транспортном происшествии без участия уполномоченных на то сотрудников полиции '+
-      'размер страхового возмещения, причитающегося потерпевшему в счет возмещения вреда, '+
-      'причиненного его транспортному средству, не может превышать 100 000 рублей 00 копеек.'+'<br>';
-    } else if (max_summ == 50000) {
-      max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
-      'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
-      'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
-      'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
-      'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
-      'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
-      'причиненного имуществу каждого потерпевшего, 400 000 рублей 00 копеек.' +'<br>'+
-      'В соответствии с пунктом 4 статьи 11.1 Закона № 40-ФЗ в случае оформления документов '+
-      'о дорожно-транспортном происшествии без участия уполномоченных на то сотрудников полиции '+
-      'размер страхового возмещения, причитающегося потерпевшему в счет возмещения вреда, '+
-      'причиненного его транспортному средству, не может превышать 50 000 рублей 00 копеек.'+'<br>';
-    }
-
-  }
+  // if (total_count > max_summ) {
+  //   total_count = max_summ;
+  //   if (max_summ == 400000) {
+  //     max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
+  //     'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
+  //     'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
+  //     'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
+  //     'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
+  //     'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
+  //     'причиненного имуществу каждого потерпевшего, ' + makeRubText_nominative(max_summ) + '.'+'<br>';
+  //   } else {
+  //     max_summ_paragraf = 'В силу пункта 6 статьи 16.1 Закона № 40-ФЗ общий размер неустойки (пени), '+
+  //     'суммы финансовой санкции, которые подлежат выплате потерпевшему - физическому лицу, не может '+
+  //     'превышать размер страховой суммы по виду причиненного вреда, установленный Законом № 40-ФЗ.' +'<br>'+
+  //     'Согласно статье 7 Закона № 40-ФЗ страховая сумма, в пределах которой страховщик при наступлении '+
+  //     'каждого страхового случая (независимо от их числа в течение срока действия договора обязательного '+
+  //     'страховая) обязуется возместить потерпевшим причиненный вред, составляет: в части возмещения вреда, '+
+  //     'причиненного имуществу каждого потерпевшего, 400 000 рублей 00 копеек.' +'<br>'+
+  //     'В соответствии с пунктом 4 статьи 11.1 Закона № 40-ФЗ в случае оформления документов '+
+  //     'о дорожно-транспортном происшествии без участия уполномоченных на то сотрудников полиции '+
+  //     'размер страхового возмещения, причитающегося потерпевшему в счет возмещения вреда, '+
+  //     'причиненного его транспортному средству, не может превышать ' + makeRubText_nominative(max_summ) + '.'+'<br>';
+  //   }
+  // }
 
   if ((total_count > total_penalty) && (total_penalty > 0)) {
     summary_paragraf = 'Учитывая вышеизложенное, требование Заявителя о взыскании '+
