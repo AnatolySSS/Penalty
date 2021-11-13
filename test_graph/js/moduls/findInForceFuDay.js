@@ -175,6 +175,9 @@ export function findInForceFuDay(date) {
              date + DAY * misteryDays != Date.parse(new Date(2021, 4, 7, 0)) &&
              date + DAY * misteryDays != Date.parse(new Date(2021, 4, 10, 0)) &&
              date + DAY * misteryDays != Date.parse(new Date(2021, 5, 14, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2021, 10, 1, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2021, 10, 2, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2021, 10, 3, 0)) &&
              date + DAY * misteryDays != Date.parse(new Date(2021, 10, 4, 0)) &&
              date + DAY * misteryDays != Date.parse(new Date(2021, 10, 5, 0)) &&
              date + DAY * misteryDays != Date.parse(new Date(2021, 11, 31, 0))
