@@ -10,9 +10,18 @@
   margin-right: auto; */
 }
 
+.modal-full {
+  max-width: none !important;
+  margin: 10px !important;
+}
+
+#exampleModal {
+  padding: 0px !important;
+}
+
 .form_grup {
-         position: relative; # Положение элемента устанавливается относительно его исходного места.
-         margin-bottom: 32px;# Внешний отступ снизу элемента
+  position: relative; # Положение элемента устанавливается относительно его исходного места.
+  margin-bottom: 32px;# Внешний отступ снизу элемента
 }
 
 select, input, button, .form_label {
@@ -22,10 +31,6 @@ select, input, button, .form_label {
 
 input {
   text-align-last: center;
-}
-
-.table_of_payments{
-  overflow-x: auto;
 }
 
 .table {
@@ -74,15 +79,6 @@ thead {
   color: #ffffff;
 }
 
-.table_1 > tr {
-  border: 1px solid black;
-}
-
-.td_main {
-  padding-left: 10px;
-  padding-right: 10px;
-}
-
 .input-numeral:focus {
   /* background-image: url("img/rub2.png"); */
   background-repeat: no-repeat;
@@ -111,4 +107,17 @@ white-space: nowrap;
 
 .card-header, #menu_osago_penalty:hover, #menu_osago_fs:hover {
   cursor: pointer;
+}
+
+#penalty_graph{
+  /* background-color: red; */
+  /* margin-left: auto;
+  margin-right: auto; */
+}
+#div_svg {
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+  height: 400px;
+  /* background-color: yellow; */
 }

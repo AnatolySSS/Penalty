@@ -160,11 +160,13 @@ button.active, .accordion_right:hover {
 }
 
 .panel {
-  /* padding: 0 18px;
-  background-color: white; */
+  padding: 18px 18px 18px 0px;
+  /* background-color: white; */
 	/* max-height: 0; */
-	padding-top: 24px;
+	margin-top: 12px;
   display: none;
   overflow: hidden;
 	transition: max-height 0.2s ease-out;
+	border: 2px solid #ffc107;
+	border-radius: 10px;
 }

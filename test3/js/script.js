@@ -13,6 +13,7 @@ import { changeDateType } from './moduls/changeDateType.js';
 import { declinationDays } from './moduls/declinationDays.js';
 import { fillPenaltyGraph } from './moduls/graph.js';
 import { makeTextDecision } from './moduls/makeTextDecision.js';
+import { decision_analize } from './moduls/analyze_fu_decision.js';
 // import { makeDecisionFile } from './moduls/docx.js';
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
@@ -447,6 +448,11 @@ document.getElementById('close_modal').onclick = function (){
   $('#show_graph').html("Показать график неустоек");
   $('#decision').hide();
   $('#show_decision').html("Показать текст решения");
+}
+
+document.getElementById('btn_fu_decision_analyze').onclick = function (){
+    let files = document.getElementById("fu_decision_file").files;
+    decision_analize(files);
 }
 
 function selectText(containerid) {
