@@ -15,6 +15,7 @@
     <link rel="stylesheet" href="css/izitoast/iziToast.min.css" type="text/css">
     <link rel="stylesheet" href="https://unpkg.com/driver.js/dist/driver.min.css" type="text/css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
     <script type="text/javascript" src="js/cleave/cleave.min.js"></script>
     <script type="text/javascript" src="js/swgjs/svg.min.js"></script>
     <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@svgdotjs/svg.js@3.0/dist/svg.min.js"></script> -->
@@ -23,7 +24,7 @@
     <script type="text/javascript" src="js/fixedheadertable/jquery.fixedheadertable.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
-    <script type="text/javascript" src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
+    <!-- <script type="text/javascript" src="https://unpkg.com/driver.js/dist/driver.min.js"></script> -->
   </head>
   <body>
     <div class="container-lg mt-5">
@@ -97,62 +98,263 @@
             <br>
             <div class="general_info">
 
-              <!-- BEGIN fu_name, date & number of appeal -->
-              <!-- <div class="fu_name form-row align-items-center">
-                <div class="form-group col-md-3">
-                  <select id="fu_name" class="custom-select col-md-12">
-                    <option>Воронин Ю.В.</option>
-                    <option>Климов В.В.</option>
-                    <option>Никитина С.В.</option>
-                    <option>Писаревский Е.Л.</option>
-                    <option>Савицкая Т.М.</option>
-                  </select>
+              <hr>
+
+              <!-- BEGIN preambula -->
+              <div class="preambula form-row">
+                <div class="form-group col-md-11 my-auto" >
+                  <button type="button" class="accordion_right" name="button">
+                    <span>Общая  информация</span>
+                    <i class="fa fa-chevron-down toggle"></i>
+                  </button>
+                  <div class="panel was-validated">
+                    <!-- BEGIN fu_name, date & number of appeal -->
+                    <div class="form-row ml-2">
+                      <div class="form-group col-md-5 ml-2">
+                        <h6>ФУ</h6>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <h6>Дата обращения</h6>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <h6>№ обращения</h6>
+                      </div>
+                    </div>
+                    <div class="fu-name form-row ml-2">
+                      <div class="form-group col-md-5">
+                        <select id="fu_name" class="custom-select form-control col-md-12" required>
+                          <option value="">Выберите подписанта</option>
+                          <option>Воронин Ю.В.</option>
+                          <option>Климов В.В.</option>
+                          <option>Максимова С.В.</option>
+                          <option>Новак Д.В.</option>
+                          <option>Савицкая Т.М.</option>
+                        </select>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <input id = "date_appeal" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <div class="input-group">
+                          <input id="appeal_number" class = "form-control input-number-fu" placeholder="Номер" type="text" size="8" required>
+                          <div class="input-group-append">
+                            <span class="input-group-text">&#8470;</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- END fu_name, date & number of appeal -->
+
+                    <!-- BEGIN fo_data -->
+                    <div class="fo_data ml-2">
+                      <div class="form-row ml-2">
+                        <div class="form-group col-md-4">
+                          <h6>Сведения о ФО</h6>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <div class="autocomplete">
+                            <input id="fo_name" class="form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+                          </div>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <input id = "fo_registration_date" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <input id = "fo_inn" class="form-control" placeholder="ИНН" type="text" size="8" required>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-12">
+                          <input id = "fo_registration_address" class="form-control input-lg" placeholder="Адрес регистрации" type="text" size="8" required>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-12">
+                          <input id = "fo_post_address" class="form-control input-lg" placeholder="Почтовый адрес" type="text" size="8" required>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-12 text-center">
+                          <a id="fo_site_check" href="" target="_blank"></a>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- END fo_data -->
+
+                    <!-- BEGIN app_data -->
+                    <div class="app_data ml-2">
+                      <div class="form-row ml-2">
+                        <div class="form-group col-md-4">
+                          <h6>Сведения о Заявителе</h6>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-6">
+                          <input id="app_name" class="form-control" type="text" placeholder="ФИО заявителя" size="40" required>
+                        </div>
+                        <div class="form-group col-md-6">
+                          <input id = "app_passport" class="form-control" placeholder="серия и № паспорта" type="text" size="8" required>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-12">
+                          <input id = "app_registration_address" class="form-control" placeholder="Место жительства" type="text" size="8" required>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-12">
+                          <input id = "app_post_address" class="form-control" placeholder="Почтовый адрес" type="text" size="8" required>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- END app_data -->
+                  </div>
                 </div>
-                <div class="form-group col-md-2">
-                  <input id = "date_appeal" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                <div class="form-group col-md-1 my-auto text-center">
+                  <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>
                 </div>
-                <div class="form-group col-md-3">
-                  <div class="input-group">
-                    <input id="appeal_number" class = "form-control input-number-fu" placeholder="Номер" type="text" size="8">
-                    <div class="input-group-append">
-                      <span class="input-group-text">&#8470;</span>
+              </div>
+              <!-- END preambula -->
+
+              <hr>
+
+              <!-- BEGIN main-claims -->
+              <div class="main-claims-all form-row">
+                <div class="form-group col-md-11 my-auto">
+                  <button type="button" class="accordion_right" name="button">
+                    <span>Требования к ФУ</span>
+                    <i class="fa fa-chevron-down toggle"></i>
+                  </button>
+                  <div class="panel was-validated">
+                    <div id="main_claims_contracts" class="ml-2">
+                      <div class="form-row ">
+                        <div class="form-group col-md-5 ml-2">
+                          <h6>Тип договора</h6>
+                        </div>
+                      </div>
+                      <div id="main_claims_contract_1" class="main_claims_contracts">
+                        <div id="claims_contract_1" class="form-row">
+                          <div class="form-group col-md-5">
+                            <select id="claims_contract_type_1" class="claims_contract_types custom-select form-control col-md-12" required>
+                              <option value="">Выберите тип договора</option>
+                              <option>ОСАГО</option>
+                              <option>КАСКО</option>
+                              <option>ДСАГО</option>
+                            </select>
+                          </div>
+                          <div class="form-group col-ms-1">
+                            <button id="add_main_claims_info_btn_1" class="add_main_claims_info_btns btn btn-outline-warning add_info">
+                              <i class="fa fa-chevron-down toggle"></i>
+                            </button>
+                          </div>
+                          <div class="form-group col-ms-1">
+                            <button id="claims_contract_btn_1" class="claims_contract_btns btn btn-outline-warning" onclick="addClaimsContract()">+</button>
+                          </div>
+                        </div>
+                        <div id="main_claims_1" style="display:none">
+                          <div class="form-row ml-2">
+                            <div class="form-group col-md-5 ml-2">
+                              <h6>Требование</h6>
+                            </div>
+                            <div class="form-group col-md-3">
+                              <h6>Сумма</h6>
+                            </div>
+                          </div>
+                          <div id="main_claim_1_1" class="main_claim_1 main_claims form-row ml-2">
+                            <div class="form-group col-md-5">
+                              <select id="main_claim_type_1_1" class="main_claim_type_1 main_claim_types custom-select form-control col-md-12" required>
+                                <option value="">Выберите требование</option>
+                                <option>Страховое возмещение</option>
+                                <option>УТС</option>
+                                <option>Эвакуатор</option>
+                                <option>Хранение</option>
+                                <option>Неустойка</option>
+                                <option>Финансовая санкция</option>
+                                <option>Экспертиза</option>
+                                <option>Юрист</option>
+                                <option>Составление претензии</option>
+                                <option>Нотариус</option>
+                                <option>Почта</option>
+                                <option>Курьер</option>
+                                <option>Телеграмма</option>
+                                <option>Дефектовка</option>
+                                <option>Диагностика</option>
+                                <option>Моральный вред</option>
+                                <option>Штраф</option>
+                                <option>Аварком</option>
+                                <option>Здоровье</option>
+                                <option>Жизнь</option>
+                                <option>Иные расходы</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                              <div class="input-group">
+                                <input id="main_claim_summ_1_1" class = "main_claim_summ_1 main_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+                                <div class="input-group-append">
+                                  <span class="input-group-text">&#8381;</span>
+                                </div>
+                              </div>
+                            </div>
+                            <div class="form-group col-ms-1">
+                              <button id="main_claim_btn_1_1" class="main_claim_btn_1 main_claim_btns btn btn-outline-warning" onclick="addFuMainClaim(1)">+</button>
+                            </div>
+                          </div>
+                          <div id="add_main_claim_info_1_1" class="add_main_claim_info_1 add_main_claim_infos form-group ml-3" style="display:none">
+                            <div class="form-group">
+                              <h6>Период неустойки</h6>
+                            </div>
+                            <div class="form-group form-inline">
+                              <label for="date_main_claim_from_1_1">c</label>
+                              <input id = "date_main_claim_from_1_1" class = "date_main_claim_from_1 date_main_claim_froms ml-2 datepicker-here col-md-3" placeholder="Дата" type="text" size="10" required>
+                              <label for="date_main_claim_to_1_1" class="ml-2">по</label>
+                              <input id = "date_main_claim_to_1_1" class = "date_main_claim_to_1 date_main_claim_tos ml-2 datepicker-here col-md-3" placeholder="Дата" type="text" size="10" required>
+                              <input id="main_claim_without_period_1_1" class="main_claim_without_period_1 main_claim_without_periods ml-2" type="checkbox" onclick="block_main_claim_date(1, 1)">
+                              <label for="main_claim_without_period_1_1" class="ml-2 form-check-label">Период не указан</label>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div> -->
-              <!-- END fu_name, date & number of appeal -->
-
-
-
-
-
-
-              <!-- BEGIN fo_name -->
-              <div class="fo_name form-row align-items-center" style="display:none">
-                <div class="form-group col-md-6">
-                  <div class="autocomplete">
-                    <input id="fo_name" class="form-control" type="text" placeholder="Введите наименование ФО" size="40">
-                  </div>
+                <div class="form-group col-md-1 my-auto text-center">
+                  <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>
                 </div>
               </div>
-              <!-- END fo_name -->
+              <!-- END main-claims -->
+
+              <hr>
+
               <!-- BEGIN date_dtp -->
-              <div class="form-row">
-                <div class="form-group row form-inline">
-                  <label for="date_dtp" class="ml-4">Дата ДТП</label>
-                  <div class="col-md-2">
-                    <input id = "date_dtp" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+              <div class="dtp-description">
+                <button type="button" class="accordion_right" name="button">
+                  <span>Описание ДТП</span>
+                  <i class="fa fa-chevron-down toggle"></i>
+                </button>
+                <div class="panel">
+                  <div class="form-row ml-2">
+                    <div class="form-group ml-2">
+                      <h6>Дата ДТП</h6>
+                    </div>
                   </div>
-                </div>
-                <div class="form-group col-md-3 form-inline ml-3">
-                  <input id="europrotocol" type="checkbox">
-                  <label for="europrotocol" class="ml-2 form-check-label">европротокол</label>
-                </div>
-                <div class="form-group form-inline col-md-4">
-                  <span id="max_summ"></span>
+                  <div class="form-row ml-2">
+                    <div class="form-group col-md-3">
+                      <input id = "date_dtp" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10">
+                    </div>
+                    <div class="form-group col-md-3 form-inline ml-3">
+                      <input id="europrotocol" type="checkbox">
+                      <label for="europrotocol" class="ml-2 form-check-label">европротокол</label>
+                    </div>
+                    <div class="form-group col-md-4">
+                      <span id="max_summ"></span>
+                    </div>
+                  </div>
                 </div>
               </div>
               <!-- END date_dtp -->
+
             </div>
 
             <hr class="mb-4">
@@ -177,7 +379,7 @@
                   о страховом возмещении
                 </div>
                 <div class="form-group col-md-2">
-                  <input id = "app_date_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  <input id = "app_date_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10">
                 </div>
                 <div class="form-group col-md-1">
                   <button id="app_btn_1" class="btn btn-outline-warning" onclick="addrows(this)">+</button>
@@ -194,7 +396,7 @@
                   о выплате УТС
                 </div>
                 <div class="form-group col-md-2">
-                  <input id = "app_date_2" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  <input id = "app_date_2" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10">
                 </div>
                 <div class="form-group col-md-1">
                   <button id="app_btn_2" class="btn btn-outline-danger" onclick="addrows(this)">×</button>
@@ -211,7 +413,7 @@
                   о выплате расходов на эвакуатор
                 </div>
                 <div class="form-group col-md-2">
-                  <input id = "app_date_3" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  <input id = "app_date_3" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10">
                 </div>
                 <div class="form-group col-md-1">
                   <button id="app_btn_3" class="btn btn-outline-danger" onclick="addrows(this)">×</button>
@@ -228,7 +430,7 @@
                   о выплате расходов на хранение
                 </div>
                 <div class="form-group col-md-2">
-                  <input id = "app_date_4" class = "datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                  <input id = "app_date_4" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10">
                 </div>
                 <div class="form-group col-md-1">
                   <button id="app_btn_4" class="btn btn-outline-danger" onclick="addrows(this)">×</button>
@@ -275,8 +477,8 @@
                           <option>Неустойка</option>
                         </select>
                       </div>
-                      <div class="form-group col-md-2">
-                        <input id = "pay1_date" class = "payments_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                      <div class="form-group col-md-3">
+                        <input id = "pay1_date" class = "payments_dates datepicker-here form-control" placeholder="Дата" type="text" size="10">
                       </div>
                       <div class="form-group col-md-3">
                         <div class="input-group">
@@ -384,7 +586,7 @@
                       <div class="add_fu_info_dates">
                         <div class="form-row">
                           <div class="form-group col-md-3 form-inline justify-content-center">
-                            <input id = "fu_date_1" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                            <input id = "fu_date_1" class = "fu_dates datepicker-here form-control" placeholder="Дата" type="text" size="10">
                           </div>
                           <div class="form-group col-md-3 form-inline">
                             <h6>Дата решения</h6>
@@ -408,7 +610,7 @@
                         </div>
                         <div class="form-row">
                           <div class="form-group col-md-3 form-inline justify-content-center">
-                            <input id = "fu_pay_date_1" class = "fu_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                            <input id = "fu_pay_date_1" class = "fu_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="10">
                           </div>
                           <div class="form-group col-md-3 form-inline">
                             <h6>Дата исполнения</h6>
@@ -454,20 +656,20 @@
                         <div class="form-group col-ms-1">
                           <button id="fu_claim_btn_1_1" class="fu_claim_btn_1 btn btn-outline-warning" onclick="addFuClaim(1)">+</button>
                         </div>
-                      </div><!-- add_court_info_row_1 -->
+                      </div><!-- add_fu_info_row_1 -->
                       <div id="add_fu_claim_info_1_1" class="add_fu_claim_info_1 form-group ml-3" style="display:none">
                         <div class="form-group">
                           <h6>Период неустойки</h6>
                         </div>
                         <div class="form-group form-inline">
                           <label for="date_fu_from_1_1">c</label>
-                          <input id = "date_fu_from_1_1" class = "date_fu_penalty_from_1 date_court_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          <input id = "date_fu_from_1_1" class = "date_fu_penalty_from_1 date_court_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="10">
                           <label for="date_fu_to_1_1" class="ml-2">по</label>
-                          <input id = "date_fu_to_1_1" class = "date_fu_penalty_to_1 date_fu_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          <input id = "date_fu_to_1_1" class = "date_fu_penalty_to_1 date_fu_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="10">
                           <input id="fu_without_period_1_1" class="fu_without_period_1 fu_without_periods ml-2" type="checkbox" onclick="block_fu_date(1, 1)">
                           <label for="fu_without_period_1_1" class="ml-2 form-check-label">Период не указан</label>
                         </div>
-                      </div><!-- add_court1_claim_info_1 -->
+                      </div><!-- add_fu1_claim_info_1 -->
                     </div><!-- add_FU_info_1 -->
                   </div><!-- FU_1 -->
                 </div><!-- FUs -->
@@ -520,7 +722,7 @@
                       <div class="add_court_info_dates">
                         <div class="form-row">
                           <div class="form-group col-md-3 form-inline justify-content-center">
-                            <input id = "court_date_1" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                            <input id = "court_date_1" class = "court_dates datepicker-here form-control" placeholder="Дата" type="text" size="10">
                           </div>
                           <div class="form-group col-md-3 form-inline">
                             <h6>Дата решения</h6>
@@ -528,7 +730,7 @@
                         </div>
                         <div class="form-row">
                           <div class="form-group col-md-3 form-inline justify-content-center">
-                            <input id = "court_in_force_date_1" class = "court_in_force_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                            <input id = "court_in_force_date_1" class = "court_in_force_dates datepicker-here form-control" placeholder="Дата" type="text" size="10">
                           </div>
                           <div class="form-group col-md-4 form-inline">
                             <h6>Дата вступления в силу</h6>
@@ -536,7 +738,7 @@
                         </div>
                         <div class="form-row">
                           <div class="form-group col-md-3 form-inline justify-content-center">
-                            <input id = "court_pay_date_1" class = "court_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                            <input id = "court_pay_date_1" class = "court_pay_dates datepicker-here form-control" placeholder="Дата" type="text" size="10">
                           </div>
                           <div class="form-group col-md-3 form-inline">
                             <h6>Дата исполнения</h6>
@@ -590,9 +792,9 @@
                         </div>
                         <div class="form-group form-inline">
                           <label for="date_court_from_1_1">c</label>
-                          <input id = "date_court_from_1_1" class = "date_court_penalty_from_1 date_court_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          <input id = "date_court_from_1_1" class = "date_court_penalty_from_1 date_court_froms ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="10">
                           <label for="date_court_to_1_1" class="ml-2">по</label>
-                          <input id = "date_court_to_1_1" class = "date_court_penalty_to_1 date_court_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="8">
+                          <input id = "date_court_to_1_1" class = "date_court_penalty_to_1 date_court_tos ml-2 datepicker-here form-control" placeholder="Дата" type="text" size="10">
                           <input id="court_without_period_1_1" class="court_without_period_1 court_without_periods ml-2" type="checkbox" onclick="block_court_date(1, 1)">
                           <label for="court_without_period_1_1" class="ml-2 form-check-label">Период не указан</label>
                         </div>
@@ -708,10 +910,11 @@
     <script type="text/javascript" src="js/word.js"></script>
     <script type="text/javascript" src="js/db.js"></script>
     <script type="text/javascript" src="js/button.js"></script>
+    <script type="text/javascript" src="js/addMainClaim.js"></script>
     <script type="text/javascript" src="js/addrows.js"></script>
     <script type="text/javascript" src="js/addcourts.js"></script>
     <script type="text/javascript" src="js/addfus.js"></script>
-    <script type="text/javascript" src="js/autocomplete.js"></script>
+    <!-- <script type="text/javascript" src="js/autocomplete.js"></script> -->
     <script type="text/javascript" src="js/datapicker/datepicker.min.js"></script>
     <script type="text/javascript" src="js/izitoast/iziToast.min.js"></script>
     <script type="text/javascript" src="js/accordion.js"></script>

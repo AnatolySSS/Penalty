@@ -34,6 +34,7 @@
     "@babel/core": "^7.13.16",
     "@babel/preset-env": "^7.13.15",
     "docx": "^6.0.3",
+    "lvovich": "^2.0.0",
     "mysql": "^2.18.1"
   }
 }
