@@ -14,7 +14,8 @@ export function findInForceFuDay(date) {
         date + DAY * misteryDays != Date.parse(new Date(2018, 3, 28, 0)) &&
         date + DAY * misteryDays != Date.parse(new Date(2018, 5, 9, 0)) &&
         date + DAY * misteryDays != Date.parse(new Date(2018, 11, 29, 0)) &&
-        date + DAY * misteryDays != Date.parse(new Date(2021, 1, 20, 0))
+        date + DAY * misteryDays != Date.parse(new Date(2021, 1, 20, 0)) &&
+        date + DAY * misteryDays != Date.parse(new Date(2022, 2, 5, 0))
         ) {
        if (new Date(date + DAY * misteryDays ).getDay() != 6 &&
            new Date(date + DAY * misteryDays ).getDay() != 0 &&
@@ -175,9 +176,29 @@ export function findInForceFuDay(date) {
              date + DAY * misteryDays != Date.parse(new Date(2021, 4, 7, 0)) &&
              date + DAY * misteryDays != Date.parse(new Date(2021, 4, 10, 0)) &&
              date + DAY * misteryDays != Date.parse(new Date(2021, 5, 14, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2021, 10, 1, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2021, 10, 2, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2021, 10, 3, 0)) &&
              date + DAY * misteryDays != Date.parse(new Date(2021, 10, 4, 0)) &&
              date + DAY * misteryDays != Date.parse(new Date(2021, 10, 5, 0)) &&
-             date + DAY * misteryDays != Date.parse(new Date(2021, 11, 31, 0))
+             date + DAY * misteryDays != Date.parse(new Date(2021, 11, 31, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 0, 1, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 0, 2, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 0, 3, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 0, 4, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 0, 5, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 0, 6, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 0, 7, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 0, 8, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 1, 23, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 2, 7, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 2, 8, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 4, 2, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 4, 3, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 4, 9, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 4, 10, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 5, 13, 0)) &&
+             date + DAY * misteryDays != Date.parse(new Date(2022, 10, 4, 0))
         ) {
           j++;
         }

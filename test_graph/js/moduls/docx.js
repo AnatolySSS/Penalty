@@ -1,5 +1,5 @@
 //Формирование Word файла
-const docx = require("docx");
+// const docx = require("docx");
 export function makeDecisionFile(decision) {
 
   const doc = new docx.Document({

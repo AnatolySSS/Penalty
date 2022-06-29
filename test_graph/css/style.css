@@ -4,6 +4,10 @@
   margin: 10px;
 }
 
+.container-lg {
+  max-width: 90% !important;
+}
+
 .jumbotron {
   /* width: 80%;
   margin-left: auto;

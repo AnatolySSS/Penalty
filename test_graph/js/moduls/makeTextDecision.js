@@ -3,6 +3,8 @@ import { makeRubText_nominative } from './makeRubText_nominative.js';
 import { makeRubText_genitive } from './makeRubText_genitive.js';
 import { declinationDays } from './declinationDays.js';
 import { declensions_by_cases } from './declensions_by_cases.js';
+import { inclineFirstname, inclineLastname, inclineMiddlename } from 'lvovich';
+import { formatDate } from './formatDate';
 
 // Формирование текста решения ФУ
 export function makeTextDecision(paymentVoluntary,
@@ -36,6 +38,8 @@ export function makeTextDecision(paymentVoluntary,
   var payment_court_claims_paragraf_without_analize = [];
 
   var fo_name;
+  var fo_inn, fo_ogrn, fo_registration_date, fo_registration_address, fo_post_address;
+  var app_name, app_passport, app_registration_address, app_post_address;
   var fo_name_nominative;
   var fo_name_genitive;
   var fo_name_accusative;
@@ -71,6 +75,7 @@ export function makeTextDecision(paymentVoluntary,
 
   //Получение значения наименования ФО
   fo_name = document.querySelector("#fo_name").value;
+
   //Если поле Финансовая организация не заполнено, то в текст решения
   //добавляется термин "Финансовая организация" в соответствующем падеже
   if (fo_name != "") {
@@ -82,6 +87,13 @@ export function makeTextDecision(paymentVoluntary,
     make_a_payment = " осуществило";
     fulfill = " исполнило";
     keep = " удержало";
+
+    fo_inn = document.querySelector("#fo_inn").value;
+    fo_registration_date = document.querySelector("#fo_registration_date").value;
+    fo_registration_date = formatDate(new Date(fo_registration_date));
+    fo_registration_address = document.querySelector("#fo_registration_address").value;
+    fo_post_address = document.querySelector("#fo_post_address").value;
+
   } else {
     fo_name_nominative = "Финансовая организация";
     fo_name_genitive = "Финансовой организации";
@@ -91,6 +103,72 @@ export function makeTextDecision(paymentVoluntary,
     fulfill = " исполнила";
     keep = " удержала";
   }
+
+  var fu_name = document.querySelector("#fu_name").value;
+  var fu_post;
+  var date_appeal = document.querySelector("#date_appeal").value;
+  date_appeal = formatDate(new Date(date_appeal));
+  var appeal_number = document.querySelector("#appeal_number").value;
+
+  app_name = document.querySelector("#app_name").value;
+  var app_firstName = app_name.split(" ")[1]
+  var app_middleName = app_name.split(" ")[2]
+  var app_lastName = app_name.split(" ")[0]
+  app_name = `${inclineLastname(app_lastName, 'genitive')} 
+              ${inclineFirstname(app_firstName, 'genitive')} 
+              ${inclineMiddlename(app_middleName, 'genitive')}`
+
+  app_passport = document.querySelector("#app_passport").value;
+  app_registration_address = document.querySelector("#app_registration_address").value;
+  app_post_address = document.querySelector("#app_post_address").value;
+
+  switch (fu_name) {
+    case "Воронин Ю.В.":
+      fu_name = "Воронин Юрий Викторович"
+      fu_post = "Главный финансовый уполномоченный"
+      break;
+    case "Климов В.В.":
+      fu_name = "Климов Виктор Владимирович"
+      fu_post = "Финансовый уполномоченный в сферах страхования, " +
+      "кредитной кооперации, деятельности кредитных организаций, " +
+      "ломбардов и негосударственных пенсионных фондов"
+      break;
+    case "Максимова С.В.":
+      fu_name = "Максимова Светлана Васильевна"
+      fu_post = "Финансовый уполномоченный в сферах " +
+      "страхования, микрофинансирования, кредитной кооперации " +
+      "и деятельности кредитных организаций"
+      break;
+    case "Новак Д.В.":
+      fu_name = "Новак Денис Васильевич"
+      fu_post = "Финансовый уполномоченный в сферах страхования, микрофинансирования, " +
+      "кредитной кооперации, деятельности кредитных организаций"
+      break;
+    case "Савицкая Т.М.":
+      fu_name = "Савицкая Татьяна Михайловна"
+      fu_post = "Финансовый уполномоченный в сферах кредитной " +
+      "кооперации, деятельности кредитных организаций, " +
+      "ломбардов и негосударственных пенсионных фондов"
+      break;
+    default:
+      break;
+  }
+
+  var preambula = `${fu_post} ${fu_name} (далее – Финансовый уполномоченный) по результатам рассмотрения обращения от 
+                  ${date_appeal} № ${appeal_number} (далее – Обращение) ${app_name} (паспорт ${app_passport}; 
+                  место жительства: ${app_registration_address}; почтовый адрес: ${app_post_address}) 
+                  (далее – Заявитель) в отношении ${fo_name} (место нахождения: ${fo_registration_address}; 
+                  почтовый адрес: ${fo_post_address}; дата государственной регистрации: ${fo_registration_date}; 
+                  идентификационный номер налогоплательщика:  ${fo_inn},<br><br>УСТАНОВИЛ<br><br>`
+  
+  main_claims.forEach(element => {
+    if (!isNaN(element.summ)) {
+      element
+    }
+  });
+
+  var main_claims_paragraf = `Финансовому уполномоченному на рассмотрение поступило Обращение в отношении ${fo_name} 
+  с требованием о взыскании ${main_claims_all_paragraph}.<br>`
 
   var first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name_genitive + ' неустойки '+
   'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
@@ -833,7 +911,8 @@ export function makeTextDecision(paymentVoluntary,
     ' × 13%)' + '.<br>';
   }
 
-  return first_paragraf +
+  return preambula + 
+         first_paragraf +
          standart_motivation +
          article_191 + article_193 +
          payment_voluntary_paragraf +

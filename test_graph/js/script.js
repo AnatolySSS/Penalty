@@ -13,6 +13,9 @@ import { changeDateType } from './moduls/changeDateType.js';
 import { declinationDays } from './moduls/declinationDays.js';
 import { fillPenaltyGraph } from './moduls/graph.js';
 import { makeTextDecision } from './moduls/makeTextDecision.js';
+import { decision_analize } from './moduls/analyze_fu_decision.js';
+import { autocomplete } from './moduls/autocomplete.js';
+import { fo_data } from './moduls/objects/foData';
 // import { makeDecisionFile } from './moduls/docx.js';
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
@@ -384,12 +387,22 @@ $('.input-numeral').toArray().forEach(function(field){
   })
 });
 
-//Форматирование номера решения ФУ
-$('.input-number-fu').toArray().forEach(function(field){
+//Форматирование ИНН ФО
+$('#fo_inn').toArray().forEach(function(field){
   new Cleave(field, {
-      prefix: 'У-'
+      numeral: true,
+      numeralThousandsGroupStyle: 'none',
+      numeralPositiveOnly: true,
+      numeralIntegerScale: 10
   })
 });
+
+//Форматирование номера решения ФУ
+// $('.input-number-fu').toArray().forEach(function(field){
+//   new Cleave(field, {
+//       prefix: 'У-'
+//   })
+// });
 
 //Функция добавление всплывающей подсказки 20-й и 21-й дни
 $(function () { $('[data-toggle="tooltip"]').tooltip(); })
@@ -449,6 +462,11 @@ document.getElementById('close_modal').onclick = function (){
   $('#show_decision').html("Показать текст решения");
 }
 
+document.getElementById('btn_fu_decision_analyze').onclick = function (){
+    let files = document.getElementById("fu_decision_file").files;
+    decision_analize(files);
+}
+
 function selectText(containerid) {
 		if (document.selection) { // IE
 			var range = document.body.createTextRange();
@@ -475,3 +493,31 @@ function selectText(containerid) {
         message: 'Текст решения скопирован',
     });
 	}
+
+  var fo = []
+
+  fo_data.fo_data.forEach(element => {
+    fo.push(element.fo_name)
+  });
+
+  autocomplete(document.getElementById("fo_name"), fo);
+
+  function validationCheck(className) {
+    $(`${className} .form-control`).focusout(function(){
+      var isOk = true
+      console.log($(this));
+      $(`${className} .form-control`).each(function() {
+        if ($(this).css('border-color') == 'rgb(220, 53, 69)') {
+          isOk = false
+        }
+      })
+      if (isOk) {
+        $(`${className}`).children().first().next().html(`<i class="fa fa-check-square-o fa-2x" aria-hidden="true" style="color: #28a745;"></i>`)
+      } else {
+        $(`${className}`).children().first().next().html(`<i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>`)
+      }
+    })
+  }
+  
+    validationCheck('.preambula')
+    validationCheck('.main-claims-all')

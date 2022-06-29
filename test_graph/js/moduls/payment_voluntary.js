@@ -90,7 +90,7 @@ export class PaymentVoluntary {
     var court_dates = $('.court_dates'); //Получение массива дат решений судов
     var numberOfPenaltyCourtPeriod = 0;
     var numberOfPenaltyPeriod = 0;
-    //Создание экземпляров решений ФУ
+    //Создание экземпляров решений судов
     for (var i = 0; i < number_of_courts; i++) {
       courtPenalty[i] = new CourtPenalty(i + 1,
                                    court_dates[i]);
