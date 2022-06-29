@@ -327,6 +327,83 @@
 
               <hr>
 
+              <!-- BEGIN main_request -->
+              <div class="main_request form-row">
+                <div class="form-group col-md-11 my-auto" >
+                  <button type="button" class="accordion_right" name="button">
+                    <span>Запрос в ФО о предоставлении документов</span>
+                    <i class="fa fa-chevron-down toggle"></i>
+                  </button>
+                  <div class="panel was-validated">
+                    <!-- BEGIN request -->
+                    <div class="form-row ml-2">
+                      <div class="form-group col-md-3">
+                        <h6>Дата запроса</h6>
+                      </div>
+                      <div class="form-group col-md-3">
+                        <h6>№ запроса</h6>
+                      </div>
+                    </div>
+                    <div class="form-row ml-2">
+                      <div class="form-group col-md-3">
+                        <input id = "date_main_request" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
+                      </div>
+                      <div class="form-group col-md-4">
+                        <div class="input-group">
+                          <input id="number_main_request" class = "form-control input-number" placeholder="Номер" type="text" size="8" required>
+                          <div class="input-group-append">
+                            <span class="input-group-text">&#8470;</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- END request -->
+
+                    <!-- BEGIN answer -->
+                    <div class="main_answer ml-2">
+                      <div class="form-row ml-2">
+                        <div class="form-group col-md-5">
+                          <h6>Сведения об ответе на запрос</h6>
+                        </div>
+                        <div class="form-group col-md-3" style="display:none">
+                          <h6>Дата ответа</h6>
+                        </div>
+                        <div class="form-group col-md-4" style="display:none">
+                          <h6>№ ответа</h6>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-5">
+                          <select id="main_answer_type" class="custom-select form-control col-md-12" required>
+                            <option value="">Выберите вариант</option>
+                            <option>Ответ получен</option>
+                            <option>Ответ не получен</option>
+                          </select>
+                        </div>
+                        <div class="form-group col-md-3" style="display:none">
+                          <input id = "date_main_answer" class = "datepicker-here" placeholder="Дата" type="text" size="10" required>
+                        </div>
+                        <div class="form-group col-md-4" style="display:none">
+                          <div class="input-group">
+                            <input id="number_main_answer" class = "input-number" placeholder="Номер" type="text" size="8" required>
+                            <div class="input-group-append">
+                              <span class="input-group-text">&#8470;</span>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <!-- END answer -->
+                  </div>
+                </div>
+                <div class="form-group col-md-1 my-auto text-center">
+                  <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>
+                </div>
+              </div>
+              <!-- END main_request -->
+
+              <hr>
+
               <!-- BEGIN date_dtp -->
               <div class="dtp-description">
                 <button type="button" class="accordion_right" name="button">
@@ -911,6 +988,7 @@
     <script type="text/javascript" src="js/db.js"></script>
     <script type="text/javascript" src="js/button.js"></script>
     <script type="text/javascript" src="js/addMainClaim.js"></script>
+    <script type="text/javascript" src="js/mainAnswer.js"></script>
     <script type="text/javascript" src="js/addrows.js"></script>
     <script type="text/javascript" src="js/addcourts.js"></script>
     <script type="text/javascript" src="js/addfus.js"></script>

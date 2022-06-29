@@ -77,9 +77,9 @@ function addClaimsContract() {
                     </div>
                     <div class="form-group form-inline">
                       <label for="date_main_claim_from_${ContractId}_1">c</label>
-                      <input id = "date_main_claim_from_${ContractId}_1" class = "date_main_claim_from_${ContractId} date_fu_main_claim_froms ml-2 datepicker-here form-control col-md-3" placeholder="Дата" type="text" size="10" required>
+                      <input id = "date_main_claim_from_${ContractId}_1" class = "date_main_claim_from_${ContractId} date_fu_main_claim_froms ml-2 datepicker-here col-md-3" placeholder="Дата" type="text" size="10" required>
                       <label for="date_main_claim_to_${ContractId}_1" class="ml-2">по</label>
-                      <input id = "date_main_claim_to_${ContractId}_1" class = "date_main_claim_to_${ContractId} date_fu_main_claim_tos ml-2 datepicker-here form-control col-md-3" placeholder="Дата" type="text" size="10" required>
+                      <input id = "date_main_claim_to_${ContractId}_1" class = "date_main_claim_to_${ContractId} date_fu_main_claim_tos ml-2 datepicker-here col-md-3" placeholder="Дата" type="text" size="10" required>
                       <input id="main_claim_without_period_${ContractId}_1" class="main_claim_without_period_${ContractId} main_claim_without_periods ml-2" type="checkbox" onclick="block_main_claim_date(${ContractId}, 1)">
                       <label for="main_claim_without_period_${ContractId}_1" class="ml-2 form-check-label">Период не указан</label>
                     </div>
@@ -243,9 +243,9 @@ $(document).on("change", ".main_claim_types", function (event) {
     $(this).parent().parent().next().find('.date_main_claim_tos').removeClass('form-control')
 	}
   validationCheck('.main-claims-all')
-  setTimeout(() => {
+  // setTimeout(() => {
     validationCheckUpdate('.main-claims-all')
-  }, 200); 
+  // }, 200); 
 });
 
 //Блокировать даты судебной неустойки при проставленной галочке "Период не указан"
@@ -259,10 +259,11 @@ function block_main_claim_date(id, claimContractId){
     $(`#date_main_claim_from_${id}_${claimContractId}`).prop('disabled', false);
     $(`#date_main_claim_to_${id}_${claimContractId}`).prop('disabled', false);
   }
-  setTimeout(() => {
+  // setTimeout(() => {
     validationCheckUpdate('.main-claims-all')
-  }, 200); 
+  // }, 200); 
 }
+
 //Изменяет картинку валидации
 function validationCheck(className) {
   $(`${className} .form-control`).focusout(function(){
@@ -272,16 +273,17 @@ function validationCheck(className) {
 
 //Обновлет сведения о валидации инпутов
 function validationCheckUpdate(className) {
-  var isOk = true
-  console.log($(this));
-  $(`${className} .form-control`).each(function() {
-    if ($(this).css('border-color') == 'rgb(220, 53, 69)') {
-      isOk = false
+  setTimeout(() => {
+    var isOk = true
+    $(`${className} .form-control`).each(function() {
+      if ($(this).css('border-color') == 'rgb(220, 53, 69)') {
+        isOk = false
+      }
+    })
+    if (isOk) {
+      $(`${className}`).children().first().next().html(`<i class="fa fa-check-square-o fa-2x" aria-hidden="true" style="color: #28a745;"></i>`)
+    } else {
+      $(`${className}`).children().first().next().html(`<i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>`)
     }
-  })
-  if (isOk) {
-    $(`${className}`).children().first().next().html(`<i class="fa fa-check-square-o fa-2x" aria-hidden="true" style="color: #28a745;"></i>`)
-  } else {
-    $(`${className}`).children().first().next().html(`<i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>`)
-  }
+  }, 200); 
 }
