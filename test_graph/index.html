@@ -24,7 +24,7 @@
     <script type="text/javascript" src="js/fixedheadertable/jquery.fixedheadertable.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
-    <!-- <script type="text/javascript" src="https://unpkg.com/driver.js/dist/driver.min.js"></script> -->
+    <script type="text/javascript" src="https://unpkg.com/driver.js/dist/driver.min.js"></script>
   </head>
   <body>
     <div class="container-lg mt-5">
@@ -327,9 +327,9 @@
 
               <hr>
 
-              <!-- BEGIN main_request -->
-              <div class="main_request form-row">
-                <div class="form-group col-md-11 my-auto" >
+              <!-- BEGIN main-request -->
+              <div class="main-request form-row">
+                <div class="form-group col-md-11 my-auto">
                   <button type="button" class="accordion_right" name="button">
                     <span>Запрос в ФО о предоставлении документов</span>
                     <i class="fa fa-chevron-down toggle"></i>
@@ -360,7 +360,7 @@
                     <!-- END request -->
 
                     <!-- BEGIN answer -->
-                    <div class="main_answer ml-2">
+                    <div class="main-answer ml-2">
                       <div class="form-row ml-2">
                         <div class="form-group col-md-5">
                           <h6>Сведения об ответе на запрос</h6>
@@ -400,34 +400,370 @@
                   <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>
                 </div>
               </div>
-              <!-- END main_request -->
+              <!-- END main-request -->
 
               <hr>
 
               <!-- BEGIN date_dtp -->
-              <div class="dtp-description">
-                <button type="button" class="accordion_right" name="button">
-                  <span>Описание ДТП</span>
-                  <i class="fa fa-chevron-down toggle"></i>
-                </button>
-                <div class="panel">
-                  <div class="form-row ml-2">
-                    <div class="form-group ml-2">
-                      <h6>Дата ДТП</h6>
+              <div class="dtp-description form-row">
+                <div class="form-group col-md-11 my-auto">
+                  <button type="button" class="accordion_right" name="button">
+                    <span>Сведения о ДТП</span>
+                    <i class="fa fa-chevron-down toggle"></i>
+                  </button>
+                  <div class="panel was-validated">
+                    <div class="dtp-description-general ml-2">
+                      <div class="form-row ml-2">
+                        <div class="form-group">
+                          <h6>Дата ДТП</h6>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-3">
+                          <input id = "date_dtp" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
+                        </div>
+                        <div class="form-group col-md-3 form-inline">
+                          <input id="europrotocol" type="checkbox">
+                          <label for="europrotocol" class="ml-2 form-check-label">европротокол</label>
+                        </div>
+                        <div class="form-group form-inline col-md-4">
+                          <span id="max_summ"></span>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="dtp-description-participants ml-2">
+                      <div class="form-row ml-2">
+                        <div class="form-group">
+                          <h6>Сведения об участниках ДТП</h6>
+                        </div>
+                      </div>
+                      <div id="dtp_description_participant_1" class="form-row">
+                        <div class="form-group col-md-4">
+                          <input id = "car_brand" class="form-control" placeholder="Марка ТС" type="text" size="8" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <input id = "car_model" class="form-control" placeholder="Модель ТС" type="text" size="8" required>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <input id = "car_reg_number" class="form-control" placeholder="ГРН" type="text" size="8" required>
+                        </div>
+                        <div class="form-group col-ms-1">
+                          <button id="add_dtp_description_participant_info_btn_1" class="add_dtp_description_participant_info_btns btn btn-outline-warning add_info">
+                            <i class="fa fa-chevron-down toggle"></i>
+                          </button>
+                        </div>
+                        <div class="form-group col-ms-1">
+                          <button id="dtp_description_participantt_btn_1" class="dtp_description_participant_btns btn btn-outline-warning" onclick="addClaimsContract()">+</button>
+                        </div>
+                      </div>
+                      <div id="dtp_description_participant_info_1" class="dtp_description_participant_infos">
+                        <div class="form-row">
+                          <div class="form-group col-md-4">
+                            <input id = "car_vin_number" class="form-control" placeholder="VIN" type="text" size="8" required>
+                          </div>
+                          <div class="form-group col-md-3">
+                            <input id = "car_year" class="form-control" placeholder="год выпуска" type="text" size="8" required>
+                          </div>
+                          <div class="form-group col-md-3">
+                            <select id="car_type" class="custom-select form-control" required>
+                              <option value="">тип ТС</option>
+                              <option>легковой</option>
+                              <option>грузовой</option>
+                              <option>автобус</option>
+                              <option>такси</option>
+                            </select>
+                          </div>
+                          <div class="form-group col-md-2">
+                            <input id = "car_veight" class="form-control" placeholder="масса" type="text" size="8" required>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <input id = "driver_name" class="form-control" placeholder="ФИО водителя" type="text" size="8" required>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <input id = "owner_name" class="form-control" placeholder="ФИО собственника" type="text" size="8" required>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col-md-3">
+                            <select id="car_type" class="custom-select form-control" required>
+                              <option value="">степень вины</option>
+                              <option>виновен</option>
+                              <option>не виновен</option>
+                            </select>
+                          </div>
+                        </div>
+
+                        <!-- BEGIN car_contracts -->
+
+                        <div class="car-contracts">
+                          <div id="car_contract_1" class="form-row">
+                            <div class="form-group col-md-5">
+                              <select id="car_contract_type_1" class="car_contract_types custom-select form-control col-md-12" required>
+                                <option value="">Выберите тип договора</option>
+                                <option>ОСАГО</option>
+                                <option>КАСКО</option>
+                                <option>ДСАГО</option>
+                                <option>Не застрахован</option>
+                              </select>
+                            </div>
+                            <div class="form-group col-ms-1">
+                              <button id="add_car_contract_info_btn_1" class="add_car_contract_info_btns btn btn-outline-warning add_info">
+                                <i class="fa fa-chevron-down toggle"></i>
+                              </button>
+                            </div>
+                            <div class="form-group col-ms-1">
+                              <button id="car_contract_btn_1" class="car_contract_btns btn btn-outline-warning" onclick="addCarContract()">+</button>
+                            </div>
+                          </div>
+
+                          <!-- BEGIN car_contract_osago -->
+
+                          <div id="car_contract_osago_info_1" class="car_contract_osago_infos">
+                            <div class="form-row">
+                              <div class="form-group col-md-9">
+                                <h6>Общие сведения о договоре страхования ОСАГО</h6>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group col-md-6">
+                                <div class="autocomplete">
+                                  <input id="car_contract_osago_fo_name_1" class="form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+                                </div>
+                              </div>
+                              <div class="form-group col-md-6">
+                                <input id = "car_contract_osago_fo_number_1" class="form-control" placeholder="серия и № полиса" type="text" size="8" required>
+                              </div>
+                            </div>
+                            <div class="form-row">
+                              <div class="form-group col-md-3">
+                                <input id = "car_contract_osago_fo_date_conclusion_1" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_1" placeholder="Дата" type="text" size="10" required>
+                                <small id="car_contract_osago_fo_date_conclusion_help_block_1" class="form-text">
+                                  Заключение дговора
+                                </small>
+                              </div>
+                              <div class="form-group col-md-3">
+                                <input id = "car_contract_osago_fo_date_start_1" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_start_help_block_1" placeholder="Дата" type="text" size="10" required>
+                                <small id="car_contract_osago_fo_date_start_help_block_1" class="form-text">
+                                  Начало срока действия
+                                </small>
+                              </div>
+                              <div class="form-group col-md-3">
+                                <input id = "car_contract_osago_fo_date_end_1" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_end_help_block_1" placeholder="Дата" type="text" size="10" required>
+                                <small id="car_contract_osago_fo_date_end_help_block_1" class="form-text">
+                                  Окончание срока действия
+                                </small>
+                              </div>
+                            </div>
+                          </div>
+                          <!-- END car_contract_osago -->
+                          <!-- BEGIN car_contract_casco -->
+                          <div id="car_contract_casco_info_1" class="car_contract_casco_infos">
+                            <!-- BEGIN car_contract_casco_general_info -->
+                            <div class="car_contract_casco_general_info">
+                              <div class="form-row">
+                                <div class="form-group col-md-9">
+                                  <h6>Общие сведения о договоре страхования КАСКО</h6>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-6">
+                                  <div class="autocomplete">
+                                    <input id="car_contract_casco_fo_name_1" class="form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+                                  </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                  <input id = "car_contract_casco_fo_number_1" class="form-control" placeholder="серия и № полиса" type="text" size="8" required>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-3">
+                                  <input id = "car_contract_casco_fo_date_conclusion_1" class = "datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_conclusion_help_block_1" placeholder="Дата" type="text" size="10" required>
+                                  <small id="car_contract_casco_fo_date_conclusion_help_block_1" class="form-text">
+                                    Заключение договора
+                                  </small>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <input id = "car_contract_casco_fo_date_start_1" class = "datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_start_help_block_1" placeholder="Дата" type="text" size="10" required>
+                                  <small id="car_contract_casco_fo_date_start_help_block_1" class="form-text">
+                                    Начало срока действия
+                                  </small>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <input id = "car_contract_casco_fo_date_end_1" class = "datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_end_help_block_1" placeholder="Дата" type="text" size="10" required>
+                                  <small id="car_contract_casco_fo_date_end_help_block_1" class="form-text">
+                                    Окончание срока действия
+                                  </small>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- END car_contract_casco_general_info -->
+                            <!-- BEGIN car_contract_casco_insurance_rules -->
+                            <div class="car_contract_casco_insurance_rules">
+                              <div class="form-row">
+                                <div class="form-group col-md-6">
+                                  <h6>Сведения о правилах страхования</h6>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-12">
+                                  <input id="car_contract_casco_insurance_rules_1" class="form-control" placeholder="Наименование правил страхования" type="text" size="8" required>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-6">
+                                  <input id = "car_contract_casco_insurance_rules_approver_name_1" class="form-control" placeholder="ФИО утвердившего" type="text" size="8" required>
+                                </div>
+                                <div class="form-group col-md-6">
+                                  <input id = "car_contract_casco_insurance_rules_approver_post_1" class="form-control" placeholder="Должность утвердившего" type="text" size="8" required>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-3">
+                                  <input id = "car_contract_casco_insurance_rules_date_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <input id = "car_contract_casco_insurance_rules_number_1" class="form-control" placeholder="№" type="text" size="8" required>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- END car_contract_casco_insurance_rules -->
+                            <!-- BEGIN car_contract_casco_insurance_inspection_information -->
+                            <div class="car_contract_casco_insurance_inspection_information">
+                              <div class="form-row">
+                                <div class="form-group col-md-6">
+                                  <h6>Сведения о предстраховом осмотре</h6>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-4">
+                                  <select id="car_contract_casco_insurance_inspection_information_1" class="car_contract_casco_insurance_inspection_informations custom-select form-control" required>
+                                    <option value="">Наличие сведений</option>
+                                    <option>Сведения имеются</option>
+                                    <option>Сведений не имеется</option>
+                                  </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <input id = "car_contract_casco_insurance_inspection_date_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-12">
+                                  <textarea id = "car_contract_casco_insurance_inspection_damaged_parts_1" class="form-control" aria-describedby="car_contract_casco_insurance_inspection_damaged_parts_help_block_1" placeholder="Перечень поврежденных деталей" type="text" size="8" required></textarea>
+                                  <small id="car_contract_casco_insurance_inspection_damaged_parts_help_block_1" class="form-text">
+                                    Введите через запятую наименования элементов и деталей, а также их повреждения
+                                  </small>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- END car_contract_casco_insurance_inspection_information -->
+                            <!-- BEGIN car_contract_casco_insurance_summ -->
+                            <div class="car_contract_casco_insurance_summ">
+                              <div class="form-row">
+                                <div class="form-group col-md-6">
+                                  <h6>Сведения о страховой сумме</h6>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-3">
+                                  <div class="input-group">
+                                    <input id="car_contract_casco_insurance_summ_summ_1" class = "input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+                                    <div class="input-group-append">
+                                      <span class="input-group-text">&#8381;</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <select id="car_contract_casco_insurance_summ_index_1" class="car_contract_casco_insurance_summ_indexes custom-select form-control" required>
+                                    <option value="">Вид суммы</option>
+                                    <option>Индексируемая</option>
+                                    <option>Не индексируемая</option>
+                                  </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <select id="car_contract_casco_insurance_summ_aggregate_1" class="car_contract_casco_insurance_summ_aggregates custom-select form-control" required>
+                                    <option value="">Тип суммы</option>
+                                    <option>Агрегатная</option>
+                                    <option>Не агрегатная</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-12">
+                                  <textarea id="car_contract_casco_insurance_summ_risks_1" class="form-control" aria-describedby="car_contract_casco_insurance_summ_risks_help_block_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
+                                  <small id="car_contract_casco_insurance_summ_risks_help_block_1" class="form-text">
+                                    Перечислите риски, покрываемые страховой суммой
+                                  </small>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- END car_contract_casco_insurance_summ -->
+                            <!-- BEGIN car_contract_casco_insurance_premium -->
+                            <div class="car_contract_casco_insurance_premium">
+                              <div class="form-row">
+                                <div class="form-group col-md-6">
+                                  <h6>Сведения о страховой премии</h6>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-4">
+                                  <select id="car_contract_casco_insurance_premium_information_1" class="car_contract_casco_insurance_premium_informations custom-select form-control" required>
+                                    <option value="">Наличие сведений</option>
+                                    <option>Сведения имеются</option>
+                                    <option>Сведений не имеется</option>
+                                    <option>Факт оплаты не оспаривается</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-3">
+                                  <div class="input-group">
+                                    <input id="car_contract_casco_insurance_premium_summ_1" class = "input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+                                    <div class="input-group-append">
+                                      <span class="input-group-text">&#8381;</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <input id = "car_contract_casco_insurance_premium_date_1" class = "datepicker-here form-control" aria-describedby="car_contract_casco_insurance_premium_date_help_block_1" placeholder="Дата" type="text" size="10" required>
+                                  <small id="car_contract_casco_insurance_premium_date_help_block_1" class="form-text">
+                                    Дата оплаты
+                                  </small>
+                                </div>
+                                <div class="form-group col-md-3">
+                                  <input id = "car_contract_casco_insurance_premium_number_1" class="form-control" aria-describedby="car_contract_casco_insurance_premium_number_help_block_1" placeholder="№" type="text" size="8" required>
+                                  <small id="car_contract_casco_insurance_premium_number_help_block_1" class="form-text">
+                                    № квитанции
+                                  </small>
+                                </div>
+                              </div>
+                              <div class="form-row">
+                                <div class="form-group col-md-12">
+                                  <textarea id="car_contract_casco_insurance_premium_risks_1" class="form-control" aria-describedby="car_contract_casco_insurance_premium_risks_help_block_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
+                                  <small id="car_contract_casco_insurance_premium_risks_help_block_1" class="form-text">
+                                    Перечислите риски, покрываемые страховой премией
+                                  </small>
+                                </div>
+                              </div>
+                            </div>
+                            <!-- END car_contract_casco_insurance_premium -->
+                            <!-- BEGIN  -->
+                            <div id="like_button_container">
+
+                            </div>
+                          </div>
+                          <!-- END car_contract_casco -->
+                        </div>
+
+                        <!-- END car_contracts -->
+
+                      </div>
                     </div>
                   </div>
-                  <div class="form-row ml-2">
-                    <div class="form-group col-md-3">
-                      <input id = "date_dtp" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10">
-                    </div>
-                    <div class="form-group col-md-3 form-inline ml-3">
-                      <input id="europrotocol" type="checkbox">
-                      <label for="europrotocol" class="ml-2 form-check-label">европротокол</label>
-                    </div>
-                    <div class="form-group col-md-4">
-                      <span id="max_summ"></span>
-                    </div>
-                  </div>
+                </div>
+                <div class="form-group col-md-1 my-auto text-center">
+                  <i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>
                 </div>
               </div>
               <!-- END date_dtp -->
@@ -554,7 +890,7 @@
                           <option>Неустойка</option>
                         </select>
                       </div>
-                      <div class="form-group col-md-3">
+                      <div class="form-group col-md-2">
                         <input id = "pay1_date" class = "payments_dates datepicker-here form-control" placeholder="Дата" type="text" size="10">
                       </div>
                       <div class="form-group col-md-3">
@@ -998,6 +1334,7 @@
     <script type="text/javascript" src="js/accordion.js"></script>
     <script type="text/javascript" src="js/left-menu.js"></script>
     <script type="text/javascript" src="js/driver.js"></script>
+
     <!-- <script type="text/javascript" src="js/analyze_fu_decision.js"></script> -->
   </div> <!-- container -->
   </body>

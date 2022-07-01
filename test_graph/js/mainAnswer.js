@@ -17,8 +17,8 @@ $('#main_answer_type').change(() => {
             $('#main_answer_type').parent().parent().find('#number_main_answer').removeClass('form-control')
         }, 100);
     }
-    validationCheck('.main_request')
-    validationCheckUpdate('.main_request')
+    validationCheck('.main-request')
+    validationCheckUpdate('.main-request')
 })
 
 

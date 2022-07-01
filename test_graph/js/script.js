@@ -500,7 +500,13 @@ function selectText(containerid) {
     fo.push(element.fo_name)
   });
 
-  autocomplete(document.getElementById("fo_name"), fo);
+  // autocomplete(document.getElementById("fo_name"), fo);
+
+  $('.autocomplete input').toArray().forEach(element => {
+    autocomplete(element, fo)
+  });
+
+  // autocomplete($('#fo_name').toArray()[0], fo)
 
   function validationCheck(className) {
     setTimeout(() => {
@@ -522,4 +528,4 @@ function selectText(containerid) {
   
     validationCheck('.preambula')
     validationCheck('.main-claims-all')
-    validationCheck('.main_request')
+    validationCheck('.main-request')
