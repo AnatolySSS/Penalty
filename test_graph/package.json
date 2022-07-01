@@ -8,6 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "jsx": "npx babel --watch js/moduls/react/jsx --out-dir ./js/moduls/react --presets react-app/prod",
     "build": "webpack -w",
     "babel": "babel"
   },
@@ -24,6 +25,7 @@
   "homepage": "https://github.com/AnatolySSS/Penalty#readme",
   "devDependencies": {
     "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/preset-react": "^7.18.6",
     "babel-loader": "^8.2.2",
     "babel-preset-es2015": "^6.24.1",
     "webpack": "^5.35.0",
@@ -33,8 +35,12 @@
     "@babel/cli": "^7.13.16",
     "@babel/core": "^7.13.16",
     "@babel/preset-env": "^7.13.15",
+    "babel-cli": "^6.26.0",
+    "babel-preset-react-app": "^3.1.2",
     "docx": "^6.0.3",
     "lvovich": "^2.0.0",
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
   }
 }

@@ -16,8 +16,12 @@ import { makeTextDecision } from './moduls/makeTextDecision.js';
 import { decision_analize } from './moduls/analyze_fu_decision.js';
 import { autocomplete } from './moduls/autocomplete.js';
 import { fo_data } from './moduls/objects/foData';
+import { renderDOM } from "./moduls/react/react.js";
 // import { makeDecisionFile } from './moduls/docx.js';
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
+
+//Формируем DOM bp react файла
+renderDOM()
 
 var total_penalty_summ_accrued; //Общая сумма начисленной неустойки
 var total_penalty_summ_paid; //Общая сумма выплаченной неустойки
