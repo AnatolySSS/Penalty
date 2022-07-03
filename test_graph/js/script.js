@@ -21,7 +21,7 @@ import { renderDOM } from "./moduls/react/react.js";
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
 //Формируем DOM bp react файла
-renderDOM()
+// renderDOM()
 
 var total_penalty_summ_accrued; //Общая сумма начисленной неустойки
 var total_penalty_summ_paid; //Общая сумма выплаченной неустойки
@@ -529,6 +529,12 @@ function selectText(containerid) {
       })
     }, 200)
   }
+
+  $(document).on("click", "button", function (event) {
+    $('.autocomplete input').toArray().forEach(element => {
+      autocomplete(element, fo)
+    });
+  })
   
     validationCheck('.preambula')
     validationCheck('.main-claims-all')

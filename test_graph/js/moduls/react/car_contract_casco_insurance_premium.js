@@ -1,6 +1,7 @@
 var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
 
 import React, { useState } from "react";
+import { validationCheck, validationCheckUpdate } from "../validationCheck";
 
 export var Car_contract_casco_insurance_premium = function Car_contract_casco_insurance_premium() {
   var _useState = useState(1),
@@ -29,10 +30,10 @@ export var Car_contract_casco_insurance_premium = function Car_contract_casco_in
       { className: "form-row" },
       React.createElement(
         "div",
-        { className: "form-group col-md-4" },
+        { className: "form-group col-md-6" },
         React.createElement(
           "select",
-          { id: "car_contract_casco_insurance_premium_information_" + count, className: "car_contract_casco_insurance_premium_informations custom-select form-control", required: true },
+          { id: "car_contract_casco_insurance_premium_information_" + count, className: "car_contract_casco_insurance_premium_informations custom-select ", required: true },
           React.createElement(
             "option",
             { value: "" },
@@ -58,14 +59,14 @@ export var Car_contract_casco_insurance_premium = function Car_contract_casco_in
     ),
     React.createElement(
       "div",
-      { className: "form-row" },
+      { className: "form-row", style: { display: 'none' } },
       React.createElement(
         "div",
         { className: "form-group col-md-3" },
         React.createElement(
           "div",
           { className: "input-group" },
-          React.createElement("input", { id: "car_contract_casco_insurance_premium_summ_" + count, className: "input-numeral form-control", placeholder: "\u0421\u0443\u043C\u043C\u0430", type: "text", size: "10", required: true }),
+          React.createElement("input", { id: "car_contract_casco_insurance_premium_summ_" + count, className: "input-numeral ", "aria-describedby": "car_contract_casco_insurance_premium_summ_help_block_" + count, placeholder: "\u0421\u0443\u043C\u043C\u0430", type: "text", size: "10", required: true }),
           React.createElement(
             "div",
             { className: "input-group-append" },
@@ -75,12 +76,17 @@ export var Car_contract_casco_insurance_premium = function Car_contract_casco_in
               "\u20BD"
             )
           )
+        ),
+        React.createElement(
+          "small",
+          { id: "car_contract_casco_insurance_premium_summ_help_block_" + count, className: "form-text" },
+          "\u0420\u0430\u0437\u043C\u0435\u0440 \u0441\u0442\u0440\u0430\u0445\u043E\u0432\u043E\u0439 \u043F\u0440\u0435\u043C\u0438\u0438"
         )
       ),
       React.createElement(
         "div",
         { className: "form-group col-md-3" },
-        React.createElement("input", { id: "car_contract_casco_insurance_premium_date_" + count, className: "datepicker-here form-control", "aria-describedby": "car_contract_casco_insurance_premium_date_help_block_" + count, placeholder: "\u0414\u0430\u0442\u0430", type: "text", size: "10", required: true }),
+        React.createElement("input", { id: "car_contract_casco_insurance_premium_date_" + count, className: "datepicker-here ", "aria-describedby": "car_contract_casco_insurance_premium_date_help_block_" + count, placeholder: "\u0414\u0430\u0442\u0430", type: "text", size: "10", required: true }),
         React.createElement(
           "small",
           { id: "car_contract_casco_insurance_premium_date_help_block_" + count, className: "form-text" },
@@ -90,7 +96,7 @@ export var Car_contract_casco_insurance_premium = function Car_contract_casco_in
       React.createElement(
         "div",
         { className: "form-group col-md-3" },
-        React.createElement("input", { id: "car_contract_casco_insurance_premium_number_" + count, className: "form-control", "aria-describedby": "car_contract_casco_insurance_premium_number_help_block_" + count, placeholder: "\u2116", type: "text", size: "8", required: true }),
+        React.createElement("input", { id: "car_contract_casco_insurance_premium_number_" + count, className: "", "aria-describedby": "car_contract_casco_insurance_premium_number_help_block_" + count, placeholder: "\u2116", type: "text", size: "8", required: true }),
         React.createElement(
           "small",
           { id: "car_contract_casco_insurance_premium_number_help_block_" + count, className: "form-text" },
@@ -100,11 +106,11 @@ export var Car_contract_casco_insurance_premium = function Car_contract_casco_in
     ),
     React.createElement(
       "div",
-      { className: "form-row" },
+      { className: "form-row", style: { display: 'none' } },
       React.createElement(
         "div",
         { className: "form-group col-md-12" },
-        React.createElement("textarea", { id: "car_contract_casco_insurance_premium_risks_" + count, className: "form-control", "aria-describedby": "car_contract_casco_insurance_premium_risks_help_block_" + count, placeholder: "\u041F\u0435\u0440\u0435\u0447\u0435\u043D\u044C \u0440\u0438\u0441\u043A\u043E\u0432", type: "text", size: "8", required: true }),
+        React.createElement("textarea", { id: "car_contract_casco_insurance_premium_risks_" + count, className: "", "aria-describedby": "car_contract_casco_insurance_premium_risks_help_block_" + count, placeholder: "\u041F\u0435\u0440\u0435\u0447\u0435\u043D\u044C \u0440\u0438\u0441\u043A\u043E\u0432", type: "text", size: "8", required: true }),
         React.createElement(
           "small",
           { id: "car_contract_casco_insurance_premium_risks_help_block_" + count, className: "form-text" },
@@ -114,3 +120,24 @@ export var Car_contract_casco_insurance_premium = function Car_contract_casco_in
     )
   );
 };
+
+// //Добавляет период взыскания неустойки судом
+// $(document).on("change", ".car_contract_casco_insurance_premium_informations", function (event) {
+//   var _this = this;
+
+//   if ($(this).find(':selected').text() == "Сведения имеются") {
+//     $(this).parent().parent().next().show('fast');
+//     $(this).parent().parent().next().next().show('fast');
+//     $(this).parent().parent().next().find('input').addClass('');
+//     $(this).parent().parent().next().next().find('textarea').addClass('');
+//   } else {
+//     $(this).parent().parent().next().hide('fast');
+//     $(this).parent().parent().next().next().hide('fast');
+//     setTimeout(function () {
+//       $(_this).parent().parent().next().find('input').removeClass('');
+//       $(_this).parent().parent().next().next().find('textarea').removeClass('');
+//     }, 200);
+//   }
+
+//   validationCheckUpdate('.dtp-description');
+// });

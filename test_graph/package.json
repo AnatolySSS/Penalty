@@ -8,7 +8,7 @@
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "jsx": "npx babel --watch js/moduls/react/jsx --out-dir ./js/moduls/react --presets react-app/prod",
+    "jsx": "npx babel --watch js/moduls/react/jsx --out-dir ./js/moduls/react --presets react-app/prod && ^C",
     "build": "webpack -w",
     "babel": "babel"
   },

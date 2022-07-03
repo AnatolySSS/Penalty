@@ -33,7 +33,7 @@ export var Car_contract_casco_insurance_summ = function Car_contract_casco_insur
                 React.createElement(
                     "div",
                     { className: "input-group" },
-                    React.createElement("input", { id: "car_contract_casco_insurance_summ_summ_" + count, className: "input-numeral form-control", placeholder: "\u0421\u0443\u043C\u043C\u0430", type: "text", size: "10", required: true }),
+                    React.createElement("input", { id: "car_contract_casco_insurance_summ_summ_" + count, className: "input-numeral ", placeholder: "\u0421\u0443\u043C\u043C\u0430", type: "text", size: "10", required: true }),
                     React.createElement(
                         "div",
                         { className: "input-group-append" },
@@ -50,7 +50,7 @@ export var Car_contract_casco_insurance_summ = function Car_contract_casco_insur
                 { className: "form-group col-md-3" },
                 React.createElement(
                     "select",
-                    { id: "car_contract_casco_insurance_summ_index_" + count, className: "car_contract_casco_insurance_summ_indexes custom-select form-control", required: true },
+                    { id: "car_contract_casco_insurance_summ_index_" + count, className: "car_contract_casco_insurance_summ_indexes custom-select ", required: true },
                     React.createElement(
                         "option",
                         { value: "" },
@@ -73,7 +73,7 @@ export var Car_contract_casco_insurance_summ = function Car_contract_casco_insur
                 { className: "form-group col-md-3" },
                 React.createElement(
                     "select",
-                    { id: "car_contract_casco_insurance_summ_aggregate_" + count, className: "car_contract_casco_insurance_summ_aggregates custom-select form-control", required: true },
+                    { id: "car_contract_casco_insurance_summ_aggregate_" + count, className: "car_contract_casco_insurance_summ_aggregates custom-select ", required: true },
                     React.createElement(
                         "option",
                         { value: "" },
@@ -98,7 +98,7 @@ export var Car_contract_casco_insurance_summ = function Car_contract_casco_insur
             React.createElement(
                 "div",
                 { className: "form-group col-md-12" },
-                React.createElement("textarea", { id: "car_contract_casco_insurance_summ_risks_" + count, className: "form-control", "aria-describedby": "car_contract_casco_insurance_summ_risks_help_block_" + count, placeholder: "\u041F\u0435\u0440\u0435\u0447\u0435\u043D\u044C \u0440\u0438\u0441\u043A\u043E\u0432", type: "text", size: "8", required: true }),
+                React.createElement("textarea", { id: "car_contract_casco_insurance_summ_risks_" + count, className: "", "aria-describedby": "car_contract_casco_insurance_summ_risks_help_block_" + count, placeholder: "\u041F\u0435\u0440\u0435\u0447\u0435\u043D\u044C \u0440\u0438\u0441\u043A\u043E\u0432", type: "text", size: "8", required: true }),
                 React.createElement(
                     "small",
                     { id: "car_contract_casco_insurance_summ_risks_help_block_" + count, className: "form-text" },

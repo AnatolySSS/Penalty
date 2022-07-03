@@ -37,8 +37,9 @@ var payId = 1;
 function addPay() {
 	payId++;
   var str = '<div id="pay_form_row_' + payId + '" class="form-row payments">' +
-    '<div class="form-group col-md-4 form-inline">' +
-      '<select id="pay' + payId + '" class="payments_names custom-select col-md-12">' +
+    '<div class="form-group col-md-3 form-inline">' +
+      '<select id="pay' + payId + '" class="payments_names custom-select col-md-12" required>' +
+        '<option value="">Вид выплаты</option>' +
         '<option>Страховое возмещение</option>' +
         '<option>УТС</option>' +
         '<option>Эвакуатор</option>' +
@@ -46,22 +47,20 @@ function addPay() {
         '<option>Неустойка</option>' +
       '</select>' +
     '</div>' +
+    '<div class="form-group col-md-3">' +
+      '<input id = "pay' + payId + '_date" class = "payments_dates datepicker-here form-control" placeholder="Дата" type="text" size="8" required>' +
+    '</div>' +
     '<div class="form-group col-md-2">' +
-      '<input id = "pay' + payId + '_date" class = "payments_dates datepicker-here form-control" placeholder="Дата" type="text" size="8">' +
+    '<input id = "pay' + payId + '_number" class="form-control" placeholder="№ ПП" type="text" size="8" required>' +
     '</div>' +
     '<div class="form-group col-md-3">' +
       '<div class="input-group">' +
-        '<input id="pay' + payId + '_text" class = "payments_summs input-numeral form-control" placeholder="Сумма" type="text" size="10">' +
+        '<input id="pay' + payId + '_text" class = "payments_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>' +
         '<div class="input-group-append">' +
           '<span class="input-group-text">&#8381;</span>' +
         '</div>' +
       '</div>' +
     '</div>' +
-    // '<div class="form-group col-ms-1">' +
-    //   '<button id="add_info_btn_' + payId + '" class="btn btn-outline-warning add_info" onclick="addInfo(' + payId + ')">' +
-    //     '<i class="fa fa-chevron-down toggle"></i>' +
-    //   '</button>' +
-    // '</div>' +
     '<div class="form-group col-ms-1">' +
       '<button id="pay_btn_' + payId + '" class="btn btn-outline-danger" onclick="removePay(' + payId + ')">×</button>' +
     '</div>' +
@@ -70,13 +69,13 @@ function addPay() {
   '<div id="add_info_penalty_form_row_' + payId + '" class="form-row" style="display:none">' +
       '<div class="form-group col-md-4 form-inline">' +
         '<div class="form-check">' +
-          '<input id="penalty_ndfl_' + payId + '" class="penalty_ndfls form-check-input" type="checkbox" onclick="addPenalty_ndfl_summ_form(' + payId + ')">' +
+          '<input id="penalty_ndfl_' + payId + '" class="penalty_ndfls form-check-input" type="checkbox" onclick="addPenalty_ndfl_summ_form(' + payId + ')" required>' +
           '<label for="penalty_ndfl_' + payId + '" class="ml-2  form-check-label">удержан НДФЛ в размере</label>' +
         '</div>' +
       '</div>' +
       '<div id="penalty_ndfl_summ_form_' + payId + '" class="form-group col-md-3" style="display:none">' +
         '<div class="input-group">' +
-          '<input id="penalty_ndfl_summ_' + payId + '" class = "penalty_ndfl_summs input-numeral form-control" placeholder="Сумма НДФЛ" type="text" size="10">' +
+          '<input id="penalty_ndfl_summ_' + payId + '" class = "penalty_ndfl_summs input-numeral form-control" placeholder="Сумма НДФЛ" type="text" size="10" required>' +
           '<div class="input-group-append">' +
             '<span class="input-group-text">&#8381;</span>' +
           '</div>' +
