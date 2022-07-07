@@ -5,9 +5,11 @@ import { declinationDays } from './declinationDays.js';
 import { declensions_by_cases } from './declensions_by_cases.js';
 import { inclineFirstname, inclineLastname, inclineMiddlename } from 'lvovich';
 import { formatDate } from './formatDate';
+import { changeDateType } from './changeDateType.js';
 
 // Формирование текста решения ФУ
-export function makeTextDecision(paymentVoluntary,
+export function makeTextDecision(claimsContract,
+                                 paymentVoluntary,
                                  paymentFu,
                                  paymentCourt,
                                  total_penalty_summ_accrued,
@@ -52,6 +54,7 @@ export function makeTextDecision(paymentVoluntary,
   var payment_conclusion_paragraf = [];
   var payment_fu_decision = [];
   var payment_court_decision = [];
+  var main_claims_all_paragraph = "";
   var payment_voluntary_paragraf = "";
   var payment_fu_paragraf = "";
   var payment_court_paragraf = "";
@@ -73,6 +76,10 @@ export function makeTextDecision(paymentVoluntary,
   court_set.clear();
   court_set.add(1); //Добавляестя для того, чтобы первое строка не разбивалась на символы
 
+
+
+
+  //ФОРМИРОВАНИЕ ПРЕАМБУЛЫ РЕШЕНИЯ
   //Получение значения наименования ФО
   fo_name = document.querySelector("#fo_name").value;
 
@@ -90,6 +97,7 @@ export function makeTextDecision(paymentVoluntary,
 
     fo_inn = document.querySelector("#fo_inn").value;
     fo_registration_date = document.querySelector("#fo_registration_date").value;
+    fo_registration_date = Date.parse(changeDateType(fo_registration_date) + 'T00:00:00')
     fo_registration_date = formatDate(new Date(fo_registration_date));
     fo_registration_address = document.querySelector("#fo_registration_address").value;
     fo_post_address = document.querySelector("#fo_post_address").value;
@@ -107,16 +115,20 @@ export function makeTextDecision(paymentVoluntary,
   var fu_name = document.querySelector("#fu_name").value;
   var fu_post;
   var date_appeal = document.querySelector("#date_appeal").value;
+  date_appeal = Date.parse(changeDateType(date_appeal) + 'T00:00:00')
   date_appeal = formatDate(new Date(date_appeal));
   var appeal_number = document.querySelector("#appeal_number").value;
 
-  app_name = document.querySelector("#app_name").value;
-  var app_firstName = app_name.split(" ")[1]
-  var app_middleName = app_name.split(" ")[2]
-  var app_lastName = app_name.split(" ")[0]
-  app_name = `${inclineLastname(app_lastName, 'genitive')} 
-              ${inclineFirstname(app_firstName, 'genitive')} 
-              ${inclineMiddlename(app_middleName, 'genitive')}`
+  if (!isNaN(app_name)) {
+    app_name = document.querySelector("#app_name").value;
+    var app_firstName = app_name.split(" ")[1]
+    var app_middleName = app_name.split(" ")[2]
+    var app_lastName = app_name.split(" ")[0]
+    app_name = `${inclineLastname(app_lastName, 'genitive')} 
+                ${inclineFirstname(app_firstName, 'genitive')} 
+                ${inclineMiddlename(app_middleName, 'genitive')}`
+  }
+  
 
   app_passport = document.querySelector("#app_passport").value;
   app_registration_address = document.querySelector("#app_registration_address").value;
@@ -159,17 +171,53 @@ export function makeTextDecision(paymentVoluntary,
                   место жительства: ${app_registration_address}; почтовый адрес: ${app_post_address}) 
                   (далее – Заявитель) в отношении ${fo_name} (место нахождения: ${fo_registration_address}; 
                   почтовый адрес: ${fo_post_address}; дата государственной регистрации: ${fo_registration_date}; 
-                  идентификационный номер налогоплательщика:  ${fo_inn},<br><br>УСТАНОВИЛ<br><br>`
-  
-  main_claims.forEach(element => {
-    if (!isNaN(element.summ)) {
-      element
-    }
-  });
+                  идентификационный номер налогоплательщика:  ${fo_inn},<br><br>УСТАНОВИЛ<br><br>`;
+
+
+
+
+// ФОРМИРОВАНИЕ АБЗАЦА С ТРЕБОВАНИЯМИ К ФУ
+  for (var i = 0; i < claimsContract.length; i++) {
+    main_claims_all_paragraph = main_claims_all_paragraph + claimsContract[i].claims_all
+  }
+
+  main_claims_all_paragraph = main_claims_all_paragraph.slice(0, -1)
 
   var main_claims_paragraf = `Финансовому уполномоченному на рассмотрение поступило Обращение в отношении ${fo_name} 
-  с требованием о взыскании ${main_claims_all_paragraph}.<br>`
+  с требованием о взыскании${main_claims_all_paragraph}.<br>`
 
+
+
+
+  //ФОРМИРОВАНИЕ АБЗАЦА С ЗАПРОСОМ В АДРЕС ФО
+  var date_main_request = document.querySelector("#date_main_request").value;
+  date_main_request = Date.parse(changeDateType(date_main_request) + 'T00:00:00')
+  date_main_request = formatDate(new Date(date_main_request));
+  var number_main_request = document.querySelector("#number_main_request").value;
+
+  var main_answer_type = document.querySelector("#main_answer_type").options.selectedIndex
+  var date_main_answer = document.querySelector("#number_main_request").value
+  date_main_answer = Date.parse(changeDateType(date_main_answer) + 'T00:00:00')
+  date_main_answer = formatDate(new Date(date_main_answer));
+  var number_main_answer = document.querySelector("#number_main_answer").value
+
+  var main_answer = ""
+  if (main_answer_type == 1) {
+    main_answer = `${fo_name} запрошенные сведения и документы предоставлены`
+  } else {
+    main_answer = `${fo_name} запрошенные сведения и документы не предоставлены`
+  }
+
+  var main_request_paragraph = `В рамках рассмотрения Обращения в адрес ${fo_name} направлено уведомление о принятии 
+  Обращения к рассмотрению от ${date_main_request} № ${number_main_request}, содержащее требование о предоставлении 
+  сведений и документов по предмету спора, указанному в Обращении.<br>
+  ${main_answer}.<br>`
+
+ var transitional_paragraph = `Рассмотрев имеющиеся в деле документы, Финансовый уполномоченный установил следующее.<br>`
+
+
+
+  
   var first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name_genitive + ' неустойки '+
   'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
   'Финансовый уполномоченный приходит к следующему.'+'<br>'
@@ -912,6 +960,9 @@ export function makeTextDecision(paymentVoluntary,
   }
 
   return preambula + 
+         main_claims_paragraf +
+         main_request_paragraph +
+         transitional_paragraph + 
          first_paragraf +
          standart_motivation +
          article_191 + article_193 +

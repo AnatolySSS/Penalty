@@ -1,3 +1,4 @@
+import { ClaimsContract } from "./moduls/mainClaim";
 import { AppDate } from './moduls/app_date.js';
 import { PaymentVoluntary } from './moduls/payment_voluntary.js';
 import { PaymentFu } from './moduls/payment_fu.js';
@@ -7,6 +8,7 @@ import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './mo
 import { COLUMN_NAME_20, COLUMN_NAME_21 } from './moduls/variables.js';
 import { DAY, STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED, DATE_EURO_START } from './moduls/variables.js';
 import { paymentVoluntary, paymentFu, paymentCourt } from './moduls/variables.js';
+import { claimsContract } from "./moduls/variables.js";
 import { makeRubText_nominative } from './moduls/makeRubText_nominative.js';
 import { makeRubText_genitive } from './moduls/makeRubText_genitive.js';
 import { changeDateType } from './moduls/changeDateType.js';
@@ -166,6 +168,16 @@ $('#btn_desicion').click(function() {
   } else { // остальные случаи
     max_summ = 400000;
     document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
+  }
+
+  //Получение массива значений всех требвоаний к ФУ
+  var number_of_main_claims_contracts = $('.main_claims_contracts').length
+  var payments_types = $('.claims_contract_types')
+
+  for (var i = 0; i < number_of_main_claims_contracts; i++) {
+    claimsContract[i] = new ClaimsContract(i + 1,
+                                           payments_types[i])
+    
   }
 
   //Получение массива значений всех переменных добровольных выплат
@@ -415,7 +427,8 @@ document.getElementById('show_decision').onclick = function show_decision(){
   if ($('#show_decision').html() == "Показать текст решения") {
     $('#decision').show();
     $('#show_decision').html("Скрыть текст решения");
-    decision = makeTextDecision(paymentVoluntary,
+    decision = makeTextDecision(claimsContract,
+                                paymentVoluntary,
                                 paymentFu,
                                 paymentCourt,
                                 total_penalty_summ_accrued,
