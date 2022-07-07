@@ -119,8 +119,10 @@ export function makeTextDecision(claimsContract,
   date_appeal = formatDate(new Date(date_appeal));
   var appeal_number = document.querySelector("#appeal_number").value;
 
-  if (!isNaN(app_name)) {
-    app_name = document.querySelector("#app_name").value;
+  
+  app_name = document.querySelector("#app_name").value;
+  console.log(isNaN(app_name));
+  if (isNaN(app_name)) {
     var app_firstName = app_name.split(" ")[1]
     var app_middleName = app_name.split(" ")[2]
     var app_lastName = app_name.split(" ")[0]
