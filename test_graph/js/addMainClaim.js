@@ -125,7 +125,7 @@ function removeClaimsContract(id) {
   ContractId--;
 }
 
-//Показать дополнительную информацию по решению ФУ
+//Показать требования, заявленные в рамках договора
 $(document).on("click", ".add_main_claims_info_btns", function (event) {
 	if (!($(this).find(".toggle").hasClass("rotate"))) {
     $(this).parent().parent().next().show('fast'); //Показывает .add_main_claims_info
@@ -140,9 +140,29 @@ $(document).on("click", ".add_main_claims_info_btns", function (event) {
   }
 });
 
+//Показать требования, заявленные в рамках договора
+$(document).on("change", ".claims_contract_types", function (event) {
+	if (!($(this).parent().next().find(".toggle").hasClass("rotate"))) {
+    $(this).parent().next().find(".toggle").addClass("rotate");
+  } else {
+    $(this).parent().next().find(".toggle").removeClass("rotate");
+  }
+  if ($(this).find(':selected').text() != "Выберите тип договора") {
+    $(this).parent().parent().next().show('fast'); //Показывает .add_main_claims_info
+    $(this).parent().next().find(".toggle").addClass("rotate");
+
+		if ($(this).parent().parent().next().children().first().find(':selected').text() == "Неустойка"){
+			$(this).parent().parent().next().children().first().next().show('fast'); //Показывает .add_main_claims_info
+		}
+  } else {
+    $(this).parent().parent().next().hide('fast'); //Скрывает .add_main_claims_info
+    $(this).parent().next().find(".toggle").removeClass("rotate");
+  }
+});
+
 function addFuMainClaim(id) {
 	claimContractId++;
-  var str = `<div id="main_claim_${id}_${claimContractId}" class="fu-name form-row ml-2">
+  var str = `<div id="main_claim_${id}_${claimContractId}" class="main_claim_${id} main_claims form-row ml-2">
                 <div class="form-group col-md-5">
                     <select id="main_claim_type_${id}_${claimContractId}" class="main_claim_type_${id} main_claim_types custom-select form-control col-md-12" required>
                       <option value="">Выберите требование</option>  
