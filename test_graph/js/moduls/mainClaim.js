@@ -1,5 +1,4 @@
 import { changeDateType } from './changeDateType.js';
-import { declinationDays } from './declinationDays.js';
 import { allClaims } from './objects/allClaims';
 import { makeRubText_genitive } from "./makeRubText_genitive";
 import { formatDate } from "./formatDate";

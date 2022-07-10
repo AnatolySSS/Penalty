@@ -1,4 +1,5 @@
 import { ClaimsContract } from "./moduls/mainClaim";
+import { DtpParticipant } from "./moduls/dtpParticipants";
 import { AppDate } from './moduls/app_date.js';
 import { PaymentVoluntary } from './moduls/payment_voluntary.js';
 import { PaymentFu } from './moduls/payment_fu.js';
@@ -8,7 +9,7 @@ import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './mo
 import { COLUMN_NAME_20, COLUMN_NAME_21 } from './moduls/variables.js';
 import { DAY, STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED, DATE_EURO_START } from './moduls/variables.js';
 import { paymentVoluntary, paymentFu, paymentCourt } from './moduls/variables.js';
-import { claimsContract } from "./moduls/variables.js";
+import { claimsContract, dtpParticipant } from "./moduls/variables.js";
 import { makeRubText_nominative } from './moduls/makeRubText_nominative.js';
 import { makeRubText_genitive } from './moduls/makeRubText_genitive.js';
 import { changeDateType } from './moduls/changeDateType.js';
@@ -179,6 +180,36 @@ $('#btn_desicion').click(function() {
                                            payments_types[i])
     
   }
+
+  //Получение массива значений всех участников ДТП
+  var number_of_dtp_participants = $('.dtp_participants').length
+  var car_brand = $('.car_brands')
+  var car_model = $('.car_models')
+  var car_reg_number = $('.car_reg_numbers')
+  var car_vin_number = $('.car_vin_numbers')
+  var car_year = $('.car_years')
+  var car_type = $('.car_types')
+  var car_weight = $('.car_weights')
+  var driver_name = $('.driver_names')
+  var owner_name = $('.owner_names')
+  var is_guilty = $('.is_guilties')
+
+  for (var i = 0; i < number_of_dtp_participants; i++) {
+    dtpParticipant[i] = new DtpParticipant(i + 1,
+                                          car_brand[i],
+                                          car_model[i],
+                                          car_reg_number[i],
+                                          car_vin_number[i],
+                                          car_year[i],
+                                          car_type[i],
+                                          car_weight[i],
+                                          driver_name[i],
+                                          owner_name[i],
+                                          is_guilty[i])
+    
+  }
+
+
 
   //Получение массива значений всех переменных добровольных выплат
   number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
@@ -428,6 +459,7 @@ document.getElementById('show_decision').onclick = function show_decision(){
     $('#decision').show();
     $('#show_decision').html("Скрыть текст решения");
     decision = makeTextDecision(claimsContract,
+                                dtpParticipant,
                                 paymentVoluntary,
                                 paymentFu,
                                 paymentCourt,
@@ -436,6 +468,8 @@ document.getElementById('show_decision').onclick = function show_decision(){
                                 max_summ,
                                 fu_claim_set);
     // makeDecisionFile(decision);
+    decision = decision.replace("ОСАГО", "обязательного страхования гражданской ответственности владельцев транспортных средств (далее – ОСАГО)")
+    console.log(decision);
     document.querySelector('#decision').innerHTML = decision;
     selectText('decision');
   } else {

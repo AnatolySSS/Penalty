@@ -4,17 +4,22 @@ var carContractId = 1;
 function addDtpParticipant() {
   dtpParticipant++
   var str = `
-  <div id="dtp_participant_${dtpParticipant}">
+  <div id="dtp_participant_${dtpParticipant}" class="dtp_participants">
     <hr>
+    <div class="form-row ml-2">
+      <div class="form-group">
+        <h6>Участник № ${dtpParticipant}</h6>
+      </div>
+    </div>
     <div id="dtp_description_participant_${dtpParticipant}" class="form-row">
       <div class="form-group col-md-4">
-        <input id = "car_brand_${dtpParticipant}" class="form-control" placeholder="Марка ТС" type="text" size="8" required>
+        <input id = "car_brand_${dtpParticipant}" class="car_brands form-control" placeholder="Марка ТС" type="text" size="8" required>
       </div>
       <div class="form-group col-md-3">
-        <input id = "car_model_${dtpParticipant}" class="form-control" placeholder="Модель ТС" type="text" size="8" required>
+        <input id = "car_model_${dtpParticipant}" class="car_models form-control" placeholder="Модель ТС" type="text" size="8" required>
       </div>
       <div class="form-group col-md-3">
-        <input id = "car_reg_number_${dtpParticipant}" class="form-control" placeholder="ГРН" type="text" size="8" required>
+        <input id = "car_reg_number_${dtpParticipant}" class="car_reg_numbers form-control" placeholder="ГРН" type="text" size="8" required>
       </div>
       <div class="form-group col-ms-1">
         <button id="add_dtp_description_participant_info_btn_${dtpParticipant}" class="add_dtp_description_participant_info_btns btn btn-outline-warning add_info">
@@ -31,13 +36,13 @@ function addDtpParticipant() {
     <div id="dtp_description_participant_info_${dtpParticipant}" class="dtp_description_participant_infos" style="display:none">
       <div class="form-row">
         <div class="form-group col-md-4">
-          <input id = "car_vin_number_${dtpParticipant}" class="form-control" placeholder="VIN" type="text" size="8" required>
+          <input id = "car_vin_number_${dtpParticipant}" class="car_vin_numbers form-control" placeholder="VIN" type="text" size="8" required>
         </div>
         <div class="form-group col-md-3">
-          <input id = "car_year_${dtpParticipant}" class="form-control" placeholder="год выпуска" type="text" size="8" required>
+          <input id = "car_year_${dtpParticipant}" class="car_years form-control" placeholder="год выпуска" type="text" size="8" required>
         </div>
         <div class="form-group col-md-3">
-          <select id="car_type_${dtpParticipant}" class="custom-select form-control" required>
+          <select id="car_type_${dtpParticipant}" class="car_types custom-select form-control" required>
             <option value="">тип ТС</option>
             <option>легковой</option>
             <option>грузовой</option>
@@ -46,23 +51,24 @@ function addDtpParticipant() {
           </select>
         </div>
         <div class="form-group col-md-2">
-          <input id = "car_veight_${dtpParticipant}" class="form-control" placeholder="масса" type="text" size="8" required>
+          <input id = "car_veight_${dtpParticipant}" class="car_weights form-control" placeholder="масса" type="text" size="8" required>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-6">
-          <input id = "driver_name_${dtpParticipant}" class="form-control" placeholder="ФИО водителя" type="text" size="8" required>
+          <input id = "driver_name_${dtpParticipant}" class="driver_names form-control" placeholder="ФИО водителя" type="text" size="8" required>
         </div>
         <div class="form-group col-md-6">
-          <input id = "owner_name_${dtpParticipant}" class="form-control" placeholder="ФИО собственника" type="text" size="8" required>
+          <input id = "owner_name_${dtpParticipant}" class="owner_names form-control" placeholder="ФИО собственника" type="text" size="8" required>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-3">
-          <select id="car_type_${dtpParticipant}" class="custom-select form-control" required>
+          <select id="car_type_${dtpParticipant}" class="is_guilties custom-select form-control" required>
             <option value="">степень вины</option>
             <option>виновен</option>
             <option>не виновен</option>
+            <option>не установлена</option>
           </select>
         </div>
       </div>
@@ -70,7 +76,7 @@ function addDtpParticipant() {
       <!-- BEGIN car_contracts -->
 
       <div id="car_contracts_${dtpParticipant}">
-        <div id="car_contract_${dtpParticipant}_1">
+        <div id="car_contract_${dtpParticipant}_1" class="car_contract_${dtpParticipant}">
 
           <!-- BEGIN contract_select -->
           <div id="car_contract_select_${dtpParticipant}_1" class="form-row">
@@ -96,7 +102,7 @@ function addDtpParticipant() {
           <!-- END contract_select -->
           <!-- BEGIN car_contract_osago -->
 
-          <div id="car_contract_osago_info_${dtpParticipant}_1" class="car_contract_osago_infos" style="display:none">
+          <div id="car_contract_osago_info_${dtpParticipant}_1" class="car_contract_osago_info_${dtpParticipant} car_contract_osago_infos" style="display:none">
             <div class="form-row">
               <div class="form-group col-md-9">
                 <h6>Общие сведения о договоре страхования ОСАГО</h6>
@@ -105,28 +111,28 @@ function addDtpParticipant() {
             <div class="form-row">
               <div class="form-group col-md-6">
                 <div class="autocomplete">
-                  <input id="car_contract_osago_fo_name_${dtpParticipant}_1" class="form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+                  <input id="car_contract_osago_fo_name_${dtpParticipant}_1" class="car_contract_osago_fo_name_${dtpParticipant} car_contract_osago_fo_names form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
                 </div>
               </div>
               <div class="form-group col-md-6">
-                <input id = "car_contract_osago_fo_number_${dtpParticipant}_1" class="form-control" placeholder="серия и № полиса" type="text" size="8" required>
+                <input id = "car_contract_osago_fo_number_${dtpParticipant}_1" class="car_contract_osago_fo_number_${dtpParticipant} car_contract_osago_fo_numbers form-control" placeholder="серия и № полиса" type="text" size="8" required>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-3">
-                <input id = "car_contract_osago_fo_date_conclusion_${dtpParticipant}_1" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_osago_fo_date_conclusion_${dtpParticipant}_1" class = "car_contract_osago_fo_date_conclusion_${dtpParticipant} car_contract_osago_fo_date_conclusions datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_osago_fo_date_conclusion_help_block_${dtpParticipant}_1" class="form-text">
                   Заключение договора
                 </small>
               </div>
               <div class="form-group col-md-3">
-                <input id = "car_contract_osago_fo_date_start_${dtpParticipant}_1" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_start_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_osago_fo_date_start_${dtpParticipant}_1" class = "car_contract_osago_fo_date_start_${dtpParticipant} car_contract_osago_fo_date_starts datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_start_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_osago_fo_date_start_help_block_${dtpParticipant}_1" class="form-text">
                   Начало срока действия
                 </small>
               </div>
               <div class="form-group col-md-3">
-                <input id = "car_contract_osago_fo_date_end_${dtpParticipant}_1" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_end_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_osago_fo_date_end_${dtpParticipant}_1" class = "car_contract_osago_fo_date_end_${dtpParticipant} car_contract_osago_fo_date_ends datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_end_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_osago_fo_date_end_help_block_${dtpParticipant}_1" class="form-text">
                   Окончание срока действия
                 </small>
@@ -137,7 +143,7 @@ function addDtpParticipant() {
           <!-- END car_contract_osago -->
           <!-- BEGIN car_contract_casco -->
 
-          <div id="car_contract_casco_info_${dtpParticipant}_1" class="car_contract_casco_infos" style="display:none">
+          <div id="car_contract_casco_info_${dtpParticipant}_1" class="car_contract_casco_info_${dtpParticipant} car_contract_casco_infos" style="display:none">
 
             <!-- BEGIN car_contract_casco_general_info -->
 
@@ -468,7 +474,7 @@ $(document).on("click", ".add_dtp_description_participant_info_btns", function (
 function addCarContract(id) {
 	carContractId++;
   var str = `
-  <div id="car_contract_${id}_${carContractId}">
+  <div id="car_contract_${id}_${carContractId}" class="car_contract_${id}">
     <div id="car_contract_select_${id}_${carContractId}" class="form-row">
       <div class="form-group col-md-5">
         <select id="car_contract_type_${id}_${carContractId}" class="car_contract_types custom-select form-control col-md-12" required>

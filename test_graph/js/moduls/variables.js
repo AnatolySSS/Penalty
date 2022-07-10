@@ -40,6 +40,7 @@ export let paymentFu = [];
 export let paymentCourt = [];
 
 export let claimsContract = [];
+export let dtpParticipant = [];
 
 export let courtPenalty = [];
 

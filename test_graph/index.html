@@ -445,24 +445,29 @@
                     <!-- BEGIN dtp_description_participants -->
 
                     <div id="dtp_description_participants" class="ml-2">
-                      <div class="form-row ml-2">
+                      <!-- <div class="form-row ml-2">
                         <div class="form-group">
                           <h6>Сведения об участниках ДТП</h6>
                         </div>
-                      </div>
+                      </div> -->
 
                       <!-- BEGIN dtp_participant -->
 
-                      <div id="dtp_participant_1">
+                      <div id="dtp_participant_1" class="dtp_participants">
+                        <div class="form-row ml-2">
+                          <div class="form-group">
+                            <h6>Участник № 1 (Заявитель)</h6>
+                          </div>
+                        </div>
                         <div id="dtp_description_participant_1" class="form-row">
                           <div class="form-group col-md-4">
-                            <input id = "car_brand" class="form-control" placeholder="Марка ТС" type="text" size="8" required>
+                            <input id = "car_brand_1" class="car_brands form-control" placeholder="Марка ТС" type="text" size="8" required>
                           </div>
                           <div class="form-group col-md-3">
-                            <input id = "car_model" class="form-control" placeholder="Модель ТС" type="text" size="8" required>
+                            <input id = "car_model_1" class="car_models form-control" placeholder="Модель ТС" type="text" size="8" required>
                           </div>
                           <div class="form-group col-md-3">
-                            <input id = "car_reg_number" class="form-control" placeholder="ГРН" type="text" size="8" required>
+                            <input id = "car_reg_number_1" class="car_reg_numbers form-control" placeholder="ГРН" type="text" size="8" required>
                           </div>
                           <div class="form-group col-ms-1">
                             <button id="add_dtp_description_participant_info_btn_1" class="add_dtp_description_participant_info_btns btn btn-outline-warning add_info">
@@ -479,13 +484,13 @@
                         <div id="dtp_description_participant_info_1" class="dtp_description_participant_infos" style="display:none">
                           <div class="form-row">
                             <div class="form-group col-md-4">
-                              <input id = "car_vin_number" class="form-control" placeholder="VIN" type="text" size="8" required>
+                              <input id = "car_vin_number_1" class="car_vin_numbers form-control" placeholder="VIN" type="text" size="8" required>
                             </div>
                             <div class="form-group col-md-3">
-                              <input id = "car_year" class="form-control" placeholder="год выпуска" type="text" size="8" required>
+                              <input id = "car_year_1" class="car_years form-control" placeholder="год выпуска" type="text" size="8" required>
                             </div>
                             <div class="form-group col-md-3">
-                              <select id="car_type" class="custom-select form-control" required>
+                              <select id="car_type_1" class="car_types custom-select form-control" required>
                                 <option value="">тип ТС</option>
                                 <option>легковой</option>
                                 <option>грузовой</option>
@@ -494,23 +499,24 @@
                               </select>
                             </div>
                             <div class="form-group col-md-2">
-                              <input id = "car_veight" class="form-control" placeholder="масса" type="text" size="8" required>
+                              <input id = "car_weight_1" class="car_weights form-control" placeholder="масса" type="text" size="8" required>
                             </div>
                           </div>
                           <div class="form-row">
                             <div class="form-group col-md-6">
-                              <input id = "driver_name" class="form-control" placeholder="ФИО водителя" type="text" size="8" required>
+                              <input id = "driver_name_1" class="driver_names form-control" placeholder="ФИО водителя" type="text" size="8" required>
                             </div>
                             <div class="form-group col-md-6">
-                              <input id = "owner_name" class="form-control" placeholder="ФИО собственника" type="text" size="8" required>
+                              <input id = "owner_name_1" class="owner_names form-control" placeholder="ФИО собственника" type="text" size="8" required>
                             </div>
                           </div>
                           <div class="form-row">
                             <div class="form-group col-md-3">
-                              <select id="car_type" class="custom-select form-control" required>
+                              <select id="is_guilty_1" class="is_guilties custom-select form-control" required>
                                 <option value="">степень вины</option>
                                 <option>виновен</option>
                                 <option>не виновен</option>
+                                <option>не установлена</option>
                               </select>
                             </div>
                           </div>
@@ -518,7 +524,7 @@
                           <!-- BEGIN car_contracts -->
 
                           <div id="car_contracts_1">
-                            <div id="car_contract_1_1">
+                            <div id="car_contract_1_1" class="car_contract_1">
 
                               <!-- BEGIN contract_select -->
                               <div id="car_contract_select_1_1" class="form-row">
@@ -544,7 +550,7 @@
                               <!-- END contract_select -->
                               <!-- BEGIN car_contract_osago -->
 
-                              <div id="car_contract_osago_info_1_1" class="car_contract_osago_infos" style="display:none">
+                              <div id="car_contract_osago_info_1_1" class="car_contract_osago_info_1 car_contract_osago_infos" style="display:none">
                                 <div class="form-row">
                                   <div class="form-group col-md-9">
                                     <h6>Общие сведения о договоре страхования ОСАГО</h6>
@@ -553,28 +559,28 @@
                                 <div class="form-row">
                                   <div class="form-group col-md-6">
                                     <div class="autocomplete">
-                                      <input id="car_contract_osago_fo_name_1_1" class="form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+                                      <input id="car_contract_osago_fo_name_1_1" class="car_contract_osago_fo_name_1 car_contract_osago_fo_names form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
                                     </div>
                                   </div>
                                   <div class="form-group col-md-6">
-                                    <input id = "car_contract_osago_fo_number_1_1" class="form-control" placeholder="серия и № полиса" type="text" size="8" required>
+                                    <input id = "car_contract_osago_fo_number_1_1" class="car_contract_osago_fo_number_1 car_contract_osago_fo_numbers form-control" placeholder="серия и № полиса" type="text" size="8" required>
                                   </div>
                                 </div>
                                 <div class="form-row">
                                   <div class="form-group col-md-3">
-                                    <input id = "car_contract_osago_fo_date_conclusion_1_1" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                                    <input id = "car_contract_osago_fo_date_conclusion_1_1" class = "car_contract_osago_fo_date_conclusion_1 car_contract_osago_fo_date_conclusions datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                                     <small id="car_contract_osago_fo_date_conclusion_help_block_1_1" class="form-text">
                                       Заключение договора
                                     </small>
                                   </div>
                                   <div class="form-group col-md-3">
-                                    <input id = "car_contract_osago_fo_date_start_1_1" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_start_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                                    <input id = "car_contract_osago_fo_date_start_1_1" class = "car_contract_osago_fo_date_start_1 car_contract_osago_fo_date_starts datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_start_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                                     <small id="car_contract_osago_fo_date_start_help_block_1_1" class="form-text">
                                       Начало срока действия
                                     </small>
                                   </div>
                                   <div class="form-group col-md-3">
-                                    <input id = "car_contract_osago_fo_date_end_1_1" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_end_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                                    <input id = "car_contract_osago_fo_date_end_1_1" class = "car_contract_osago_fo_date_end_1 car_contract_osago_fo_date_ends datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_end_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                                     <small id="car_contract_osago_fo_date_end_help_block_1_1" class="form-text">
                                       Окончание срока действия
                                     </small>
@@ -585,7 +591,7 @@
                               <!-- END car_contract_osago -->
                               <!-- BEGIN car_contract_casco -->
 
-                              <div id="car_contract_casco_info_1_1" class="car_contract_casco_infos" style="display:none">
+                              <div id="car_contract_casco_info_1_1" class="car_contract_casco_info_1 car_contract_casco_infos" style="display:none">
 
                                 <!-- BEGIN car_contract_casco_general_info -->
 

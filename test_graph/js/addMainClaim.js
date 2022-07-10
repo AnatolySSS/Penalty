@@ -271,7 +271,7 @@ $(document).on("change", ".main_claim_types", function (event) {
     $(this).parent().parent().next().find('.date_main_claim_tos').removeClass('form-control')
 	}
   validationCheck('.main-claims-all')
-  validationCheckUpdate('.main-claims-all');
+  validationCheckUpdate('.main-claims-all')
 });
 
 //Блокировать даты судебной неустойки при проставленной галочке "Период не указан"

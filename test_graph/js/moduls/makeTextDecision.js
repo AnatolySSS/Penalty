@@ -3,12 +3,13 @@ import { makeRubText_nominative } from './makeRubText_nominative.js';
 import { makeRubText_genitive } from './makeRubText_genitive.js';
 import { declinationDays } from './declinationDays.js';
 import { declensions_by_cases } from './declensions_by_cases.js';
-import { inclineFirstname, inclineLastname, inclineMiddlename } from 'lvovich';
+import { inclineFirstname, inclineLastname, inclineMiddlename, getLastnameGender } from 'lvovich';
 import { formatDate } from './formatDate';
 import { changeDateType } from './changeDateType.js';
 
 // Формирование текста решения ФУ
 export function makeTextDecision(claimsContract,
+                                 dtpParticipant,
                                  paymentVoluntary,
                                  paymentFu,
                                  paymentCourt,
@@ -120,9 +121,11 @@ export function makeTextDecision(claimsContract,
   var appeal_number = document.querySelector("#appeal_number").value;
 
   
-  app_name = document.querySelector("#app_name").value;
-  console.log(isNaN(app_name));
-  if (isNaN(app_name)) {
+  app_name = document.querySelector("#app_name").value
+  console.log(app_name);
+
+  if (app_name != "") {
+    var app_name_im = app_name
     var app_firstName = app_name.split(" ")[1]
     var app_middleName = app_name.split(" ")[2]
     var app_lastName = app_name.split(" ")[0]
@@ -215,11 +218,67 @@ export function makeTextDecision(claimsContract,
   сведений и документов по предмету спора, указанному в Обращении.<br>
   ${main_answer}.<br>`
 
- var transitional_paragraph = `Рассмотрев имеющиеся в деле документы, Финансовый уполномоченный установил следующее.<br>`
+  var transitional_paragraph = `Рассмотрев имеющиеся в деле документы, Финансовый уполномоченный установил следующее.<br>`
+
+  //ФОРМИРОВАНИЕ АБЗАЦА С ОПИСАНИЕМ ПОЛИСА ЗАЯВИТЕЛЯ
+
+  //ФОРМИРОВАНИЕ АБЗАЦА С ОПИСАНИЕМ ДТП
+  var date_dtp = document.querySelector('#date_dtp').value;
+  date_dtp = changeDateType(date_dtp);
+  date_dtp = Date.parse(date_dtp + 'T00:00:00');
+  date_dtp = formatDate(new Date(date_dtp));
+  var dtp_description_paragraph = ""
+  var all_participants = ""
+
+  //Если участников двое
+  if (dtpParticipant.length == 2) {
+
+    //Если Заявитель не является виновником? а второй участник виновник
+    if (dtpParticipant[0].is_guilty.options.selectedIndex == 2 &&
+        dtpParticipant[1].is_guilty.options.selectedIndex == 1) {
+      dtp_description_paragraph = `${dtpParticipant[0].contract_paragraph_all}
+      В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 
+      (далее – ДТП) вследствие действий ${dtpParticipant[1].driver_name_genitive}, ${dtpParticipant[1].driver_declination} 
+      транспортным средством ${dtpParticipant[1].full_car_name}, был причинен ущерб принадлежащему Заявителю 
+      транспортному средству ${dtpParticipant[0].full_car_name}.<br>
+      ${dtpParticipant[1].contract_paragraph_all}`
+    
+    //Если оба участника виновники
+    } else if (dtpParticipant[0].is_guilty.options.selectedIndex == 1 &&
+      dtpParticipant[1].is_guilty.options.selectedIndex == 1) {
+    
+    //Если вина обоих участников не установлена
+    } else if (dtpParticipant[0].is_guilty.options.selectedIndex == 3 &&
+      dtpParticipant[1].is_guilty.options.selectedIndex == 3) {
+        if (app_name_im.split(" ")[0] == dtpParticipant[0].driver_name.value.split(" ")[0]) {
+          app_driver_name = `Заявителя`
+        } else {
+          app_driver_name = dtpParticipant[0].driver_name_genitive
+        }
+        dtp_description_paragraph = `${date_dtp} произошло дорожно-транспортного происшествия (далее – ДТП), 
+        с участием транспортного средства ${dtpParticipant[1].full_car_name}, под управлением водителя 
+        ${dtpParticipant[1].driver_name_genitive} и транспортного средства ${dtpParticipant[1].full_car_name} 
+        (далее – Транспортное средство), принадлежащего Заявителю на праве собственности, под управлением 
+        ${app_driver_name}, в результате которого Транспортному средству был причинен ущерб.<br>
+        Документов, подтверждающих наличие вины в ДТП ${app_driver_name} и ${dtpParticipant[1].driver_name_genitive} 
+        Финансовому уполномоченному не предоставлено.<br>`
+    }
+  //Если участников больше чем двое
+  } else {
+    dtpParticipant.forEach(currentParticipant => {
+      all_participants = all_participants + currentParticipant.full_car_name
+    })
+    dtp_description_paragraph = `В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 
+    (далее – ДТП) вследствие столкновения транспортных средств: `
+  }
+
+  for (var i = 0; i < dtpParticipant.length; i++) {
+    dtpParticipant[i]
+  }
 
 
 
-  
+
   var first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name_genitive + ' неустойки '+
   'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
   'Финансовый уполномоченный приходит к следующему.'+'<br>'
@@ -965,6 +1024,7 @@ export function makeTextDecision(claimsContract,
          main_claims_paragraf +
          main_request_paragraph +
          transitional_paragraph + 
+         dtp_description_paragraph +
          first_paragraf +
          standart_motivation +
          article_191 + article_193 +
