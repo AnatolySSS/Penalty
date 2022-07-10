@@ -19,8 +19,10 @@ import { makeTextDecision } from './moduls/makeTextDecision.js';
 import { decision_analize } from './moduls/analyze_fu_decision.js';
 import { autocomplete } from './moduls/autocomplete.js';
 import { fo_data } from './moduls/objects/foData';
+import { allCars } from './moduls/objects/allCars';
 import { renderDOM } from "./moduls/react/react.js";
-import { generate } from './moduls/docx.js';
+import { makeDecisionFile } from './moduls/docx.js';
+import { all_paragraphs } from "./moduls/makeTextDecision";
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
 //Формируем DOM bp react файла
@@ -469,11 +471,14 @@ document.getElementById('show_decision').onclick = function show_decision(){
                                 fu_claim_set);
     
     decision = decision.replace("ОСАГО", "обязательного страхования гражданской ответственности владельцев транспортных средств (далее – ОСАГО)")
-    generate();
+    // makeDecisionFile(all_paragraphs);
     document.querySelector('#decision').innerHTML = decision;
+    // $('#decision_text_text_area').show();
+    // document.querySelector('#decision_text_text_area').value = decision;
     selectText('decision');
   } else {
     $('#decision').hide();
+    // $('#decision_text_text_area').hide();
     $('#show_decision').html("Показать текст решения");
   }
 }
@@ -545,19 +550,32 @@ function selectText(containerid) {
     });
 	}
 
+  //Автопоиск наименований ФО
   var fo = []
-
   fo_data.fo_data.forEach(element => {
     fo.push(element.fo_name)
   });
-
-  // autocomplete(document.getElementById("fo_name"), fo);
 
   $('.autocomplete input').toArray().forEach(element => {
     autocomplete(element, fo)
   });
 
-  // autocomplete($('#fo_name').toArray()[0], fo)
+  //Автопоиск марок ТС
+  var car_brands = []
+  car_brands = Object.keys(allCars)
+  $('.car_brands').toArray().forEach(element => {
+    autocomplete(element, car_brands)
+  })
+
+  //Автопоиск моделей ТС
+  var car_models = []
+  $('.car_brands').focusout(function () {
+    // console.log(allCars[$(this).val()])
+    car_models = allCars[$(this).val()]
+    $('.car_models').toArray().forEach(element => {
+      autocomplete(element, car_models)
+    })
+  })
 
   function validationCheck(className) {
     setTimeout(() => {
@@ -581,6 +599,15 @@ function selectText(containerid) {
     $('.autocomplete input').toArray().forEach(element => {
       autocomplete(element, fo)
     });
+    $('.car_brands').toArray().forEach(element => {
+      autocomplete(element, car_brands)
+    })
+    $('.car_brands').focusout(function () {
+      car_models = allCars[$(this).val()]
+      $('.car_models').toArray().forEach(element => {
+        autocomplete(element, car_models)
+      })
+    })
   })
   
     validationCheck('.preambula')

@@ -7,6 +7,8 @@ import { inclineFirstname, inclineLastname, inclineMiddlename, getLastnameGender
 import { formatDate } from './formatDate';
 import { changeDateType } from './changeDateType.js';
 
+export var all_paragraphs =[]
+
 // Формирование текста решения ФУ
 export function makeTextDecision(claimsContract,
                                  dtpParticipant,
@@ -17,6 +19,7 @@ export function makeTextDecision(claimsContract,
                                  total_penalty_summ_paid,
                                  max_summ,
                                  fu_claim_set) {
+
   var total_ndfl = 0;
   var article_193;
   var claim_name = [];
@@ -128,9 +131,7 @@ export function makeTextDecision(claimsContract,
     var app_firstName = app_name.split(" ")[1]
     var app_middleName = app_name.split(" ")[2]
     var app_lastName = app_name.split(" ")[0]
-    app_name = `${inclineLastname(app_lastName, 'genitive')} 
-                ${inclineFirstname(app_firstName, 'genitive')} 
-                ${inclineMiddlename(app_middleName, 'genitive')}`
+    app_name = `${inclineLastname(app_lastName, 'genitive')} ${inclineFirstname(app_firstName, 'genitive')} ${inclineMiddlename(app_middleName, 'genitive')}`
   }
   
 
@@ -170,15 +171,26 @@ export function makeTextDecision(claimsContract,
       break;
   }
 
+  var installed = "<br><br><div class='text-center'><b>УСТАНОВИЛ</b></div><br>"
   var preambula = `${fu_post} ${fu_name} (далее – Финансовый уполномоченный) по результатам рассмотрения обращения от 
                   ${date_appeal} № ${appeal_number} (далее – Обращение) ${app_name} (паспорт ${app_passport}; 
                   место жительства: ${app_registration_address}; почтовый адрес: ${app_post_address}) 
                   (далее – Заявитель) в отношении ${fo_name} (место нахождения: ${fo_registration_address}; 
                   почтовый адрес: ${fo_post_address}; дата государственной регистрации: ${fo_registration_date}; 
-                  идентификационный номер налогоплательщика:  ${fo_inn},<br><br>УСТАНОВИЛ<br><br>`;
+                  идентификационный номер налогоплательщика:  ${fo_inn},${installed}`;
 
+  
 
+  // all_paragraphs[1] = fu_post + " " + fu_name + " (далее – Финансовый уполномоченный) по результатам рассмотрения " + 
+  // "обращения от " + date_appeal + " № " + appeal_number +  " (далее – Обращение) " + app_name + " (паспорт " +
+  // app_passport + "; место жительства: " + app_registration_address + "; почтовый адрес: " + app_post_address +
+  // ") (далее – Заявитель) в отношении " + fo_name + " (место нахождения: " + fo_registration_address +
+  // "; почтовый адрес: " + fo_post_address + "; дата государственной регистрации: " + fo_registration_date +
+  // "; идентификационный номер налогоплательщика: " + fo_inn + ","
 
+  // all_paragraphs[2] = ""
+  // all_paragraphs[3] = "УСТАНОВИЛ"
+  // all_paragraphs[4] = ""
 
 // ФОРМИРОВАНИЕ АБЗАЦА С ТРЕБОВАНИЯМИ К ФУ
   for (var i = 0; i < claimsContract.length; i++) {
@@ -239,7 +251,7 @@ export function makeTextDecision(claimsContract,
   //Если участников двое
   } else if (dtpParticipant.length == 2) {
 
-    //Если Заявитель не является виновником? а второй участник виновник
+    //Если Заявитель не является виновником, а второй участник виновник
     if (dtpParticipant[0].is_guilty.options.selectedIndex == 2 &&
         dtpParticipant[1].is_guilty.options.selectedIndex == 1) {
       dtp_description_paragraph = `В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 

@@ -1,157 +1,46 @@
 //Формирование Word файла
-import { Document,
-         Paragraph,
-         Packer,
-         TextRun,
-         Table,
-         TableRow,
-         TableCell,
-         WidthType } from "docx"
-import { saveAs } from "file-saver"
+// const docx = require("docx");
+import { Document, Packer, Paragraph, AlignmentType } from 'docx'
 
-import { docx } from "docx";
 
-export function makeDecisionFile() {
-
-    // Create a new instance of Document for the docx module
+export function makeDecisionFile(all_paragraphs) {
+    let paragraphs = []
+    for (let i = 0; i < all_paragraphs.length; i++) {
+        paragraphs[i] = new Paragraph({ text: all_paragraphs[i], style: "myCustomStyle" })
+        
+    }
     const doc = new Document({
-        title: "Решение ФУ",
-        sections: [{
-            properties: {},
-            margins: {
-                  top: 2,
-                  right: 1.5,
-                  bottom: 2,
-                  left: 3,
-              },
-            children: [
-                new Paragraph({
-                    children: [
-                        new TextRun(decision)
-                    ],
-                }),
-                new Table({
-                  width: {
-                      size: 8535,
-                      type: WidthType.DXA,
-                  },
-                    rows: [
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    columnSpan: 2,
-                                    children: [
-                                        new Paragraph({
-                                            children: [
-                                                new TextRun({
-                                                    text: "СЛУЖБА ФИНАНСОВОГО УПОЛНОМОЧЕННОГО\n",
-                                                    bold: true,
-                                                }),
-                                                new TextRun({
-                                                    text: "РЕШЕНИЕ",
-                                                    bold: true,
-                                                    // characterSpacing: 5,
-                                                }),
-                                            ]
-                                        }),
-                                    ]
-                                }),
-                            ],
-                        }),
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                
-                                    children: [
-                                        new Paragraph({
-                                            children: [
-                                                new TextRun({
-                                                    text: "«_____» _______________20____ г.",
-                                                    size: 12,
-                                                }),
-                                            ]
-                                        }),
-                                    ]
-                                }),
-                                new TableCell({
-                                  children: [],
-                                }),
-                            ],
-                        }),
-                        new TableRow({
-                            children: [
-                                new TableCell({
-                                    children: [
-                                        new Paragraph({
-                                            children: [
-                                                new TextRun({
-                                                    text: "  дата подписания",
-                                                    size: 10,
-                                                }),
-                                                new TextRun({
-                                                    text: "\n№\nг. Москва",
-                                                    size: 12,
-                                                }),
-                                            ]
-                                        }),
-                                    ]
-                                }),
-                                new TableCell({
-                                  children: [],
-                                }),
-                            ],
-                        }),
-                    ],
-                }),
-            ],
-        }],
-    })
-    // Call saveDocumentToFile with the document instance and a filename
-    saveDocumentToFile(doc, "New Document.docx")
+        sections: [
+            {
+                children: [
+                    paragraphs[1],
+                    paragraphs[2],
+                    paragraphs[3],
+                    paragraphs[4],
+                ],
+            },
+        ],
+        styles: {
+            paragraphStyles: [
+              {
+                id: "myCustomStyle",
+                name: "My Custom Style",
+                basedOn: "Normal",
+                run: {
+                  size: 26,
+                  font: "Times New Roman",
+                },
+                paragraph: {
+                  spacing: { line: 276, before: 150, after: 150 },
+                  alignment: AlignmentType.JUSTIFIED
+                }
+              }
+            ]
+          },
+    });
 
-  // Used to export the file into a .docx file
-  
-  function saveDocumentToFile(doc, fileName) {
-    // Create new instance of Packer for the docx module
-    const packer = new Packer()
-    // Create a mime type that will associate the new file with Microsoft Word
-    const mimeType =
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-    // Create a Blob containing the Document instance and the mimeType
-    packer.toBuffer(doc).then(blob => {
-      const docblob = blob.slice(0, blob.size, mimeType)
-      // Save the file using saveAs from the file-saver package
-      saveAs(docblob, fileName)
-    })
-  }
+    Packer.toBlob(doc).then((blob) => {
+        saveAs(blob, "Решение ФУ.docx");
+    });
 }
 
-export function generate() {
-        const doc = new docx.Document({
-            sections: [
-                {
-                    children: [
-                        new docx.Paragraph({
-                            children: [
-                                new docx.TextRun("Hello World"),
-                                new docx.TextRun({
-                                    text: "Foo Bar",
-                                    bold: true,
-                                }),
-                                new docx.TextRun({
-                                    text: "\tGithub is the best",
-                                    bold: true,
-                                }),
-                            ],
-                        }),
-                    ],
-                },
-            ],
-        });
-
-        docx.Packer.toBlob(doc).then((blob) => {
-            console.log(blob);
-            saveAs(blob, "example.docx");
-            console.log("Document created successfully");
-        });
-    }
