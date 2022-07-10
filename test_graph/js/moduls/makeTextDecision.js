@@ -3,12 +3,15 @@ import { makeRubText_nominative } from './makeRubText_nominative.js';
 import { makeRubText_genitive } from './makeRubText_genitive.js';
 import { declinationDays } from './declinationDays.js';
 import { declensions_by_cases } from './declensions_by_cases.js';
-import { inclineFirstname, inclineLastname, inclineMiddlename } from 'lvovich';
+import { inclineFirstname, inclineLastname, inclineMiddlename, getLastnameGender } from 'lvovich';
 import { formatDate } from './formatDate';
 import { changeDateType } from './changeDateType.js';
 
+export var all_paragraphs =[]
+
 // Формирование текста решения ФУ
 export function makeTextDecision(claimsContract,
+                                 dtpParticipant,
                                  paymentVoluntary,
                                  paymentFu,
                                  paymentCourt,
@@ -16,6 +19,7 @@ export function makeTextDecision(claimsContract,
                                  total_penalty_summ_paid,
                                  max_summ,
                                  fu_claim_set) {
+
   var total_ndfl = 0;
   var article_193;
   var claim_name = [];
@@ -119,14 +123,15 @@ export function makeTextDecision(claimsContract,
   date_appeal = formatDate(new Date(date_appeal));
   var appeal_number = document.querySelector("#appeal_number").value;
 
-  if (!isNaN(app_name)) {
-    app_name = document.querySelector("#app_name").value;
+  
+  app_name = document.querySelector("#app_name").value
+
+  if (app_name != "") {
+    var app_name_im = app_name
     var app_firstName = app_name.split(" ")[1]
     var app_middleName = app_name.split(" ")[2]
     var app_lastName = app_name.split(" ")[0]
-    app_name = `${inclineLastname(app_lastName, 'genitive')} 
-                ${inclineFirstname(app_firstName, 'genitive')} 
-                ${inclineMiddlename(app_middleName, 'genitive')}`
+    app_name = `${inclineLastname(app_lastName, 'genitive')} ${inclineFirstname(app_firstName, 'genitive')} ${inclineMiddlename(app_middleName, 'genitive')}`
   }
   
 
@@ -166,15 +171,26 @@ export function makeTextDecision(claimsContract,
       break;
   }
 
+  var installed = "<br><br><div class='text-center'><b>УСТАНОВИЛ</b></div><br>"
   var preambula = `${fu_post} ${fu_name} (далее – Финансовый уполномоченный) по результатам рассмотрения обращения от 
                   ${date_appeal} № ${appeal_number} (далее – Обращение) ${app_name} (паспорт ${app_passport}; 
                   место жительства: ${app_registration_address}; почтовый адрес: ${app_post_address}) 
                   (далее – Заявитель) в отношении ${fo_name} (место нахождения: ${fo_registration_address}; 
                   почтовый адрес: ${fo_post_address}; дата государственной регистрации: ${fo_registration_date}; 
-                  идентификационный номер налогоплательщика:  ${fo_inn},<br><br>УСТАНОВИЛ<br><br>`;
+                  идентификационный номер налогоплательщика:  ${fo_inn},${installed}`;
 
+  
 
+  // all_paragraphs[1] = fu_post + " " + fu_name + " (далее – Финансовый уполномоченный) по результатам рассмотрения " + 
+  // "обращения от " + date_appeal + " № " + appeal_number +  " (далее – Обращение) " + app_name + " (паспорт " +
+  // app_passport + "; место жительства: " + app_registration_address + "; почтовый адрес: " + app_post_address +
+  // ") (далее – Заявитель) в отношении " + fo_name + " (место нахождения: " + fo_registration_address +
+  // "; почтовый адрес: " + fo_post_address + "; дата государственной регистрации: " + fo_registration_date +
+  // "; идентификационный номер налогоплательщика: " + fo_inn + ","
 
+  // all_paragraphs[2] = ""
+  // all_paragraphs[3] = "УСТАНОВИЛ"
+  // all_paragraphs[4] = ""
 
 // ФОРМИРОВАНИЕ АБЗАЦА С ТРЕБОВАНИЯМИ К ФУ
   for (var i = 0; i < claimsContract.length; i++) {
@@ -213,11 +229,117 @@ export function makeTextDecision(claimsContract,
   сведений и документов по предмету спора, указанному в Обращении.<br>
   ${main_answer}.<br>`
 
- var transitional_paragraph = `Рассмотрев имеющиеся в деле документы, Финансовый уполномоченный установил следующее.<br>`
+  var transitional_paragraph = `Рассмотрев имеющиеся в деле документы, Финансовый уполномоченный установил следующее.<br>`
 
 
 
+
+
+
+  //ФОРМИРОВАНИЕ АБЗАЦА С ОПИСАНИЕМ ДТП
+  var date_dtp = document.querySelector('#date_dtp').value;
+  date_dtp = changeDateType(date_dtp);
+  date_dtp = Date.parse(date_dtp + 'T00:00:00');
+  date_dtp = formatDate(new Date(date_dtp));
+  var dtp_description_paragraph = ""
+  var all_innocent_participants = ""
+  var contracts_except_app = ""
+
+  //Если один участник ДТП
+  if (dtpParticipant.length == 1) {
   
+  //Если участников двое
+  } else if (dtpParticipant.length == 2) {
+
+    //Если Заявитель не является виновником, а второй участник виновник
+    if (dtpParticipant[0].is_guilty.options.selectedIndex == 2 &&
+        dtpParticipant[1].is_guilty.options.selectedIndex == 1) {
+      dtp_description_paragraph = `В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 
+      (далее – ДТП) вследствие действий ${dtpParticipant[1].driver_name_genitive}, ${dtpParticipant[1].driver_declination} 
+      транспортным средством ${dtpParticipant[1].full_car_name}, был причинен ущерб принадлежащему Заявителю 
+      транспортному средству ${dtpParticipant[0].full_car_name}.<br>`
+    
+    //Если оба участника виновники
+    } else if (dtpParticipant[0].is_guilty.options.selectedIndex == 1 &&
+      dtpParticipant[1].is_guilty.options.selectedIndex == 1) {
+    
+    //Если вина обоих участников не установлена
+    } else if (dtpParticipant[0].is_guilty.options.selectedIndex == 3 &&
+      dtpParticipant[1].is_guilty.options.selectedIndex == 3) {
+        if (app_name_im.split(" ")[0] == dtpParticipant[0].driver_name.value.split(" ")[0]) {
+          app_driver_name = `Заявителя`
+        } else {
+          app_driver_name = dtpParticipant[0].driver_name_genitive
+        }
+        dtp_description_paragraph = `${date_dtp} произошло дорожно-транспортного происшествия (далее – ДТП), 
+        с участием транспортного средства ${dtpParticipant[1].full_car_name}, под управлением 
+        ${dtpParticipant[1].driver_name_genitive} и транспортного средства ${dtpParticipant[1].full_car_name} 
+        (далее – Транспортное средство), принадлежащего Заявителю на праве собственности, под управлением 
+        ${app_driver_name}, в результате которого Транспортному средству был причинен ущерб.<br>
+        Документов, подтверждающих наличие вины в ДТП ${app_driver_name} и ${dtpParticipant[1].driver_name_genitive} 
+        Финансовому уполномоченному не предоставлено.<br>`
+    }
+  //Если участников больше чем двое
+  } else if (dtpParticipant.length > 2) {
+    //Определение количества виновников, невиновных и участников с неустановленной степенью вины
+    var dpt_number_of_culpits = 0
+    var dpt_number_of_innocents = 0
+    var dpt_number_of_fault_not_established = 0
+    var dtp_culpit_one_number
+
+    for (let i = 0; i < dtpParticipant.length; i++) {
+      switch (dtpParticipant[i].is_guilty.options.selectedIndex) {
+        case 1:
+          dpt_number_of_culpits++
+          break;
+        case 2:
+          dpt_number_of_innocents++
+          break;
+        case 3:
+          dpt_number_of_fault_not_established++
+          break;
+        default:
+          break;
+      }
+    }
+
+    //Если Заявитель не является виновником ДТП
+    if (dtpParticipant[0].is_guilty.options.selectedIndex == 2) {
+      //Если виновник в ДТП только один
+      if (dpt_number_of_culpits == 1) {
+        //Определение виновника ДТП (за исключением Заявителя, т.к. он не является виновником в данной ветке)
+        for (let i = 1; i < dtpParticipant.length; i++) {
+          if (dtpParticipant[i].is_guilty.options.selectedIndex == 1) {
+            dtp_culpit_one_number = i
+          } else {
+            all_innocent_participants = `${all_innocent_participants} транспортного средства
+            ${dtpParticipant[i].full_car_name}, под управлением ${dtpParticipant[i].driver_name_genitive},`
+          }
+        }
+        dtp_description_paragraph = `В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 
+        (далее – ДТП), вследствие действий ${dtpParticipant[dtp_culpit_one_number].driver_name_genitive}, 
+        ${dtpParticipant[1].driver_declination} транспортным средством ${dtpParticipant[dtp_culpit_one_number].full_car_name}, 
+        с участием ${all_innocent_participants} был причинен ущерб принадлежащему Заявителю транспортному средству 
+        ${dtpParticipant[0].full_car_name}.<br>`
+      } else {
+        
+      }
+    } else {
+      
+    }
+  }
+
+  for (let i = 1; i < dtpParticipant.length; i++) {
+    contracts_except_app = contracts_except_app + dtpParticipant[i].contract_paragraph_all
+  }
+
+  //Добавление абзацев с договорами ОСАГО, КАСКО и ДСАГО
+  var dtp_description_with_contracts_paragraph = ""
+  dtp_description_with_contracts_paragraph = dtpParticipant[0].contract_paragraph_all + 
+                                             dtp_description_paragraph +
+                                             contracts_except_app
+
+
   var first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name_genitive + ' неустойки '+
   'за несоблюдение срока выплаты страхового возмещения по договору ОСАГО, '+
   'Финансовый уполномоченный приходит к следующему.'+'<br>'
@@ -963,6 +1085,7 @@ export function makeTextDecision(claimsContract,
          main_claims_paragraf +
          main_request_paragraph +
          transitional_paragraph + 
+         dtp_description_with_contracts_paragraph +
          first_paragraf +
          standart_motivation +
          article_191 + article_193 +

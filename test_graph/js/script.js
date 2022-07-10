@@ -1,4 +1,5 @@
 import { ClaimsContract } from "./moduls/mainClaim";
+import { DtpParticipant } from "./moduls/dtpParticipants";
 import { AppDate } from './moduls/app_date.js';
 import { PaymentVoluntary } from './moduls/payment_voluntary.js';
 import { PaymentFu } from './moduls/payment_fu.js';
@@ -8,7 +9,7 @@ import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './mo
 import { COLUMN_NAME_20, COLUMN_NAME_21 } from './moduls/variables.js';
 import { DAY, STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED, DATE_EURO_START } from './moduls/variables.js';
 import { paymentVoluntary, paymentFu, paymentCourt } from './moduls/variables.js';
-import { claimsContract } from "./moduls/variables.js";
+import { claimsContract, dtpParticipant } from "./moduls/variables.js";
 import { makeRubText_nominative } from './moduls/makeRubText_nominative.js';
 import { makeRubText_genitive } from './moduls/makeRubText_genitive.js';
 import { changeDateType } from './moduls/changeDateType.js';
@@ -18,8 +19,10 @@ import { makeTextDecision } from './moduls/makeTextDecision.js';
 import { decision_analize } from './moduls/analyze_fu_decision.js';
 import { autocomplete } from './moduls/autocomplete.js';
 import { fo_data } from './moduls/objects/foData';
+import { allCars } from './moduls/objects/allCars';
 import { renderDOM } from "./moduls/react/react.js";
-// import { makeDecisionFile } from './moduls/docx.js';
+import { makeDecisionFile } from './moduls/docx.js';
+import { all_paragraphs } from "./moduls/makeTextDecision";
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
 //Формируем DOM bp react файла
@@ -179,6 +182,36 @@ $('#btn_desicion').click(function() {
                                            payments_types[i])
     
   }
+
+  //Получение массива значений всех участников ДТП
+  var number_of_dtp_participants = $('.dtp_participants').length
+  var car_brand = $('.car_brands')
+  var car_model = $('.car_models')
+  var car_reg_number = $('.car_reg_numbers')
+  var car_vin_number = $('.car_vin_numbers')
+  var car_year = $('.car_years')
+  var car_type = $('.car_types')
+  var car_weight = $('.car_weights')
+  var driver_name = $('.driver_names')
+  var owner_name = $('.owner_names')
+  var is_guilty = $('.is_guilties')
+
+  for (var i = 0; i < number_of_dtp_participants; i++) {
+    dtpParticipant[i] = new DtpParticipant(i + 1,
+                                          car_brand[i],
+                                          car_model[i],
+                                          car_reg_number[i],
+                                          car_vin_number[i],
+                                          car_year[i],
+                                          car_type[i],
+                                          car_weight[i],
+                                          driver_name[i],
+                                          owner_name[i],
+                                          is_guilty[i])
+    
+  }
+
+
 
   //Получение массива значений всех переменных добровольных выплат
   number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
@@ -428,6 +461,7 @@ document.getElementById('show_decision').onclick = function show_decision(){
     $('#decision').show();
     $('#show_decision').html("Скрыть текст решения");
     decision = makeTextDecision(claimsContract,
+                                dtpParticipant,
                                 paymentVoluntary,
                                 paymentFu,
                                 paymentCourt,
@@ -435,11 +469,16 @@ document.getElementById('show_decision').onclick = function show_decision(){
                                 total_penalty_summ_paid,
                                 max_summ,
                                 fu_claim_set);
-    // makeDecisionFile(decision);
+    
+    decision = decision.replace("ОСАГО", "обязательного страхования гражданской ответственности владельцев транспортных средств (далее – ОСАГО)")
+    // makeDecisionFile(all_paragraphs);
     document.querySelector('#decision').innerHTML = decision;
+    // $('#decision_text_text_area').show();
+    // document.querySelector('#decision_text_text_area').value = decision;
     selectText('decision');
   } else {
     $('#decision').hide();
+    // $('#decision_text_text_area').hide();
     $('#show_decision').html("Показать текст решения");
   }
 }
@@ -511,19 +550,32 @@ function selectText(containerid) {
     });
 	}
 
+  //Автопоиск наименований ФО
   var fo = []
-
   fo_data.fo_data.forEach(element => {
     fo.push(element.fo_name)
   });
-
-  // autocomplete(document.getElementById("fo_name"), fo);
 
   $('.autocomplete input').toArray().forEach(element => {
     autocomplete(element, fo)
   });
 
-  // autocomplete($('#fo_name').toArray()[0], fo)
+  //Автопоиск марок ТС
+  var car_brands = []
+  car_brands = Object.keys(allCars)
+  $('.car_brands').toArray().forEach(element => {
+    autocomplete(element, car_brands)
+  })
+
+  //Автопоиск моделей ТС
+  var car_models = []
+  $('.car_brands').focusout(function () {
+    // console.log(allCars[$(this).val()])
+    car_models = allCars[$(this).val()]
+    $('.car_models').toArray().forEach(element => {
+      autocomplete(element, car_models)
+    })
+  })
 
   function validationCheck(className) {
     setTimeout(() => {
@@ -547,6 +599,15 @@ function selectText(containerid) {
     $('.autocomplete input').toArray().forEach(element => {
       autocomplete(element, fo)
     });
+    $('.car_brands').toArray().forEach(element => {
+      autocomplete(element, car_brands)
+    })
+    $('.car_brands').focusout(function () {
+      car_models = allCars[$(this).val()]
+      $('.car_models').toArray().forEach(element => {
+        autocomplete(element, car_models)
+      })
+    })
   })
   
     validationCheck('.preambula')
