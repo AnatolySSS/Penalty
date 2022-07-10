@@ -20,7 +20,7 @@ import { decision_analize } from './moduls/analyze_fu_decision.js';
 import { autocomplete } from './moduls/autocomplete.js';
 import { fo_data } from './moduls/objects/foData';
 import { renderDOM } from "./moduls/react/react.js";
-// import { makeDecisionFile } from './moduls/docx.js';
+import { generate } from './moduls/docx.js';
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
 //Формируем DOM bp react файла
@@ -467,9 +467,9 @@ document.getElementById('show_decision').onclick = function show_decision(){
                                 total_penalty_summ_paid,
                                 max_summ,
                                 fu_claim_set);
-    // makeDecisionFile(decision);
+    
     decision = decision.replace("ОСАГО", "обязательного страхования гражданской ответственности владельцев транспортных средств (далее – ОСАГО)")
-    console.log(decision);
+    generate();
     document.querySelector('#decision').innerHTML = decision;
     selectText('decision');
   } else {

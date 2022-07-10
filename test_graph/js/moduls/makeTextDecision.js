@@ -122,7 +122,6 @@ export function makeTextDecision(claimsContract,
 
   
   app_name = document.querySelector("#app_name").value
-  console.log(app_name);
 
   if (app_name != "") {
     var app_name_im = app_name
@@ -220,7 +219,10 @@ export function makeTextDecision(claimsContract,
 
   var transitional_paragraph = `Рассмотрев имеющиеся в деле документы, Финансовый уполномоченный установил следующее.<br>`
 
-  //ФОРМИРОВАНИЕ АБЗАЦА С ОПИСАНИЕМ ПОЛИСА ЗАЯВИТЕЛЯ
+
+
+
+
 
   //ФОРМИРОВАНИЕ АБЗАЦА С ОПИСАНИЕМ ДТП
   var date_dtp = document.querySelector('#date_dtp').value;
@@ -228,20 +230,22 @@ export function makeTextDecision(claimsContract,
   date_dtp = Date.parse(date_dtp + 'T00:00:00');
   date_dtp = formatDate(new Date(date_dtp));
   var dtp_description_paragraph = ""
-  var all_participants = ""
+  var all_innocent_participants = ""
+  var contracts_except_app = ""
 
+  //Если один участник ДТП
+  if (dtpParticipant.length == 1) {
+  
   //Если участников двое
-  if (dtpParticipant.length == 2) {
+  } else if (dtpParticipant.length == 2) {
 
     //Если Заявитель не является виновником? а второй участник виновник
     if (dtpParticipant[0].is_guilty.options.selectedIndex == 2 &&
         dtpParticipant[1].is_guilty.options.selectedIndex == 1) {
-      dtp_description_paragraph = `${dtpParticipant[0].contract_paragraph_all}
-      В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 
+      dtp_description_paragraph = `В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 
       (далее – ДТП) вследствие действий ${dtpParticipant[1].driver_name_genitive}, ${dtpParticipant[1].driver_declination} 
       транспортным средством ${dtpParticipant[1].full_car_name}, был причинен ущерб принадлежащему Заявителю 
-      транспортному средству ${dtpParticipant[0].full_car_name}.<br>
-      ${dtpParticipant[1].contract_paragraph_all}`
+      транспортному средству ${dtpParticipant[0].full_car_name}.<br>`
     
     //Если оба участника виновники
     } else if (dtpParticipant[0].is_guilty.options.selectedIndex == 1 &&
@@ -256,7 +260,7 @@ export function makeTextDecision(claimsContract,
           app_driver_name = dtpParticipant[0].driver_name_genitive
         }
         dtp_description_paragraph = `${date_dtp} произошло дорожно-транспортного происшествия (далее – ДТП), 
-        с участием транспортного средства ${dtpParticipant[1].full_car_name}, под управлением водителя 
+        с участием транспортного средства ${dtpParticipant[1].full_car_name}, под управлением 
         ${dtpParticipant[1].driver_name_genitive} и транспортного средства ${dtpParticipant[1].full_car_name} 
         (далее – Транспортное средство), принадлежащего Заявителю на праве собственности, под управлением 
         ${app_driver_name}, в результате которого Транспортному средству был причинен ущерб.<br>
@@ -264,19 +268,64 @@ export function makeTextDecision(claimsContract,
         Финансовому уполномоченному не предоставлено.<br>`
     }
   //Если участников больше чем двое
-  } else {
-    dtpParticipant.forEach(currentParticipant => {
-      all_participants = all_participants + currentParticipant.full_car_name
-    })
-    dtp_description_paragraph = `В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 
-    (далее – ДТП) вследствие столкновения транспортных средств: `
+  } else if (dtpParticipant.length > 2) {
+    //Определение количества виновников, невиновных и участников с неустановленной степенью вины
+    var dpt_number_of_culpits = 0
+    var dpt_number_of_innocents = 0
+    var dpt_number_of_fault_not_established = 0
+    var dtp_culpit_one_number
+
+    for (let i = 0; i < dtpParticipant.length; i++) {
+      switch (dtpParticipant[i].is_guilty.options.selectedIndex) {
+        case 1:
+          dpt_number_of_culpits++
+          break;
+        case 2:
+          dpt_number_of_innocents++
+          break;
+        case 3:
+          dpt_number_of_fault_not_established++
+          break;
+        default:
+          break;
+      }
+    }
+
+    //Если Заявитель не является виновником ДТП
+    if (dtpParticipant[0].is_guilty.options.selectedIndex == 2) {
+      //Если виновник в ДТП только один
+      if (dpt_number_of_culpits == 1) {
+        //Определение виновника ДТП (за исключением Заявителя, т.к. он не является виновником в данной ветке)
+        for (let i = 1; i < dtpParticipant.length; i++) {
+          if (dtpParticipant[i].is_guilty.options.selectedIndex == 1) {
+            dtp_culpit_one_number = i
+          } else {
+            all_innocent_participants = `${all_innocent_participants} транспортного средства
+            ${dtpParticipant[i].full_car_name}, под управлением ${dtpParticipant[i].driver_name_genitive},`
+          }
+        }
+        dtp_description_paragraph = `В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 
+        (далее – ДТП), вследствие действий ${dtpParticipant[dtp_culpit_one_number].driver_name_genitive}, 
+        ${dtpParticipant[1].driver_declination} транспортным средством ${dtpParticipant[dtp_culpit_one_number].full_car_name}, 
+        с участием ${all_innocent_participants} был причинен ущерб принадлежащему Заявителю транспортному средству 
+        ${dtpParticipant[0].full_car_name}.<br>`
+      } else {
+        
+      }
+    } else {
+      
+    }
   }
 
-  for (var i = 0; i < dtpParticipant.length; i++) {
-    dtpParticipant[i]
+  for (let i = 1; i < dtpParticipant.length; i++) {
+    contracts_except_app = contracts_except_app + dtpParticipant[i].contract_paragraph_all
   }
 
-
+  //Добавление абзацев с договорами ОСАГО, КАСКО и ДСАГО
+  var dtp_description_with_contracts_paragraph = ""
+  dtp_description_with_contracts_paragraph = dtpParticipant[0].contract_paragraph_all + 
+                                             dtp_description_paragraph +
+                                             contracts_except_app
 
 
   var first_paragraf = 'Рассмотрев требования Заявителя о взыскании с ' + fo_name_genitive + ' неустойки '+
@@ -1024,7 +1073,7 @@ export function makeTextDecision(claimsContract,
          main_claims_paragraf +
          main_request_paragraph +
          transitional_paragraph + 
-         dtp_description_paragraph +
+         dtp_description_with_contracts_paragraph +
          first_paragraf +
          standart_motivation +
          article_191 + article_193 +

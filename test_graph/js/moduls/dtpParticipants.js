@@ -26,6 +26,8 @@ export class DtpParticipantContract {
         this.date_start = date_start
         this.date_end = date_end
 
+        this.contract_paragraph = ""
+
     }
 
     getConclusionDate() {return Date.parse(changeDateType(this.date_conclusion.value) + 'T00:00:00');}
