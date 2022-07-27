@@ -123,7 +123,7 @@ export const allClaims = {
         {
             "claim": "Иные расходы",
             "contract": "osago casko",
-            "short": "иные расходы",
+            "short": "иных расходов",
             "res": "иные расходы"
         }
     ]
