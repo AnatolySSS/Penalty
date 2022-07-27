@@ -3,6 +3,8 @@ export let DAY = 24*60*60*1000;
 //Дата начала действия лимита для европротокола 100 000₽
 export let DATE_EURO_START = Date.parse(new Date(2018, 5, 1, 0));
 
+export let DATE_FZ_123_START = Date.parse(new Date(2019, 5, 1, 0));
+
 export let COLUMN_NAME_0 = "№";
 export let COLUMN_NAME_1 = "Вид выплаты";
 export let COLUMN_NAME_2 = "Дата выплаты";
@@ -34,13 +36,15 @@ export let decision;
 // export var pay_summ_y_all = 0; //Сложение всех предыдущих сумм выплат (для определения координат начала очередного прямоугольника)
 // export var pay_date_x = [], pay_summ_y = [];
 
+
+export let claimsContract = [];
+export let dtpParticipant = [];
+export let appToFo = [];
+
 //переменная для массива добровольных выплат
 export let paymentVoluntary = [];
 export let paymentFu = [];
 export let paymentCourt = [];
-
-export let claimsContract = [];
-export let dtpParticipant = [];
 
 export let courtPenalty = [];
 

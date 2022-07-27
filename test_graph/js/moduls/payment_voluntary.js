@@ -9,6 +9,7 @@ import { AppDate } from './app_date.js';
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './variables.js';
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './variables.js';
 import { DAY } from './variables.js';
+import { AppToFo } from "./appToFos";
 
 /* Объект для добровольной выплаты
 
@@ -26,10 +27,6 @@ import { DAY } from './variables.js';
     * last_day - последний день 20го срока
     * penalty_day - первый день начисления неустойки (21й день)
 */
-const date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
-const date_uts = new AppDate($('#app_date_2'), $('#date_uts_last_day'), $('#date_uts_penalty_day'));
-const date_ev = new AppDate($('#app_date_3'), $('#date_ev_last_day'), $('#date_ev_penalty_day'));
-const date_stor = new AppDate($('#app_date_4'), $('#date_stor_last_day'), $('#date_stor_penalty_day'));
 
 class PenaltyCourtPeriod {
   start_date
@@ -57,7 +54,13 @@ class PenaltyPeriod {
 
 export class PaymentVoluntary {
 
-  id
+  app_id
+  payment_id
+
+  date_sv
+  date_uts
+  date_ev
+  date_stor
 
   type
   date
@@ -83,7 +86,12 @@ export class PaymentVoluntary {
 
   count_days
 
-  constructor(id, type, date, summ, ndfl, ndfl_summ){
+  constructor(app_id, payment_id, type, date, order, summ, ndfl, ndfl_summ){
+
+    this.date_sv = new AppDate("date_sv")
+    this.date_uts = new AppDate("date_uts")
+    this.date_ev = new AppDate("date_ev")
+    this.date_stor = new AppDate("date_stor")
 
     //Получение массива значений всех переменных решений судов
     var number_of_courts = $('.courts').length; //Получение количества строк с выплатами
@@ -103,10 +111,12 @@ export class PaymentVoluntary {
      }
     }
 
-    this.id = id;
+    this.app_id = app_id;
+    this.payment_id = payment_id;
     this.type = type;
     //обработка значения даты выплаты (преобразование в количество миллисекунд)
     this.date = Date.parse(changeDateType(date.value) + 'T00:00:00');
+    this.order = order;
     //редактирвоание значений суммы выплаты (удаление пробелов, преобразование к числовому типу)
     this.summ = Number(summ.value.replace(/\s+/g, ''));
     this.ndfl = ndfl;
@@ -114,43 +124,44 @@ export class PaymentVoluntary {
     this.ndfl_summ = Number(ndfl_summ.value.replace(/\s+/g, ''));
     //Вычисление количества дней между датой выплаты и 20м днем
     switch (this.type.options.selectedIndex) {
-      case 0:
-        this.app_day = date_sv.getAppDate();
-        this.app_day_form = date_sv.getAppDateFormatted();
-        this.last_day = date_sv.getLastDay();
-        this.last_day_form = date_sv.getLastDayFormatted();
-        this.penalty_day = date_sv.getPenaltyDay();
-        this.penalty_day_form = date_sv.getPenaltyDayFormatted();
-        break;
       case 1:
-        this.app_day = date_uts.getAppDate();
-        this.app_day_form = date_uts.getAppDateFormatted();
-        this.last_day = date_uts.getLastDay();
-        this.last_day_form = date_uts.getLastDayFormatted();
-        this.penalty_day = date_uts.getPenaltyDay();
-        this.penalty_day_form = date_uts.getPenaltyDayFormatted();
+        this.app_day = this.date_sv.getAppDate();
+        this.app_day_form = this.date_sv.getAppDateFormatted();
+        this.last_day = this.date_sv.getLastDay();
+        this.last_day_form = this.date_sv.getLastDayFormatted();
+        this.penalty_day = this.date_sv.getPenaltyDay();
+        this.penalty_day_form = this.date_sv.getPenaltyDayFormatted();
         break;
       case 2:
-        this.app_day = date_ev.getAppDate();
-        this.app_day_form = date_ev.getAppDateFormatted();
-        this.last_day = date_ev.getLastDay();
-        this.last_day_form = date_ev.getLastDayFormatted();
-        this.penalty_day = date_ev.getPenaltyDay();
-        this.penalty_day_form = date_ev.getPenaltyDayFormatted();
+        this.app_day = this.date_uts.getAppDate();
+        this.app_day_form = this.date_uts.getAppDateFormatted();
+        this.last_day = this.date_uts.getLastDay();
+        this.last_day_form = this.date_uts.getLastDayFormatted();
+        this.penalty_day = this.date_uts.getPenaltyDay();
+        this.penalty_day_form = this.date_uts.getPenaltyDayFormatted();
         break;
       case 3:
-        this.app_day = date_stor.getAppDate();
-        this.app_day_form = date_stor.getAppDateFormatted();
-        this.last_day = date_stor.getLastDay();
-        this.last_day_form = date_stor.getLastDayFormatted();
-        this.penalty_day = date_stor.getPenaltyDay();
-        this.penalty_day_form = date_stor.getPenaltyDayFormatted();
+        this.app_day = this.date_ev.getAppDate();
+        this.app_day_form = this.date_ev.getAppDateFormatted();
+        this.last_day = this.date_ev.getLastDay();
+        this.last_day_form = this.date_ev.getLastDayFormatted();
+        this.penalty_day = this.date_ev.getPenaltyDay();
+        this.penalty_day_form = this.date_ev.getPenaltyDayFormatted();
+        break;
+      case 4:
+        this.app_day = this.date_stor.getAppDate();
+        this.app_day_form = this.date_stor.getAppDateFormatted();
+        this.last_day = this.date_stor.getLastDay();
+        this.last_day_form = this.date_stor.getLastDayFormatted();
+        this.penalty_day = this.date_stor.getPenaltyDay();
+        this.penalty_day_form = this.date_stor.getPenaltyDayFormatted();
         break;
     }
+
     //количество дней задержки выплаты
     this.days_delay = (this.date - this.last_day) / DAY;
     //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
-    this.count_days = (this.date - date_sv.getAppDate()) / DAY;
+    this.count_days = (this.date - this.date_sv.getAppDate()) / DAY;
     //Если выплата была в срок, то изменение отрицательного значения на нулевое
     if (this.days_delay < 0 || isNaN(this.days_delay)) {
       this.days_delay = 0;
@@ -239,8 +250,8 @@ export class PaymentVoluntary {
     var str_payment_dataled_helper = '';
     var str_payment_dataled = '';
     var number_of_payment_rows;
-    if (!isNaN(this.date)) {
-      if (this.type.selectedIndex != 4) {
+    if (this.type.options.selectedIndex != 0) {
+      if (this.type.selectedIndex != 5) {
         number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
         if (this.penalty_period.length > 0 && this.days_delay > 0) {
           for (var i = 0; i < this.penalty_period.length; i++) {

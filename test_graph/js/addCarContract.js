@@ -27,7 +27,7 @@ function addDtpParticipant() {
         </button>
       </div>
       <div class="form-group col-ms-1">
-        <button id="dtp_description_participantt_btn_${dtpParticipant}" class="dtp_description_participant_btns btn btn-outline-danger" onclick="removeDtpParticipant()">×</button>
+        <button id="dtp_description_participant_btn_${dtpParticipant}" class="dtp_description_participant_btns btn btn-outline-danger" onclick="removeDtpParticipant()">×</button>
       </div>
     </div>
 
@@ -35,9 +35,6 @@ function addDtpParticipant() {
 
     <div id="dtp_description_participant_info_${dtpParticipant}" class="dtp_description_participant_infos" style="display:none">
       <div class="form-row">
-        <div class="form-group col-md-4">
-          <input id = "car_vin_number_${dtpParticipant}" class="car_vin_numbers form-control" placeholder="VIN" type="text" size="8" required>
-        </div>
         <div class="form-group col-md-3">
           <input id = "car_year_${dtpParticipant}" class="car_years form-control" placeholder="год выпуска" type="text" size="8" required>
         </div>
@@ -50,8 +47,11 @@ function addDtpParticipant() {
             <option>такси</option>
           </select>
         </div>
-        <div class="form-group col-md-2">
+        <div class="form-group col-md-2" style="display:none">
           <input id = "car_veight_${dtpParticipant}" class="car_weights form-control" placeholder="масса" type="text" size="8" required>
+        </div>
+        <div class="form-group col-md-4" style="display:none">
+          <input id = "car_vin_number_${dtpParticipant}" class="car_vin_numbers form-control" placeholder="VIN" type="text" size="8" required>
         </div>
       </div>
       <div class="form-row">
@@ -90,12 +90,12 @@ function addDtpParticipant() {
               </select>
             </div>
             <div class="form-group col-ms-1">
-              <button id="add_car_contract_info_btn_${dtpParticipant}_1" class="add_car_contract_info_btns btn btn-outline-warning add_info">
+              <button id="add_car_contract_info_btn_${dtpParticipant}_1" class="add_car_contract_info_btn_${dtpParticipant} add_car_contract_info_btns btn btn-outline-warning add_info">
                 <i class="fa fa-chevron-down toggle"></i>
               </button>
             </div>
             <div class="form-group col-ms-1">
-              <button id="car_contract_btn_${dtpParticipant}_1" class="car_contract_btns btn btn-outline-warning" onclick="addCarContract(${dtpParticipant})">+</button>
+              <button id="car_contract_btn_${dtpParticipant}_1" class="car_contract_btn_${dtpParticipant} car_contract_btns btn btn-outline-warning" onclick="addCarContract(${dtpParticipant})">+</button>
             </div>
           </div>
 
@@ -111,28 +111,28 @@ function addDtpParticipant() {
             <div class="form-row">
               <div class="form-group col-md-6">
                 <div class="autocomplete">
-                  <input id="car_contract_osago_fo_name_${dtpParticipant}_1" class="car_contract_osago_fo_name_${dtpParticipant} car_contract_osago_fo_names form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+                  <input id="car_contract_osago_fo_name_${dtpParticipant}_1" class="car_contract_osago_fo_name_${dtpParticipant} car_contract_osago_fo_names" type="text" placeholder="Введите наименование ФО" size="40" required>
                 </div>
               </div>
               <div class="form-group col-md-6">
-                <input id = "car_contract_osago_fo_number_${dtpParticipant}_1" class="car_contract_osago_fo_number_${dtpParticipant} car_contract_osago_fo_numbers form-control" placeholder="серия и № полиса" type="text" size="8" required>
+                <input id = "car_contract_osago_fo_number_${dtpParticipant}_1" class="car_contract_osago_fo_number_${dtpParticipant} car_contract_osago_fo_numbers" placeholder="серия и № полиса" type="text" size="8" required>
               </div>
             </div>
             <div class="form-row">
               <div class="form-group col-md-3">
-                <input id = "car_contract_osago_fo_date_conclusion_${dtpParticipant}_1" class = "car_contract_osago_fo_date_conclusion_${dtpParticipant} car_contract_osago_fo_date_conclusions datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_osago_fo_date_conclusion_${dtpParticipant}_1" class = "car_contract_osago_fo_date_conclusion_${dtpParticipant} car_contract_osago_fo_date_conclusions datepicker-here" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_osago_fo_date_conclusion_help_block_${dtpParticipant}_1" class="form-text">
                   Заключение договора
                 </small>
               </div>
               <div class="form-group col-md-3">
-                <input id = "car_contract_osago_fo_date_start_${dtpParticipant}_1" class = "car_contract_osago_fo_date_start_${dtpParticipant} car_contract_osago_fo_date_starts datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_start_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_osago_fo_date_start_${dtpParticipant}_1" class = "car_contract_osago_fo_date_start_${dtpParticipant} car_contract_osago_fo_date_starts datepicker-here" aria-describedby="car_contract_osago_fo_date_start_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_osago_fo_date_start_help_block_${dtpParticipant}_1" class="form-text">
                   Начало срока действия
                 </small>
               </div>
               <div class="form-group col-md-3">
-                <input id = "car_contract_osago_fo_date_end_${dtpParticipant}_1" class = "car_contract_osago_fo_date_end_${dtpParticipant} car_contract_osago_fo_date_ends datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_end_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_osago_fo_date_end_${dtpParticipant}_1" class = "car_contract_osago_fo_date_end_${dtpParticipant} car_contract_osago_fo_date_ends datepicker-here" aria-describedby="car_contract_osago_fo_date_end_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_osago_fo_date_end_help_block_${dtpParticipant}_1" class="form-text">
                   Окончание срока действия
                 </small>
@@ -156,28 +156,28 @@ function addDtpParticipant() {
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <div class="autocomplete">
-                    <input id="car_contract_casco_fo_name_${dtpParticipant}_1" class="form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+                    <input id="car_contract_casco_fo_name_${dtpParticipant}_1" class="car_contract_casco_fo_name_${dtpParticipant} car_contract_casco_fo_names" type="text" placeholder="Введите наименование ФО" size="40" required>
                   </div>
                 </div>
                 <div class="form-group col-md-6">
-                  <input id = "car_contract_casco_fo_number_${dtpParticipant}_1" class="form-control" placeholder="серия и № полиса" type="text" size="8" required>
+                  <input id = "car_contract_casco_fo_number_${dtpParticipant}_1" class="car_contract_casco_fo_number_${dtpParticipant} car_contract_casco_fo_numbers" placeholder="серия и № полиса" type="text" size="8" required>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-3">
-                  <input id = "car_contract_casco_fo_date_conclusion_${dtpParticipant}_1" class = "datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_conclusion_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                  <input id = "car_contract_casco_fo_date_conclusion_${dtpParticipant}_1" class = "car_contract_casco_fo_date_conclusion_${dtpParticipant} car_contract_casco_fo_date_conclusions datepicker-here" aria-describedby="car_contract_casco_fo_date_conclusion_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                   <small id="car_contract_casco_fo_date_conclusion_help_block_${dtpParticipant}_1" class="form-text">
                     Заключение договора
                   </small>
                 </div>
                 <div class="form-group col-md-3">
-                  <input id = "car_contract_casco_fo_date_start_${dtpParticipant}_1" class = "datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_start_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                  <input id = "car_contract_casco_fo_date_start_${dtpParticipant}_1" class = "car_contract_casco_fo_date_start_${dtpParticipant} car_contract_casco_fo_date_starts datepicker-here" aria-describedby="car_contract_casco_fo_date_start_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                   <small id="car_contract_casco_fo_date_start_help_block_${dtpParticipant}_1" class="form-text">
                     Начало срока действия
                   </small>
                 </div>
                 <div class="form-group col-md-3">
-                  <input id = "car_contract_casco_fo_date_end_${dtpParticipant}_1" class = "datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_end_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                  <input id = "car_contract_casco_fo_date_end_${dtpParticipant}_1" class = "car_contract_casco_fo_date_end_${dtpParticipant} car_contract_casco_fo_date_ends datepicker-here" aria-describedby="car_contract_casco_fo_date_end_help_block_1_1" placeholder="Дата" type="text" size="10" required>
                   <small id="car_contract_casco_fo_date_end_help_block_${dtpParticipant}_1" class="form-text">
                     Окончание срока действия
                   </small>
@@ -196,23 +196,23 @@ function addDtpParticipant() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-12">
-                  <input id="car_contract_casco_insurance_rules_${dtpParticipant}_1" class="form-control" placeholder="Наименование правил страхования" type="text" size="8" required>
+                  <input id="car_contract_casco_insurance_rules_${dtpParticipant}_1" class="car_contract_casco_insurance_rules_${dtpParticipant} car_contract_casco_insurance_rules" placeholder="Наименование правил страхования" type="text" size="8" required>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <input id = "car_contract_casco_insurance_rules_approver_name_${dtpParticipant}_1" class="form-control" placeholder="ФИО утвердившего" type="text" size="8" required>
+                  <input id = "car_contract_casco_insurance_rules_approver_name_${dtpParticipant}_1" class="car_contract_casco_insurance_rules_approver_name_${dtpParticipant} car_contract_casco_insurance_rules_approver_names" placeholder="ФИО утвердившего" type="text" size="8" required>
                 </div>
                 <div class="form-group col-md-6">
-                  <input id = "car_contract_casco_insurance_rules_approver_post_${dtpParticipant}_1" class="form-control" placeholder="Должность утвердившего" type="text" size="8" required>
+                  <input id = "car_contract_casco_insurance_rules_approver_post_${dtpParticipant}_1" class="car_contract_casco_insurance_rules_approver_post_${dtpParticipant} car_contract_casco_insurance_rules_approver_posts" placeholder="Должность утвердившего" type="text" size="8" required>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-3">
-                  <input id = "car_contract_casco_insurance_rules_date_${dtpParticipant}_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
+                  <input id = "car_contract_casco_insurance_rules_date_${dtpParticipant}_1" class = "car_contract_casco_insurance_rules_date_${dtpParticipant} car_contract_casco_insurance_rules_dates datepicker-here" placeholder="Дата" type="text" size="10" required>
                 </div>
                 <div class="form-group col-md-3">
-                  <input id = "car_contract_casco_insurance_rules_number_${dtpParticipant}_1" class="form-control" placeholder="№" type="text" size="8" required>
+                  <input id = "car_contract_casco_insurance_rules_number_${dtpParticipant}_1" class="car_contract_casco_insurance_rules_number_${dtpParticipant} car_contract_casco_insurance_rules_numbers" placeholder="№" type="text" size="8" required>
                 </div>
               </div>
             </div>
@@ -228,19 +228,19 @@ function addDtpParticipant() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-4">
-                  <select id="car_contract_casco_insurance_inspection_information_${dtpParticipant}_1" class="car_contract_casco_insurance_inspection_informations custom-select form-control" required>
+                  <select id="car_contract_casco_insurance_inspection_information_${dtpParticipant}_1" class="car_contract_casco_insurance_inspection_information_${dtpParticipant} car_contract_casco_insurance_inspection_informations custom-select" required>
                     <option value="">Наличие сведений</option>
                     <option>Сведения имеются</option>
                     <option>Сведений не имеется</option>
                   </select>
                 </div>
                 <div class="form-group col-md-3" style="display:none">
-                  <input id = "car_contract_casco_insurance_inspection_date_${dtpParticipant}_1" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
+                  <input id = "car_contract_casco_insurance_inspection_date_${dtpParticipant}_1" class = "car_contract_casco_insurance_inspection_date_${dtpParticipant} car_contract_casco_insurance_inspection_dates datepicker-here" placeholder="Дата" type="text" size="10" required>
                 </div>
               </div>
               <div class="form-row" style="display:none">
                 <div class="form-group col-md-12">
-                  <textarea id = "car_contract_casco_insurance_inspection_damaged_parts_${dtpParticipant}_1" class="form-control" aria-describedby="car_contract_casco_insurance_inspection_damaged_parts_help_block_${dtpParticipant}_1" placeholder="Перечень поврежденных деталей" type="text" size="8" required></textarea>
+                  <textarea id = "car_contract_casco_insurance_inspection_damaged_parts_${dtpParticipant}_1" class="car_contract_casco_insurance_inspection_damaged_parts_${dtpParticipant} car_contract_casco_insurance_inspection_damaged_parts" aria-describedby="car_contract_casco_insurance_inspection_damaged_parts_help_block_${dtpParticipant}_1" placeholder="Перечень поврежденных деталей" type="text" size="8" required></textarea>
                   <small id="car_contract_casco_insurance_inspection_damaged_parts_help_block_${dtpParticipant}_1" class="form-text">
                     Введите через запятую наименования элементов и деталей, а также их повреждения
                   </small>
@@ -260,21 +260,21 @@ function addDtpParticipant() {
               <div class="form-row">
                 <div class="form-group col-md-3">
                   <div class="input-group">
-                    <input id="car_contract_casco_insurance_summ_summ_${dtpParticipant}_1" class = "input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+                    <input id="car_contract_casco_insurance_summ_summ_${dtpParticipant}_1" class = "car_contract_casco_insurance_summ_summ_${dtpParticipant} car_contract_casco_insurance_summ_summs input-numeral" placeholder="Сумма" type="text" size="10" required>
                     <div class="input-group-append">
                       <span class="input-group-text">&#8381;</span>
                     </div>
                   </div>
                 </div>
                 <div class="form-group col-md-3">
-                  <select id="car_contract_casco_insurance_summ_index_${dtpParticipant}_1" class="car_contract_casco_insurance_summ_indexes custom-select form-control" required>
+                  <select id="car_contract_casco_insurance_summ_index_${dtpParticipant}_1" class="car_contract_casco_insurance_summ_index_${dtpParticipant} car_contract_casco_insurance_summ_indexes custom-select" required>
                     <option value="">Вид суммы</option>
                     <option>Индексируемая</option>
                     <option>Не индексируемая</option>
                   </select>
                 </div>
                 <div class="form-group col-md-3">
-                  <select id="car_contract_casco_insurance_summ_aggregate_${dtpParticipant}_1" class="car_contract_casco_insurance_summ_aggregates custom-select form-control" required>
+                  <select id="car_contract_casco_insurance_summ_aggregate_${dtpParticipant}_1" class="car_contract_casco_insurance_summ_aggregate_${dtpParticipant} car_contract_casco_insurance_summ_aggregates custom-select" required>
                     <option value="">Тип суммы</option>
                     <option>Агрегатная</option>
                     <option>Не агрегатная</option>
@@ -283,7 +283,7 @@ function addDtpParticipant() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-12">
-                  <textarea id="car_contract_casco_insurance_summ_risks_${dtpParticipant}_1" class="form-control" aria-describedby="car_contract_casco_insurance_summ_risks_help_block_${dtpParticipant}_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
+                  <textarea id="car_contract_casco_insurance_summ_risks_${dtpParticipant}_1" class="car_contract_casco_insurance_summ_risks_${dtpParticipant} car_contract_casco_insurance_summ_risks" aria-describedby="car_contract_casco_insurance_summ_risks_help_block_${dtpParticipant}_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
                   <small id="car_contract_casco_insurance_summ_risks_help_block_${dtpParticipant}_1" class="form-text">
                     Перечислите риски, покрываемые страховой суммой
                   </small>
@@ -302,7 +302,7 @@ function addDtpParticipant() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-4">
-                  <select id="car_contract_casco_insurance_premium_information_${dtpParticipant}_1" class="car_contract_casco_insurance_premium_informations custom-select form-control" required>
+                  <select id="car_contract_casco_insurance_premium_information_${dtpParticipant}_1" class="car_contract_casco_insurance_premium_information_${dtpParticipant} car_contract_casco_insurance_premium_informations custom-select" required>
                     <option value="">Наличие сведений</option>
                     <option>Сведения имеются</option>
                     <option>Сведений не имеется</option>
@@ -313,20 +313,20 @@ function addDtpParticipant() {
               <div class="form-row" style="display:none">
                 <div class="form-group col-md-3">
                   <div class="input-group">
-                    <input id="car_contract_casco_insurance_premium_summ_${dtpParticipant}_1" class = "input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+                    <input id="car_contract_casco_insurance_premium_summ_${dtpParticipant}_1" class = "car_contract_casco_insurance_premium_summ_${dtpParticipant} car_contract_casco_insurance_premium_summs input-numeral" placeholder="Сумма" type="text" size="10" required>
                     <div class="input-group-append">
                       <span class="input-group-text">&#8381;</span>
                     </div>
                   </div>
                 </div>
                 <div class="form-group col-md-3">
-                  <input id = "car_contract_casco_insurance_premium_date_${dtpParticipant}_1" class = "datepicker-here form-control" aria-describedby="car_contract_casco_insurance_premium_date_help_block_${dtpParticipant}_1" placeholder="Дата" type="text" size="10" required>
+                  <input id = "car_contract_casco_insurance_premium_date_${dtpParticipant}_1" class = "car_contract_casco_insurance_premium_date_${dtpParticipant} car_contract_casco_insurance_premium_dates datepicker-here" aria-describedby="car_contract_casco_insurance_premium_date_help_block_${dtpParticipant}_1" placeholder="Дата" type="text" size="10" required>
                   <small id="car_contract_casco_insurance_premium_date_help_block_${dtpParticipant}_1" class="form-text">
                     Дата оплаты
                   </small>
                 </div>
                 <div class="form-group col-md-3">
-                  <input id = "car_contract_casco_insurance_premium_number_${dtpParticipant}_1" class="form-control" aria-describedby="car_contract_casco_insurance_premium_number_help_block_${dtpParticipant}_1" placeholder="№" type="text" size="8" required>
+                  <input id = "car_contract_casco_insurance_premium_number_${dtpParticipant}_1" class="car_contract_casco_insurance_premium_number_${dtpParticipant} car_contract_casco_insurance_premium_numbers" aria-describedby="car_contract_casco_insurance_premium_number_help_block_${dtpParticipant}_1" placeholder="№" type="text" size="8" required>
                   <small id="car_contract_casco_insurance_premium_number_help_block_${dtpParticipant}_1" class="form-text">
                     № квитанции
                   </small>
@@ -334,7 +334,7 @@ function addDtpParticipant() {
               </div>
               <div class="form-row" style="display:none">
                 <div class="form-group col-md-12">
-                  <textarea id="car_contract_casco_insurance_premium_risks_${dtpParticipant}_1" class="form-control" aria-describedby="car_contract_casco_insurance_premium_risks_help_block_${dtpParticipant}_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
+                  <textarea id="car_contract_casco_insurance_premium_risks_${dtpParticipant}_1" class="car_contract_casco_insurance_premium_risks_${dtpParticipant} car_contract_casco_insurance_premium_risks" aria-describedby="car_contract_casco_insurance_premium_risks_help_block_${dtpParticipant}_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
                   <small id="car_contract_casco_insurance_premium_risks_help_block_${dtpParticipant}_1" class="form-text">
                     Перечислите риски, покрываемые страховой премией
                   </small>
@@ -351,19 +351,19 @@ function addDtpParticipant() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <select id="car_contract_casco_beneficiary_subject_${dtpParticipant}_1" class="car_contract_casco_beneficiary_subjects custom-select form-control" required>
+                  <select id="car_contract_casco_beneficiary_subject_${dtpParticipant}_1" class="car_contract_casco_beneficiary_subject_${dtpParticipant} car_contract_casco_beneficiary_subjects custom-select" required>
                     <option value="">Укажите выгодоприобретателя</option>
                     <option>Заявитель</option>
                     <option>Банк</option>
                   </select>
                 </div>
                 <div class="form-group col-md-6" style="display:none">
-                  <input id = "car_contract_casco_beneficiary_subject_bank_name_${dtpParticipant}_1" class="form-control" placeholder="Наименование банка" type="text" size="8" required>
+                  <input id = "car_contract_casco_beneficiary_subject_bank_name_${dtpParticipant}_1" class="car_contract_casco_beneficiary_subject_bank_name_${dtpParticipant} car_contract_casco_beneficiary_subject_bank_names" placeholder="Наименование банка" type="text" size="8" required>
                 </div>
               </div>
               <div class="form-row">
                 <div class="form-group col-md-12">
-                  <textarea id="car_contract_casco_beneficiary_risks_${dtpParticipant}_1" class="form-control" aria-describedby="car_contract_casco_beneficiary_risks_help_block_${dtpParticipant}_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
+                  <textarea id="car_contract_casco_beneficiary_risks_${dtpParticipant}_1" class="car_contract_casco_beneficiary_risks_${dtpParticipant} car_contract_casco_beneficiary_risks" aria-describedby="car_contract_casco_beneficiary_risks_help_block_${dtpParticipant}_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
                   <small id="car_contract_casco_beneficiary_risks_help_block_${dtpParticipant}_1" class="form-text">
                     Перечислите риски, от которых застрахован выгодоприобретатель
                   </small>
@@ -380,14 +380,14 @@ function addDtpParticipant() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-6">
-                  <select id="car_contract_casco_franchise_presence_${dtpParticipant}_1" class="car_contract_casco_beneficiary_presences custom-select form-control" required>
+                  <select id="car_contract_casco_franchise_presence_${dtpParticipant}_1" class="car_contract_casco_franchise_presence_${dtpParticipant} car_contract_casco_franchise_presences custom-select" required>
                     <option value="">Наличие франшизы</option>
                     <option>Франшиза установлена</option>
                     <option>Франшиза не установлена</option>
                   </select>
                 </div>
                 <div class="form-group col-md-3" style="display:none">
-                  <select id="car_contract_casco_franchise_type_${dtpParticipant}_1" class="car_contract_casco_franchise_types custom-select form-control" required>
+                  <select id="car_contract_casco_franchise_type_${dtpParticipant}_1" class="car_contract_casco_franchise_type_${dtpParticipant} car_contract_casco_franchise_types custom-select" required>
                     <option value="">Вид франшизы</option>
                     <option>Условная</option>
                     <option>Безусловная</option>
@@ -395,7 +395,7 @@ function addDtpParticipant() {
                 </div>
                 <div class="form-group col-md-3" style="display:none">
                   <div class="input-group">
-                    <input id="car_contract_casco_franchise_summ_${dtpParticipant}_1" class = "input-numeral form-control" placeholder="Размер франшизы" type="text" size="10" required>
+                    <input id="car_contract_casco_franchise_summ_${dtpParticipant}_1" class = "car_contract_casco_franchise_summ_${dtpParticipant} car_contract_casco_franchise_summs input-numeral" placeholder="Размер франшизы" type="text" size="10" required>
                     <div class="input-group-append">
                       <span class="input-group-text">&#8381;</span>
                     </div>
@@ -404,7 +404,7 @@ function addDtpParticipant() {
               </div>
               <div class="form-row" style="display:none">
                 <div class="form-group col-md-12">
-                  <textarea id="car_contract_casco_franchise_risks_${dtpParticipant}_1" class="form-control" aria-describedby="car_contract_casco_franchise_risks_help_block_${dtpParticipant}_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
+                  <textarea id="car_contract_casco_franchise_risks_${dtpParticipant}_1" class="car_contract_casco_franchise_risks_${dtpParticipant} car_contract_casco_franchise_risks" aria-describedby="car_contract_casco_franchise_risks_help_block_${dtpParticipant}_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
                   <small id="car_contract_casco_franchise_risks_help_block_${dtpParticipant}_1" class="form-text">
                     Перечислите риски, по которым установлена франшиза
                   </small>
@@ -446,8 +446,8 @@ function addDtpParticipant() {
   });
 
   //Вызывает функцию, изменяющую общую картинку валидации
-  validationCheck('.dtp-description')
-  validationCheckUpdate('.dtp-description')
+  validationCheck('dtp-description')
+  validationCheckUpdate('dtp-description')
 
 }
 
@@ -456,11 +456,12 @@ function removeDtpParticipant() {
   if ($(`#add_dtp_description_participant_info_btn_${dtpParticipant}`).find(".toggle").hasClass("rotate")) {
     $(`#add_dtp_description_participant_info_btn_${dtpParticipant}`).find(".toggle").removeClass("rotate");
   }
-  validationCheckUpdate('.dtp-description')
+  validationCheckUpdate('dtp-description')
+  validationCheck('dtp-description')
   dtpParticipant--;
 }
 
-//Показать дополнительную информацию по решению ФУ
+//Показать дополнительную информацию по участнику ДТП
 $(document).on("click", ".add_dtp_description_participant_info_btns", function (event) {
 	if (!($(this).find(".toggle").hasClass("rotate"))) {
     $(this).parent().parent().next().show('fast'); //Показывает .add_dtp_description_participant_info
@@ -469,6 +470,41 @@ $(document).on("click", ".add_dtp_description_participant_info_btns", function (
     $(this).parent().parent().next().hide('fast'); //Скрывает .add_dtp_description_participant_info
     $(this).find(".toggle").removeClass("rotate");
   }
+
+  validationCheckUpdate('dtp-description')
+  validationCheck('dtp-description')
+});
+
+//Добавляет информацию о массе ТС
+$(document).on("change", ".car_types", function (event) {
+	if ($(this).find(':selected').text() == "грузовой") {
+		$(this).parent().next().show('fast')
+    $(this).parent().next().find('input').addClass('form-control')
+	} else {
+    $(this).parent().next().hide('fast')
+    setTimeout(() => {
+        $(this).parent().next().find('input').removeClass('form-control')
+    }, 200);
+        
+	}
+    validationCheckUpdate('dtp-description')
+    validationCheck('dtp-description')
+});
+
+//Добавляет VIN если выбран договор КАСКО
+$(document).on("change", ".car_contract_types", function (event) {
+	if ($(this).find(':selected').text() == "КАСКО") {
+		$(this).parent().parent().parent().parent().parent().children().first().children().first().next().next().next().show('fast')
+    $(this).parent().parent().parent().parent().parent().children().first().children().first().next().next().next().find('input').addClass('form-control')
+	} else {
+    $(this).parent().parent().parent().parent().parent().children().first().children().first().next().next().next().hide('fast')
+    setTimeout(() => {
+      $(this).parent().parent().parent().parent().parent().children().first().children().first().next().next().next().find('input').removeClass('form-control')
+    }, 200);
+        
+	}
+    validationCheckUpdate('dtp-description')
+    validationCheck('dtp-description')
 });
 
 function addCarContract(id) {
@@ -477,7 +513,7 @@ function addCarContract(id) {
   <div id="car_contract_${id}_${carContractId}" class="car_contract_${id}">
     <div id="car_contract_select_${id}_${carContractId}" class="form-row">
       <div class="form-group col-md-5">
-        <select id="car_contract_type_${id}_${carContractId}" class="car_contract_types custom-select form-control col-md-12" required>
+        <select id="car_contract_type_${id}_${carContractId}" class="car_contract_type_${id} car_contract_types custom-select form-control col-md-12" required>
             <option value="">Выберите тип договора</option>
             <option>ОСАГО</option>
             <option>КАСКО</option>
@@ -486,18 +522,18 @@ function addCarContract(id) {
         </select>
       </div>
       <div class="form-group col-ms-1">
-        <button id="add_car_contract_info_btn_${id}_${carContractId}" class="add_car_contract_info_btns btn btn-outline-warning add_info">
+        <button id="add_car_contract_info_btn_${id}_${carContractId}" class="add_car_contract_info_btn_${id} add_car_contract_info_btns btn btn-outline-warning add_info">
           <i class="fa fa-chevron-down toggle"></i>
         </button>
       </div>
       <div class="form-group col-ms-1">
-        <button id="car_contract_btn_${id}_${carContractId}" class="car_contract_btns btn btn-outline-danger" onclick="removeCarContract(${id}, ${carContractId})">×</button>
+        <button id="car_contract_btn_${id}_${carContractId}" class="car_contract_btn_${id} car_contract_btns btn btn-outline-danger" onclick="removeCarContract(${id}, ${carContractId})">×</button>
       </div>
     </div>
 
     <!-- BEGIN car_contract_osago -->
 
-    <div id="car_contract_osago_info_${id}_${carContractId}" class="car_contract_osago_infos" style="display:none">
+    <div id="car_contract_osago_info_${id}_${carContractId}" class="car_contract_osago_info_${id} car_contract_osago_infos" style="display:none">
       <div class="form-row">
         <div class="form-group col-md-9">
           <h6>Общие сведения о договоре страхования ОСАГО</h6>
@@ -506,28 +542,28 @@ function addCarContract(id) {
       <div class="form-row">
         <div class="form-group col-md-6">
           <div class="autocomplete">
-            <input id="car_contract_osago_fo_name_${id}_${carContractId}" class="form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+            <input id="car_contract_osago_fo_name_${id}_${carContractId}" class="car_contract_osago_fo_name_${id} car_contract_osago_fo_names form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
           </div>
         </div>
         <div class="form-group col-md-6">
-          <input id = "car_contract_osago_fo_number_${id}_${carContractId}" class="form-control" placeholder="серия и № полиса" type="text" size="8" required>
+          <input id = "car_contract_osago_fo_number_${id}_${carContractId}" class="car_contract_osago_fo_number_${id} car_contract_osago_fo_numbers form-control" placeholder="серия и № полиса" type="text" size="8" required>
         </div>
       </div>
       <div class="form-row">
         <div class="form-group col-md-3">
-          <input id = "car_contract_osago_fo_date_conclusion_${id}_${carContractId}" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+          <input id = "car_contract_osago_fo_date_conclusion_${id}_${carContractId}" class = "car_contract_osago_fo_date_conclusion_${id} car_contract_osago_fo_date_conclusions datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
           <small id="car_contract_osago_fo_date_conclusion_help_block_${id}_${carContractId}" class="form-text">
               Заключение дговора
           </small>
         </div>
         <div class="form-group col-md-3">
-          <input id = "car_contract_osago_fo_date_start_${id}_${carContractId}" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_start_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+          <input id = "car_contract_osago_fo_date_start_${id}_${carContractId}" class = "car_contract_osago_fo_date_start_${id} car_contract_osago_fo_date_starts datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_start_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
           <small id="car_contract_osago_fo_date_start_help_block_${id}_${carContractId}" class="form-text">
               Начало срока действия
           </small>
         </div>
         <div class="form-group col-md-3">
-          <input id = "car_contract_osago_fo_date_end_${id}_${carContractId}" class = "datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_end_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+          <input id = "car_contract_osago_fo_date_end_${id}_${carContractId}" class = "car_contract_osago_fo_date_end_${id} car_contract_osago_fo_date_ends datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_end_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
           <small id="car_contract_osago_fo_date_end_help_block_${id}_${carContractId}" class="form-text">
               Окончание срока действия
           </small>
@@ -538,7 +574,7 @@ function addCarContract(id) {
     <!-- END car_contract_osago -->
     <!-- BEGIN car_contract_casco -->
 
-    <div id="car_contract_casco_info_${id}_${carContractId}" class="car_contract_casco_infos" style="display:none">
+    <div id="car_contract_casco_info_${id}_${carContractId}" class="car_contract_casco_info_${id} car_contract_casco_infos" style="display:none">
 
       <!-- BEGIN car_contract_casco_general_info -->
 
@@ -551,28 +587,28 @@ function addCarContract(id) {
         <div class="form-row">
             <div class="form-group col-md-6">
                 <div class="autocomplete">
-                    <input id="car_contract_casco_fo_name_${id}_${carContractId}" class="form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+                    <input id="car_contract_casco_fo_name_${id}_${carContractId}" class="car_contract_casco_fo_name_${id} car_contract_casco_fo_names form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
                 </div>
             </div>
             <div class="form-group col-md-6">
-                <input id = "car_contract_casco_fo_number_${id}_${carContractId}" class="form-control" placeholder="серия и № полиса" type="text" size="8" required>
+                <input id = "car_contract_casco_fo_number_${id}_${carContractId}" class="car_contract_casco_fo_number_${id} car_contract_casco_fo_numbers orm-control" placeholder="серия и № полиса" type="text" size="8" required>
             </div>
         </div>
         <div class="form-row">
             <div class="form-group col-md-3">
-                <input id = "car_contract_casco_fo_date_conclusion_${id}_${carContractId}" class = "datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_conclusion_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_casco_fo_date_conclusion_${id}_${carContractId}" class = "car_contract_casco_fo_date_conclusion_${id} car_contract_casco_fo_date_conclusions datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_conclusion_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_casco_fo_date_conclusion_help_block_${id}_${carContractId}" class="form-text">
                     Заключение договора
                 </small>
             </div>
             <div class="form-group col-md-3">
-                <input id = "car_contract_casco_fo_date_start_${id}_${carContractId}" class = "datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_start_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_casco_fo_date_start_${id}_${carContractId}" class = "car_contract_casco_fo_date_start_${id} car_contract_casco_fo_date_starts datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_start_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_casco_fo_date_start_help_block_${id}_${carContractId}" class="form-text">
                     Начало срока действия
                 </small>
             </div>
             <div class="form-group col-md-3">
-                <input id = "car_contract_casco_fo_date_end_${id}_${carContractId}" class = "datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_end_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_casco_fo_date_end_${id}_${carContractId}" class = "car_contract_casco_fo_date_end_${id} car_contract_casco_fo_date_ends datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_end_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_casco_fo_date_end_help_block_${id}_${carContractId}" class="form-text">
                     Окончание срока действия
                 </small>
@@ -591,23 +627,23 @@ function addCarContract(id) {
         </div>
         <div class="form-row">
           <div class="form-group col-md-12">
-            <input id="car_contract_casco_insurance_rules_${id}_${carContractId}" class="form-control" placeholder="Наименование правил страхования" type="text" size="8" required>
+            <input id="car_contract_casco_insurance_rules_${id}_${carContractId}" class="car_contract_casco_insurance_rules_${id} car_contract_casco_insurance_rules form-control" placeholder="Наименование правил страхования" type="text" size="8" required>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <input id = "car_contract_casco_insurance_rules_approver_name_${id}_${carContractId}" class="form-control" placeholder="ФИО утвердившего" type="text" size="8" required>
+            <input id = "car_contract_casco_insurance_rules_approver_name_${id}_${carContractId}" class="car_contract_casco_insurance_rules_approver_name_${id} car_contract_casco_insurance_rules_approver_names form-control" placeholder="ФИО утвердившего" type="text" size="8" required>
           </div>
           <div class="form-group col-md-6">
-            <input id = "car_contract_casco_insurance_rules_approver_post_${id}_${carContractId}" class="form-control" placeholder="Должность утвердившего" type="text" size="8" required>
+            <input id = "car_contract_casco_insurance_rules_approver_post_${id}_${carContractId}" class="car_contract_casco_insurance_rules_approver_post_${id} car_contract_casco_insurance_rules_approver_posts form-control" placeholder="Должность утвердившего" type="text" size="8" required>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-3">
-            <input id = "car_contract_casco_insurance_rules_date_${id}_${carContractId}" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
+            <input id = "car_contract_casco_insurance_rules_date_${id}_${carContractId}" class = "car_contract_casco_insurance_rules_date_${id} car_contract_casco_insurance_rules_dates datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
           </div>
           <div class="form-group col-md-3">
-            <input id = "car_contract_casco_insurance_rules_number_${id}_${carContractId}" class="form-control" placeholder="№" type="text" size="8" required>
+            <input id = "car_contract_casco_insurance_rules_number_${id}_${carContractId}" class="car_contract_casco_insurance_rules_number_${id} car_contract_casco_insurance_rules_numbers form-control" placeholder="№" type="text" size="8" required>
           </div>
         </div>
       </div>
@@ -623,19 +659,19 @@ function addCarContract(id) {
         </div>
         <div class="form-row">
           <div class="form-group col-md-4">
-            <select id="car_contract_casco_insurance_inspection_information_${id}_${carContractId}" class="car_contract_casco_insurance_inspection_informations custom-select form-control" required>
+            <select id="car_contract_casco_insurance_inspection_information_${id}_${carContractId}" class="car_contract_casco_insurance_inspection_information_${id} car_contract_casco_insurance_inspection_informations custom-select form-control" required>
               <option value="">Наличие сведений</option>
               <option>Сведения имеются</option>
               <option>Сведений не имеется</option>
             </select>
           </div>
           <div class="form-group col-md-3" style="display:none">
-            <input id = "car_contract_casco_insurance_inspection_date_${id}_${carContractId}" class = "datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
+            <input id = "car_contract_casco_insurance_inspection_date_${id}_${carContractId}" class = "car_contract_casco_insurance_inspection_date_${id} car_contract_casco_insurance_inspection_dates datepicker-here form-control" placeholder="Дата" type="text" size="10" required>
           </div>
         </div>
         <div class="form-row" style="display:none">
           <div class="form-group col-md-12">
-            <textarea id = "car_contract_casco_insurance_inspection_damaged_parts_${id}_${carContractId}" class="form-control" aria-describedby="car_contract_casco_insurance_inspection_damaged_parts_help_block_${id}_${carContractId}" placeholder="Перечень поврежденных деталей" type="text" size="8" required></textarea>
+            <textarea id = "car_contract_casco_insurance_inspection_damaged_parts_${id}_${carContractId}" class="car_contract_casco_insurance_inspection_damaged_parts_${id} car_contract_casco_insurance_inspection_damaged_parts form-control" aria-describedby="car_contract_casco_insurance_inspection_damaged_parts_help_block_${id}_${carContractId}" placeholder="Перечень поврежденных деталей" type="text" size="8" required></textarea>
             <small id="car_contract_casco_insurance_inspection_damaged_parts_help_block_${id}_${carContractId}" class="form-text">
               Введите через запятую наименования элементов и деталей, а также их повреждения
             </small>
@@ -655,21 +691,21 @@ function addCarContract(id) {
         <div class="form-row">
           <div class="form-group col-md-3">
             <div class="input-group">
-              <input id="car_contract_casco_insurance_summ_summ_${id}_${carContractId}" class = "input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+              <input id="car_contract_casco_insurance_summ_summ_${id}_${carContractId}" class = "car_contract_casco_insurance_summ_summ_${id} car_contract_casco_insurance_summ_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
               <div class="input-group-append">
                 <span class="input-group-text">&#8381;</span>
               </div>
             </div>
           </div>
           <div class="form-group col-md-3">
-            <select id="car_contract_casco_insurance_summ_index_${id}_${carContractId}" class="car_contract_casco_insurance_summ_indexes custom-select form-control" required>
+            <select id="car_contract_casco_insurance_summ_index_${id}_${carContractId}" class="car_contract_casco_insurance_summ_index_${id} car_contract_casco_insurance_summ_indexes custom-select form-control" required>
               <option value="">Вид суммы</option>
               <option>Индексируемая</option>
               <option>Не индексируемая</option>
             </select>
           </div>
           <div class="form-group col-md-3">
-            <select id="car_contract_casco_insurance_summ_aggregate_${id}_${carContractId}" class="car_contract_casco_insurance_summ_aggregates custom-select form-control" required>
+            <select id="car_contract_casco_insurance_summ_aggregate_${id}_${carContractId}" class="car_contract_casco_insurance_summ_aggregate_${id} car_contract_casco_insurance_summ_aggregates custom-select form-control" required>
               <option value="">Тип суммы</option>
               <option>Агрегатная</option>
               <option>Не агрегатная</option>
@@ -678,7 +714,7 @@ function addCarContract(id) {
         </div>
         <div class="form-row">
           <div class="form-group col-md-12">
-            <textarea id="car_contract_casco_insurance_summ_risks_${id}_${carContractId}" class="form-control" aria-describedby="car_contract_casco_insurance_summ_risks_help_block_${id}_${carContractId}" placeholder="Перечень рисков" type="text" size="8" required></textarea>
+            <textarea id="car_contract_casco_insurance_summ_risks_${id}_${carContractId}" class="car_contract_casco_insurance_summ_risks_${id} car_contract_casco_insurance_summ_risks form-control" aria-describedby="car_contract_casco_insurance_summ_risks_help_block_${id}_${carContractId}" placeholder="Перечень рисков" type="text" size="8" required></textarea>
             <small id="car_contract_casco_insurance_summ_risks_help_block_${id}_${carContractId}" class="form-text">
               Перечислите риски, покрываемые страховой суммой
             </small>
@@ -697,7 +733,7 @@ function addCarContract(id) {
         </div>
         <div class="form-row">
           <div class="form-group col-md-4">
-            <select id="car_contract_casco_insurance_premium_information_${id}_${carContractId}" class="car_contract_casco_insurance_premium_informations custom-select form-control" required>
+            <select id="car_contract_casco_insurance_premium_information_${id}_${carContractId}" class="car_contract_casco_insurance_premium_information_${id} car_contract_casco_insurance_premium_informations custom-select form-control" required>
               <option value="">Наличие сведений</option>
               <option>Сведения имеются</option>
               <option>Сведений не имеется</option>
@@ -708,20 +744,20 @@ function addCarContract(id) {
         <div class="form-row" style="display:none">
           <div class="form-group col-md-3">
             <div class="input-group">
-              <input id="car_contract_casco_insurance_premium_summ_${id}_${carContractId}" class = "input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+              <input id="car_contract_casco_insurance_premium_summ_${id}_${carContractId}" class = "car_contract_casco_insurance_premium_summ_${id} car_contract_casco_insurance_premium_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
               <div class="input-group-append">
                 <span class="input-group-text">&#8381;</span>
               </div>
             </div>
           </div>
           <div class="form-group col-md-3">
-            <input id = "car_contract_casco_insurance_premium_date_${id}_${carContractId}" class = "datepicker-here form-control" aria-describedby="car_contract_casco_insurance_premium_date_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+            <input id = "car_contract_casco_insurance_premium_date_${id}_${carContractId}" class = "car_contract_casco_insurance_premium_date_${id} car_contract_casco_insurance_premium_dates datepicker-here form-control" aria-describedby="car_contract_casco_insurance_premium_date_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
             <small id="car_contract_casco_insurance_premium_date_help_block_${id}_${carContractId}" class="form-text">
               Дата оплаты
             </small>
           </div>
           <div class="form-group col-md-3">
-            <input id = "car_contract_casco_insurance_premium_number_${id}_${carContractId}" class="form-control" aria-describedby="car_contract_casco_insurance_premium_number_help_block_${id}_${carContractId}" placeholder="№" type="text" size="8" required>
+            <input id = "car_contract_casco_insurance_premium_number_${id}_${carContractId}" class="car_contract_casco_insurance_premium_number_${id} car_contract_casco_insurance_premium_numbers form-control" aria-describedby="car_contract_casco_insurance_premium_number_help_block_${id}_${carContractId}" placeholder="№" type="text" size="8" required>
             <small id="car_contract_casco_insurance_premium_number_help_block_${id}_${carContractId}" class="form-text">
               № квитанции
             </small>
@@ -729,7 +765,7 @@ function addCarContract(id) {
         </div>
         <div class="form-row" style="display:none">
           <div class="form-group col-md-12">
-            <textarea id="car_contract_casco_insurance_premium_risks_${id}_${carContractId}" class="form-control" aria-describedby="car_contract_casco_insurance_premium_risks_help_block_${id}_${carContractId}" placeholder="Перечень рисков" type="text" size="8" required></textarea>
+            <textarea id="car_contract_casco_insurance_premium_risks_${id}_${carContractId}" class="car_contract_casco_insurance_premium_risks_${id} car_contract_casco_insurance_premium_risks form-control" aria-describedby="car_contract_casco_insurance_premium_risks_help_block_${id}_${carContractId}" placeholder="Перечень рисков" type="text" size="8" required></textarea>
             <small id="car_contract_casco_insurance_premium_risks_help_block_${id}_${carContractId}" class="form-text">
               Перечислите риски, покрываемые страховой премией
             </small>
@@ -746,19 +782,19 @@ function addCarContract(id) {
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <select id="car_contract_casco_beneficiary_subject_${id}_${carContractId}" class="car_contract_casco_beneficiary_subjects custom-select form-control" required>
+            <select id="car_contract_casco_beneficiary_subject_${id}_${carContractId}" class="car_contract_casco_beneficiary_subject_${id} car_contract_casco_beneficiary_subjects custom-select form-control" required>
               <option value="">Укажите выгодоприобретателя</option>
               <option>Заявитель</option>
               <option>Банк</option>
             </select>
           </div>
           <div class="form-group col-md-6" style="display:none">
-            <input id = "car_contract_casco_beneficiary_subject_bank_name_${id}_${carContractId}" class="form-control" placeholder="Наименование банка" type="text" size="8" required>
+            <input id = "car_contract_casco_beneficiary_subject_bank_name_${id}_${carContractId}" class="car_contract_casco_beneficiary_subject_bank_name_${id} car_contract_casco_beneficiary_subject_bank_names form-control" placeholder="Наименование банка" type="text" size="8" required>
           </div>
         </div>
         <div class="form-row">
           <div class="form-group col-md-12">
-            <textarea id="car_contract_casco_beneficiary_risks_${id}_${carContractId}" class="form-control" aria-describedby="car_contract_casco_beneficiary_risks_help_block_${id}_${carContractId}" placeholder="Перечень рисков" type="text" size="8" required></textarea>
+            <textarea id="car_contract_casco_beneficiary_risks_${id}_${carContractId}" class="car_contract_casco_beneficiary_risks_${id} car_contract_casco_beneficiary_risks form-control" aria-describedby="car_contract_casco_beneficiary_risks_help_block_${id}_${carContractId}" placeholder="Перечень рисков" type="text" size="8" required></textarea>
             <small id="car_contract_casco_beneficiary_risks_help_block_${id}_${carContractId}" class="form-text">
               Перечислите риски, от которых застрахован выгодоприобретатель
             </small>
@@ -775,14 +811,14 @@ function addCarContract(id) {
         </div>
         <div class="form-row">
           <div class="form-group col-md-6">
-            <select id="car_contract_casco_franchise_presence_${id}_${carContractId}" class="car_contract_casco_beneficiary_presences custom-select form-control" required>
+            <select id="car_contract_casco_franchise_presence_${id}_${carContractId}" class="car_contract_casco_franchise_presence_${id} car_contract_casco_franchise_presences custom-select form-control" required>
               <option value="">Наличие франшизы</option>
               <option>Франшиза установлена</option>
               <option>Франшиза не установлена</option>
             </select>
           </div>
           <div class="form-group col-md-3" style="display:none">
-            <select id="car_contract_casco_franchise_type_${id}_${carContractId}" class="car_contract_casco_franchise_types custom-select form-control" required>
+            <select id="car_contract_casco_franchise_type_${id}_${carContractId}" class="car_contract_casco_franchise_type_${id} car_contract_casco_franchise_types custom-select form-control" required>
               <option value="">Вид франшизы</option>
               <option>Условная</option>
               <option>Безусловная</option>
@@ -790,7 +826,7 @@ function addCarContract(id) {
           </div>
           <div class="form-group col-md-3" style="display:none">
             <div class="input-group">
-              <input id="car_contract_casco_franchise_summ_${id}_${carContractId}" class = "input-numeral form-control" placeholder="Размер франшизы" type="text" size="10" required>
+              <input id="car_contract_casco_franchise_summ_${id}_${carContractId}" class = "car_contract_casco_franchise_summ_${id} car_contract_casco_franchise_summs input-numeral form-control" placeholder="Размер франшизы" type="text" size="10" required>
               <div class="input-group-append">
                 <span class="input-group-text">&#8381;</span>
               </div>
@@ -799,7 +835,7 @@ function addCarContract(id) {
         </div>
         <div class="form-row" style="display:none">
           <div class="form-group col-md-12">
-            <textarea id="car_contract_casco_franchise_risks_${id}_${carContractId}" class="form-control" aria-describedby="car_contract_casco_franchise_risks_help_block_1_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
+            <textarea id="car_contract_casco_franchise_risks_${id}_${carContractId}" class="car_contract_casco_franchise_risks_${id} car_contract_casco_franchise_risks form-control" aria-describedby="car_contract_casco_franchise_risks_help_block_1_1" placeholder="Перечень рисков" type="text" size="8" required></textarea>
             <small id="car_contract_casco_franchise_risks_help_block_${id}_${carContractId}" class="form-text">
               Перечислите риски, по которым установлена франшиза
             </small>
@@ -834,86 +870,53 @@ function addCarContract(id) {
   });
 
   //Вызывает функцию, изменяющую общую картинку валидации
-  validationCheck('.main-claims-all')
-  validationCheckUpdate('.main-claims-all')
+  validationCheck('dtp-description')
+  validationCheckUpdate('dtp-description')
 }
 
 function removeCarContract(id, claimContractId) {
     $(`#car_contract_${id}_${claimContractId}`).remove();
-    validationCheckUpdate('.main-claims-all')
+    validationCheckUpdate('dtp-description')
+    validationCheck('dtp-description')
+    carContractId--
 }
 
-//Показать дополнительную информацию по решению ФУ
+//Показать дополнительную информацию договору страхования
 $(document).on("click", ".add_car_contract_info_btns", function (event) {
   if (!($(this).find(".toggle").hasClass("rotate"))) {
     $(this).find(".toggle").addClass("rotate");
     if ($(this).parent().parent().children().first().children().first().find(':selected').text() == "ОСАГО") {
       //Показываем сведения по полису ОСАГО
       $(this).parent().parent().next().show('fast')
-      $(this).parent().parent().next().find('input').addClass('form-control')
-
       //Скрываем сведения по полису КАСКО
       $(this).parent().parent().next().next().hide('fast')
-      setTimeout(() => {
-          $(this).parent().parent().next().next().find('input').removeClass('form-control')
-          $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
-      }, 200);
     } else if ($(this).parent().parent().children().first().children().first().find(':selected').text() == "КАСКО") {
         //Показываем сведения по полису КАСКО
         $(this).parent().parent().next().next().show('fast')
-        $(this).parent().parent().next().next().find('input').addClass('form-control')
-        $(this).parent().parent().next().next().find('textarea').addClass('form-control')
-
         //Скрываем сведения по полису ОСАГО
         $(this).parent().parent().next().hide('fast')
-        setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
-        }, 200);
     } else if ($(this).parent().parent().children().first().children().first().find(':selected').text() == "ДСАГО") {
         //Скрываем сведения по полису ОСАГО
         $(this).parent().parent().next().hide('fast')
-        setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
-        }, 200);
-
         //Скрываем сведения по полису КАСКО
         $(this).parent().parent().next().next().hide('fast')
-        setTimeout(() => {
-            $(this).parent().parent().next().next().find('input').removeClass('form-control')
-            $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
-        }, 200);
     } else {
         //Скрываем сведения по полису ОСАГО
         $(this).parent().parent().next().hide('fast')
-        setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
-        }, 200);
-
         //Скрываем сведения по полису КАСКО
         $(this).parent().parent().next().next().hide('fast')
-        setTimeout(() => {
-            $(this).parent().parent().next().next().find('input').removeClass('form-control')
-            $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
-        }, 200);
     }
-
-    validationCheckUpdate('.dtp-description')
   } else {
     $(this).find(".toggle").removeClass("rotate");
      //Скрываем сведения по полису ОСАГО
      $(this).parent().parent().next().hide('fast')
-     setTimeout(() => {
-         $(this).parent().parent().next().find('input').removeClass('form-control')
-     }, 200);
-
      //Скрываем сведения по полису КАСКО
      $(this).parent().parent().next().next().hide('fast')
-     setTimeout(() => {
-         $(this).parent().parent().next().next().find('input').removeClass('form-control')
-         $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
-     }, 200);
-
   }
+
+  validationCheckUpdate('dtp-description')
+  validationCheck('dtp-description')
+
 });
 
 //Показывает информацию по соответствующему полису (ОСАГО, КАСКО. ДСАГО)
@@ -933,12 +936,14 @@ $(document).on("change", ".car_contract_types", function (event) {
     setTimeout(() => {
         $(this).parent().parent().next().next().find('input').removeClass('form-control')
         $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
+        $(this).parent().parent().next().next().find('select').removeClass('form-control')
     }, 200);
   } else if ($(this).find(':selected').text() == "КАСКО") {
     //Показываем сведения по полису КАСКО
     $(this).parent().parent().next().next().show('fast')
     $(this).parent().parent().next().next().find('input').addClass('form-control')
     $(this).parent().parent().next().next().find('textarea').addClass('form-control')
+    $(this).parent().parent().next().next().find('select').addClass('form-control')
 
     //Скрываем сведения по полису ОСАГО
     $(this).parent().parent().next().hide('fast')
@@ -957,9 +962,10 @@ $(document).on("change", ".car_contract_types", function (event) {
     setTimeout(() => {
         $(this).parent().parent().next().next().find('input').removeClass('form-control')
         $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
+        $(this).parent().parent().next().next().find('select').removeClass('form-control')
     }, 200);
   } else {
-    $(this).parent().next().find(".toggle").removeClass("rotate");
+    $(this).parent().next().find(".toggle").removeClass("rotate")
     //Скрываем сведения по полису ОСАГО
     $(this).parent().parent().next().hide('fast')
     setTimeout(() => {
@@ -971,10 +977,12 @@ $(document).on("change", ".car_contract_types", function (event) {
     setTimeout(() => {
         $(this).parent().parent().next().next().find('input').removeClass('form-control')
         $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
+        $(this).parent().parent().next().next().find('select').removeClass('form-control')
     }, 200);
   }
 
-  validationCheckUpdate('.dtp-description')
+  validationCheckUpdate('dtp-description')
+  validationCheck('dtp-description')
 
 });
 
@@ -982,21 +990,20 @@ $(document).on("change", ".car_contract_types", function (event) {
 $(document).on("change", ".car_contract_casco_insurance_inspection_informations", function (event) {
 	if ($(this).find(':selected').text() == "Сведения имеются") {
 		$(this).parent().next().show('fast')
-        $(this).parent().parent().next().show('fast')
-        $(this).parent().next().find('input').addClass('form-control')
-        $(this).parent().parent().next().find('textarea').addClass('form-control')
+    $(this).parent().parent().next().show('fast')
+
+    $(this).parent().next().find('input').addClass('form-control')
+    $(this).parent().parent().next().find('textarea').addClass('form-control')
 	} else {
-        $(this).parent().next().hide('fast')
-        $(this).parent().parent().next().hide('fast')
-        setTimeout(() => {
-            $(this).parent().next().find('input').removeClass('')
-            $(this).parent().parent().next().find('textarea').removeClass('form-control')
-        }, 200);
-        
+    $(this).parent().next().hide('fast')
+    $(this).parent().parent().next().hide('fast')
+    setTimeout(() => {
+        $(this).parent().next().find('input').removeClass('form-control')
+        $(this).parent().parent().next().find('textarea').removeClass('form-control')
+    }, 200);
 	}
-
-    validationCheckUpdate('.dtp-description')
-
+    validationCheckUpdate('dtp-description')
+    validationCheck('dtp-description')
 });
 
 //Добавляет информацию о страховой премии
@@ -1015,7 +1022,8 @@ $(document).on("change", ".car_contract_casco_insurance_premium_informations", f
     }, 200);
 	}
 
-    validationCheckUpdate('.dtp-description')
+    validationCheckUpdate('dtp-description')
+    validationCheck('dtp-description')
 
 });
 
@@ -1031,52 +1039,57 @@ $(document).on("change", ".car_contract_casco_beneficiary_subjects", function (e
     }, 200);
         
 	}
-
-    validationCheckUpdate('.dtp-description')
-
+    validationCheckUpdate('dtp-description')
+    validationCheck('dtp-description')
 });
 
 //Добавляет информацию о франшизе
-$(document).on("change", ".car_contract_casco_beneficiary_presences", function (event) {
+$(document).on("change", ".car_contract_casco_franchise_presences", function (event) {
 	if ($(this).find(':selected').text() == "Франшиза установлена") {
 		$(this).parent().next().show('fast')
     $(this).parent().next().next().show('fast')
     $(this).parent().parent().next().show('fast')
+
     $(this).parent().parent().find('input').addClass('form-control')
+    $(this).parent().next().find('select').addClass('form-control')
+    $(this).parent().parent().next().find('textarea').addClass('form-control')
 	} else {
     $(this).parent().next().hide('fast')
     $(this).parent().next().next().hide('fast')
     $(this).parent().parent().next().hide('fast')
     setTimeout(() => {
-        $(this).parent().parent().find('input').removeClass('form-control')
+      $(this).parent().parent().find('input').removeClass('form-control')
+      $(this).parent().next().find('select').removeClass('form-control')
+      $(this).parent().parent().next().find('textarea').removeClass('form-control')
     }, 200);
         
 	}
 
-    validationCheckUpdate('.dtp-description')
+    validationCheckUpdate('dtp-description')
+    validationCheck('dtp-description')
 
 });
 
 //Изменяет картинку валидации
 function validationCheck(className) {
-  $(`${className} .form-control`).focusout(function(){
-      validationCheckUpdate(className)
+  $(`.${className} .form-control`).focusout(function(){
+    validationCheckUpdate(className)
   })
-  }
-    
-    //Обновлет сведения о валидации инпутов
+}
+
+//Обновлет сведения о валидации инпутов
 function validationCheckUpdate(className) {
   setTimeout(() => {
-      var isOk = true
-      $(`${className} .form-control`).each(function() {
+    var isOk = true
+    $(`.${className} .form-control`).each(function() {
       if ($(this).css('border-color') == 'rgb(220, 53, 69)') {
-          isOk = false
+        isOk = false
       }
-      })
-      if (isOk) {
-      $(`${className}`).children().first().next().html(`<i class="fa fa-check-square-o fa-2x" aria-hidden="true" style="color: #28a745;"></i>`)
-      } else {
-      $(`${className}`).children().first().next().html(`<i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>`)
-      }
+    })
+    if (isOk) {
+      $(`#${className}`).children().first().children().first().children().first().next().html(`<i class="fa fa-check-square-o fa-2x" aria-hidden="true" style="color: #28a745;"></i>`)
+    } else {
+      $(`#${className}`).children().first().children().first().children().first().next().html(`<i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>`)
+    }
   }, 200); 
-  }
+}

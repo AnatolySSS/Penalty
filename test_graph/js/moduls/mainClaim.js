@@ -53,7 +53,7 @@ export class ClaimsContract {
     constructor (id, type) {
 
         this.id = id;
-        this.type = type.value
+        this.type = type
         this.claims_all = ""
 
         var number_of_claims = $('.main_claim_' + id).length;
@@ -81,18 +81,18 @@ export class ClaimsContract {
 
             switch (this.claim[i].type.options.selectedIndex) {
                 case 2:
-                    this.claim[i].type_text_full = "страхового возмещения" + " по договору " + this.type + " " + this.claim[i].type_text + current_claim_summ
+                    this.claim[i].type_text_full = "страхового возмещения" + " по договору " + this.type.value + " " + this.claim[i].type_text + current_claim_summ
                     break;
                 case 1:
-                    this.claim[i].type_text_full = this.claim[i].type_text + " по договору " + this.type + current_claim_summ
+                    this.claim[i].type_text_full = this.claim[i].type_text + " по договору " + this.type.value + current_claim_summ
                     break;
                 case 5:
                     if (this.claim[i].without.checked) {
-                        this.claim[i].type_text_full = this.claim[i].type_text + " по договору " + this.type + current_claim_summ
+                        this.claim[i].type_text_full = this.claim[i].type_text + " по договору " + this.type.value + current_claim_summ
                     } else if (this.claim[i].pdf.checked) {
-                        this.claim[i].type_text_full = this.claim[i].type_text + " по договору " + this.type + " за период с " + this.claim[i].getFromDateFormatted() + " по день фактического исполнения обязательств" + current_claim_summ
+                        this.claim[i].type_text_full = this.claim[i].type_text + " по договору " + this.type.value + " за период с " + this.claim[i].getFromDateFormatted() + " по день фактического исполнения обязательств" + current_claim_summ
                     } else {
-                        this.claim[i].type_text_full = this.claim[i].type_text + " по договору " + this.type + " за период с " + this.claim[i].getFromDateFormatted() + " по " + this.claim[i].getToDateFormatted() + current_claim_summ
+                        this.claim[i].type_text_full = this.claim[i].type_text + " по договору " + this.type.value + " за период с " + this.claim[i].getFromDateFormatted() + " по " + this.claim[i].getToDateFormatted() + current_claim_summ
                     }
                     break;
                 default:

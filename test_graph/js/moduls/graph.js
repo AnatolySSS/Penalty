@@ -194,18 +194,18 @@ export function fillPenaltyGraph(swg_graph,
 
   //отрисовка добровольных выплат
   for (var i = 0; i < count_vol_days.length; i++) {
-    if (!isNaN(count_vol_days[i]) && paymentVoluntary[i].type.options.selectedIndex != 4) {
+    if (!isNaN(count_vol_days[i]) && paymentVoluntary[i].type.options.selectedIndex != 5) {
       switch (payment_vol_types[i]) {
-        case 0:
+        case 1:
           type = 0;
           break;
-        case 1:
+        case 2:
           type = 1;
           break;
-        case 2:
+        case 3:
           type = 2;
           break;
-        case 3:
+        case 4:
           type = 3;
           break;
         default:

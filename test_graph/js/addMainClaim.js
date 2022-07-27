@@ -115,8 +115,8 @@ function addClaimsContract() {
   });
 
   //Вызывает функцию, изменяющую общую картинку валидации
-  validationCheck('.main-claims-all')
-  validationCheckUpdate('.main-claims-all')
+  validationCheck('main-claims-all')
+  validationCheckUpdate('main-claims-all')
 
 }
 
@@ -125,7 +125,7 @@ function removeClaimsContract(id) {
   if ($(`#add_main_claims_info_btn_${ContractId}`).find(".toggle").hasClass("rotate")) {
     $(`#add_main_claims_info_btn_${ContractId}`).find(".toggle").removeClass("rotate");
   }
-  validationCheckUpdate('.main-claims-all')
+  validationCheckUpdate('main-claims-all')
   ContractId--;
 }
 
@@ -249,14 +249,14 @@ function addFuMainClaim(id) {
   });
 
   //Вызывает функцию, изменяющую общую картинку валидации
-  validationCheck('.main-claims-all')
-  validationCheckUpdate('.main-claims-all')
+  validationCheck('main-claims-all')
+  validationCheckUpdate('main-claims-all')
 }
 
 function removeFuMainClaim(id, claimContractId) {
     $(`#main_claim_${id}_${claimContractId}`).remove();
     $(`#add_main_claim_info_${id}_${claimContractId}`).remove();
-    validationCheckUpdate('.main-claims-all')
+    validationCheckUpdate('main-claims-all')
 }
 
 //Добавляет период взыскания неустойки судом
@@ -270,8 +270,8 @@ $(document).on("change", ".main_claim_types", function (event) {
     $(this).parent().parent().next().find('.date_main_claim_froms').removeClass('form-control')
     $(this).parent().parent().next().find('.date_main_claim_tos').removeClass('form-control')
 	}
-  validationCheck('.main-claims-all')
-  validationCheckUpdate('.main-claims-all')
+  validationCheck('main-claims-all')
+  validationCheckUpdate('main-claims-all')
 });
 
 //Блокировать даты судебной неустойки при проставленной галочке "Период не указан"
@@ -289,7 +289,7 @@ function block_main_claim_date(id, claimContractId){
     $(`#date_main_claim_to_${id}_${claimContractId}`).prop('disabled', false);
     $(`#main_claim_pdf_${id}_${claimContractId}`).prop('disabled', false);
   }
-    validationCheckUpdate('.main-claims-all')
+    validationCheckUpdate('main-claims-all')
 }
 
 //Блокирует дату "по" в периоде взыскания неустойки ПДФ
@@ -300,12 +300,12 @@ $(document).on("click", ".main_claim_pdfs", function (event) {
   } else {
     $(this).parent().prev().find('.date_main_claim_tos').prop('disabled', false);
   }
-    validationCheckUpdate('.main-claims-all')
+    validationCheckUpdate('main-claims-all')
 })
 
 //Изменяет картинку валидации
 function validationCheck(className) {
-  $(`${className} .form-control`).focusout(function(){
+  $(`.${className} .form-control`).focusout(function(){
     validationCheckUpdate(className)
   })
 }
@@ -314,15 +314,15 @@ function validationCheck(className) {
 function validationCheckUpdate(className) {
   setTimeout(() => {
     var isOk = true
-    $(`${className} .form-control`).each(function() {
+    $(`.${className} .form-control`).each(function() {
       if ($(this).css('border-color') == 'rgb(220, 53, 69)') {
         isOk = false
       }
     })
     if (isOk) {
-      $(`${className}`).children().first().next().html(`<i class="fa fa-check-square-o fa-2x" aria-hidden="true" style="color: #28a745;"></i>`)
+      $(`#${className}`).children().first().children().first().children().first().next().html(`<i class="fa fa-check-square-o fa-2x" aria-hidden="true" style="color: #28a745;"></i>`)
     } else {
-      $(`${className}`).children().first().next().html(`<i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>`)
+      $(`#${className}`).children().first().children().first().children().first().next().html(`<i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>`)
     }
   }, 200); 
 }

@@ -26,10 +26,10 @@ import { DAY } from './variables.js';
     // * last_day - последний день 20го срока
     // * penalty_day - первый день начисления неустойки (21й день)
 */
-const date_sv = new AppDate($('#app_date_1'), $('#date_sv_last_day'), $('#date_sv_penalty_day'));
-const date_uts = new AppDate($('#app_date_2'), $('#date_uts_last_day'), $('#date_uts_penalty_day'));
-const date_ev = new AppDate($('#app_date_3'), $('#date_ev_last_day'), $('#date_ev_penalty_day'));
-const date_stor = new AppDate($('#app_date_4'), $('#date_stor_last_day'), $('#date_stor_penalty_day'));
+let date_sv = new AppDate("date_sv")
+let date_uts = new AppDate("date_uts")
+let date_ev = new AppDate("date_ev")
+let date_stor = new AppDate("date_stor")
 
 class PenaltyCourtPeriod {
   start_date

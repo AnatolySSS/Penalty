@@ -74,8 +74,9 @@ export function autocomplete(inp, arr) {
             document.querySelector("#fo_registration_date").value = element.fo_registration_date
             document.querySelector("#fo_site_check").innerHTML = "Ссылка на сайт ЦБ РФ для проверки ФО"
             document.querySelector("#fo_site_check").href = "https://cbr.ru/finorg/foinfo/?ogrn=" + element.fo_ogrn
+            document.querySelector("#fo_site_check_div").setAttribute("style", "display")
           }
-        });
+        })
       }
   });
   function addActive(x) {
