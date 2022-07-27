@@ -59,7 +59,7 @@ function addDtpParticipant() {
           <input id = "driver_name_${dtpParticipant}" class="driver_names form-control" placeholder="ФИО водителя" type="text" size="8" required>
         </div>
         <div class="form-group col-md-6">
-          <input id = "owner_name_${dtpParticipant}" class="owner_names form-control" placeholder="ФИО собственника" type="text" size="8" required>
+          <input id = "owner_name_${dtpParticipant}" class="owner_names form-control li-quotes" placeholder="ФИО собственника" type="text" size="8" required>
         </div>
       </div>
       <div class="form-row">
@@ -111,7 +111,7 @@ function addDtpParticipant() {
             <div class="form-row">
               <div class="form-group col-md-6">
                 <div class="autocomplete">
-                  <input id="car_contract_osago_fo_name_${dtpParticipant}_1" class="car_contract_osago_fo_name_${dtpParticipant} car_contract_osago_fo_names" type="text" placeholder="Введите наименование ФО" size="40" required>
+                  <input id="car_contract_osago_fo_name_${dtpParticipant}_1" class="car_contract_osago_fo_name_${dtpParticipant} car_contract_osago_fo_names li-quotes" type="text" placeholder="Введите наименование ФО" size="40" required>
                 </div>
               </div>
               <div class="form-group col-md-6">
@@ -156,7 +156,7 @@ function addDtpParticipant() {
               <div class="form-row">
                 <div class="form-group col-md-6">
                   <div class="autocomplete">
-                    <input id="car_contract_casco_fo_name_${dtpParticipant}_1" class="car_contract_casco_fo_name_${dtpParticipant} car_contract_casco_fo_names" type="text" placeholder="Введите наименование ФО" size="40" required>
+                    <input id="car_contract_casco_fo_name_${dtpParticipant}_1" class="car_contract_casco_fo_name_${dtpParticipant} car_contract_casco_fo_names li-quotes" type="text" placeholder="Введите наименование ФО" size="40" required>
                   </div>
                 </div>
                 <div class="form-group col-md-6">
@@ -196,7 +196,7 @@ function addDtpParticipant() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-12">
-                  <input id="car_contract_casco_insurance_rules_${dtpParticipant}_1" class="car_contract_casco_insurance_rules_${dtpParticipant} car_contract_casco_insurance_rules" placeholder="Наименование правил страхования" type="text" size="8" required>
+                  <input id="car_contract_casco_insurance_rules_${dtpParticipant}_1" class="car_contract_casco_insurance_rules_${dtpParticipant} car_contract_casco_insurance_rules li-quotes" placeholder="Наименование правил страхования" type="text" size="8" required>
                 </div>
               </div>
               <div class="form-row">
@@ -358,7 +358,7 @@ function addDtpParticipant() {
                   </select>
                 </div>
                 <div class="form-group col-md-6" style="display:none">
-                  <input id = "car_contract_casco_beneficiary_subject_bank_name_${dtpParticipant}_1" class="car_contract_casco_beneficiary_subject_bank_name_${dtpParticipant} car_contract_casco_beneficiary_subject_bank_names" placeholder="Наименование банка" type="text" size="8" required>
+                  <input id = "car_contract_casco_beneficiary_subject_bank_name_${dtpParticipant}_1" class="car_contract_casco_beneficiary_subject_bank_name_${dtpParticipant} car_contract_casco_beneficiary_subject_bank_names li-quotes" placeholder="Наименование банка" type="text" size="8" required>
                 </div>
               </div>
               <div class="form-row">
@@ -479,11 +479,11 @@ $(document).on("click", ".add_dtp_description_participant_info_btns", function (
 $(document).on("change", ".car_types", function (event) {
 	if ($(this).find(':selected').text() == "грузовой") {
 		$(this).parent().next().show('fast')
-    $(this).parent().next().find('input').addClass('form-control')
+    $(this).parent().next().find('input[type=text]').addClass('form-control')
 	} else {
     $(this).parent().next().hide('fast')
     setTimeout(() => {
-        $(this).parent().next().find('input').removeClass('form-control')
+        $(this).parent().next().find('input[type=text]').removeClass('form-control')
     }, 200);
         
 	}
@@ -495,11 +495,11 @@ $(document).on("change", ".car_types", function (event) {
 $(document).on("change", ".car_contract_types", function (event) {
 	if ($(this).find(':selected').text() == "КАСКО") {
 		$(this).parent().parent().parent().parent().parent().children().first().children().first().next().next().next().show('fast')
-    $(this).parent().parent().parent().parent().parent().children().first().children().first().next().next().next().find('input').addClass('form-control')
+    $(this).parent().parent().parent().parent().parent().children().first().children().first().next().next().next().find('input[type=text]').addClass('form-control')
 	} else {
     $(this).parent().parent().parent().parent().parent().children().first().children().first().next().next().next().hide('fast')
     setTimeout(() => {
-      $(this).parent().parent().parent().parent().parent().children().first().children().first().next().next().next().find('input').removeClass('form-control')
+      $(this).parent().parent().parent().parent().parent().children().first().children().first().next().next().next().find('input[type=text]').removeClass('form-control')
     }, 200);
         
 	}
@@ -542,7 +542,7 @@ function addCarContract(id) {
       <div class="form-row">
         <div class="form-group col-md-6">
           <div class="autocomplete">
-            <input id="car_contract_osago_fo_name_${id}_${carContractId}" class="car_contract_osago_fo_name_${id} car_contract_osago_fo_names form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+            <input id="car_contract_osago_fo_name_${id}_${carContractId}" class="car_contract_osago_fo_name_${id} car_contract_osago_fo_names form-control li-quotes" type="text" placeholder="Введите наименование ФО" size="40" required>
           </div>
         </div>
         <div class="form-group col-md-6">
@@ -587,7 +587,7 @@ function addCarContract(id) {
         <div class="form-row">
             <div class="form-group col-md-6">
                 <div class="autocomplete">
-                    <input id="car_contract_casco_fo_name_${id}_${carContractId}" class="car_contract_casco_fo_name_${id} car_contract_casco_fo_names form-control" type="text" placeholder="Введите наименование ФО" size="40" required>
+                    <input id="car_contract_casco_fo_name_${id}_${carContractId}" class="car_contract_casco_fo_name_${id} car_contract_casco_fo_names form-control li-quotes" type="text" placeholder="Введите наименование ФО" size="40" required>
                 </div>
             </div>
             <div class="form-group col-md-6">
@@ -627,7 +627,7 @@ function addCarContract(id) {
         </div>
         <div class="form-row">
           <div class="form-group col-md-12">
-            <input id="car_contract_casco_insurance_rules_${id}_${carContractId}" class="car_contract_casco_insurance_rules_${id} car_contract_casco_insurance_rules form-control" placeholder="Наименование правил страхования" type="text" size="8" required>
+            <input id="car_contract_casco_insurance_rules_${id}_${carContractId}" class="car_contract_casco_insurance_rules_${id} car_contract_casco_insurance_rules form-control li-quotes" placeholder="Наименование правил страхования" type="text" size="8" required>
           </div>
         </div>
         <div class="form-row">
@@ -789,7 +789,7 @@ function addCarContract(id) {
             </select>
           </div>
           <div class="form-group col-md-6" style="display:none">
-            <input id = "car_contract_casco_beneficiary_subject_bank_name_${id}_${carContractId}" class="car_contract_casco_beneficiary_subject_bank_name_${id} car_contract_casco_beneficiary_subject_bank_names form-control" placeholder="Наименование банка" type="text" size="8" required>
+            <input id = "car_contract_casco_beneficiary_subject_bank_name_${id}_${carContractId}" class="car_contract_casco_beneficiary_subject_bank_name_${id} car_contract_casco_beneficiary_subject_bank_names form-control li-quotes" placeholder="Наименование банка" type="text" size="8" required>
           </div>
         </div>
         <div class="form-row">
@@ -929,38 +929,38 @@ $(document).on("change", ".car_contract_types", function (event) {
   if ($(this).find(':selected').text() == "ОСАГО") {
       //Показываем сведения по полису ОСАГО
     $(this).parent().parent().next().show('fast')
-    $(this).parent().parent().next().find('input').addClass('form-control')
+    $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
 
     //Скрываем сведения по полису КАСКО
     $(this).parent().parent().next().next().hide('fast')
     setTimeout(() => {
-        $(this).parent().parent().next().next().find('input').removeClass('form-control')
+        $(this).parent().parent().next().next().find('input[type=text]').removeClass('form-control')
         $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
         $(this).parent().parent().next().next().find('select').removeClass('form-control')
     }, 200);
   } else if ($(this).find(':selected').text() == "КАСКО") {
     //Показываем сведения по полису КАСКО
     $(this).parent().parent().next().next().show('fast')
-    $(this).parent().parent().next().next().find('input').addClass('form-control')
+    $(this).parent().parent().next().next().find('input[type=text]').addClass('form-control')
     $(this).parent().parent().next().next().find('textarea').addClass('form-control')
     $(this).parent().parent().next().next().find('select').addClass('form-control')
 
     //Скрываем сведения по полису ОСАГО
     $(this).parent().parent().next().hide('fast')
     setTimeout(() => {
-        $(this).parent().parent().next().find('input').removeClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
     }, 200);
   } else if ($(this).find(':selected').text() == "ДСАГО") {
     //Скрываем сведения по полису ОСАГО
     $(this).parent().parent().next().hide('fast')
     setTimeout(() => {
-        $(this).parent().parent().next().find('input').removeClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
     }, 200);
 
     //Скрываем сведения по полису КАСКО
     $(this).parent().parent().next().next().hide('fast')
     setTimeout(() => {
-        $(this).parent().parent().next().next().find('input').removeClass('form-control')
+        $(this).parent().parent().next().next().find('input[type=text]').removeClass('form-control')
         $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
         $(this).parent().parent().next().next().find('select').removeClass('form-control')
     }, 200);
@@ -969,13 +969,13 @@ $(document).on("change", ".car_contract_types", function (event) {
     //Скрываем сведения по полису ОСАГО
     $(this).parent().parent().next().hide('fast')
     setTimeout(() => {
-        $(this).parent().parent().next().find('input').removeClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
     }, 200);
 
     //Скрываем сведения по полису КАСКО
     $(this).parent().parent().next().next().hide('fast')
     setTimeout(() => {
-        $(this).parent().parent().next().next().find('input').removeClass('form-control')
+        $(this).parent().parent().next().next().find('input[type=text]').removeClass('form-control')
         $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
         $(this).parent().parent().next().next().find('select').removeClass('form-control')
     }, 200);
@@ -992,13 +992,13 @@ $(document).on("change", ".car_contract_casco_insurance_inspection_informations"
 		$(this).parent().next().show('fast')
     $(this).parent().parent().next().show('fast')
 
-    $(this).parent().next().find('input').addClass('form-control')
+    $(this).parent().next().find('input[type=text]').addClass('form-control')
     $(this).parent().parent().next().find('textarea').addClass('form-control')
 	} else {
     $(this).parent().next().hide('fast')
     $(this).parent().parent().next().hide('fast')
     setTimeout(() => {
-        $(this).parent().next().find('input').removeClass('form-control')
+        $(this).parent().next().find('input[type=text]').removeClass('form-control')
         $(this).parent().parent().next().find('textarea').removeClass('form-control')
     }, 200);
 	}
@@ -1011,13 +1011,13 @@ $(document).on("change", ".car_contract_casco_insurance_premium_informations", f
 	if ($(this).find(':selected').text() == "Сведения имеются") {
 		$(this).parent().parent().next().show('fast')
     $(this).parent().parent().next().next().show('fast')
-    $(this).parent().parent().next().find('input').addClass('form-control')
+    $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
     $(this).parent().parent().next().next().find('textarea').addClass('form-control')
 	} else {
     $(this).parent().parent().next().hide('fast')
     $(this).parent().parent().next().next().hide('fast')
     setTimeout(() => {
-      $(this).parent().parent().next().find('input').removeClass('form-control')
+      $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
       $(this).parent().parent().next().next().find('textarea').removeClass('form-control')
     }, 200);
 	}
@@ -1031,11 +1031,11 @@ $(document).on("change", ".car_contract_casco_insurance_premium_informations", f
 $(document).on("change", ".car_contract_casco_beneficiary_subjects", function (event) {
 	if ($(this).find(':selected').text() == "Банк") {
 		$(this).parent().next().show('fast')
-    $(this).parent().next().find('input').addClass('form-control')
+    $(this).parent().next().find('input[type=text]').addClass('form-control')
 	} else {
     $(this).parent().next().hide('fast')
     setTimeout(() => {
-        $(this).parent().next().find('input').removeClass('form-control')
+        $(this).parent().next().find('input[type=text]').removeClass('form-control')
     }, 200);
         
 	}
@@ -1050,7 +1050,7 @@ $(document).on("change", ".car_contract_casco_franchise_presences", function (ev
     $(this).parent().next().next().show('fast')
     $(this).parent().parent().next().show('fast')
 
-    $(this).parent().parent().find('input').addClass('form-control')
+    $(this).parent().parent().find('input[type=text]').addClass('form-control')
     $(this).parent().next().find('select').addClass('form-control')
     $(this).parent().parent().next().find('textarea').addClass('form-control')
 	} else {
@@ -1058,7 +1058,7 @@ $(document).on("change", ".car_contract_casco_franchise_presences", function (ev
     $(this).parent().next().next().hide('fast')
     $(this).parent().parent().next().hide('fast')
     setTimeout(() => {
-      $(this).parent().parent().find('input').removeClass('form-control')
+      $(this).parent().parent().find('input[type=text]').removeClass('form-control')
       $(this).parent().next().find('select').removeClass('form-control')
       $(this).parent().parent().next().find('textarea').removeClass('form-control')
     }, 200);

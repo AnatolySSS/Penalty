@@ -24,15 +24,15 @@ function addClaimsContract() {
                   </div>
                 </div>
                 <div id="main_claims_${ContractId}" style="display:none">
-                  <div class="form-row ml-2">
-                    <div class="form-group col-md-5 ml-2">
+                  <div class="form-row">
+                    <div class="form-group col-md-5">
                       <h6>Требование</h6>
                     </div>
                     <div class="form-group col-md-3">
                       <h6>Сумма</h6>
                     </div>
                   </div>
-                  <div id="main_claim_${ContractId}_1" class="main_claim_${ContractId} main_claims form-row ml-2">
+                  <div id="main_claim_${ContractId}_1" class="main_claim_${ContractId} main_claims form-row">
                     <div class="form-group col-md-5">
                       <select id="main_claim_type_${ContractId}_1" class="main_claim_type_${ContractId} main_claim_types custom-select form-control col-md-12" required>
                         <option value="">Выберите требование</option>
@@ -166,7 +166,7 @@ $(document).on("change", ".claims_contract_types", function (event) {
 
 function addFuMainClaim(id) {
 	claimContractId++;
-  var str = `<div id="main_claim_${id}_${claimContractId}" class="main_claim_${id} main_claims form-row ml-2">
+  var str = `<div id="main_claim_${id}_${claimContractId}" class="main_claim_${id} main_claims form-row">
               <div class="form-group col-md-5">
                 <select id="main_claim_type_${id}_${claimContractId}" class="main_claim_type_${id} main_claim_types custom-select form-control col-md-12" required>
                   <option value="">Выберите требование</option>  

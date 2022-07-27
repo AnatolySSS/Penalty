@@ -436,7 +436,7 @@ export function makeTextDecision(claimsContract,
   var europrotocol_paragraph = ""
   if (europrotocol.checked) {
     europrotocol_paragraph = `ДТП было оформлено в соответствии с пунктом 1 статьи 11.1 Закона № 40-ФЗ 
-    без участия уполномоченных на то сотрудников полиции.`
+    без участия уполномоченных на то сотрудников полиции.<br>`
   }
   dtp_description_paragraph = dtp_description_paragraph + europrotocol_paragraph
 

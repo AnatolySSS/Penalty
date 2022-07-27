@@ -171,7 +171,7 @@ function addAppToFo() {
                                 <input id = "apps_to_fo_expertise_app_number_${appsToFoId}_1" class="apps_to_fo_expertise_app_number_${appsToFoId} apps_to_fo_expertise_app_numbers form-control" placeholder="№ заключения" type="text" size="8" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <input id = "apps_to_fo_expertise_app_orgainzation_${appsToFoId}_1" class="apps_to_fo_expertise_app_orgainzation_${appsToFoId} apps_to_fo_expertise_app_orgainzations form-control" placeholder="Наименование экспертной организации" type="text" size="8" required>
+                                <input id = "apps_to_fo_expertise_app_orgainzation_${appsToFoId}_1" class="apps_to_fo_expertise_app_orgainzation_${appsToFoId} apps_to_fo_expertise_app_orgainzations form-control li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
                             </div>
                             <div class="form-group col-ms-1">
                                 <button id="add_apps_to_fo_expertise_app_info_btn_${appsToFoId}_1" class="add_apps_to_fo_expertise_app_info_btn_${appsToFoId} add_apps_to_fo_expertise_app_info_btns btn btn-outline-warning add_info">
@@ -186,59 +186,74 @@ function addAppToFo() {
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <div class="input-group">
-                                        <input id="apps_to_fo_expertise_app_summ_without_${appsToFoId}_1" class = "apps_to_fo_expertise_app_summ_without_${appsToFoId} apps_to_fo_expertise_app_summ_withouts input-numeral form-control" aria-describedby="apps_to_fo_expertise_app_summ_without_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
+                                        <input id="apps_to_fo_expertise_app_summ_without_${appsToFoId}_1" class = "apps_to_fo_expertise_app_summ_without_${appsToFoId} apps_to_fo_expertise_app_summ_withouts input-numeral deactivation" aria-describedby="apps_to_fo_expertise_app_summ_without_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
                                         <div class="input-group-append">
                                             <span class="input-group-text">&#8381;</span>
                                         </div>
                                     </div>
                                     <small id="apps_to_fo_expertise_app_summ_without_help_block_${appsToFoId}_1" class="form-text">
-                                        Без износа
+                                        <div class="form-inline">
+                                            <input id="apps_to_fo_expertise_app_summ_without_deactivate_${appsToFoId}_1" class="deactivator" type="checkbox">
+                                            <label for="apps_to_fo_expertise_app_summ_without_deactivate_${appsToFoId}_1" class="ml-2 form-check-label">Без износа</label>
+                                        </div>
                                     </small>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="input-group">
-                                        <input id="apps_to_fo_expertise_app_summ_with_${appsToFoId}_1" class = "apps_to_fo_expertise_app_summ_with_${appsToFoId} apps_to_fo_expertise_app_summ_withs input-numeral form-control" aria-describedby="apps_to_fo_expertise_app_summ_with_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
+                                        <input id="apps_to_fo_expertise_app_summ_with_${appsToFoId}_1" class = "apps_to_fo_expertise_app_summ_with_${appsToFoId} apps_to_fo_expertise_app_summ_withs input-numeral deactivation" aria-describedby="apps_to_fo_expertise_app_summ_with_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
                                         <div class="input-group-append">
                                             <span class="input-group-text">&#8381;</span>
                                         </div>
                                     </div>
                                     <small id="apps_to_fo_expertise_app_summ_with_help_block_${appsToFoId}_1" class="form-text">
-                                        С износом
+                                        <div class="form-inline">
+                                            <input id="apps_to_fo_expertise_app_summ_with_deactivate_${appsToFoId}_1" class="deactivator" type="checkbox">
+                                            <label for="apps_to_fo_expertise_app_summ_with_deactivate_${appsToFoId}_1" class="ml-2 form-check-label">С износом</label>
+                                        </div>
                                     </small>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="input-group">
-                                        <input id="apps_to_fo_expertise_app_summ_market_${appsToFoId}_1" class = "apps_to_fo_expertise_app_summ_market_${appsToFoId} apps_to_fo_expertise_app_summ_markets input-numeral form-control" aria-describedby="apps_to_fo_expertise_app_summ_market_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
+                                        <input id="apps_to_fo_expertise_app_summ_market_${appsToFoId}_1" class = "apps_to_fo_expertise_app_summ_market_${appsToFoId} apps_to_fo_expertise_app_summ_markets input-numeral deactivation" aria-describedby="apps_to_fo_expertise_app_summ_market_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
                                         <div class="input-group-append">
                                             <span class="input-group-text">&#8381;</span>
                                         </div>
                                     </div>
                                     <small id="apps_to_fo_expertise_app_summ_market_help_block_${appsToFoId}_1" class="form-text">
-                                        Рыночная стоимость
+                                        <div class="form-inline">
+                                            <input id="apps_to_fo_expertise_app_summ_market_deactivate_${appsToFoId}_1" class="deactivator" type="checkbox">
+                                            <label for="apps_to_fo_expertise_app_summ_market_deactivate_${appsToFoId}_1" class="ml-2 form-check-label">Рыночная стоимость</label>
+                                        </div>
                                     </small>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <div class="input-group">
-                                        <input id="apps_to_fo_expertise_app_summ_leftovers_${appsToFoId}_1" class = "apps_to_fo_expertise_app_summ_leftovers_${appsToFoId} apps_to_fo_expertise_app_summ_leftovers input-numeral form-control" aria-describedby="apps_to_fo_expertise_app_summ_leftovers_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
+                                        <input id="apps_to_fo_expertise_app_summ_leftovers_${appsToFoId}_1" class = "apps_to_fo_expertise_app_summ_leftovers_${appsToFoId} apps_to_fo_expertise_app_summ_leftovers input-numeral deactivation" aria-describedby="apps_to_fo_expertise_app_summ_leftovers_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
                                         <div class="input-group-append">
                                             <span class="input-group-text">&#8381;</span>
                                         </div>
                                     </div>
                                     <small id="apps_to_fo_expertise_app_summ_leftovers_help_block_${appsToFoId}_1" class="form-text">
-                                        Годные остатки
+                                        <div class="form-inline">
+                                            <input id="apps_to_fo_expertise_app_summ_leftovers_deactivate_${appsToFoId}_1" class="deactivator" type="checkbox">
+                                            <label for="apps_to_fo_expertise_app_summ_leftovers_deactivate_${appsToFoId}_1" class="ml-2 form-check-label">Годные остатки</label>
+                                        </div>
                                     </small>
                                 </div>
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-3">
                                     <div class="input-group">
-                                        <input id="apps_to_fo_expertise_app_summ_uts_${appsToFoId}_1" class = "apps_to_fo_expertise_app_summ_uts_${appsToFoId} apps_to_fo_expertise_app_summ_uts input-numeral form-control" aria-describedby="apps_to_fo_expertise_app_summ_uts_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
+                                        <input id="apps_to_fo_expertise_app_summ_uts_${appsToFoId}_1" class = "apps_to_fo_expertise_app_summ_uts_${appsToFoId} apps_to_fo_expertise_app_summ_uts input-numeral deactivation" aria-describedby="apps_to_fo_expertise_app_summ_uts_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
                                         <div class="input-group-append">
                                             <span class="input-group-text">&#8381;</span>
                                         </div>
                                     </div>
                                     <small id="apps_to_fo_expertise_app_summ_uts_help_block_${appsToFoId}_1" class="form-text">
-                                        УТС
+                                        <div class="form-inline">
+                                            <input id="apps_to_fo_expertise_app_summ_uts_deactivate_${appsToFoId}_1" class="deactivator" type="checkbox">
+                                            <label for="apps_to_fo_expertise_app_summ_uts_deactivate_${appsToFoId}_1" class="ml-2 form-check-label">УТС</label>
+                                        </div>
                                     </small>
                                 </div>
                             </div>
@@ -299,13 +314,13 @@ function addAppToFo() {
                     <div id="apps_to_fo_request_${appsToFoId}_1" class="apps_to_fo_requests_${appsToFoId}">
                         <div class="form-row">
                             <div class="form-group col-md-3">
-                                <input id = "apps_to_fo_request_date_${appsToFoId}_1" class = "apps_to_fo_request_date_${appsToFoId} apps_to_fo_request_dates datepicker-here form-control deactivation" aria-describedby="apps_to_fo_request_date_help_block_${appsToFoId}_1" placeholder="Дата" type="text" size="10" required>
+                                <input id = "apps_to_fo_request_date_${appsToFoId}_1" class = "apps_to_fo_request_date_${appsToFoId} apps_to_fo_request_dates datepicker-here form-control" aria-describedby="apps_to_fo_request_date_help_block_${appsToFoId}_1" placeholder="Дата" type="text" size="10" required>
                                 <small id="apps_to_fo_request_date_help_block_${appsToFoId}_1" class="form-text">
                                     Дата запроса
                                 </small>
                             </div>
                             <div class="form-group col-md-3">
-                                <input id = "apps_to_fo_request_number_${appsToFoId}_1" class="apps_to_fo_request_number_${appsToFoId} apps_to_fo_request_numbers form-control deactivation" aria-describedby="apps_to_fo_request_number_help_block_${appsToFoId}_1" placeholder="№ письма" type="text" size="8" required>
+                                <input id = "apps_to_fo_request_number_${appsToFoId}_1" class="apps_to_fo_request_number_${appsToFoId} apps_to_fo_request_numbers form-control" aria-describedby="apps_to_fo_request_number_help_block_${appsToFoId}_1" placeholder="№ письма" type="text" size="8" required>
                                 <small id="apps_to_fo_request_number_help_block_${appsToFoId}_1" class="form-text">
                                     № письма
                                 </small>
@@ -442,7 +457,7 @@ function addAppToFo() {
                             </div>
                             <div class="form-row">
                                 <div class="form-group col-md-6">
-                                    <input id = "apps_to_fo_inspection_notice_letter_organization_${appsToFoId}_1" class="apps_to_fo_inspection_notice_letter_organization_${appsToFoId} apps_to_fo_inspection_notice_letter_organizations form-control" aria-describedby="apps_to_fo_inspection_notice_letter_organization_help_block_${appsToFoId}_1" placeholder="Наименование организации" type="text" size="8" required>
+                                    <input id = "apps_to_fo_inspection_notice_letter_organization_${appsToFoId}_1" class="apps_to_fo_inspection_notice_letter_organization_${appsToFoId} apps_to_fo_inspection_notice_letter_organizations form-control li-quotes" aria-describedby="apps_to_fo_inspection_notice_letter_organization_help_block_${appsToFoId}_1" placeholder="Наименование организации" type="text" size="8" required>
                                     <small id="apps_to_fo_inspection_notice_letter_organization_help_block_${appsToFoId}_1" class="form-text">
                                         Наименование организации
                                         <i class="fa fa-question-circle" aria-hidden="true" tabindex="0" data-trigger="focus" data-toggle="popover"></i>
@@ -536,7 +551,7 @@ function addAppToFo() {
                                 <input id = "apps_to_fo_inspection_number_${appsToFoId}" class="apps_to_fo_inspection_number_${appsToFoId} apps_to_fo_inspection_numbers form-control" placeholder="№ акта" type="text" size="8" required>
                             </div>
                             <div class="form-group col-md-6">
-                                <input id = "apps_to_fo_inspection_orgainzation_${appsToFoId}" class="apps_to_fo_inspection_orgainzation_${appsToFoId} apps_to_fo_inspection_orgainzations form-control" placeholder="Наименование экспертной организации" type="text" size="8" required>
+                                <input id = "apps_to_fo_inspection_orgainzation_${appsToFoId}" class="apps_to_fo_inspection_orgainzation_${appsToFoId} apps_to_fo_inspection_orgainzations form-control li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
                             </div>
                         </div>
                     </div>
@@ -570,7 +585,7 @@ function addAppToFo() {
                                 <input id = "apps_to_fo_expertise_number_${appsToFoId}_1" class="apps_to_fo_expertise_number_${appsToFoId} apps_to_fo_expertise_numbers form-control" placeholder="№ заключения" type="text" size="8" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <input id = "apps_to_fo_expertise_orgainzation_${appsToFoId}_1" class="apps_to_fo_expertise_orgainzation_${appsToFoId} apps_to_fo_expertise_orgainzations form-control" placeholder="Наименование экспертной организации" type="text" size="8" required>
+                                <input id = "apps_to_fo_expertise_orgainzation_${appsToFoId}_1" class="apps_to_fo_expertise_orgainzation_${appsToFoId} apps_to_fo_expertise_orgainzations form-control li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
                             </div>
                             <div class="form-group col-ms-1">
                                 <button id="add_apps_to_fo_expertise_info_btn_${appsToFoId}_1" class="add_apps_to_fo_expertise_info_btn_${appsToFoId} add_apps_to_fo_expertise_info_btns btn btn-outline-warning add_info">
@@ -917,12 +932,12 @@ $(document).on("change", ".apps_to_fo_claims_contract_infos", function (event) {
 	if ($(this).find(':selected').text() == "Дополнительные требования заявлены") {
         $(this).parent().parent().next().show('fast')
 
-        $(this).parent().parent().next().find('input').addClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
         $(this).parent().parent().next().find('select').addClass('form-control')
 	} else {
         $(this).parent().parent().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
+            $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().next().find('select').removeClass('form-control')
         }, 200)
 	}
@@ -935,12 +950,12 @@ $(document).on("change", ".apps_to_fo_types", function (event) {
 	if ($(this).find(':selected').text() == "Заявление о страховом случае") {
         $(this).parent().parent().next().find('.apps-to-fo-agreement').show('fast')
 
-        $(this).parent().parent().next().find('.apps-to-fo-agreement').find('input').addClass('form-control')
+        $(this).parent().parent().next().find('.apps-to-fo-agreement').find('input[type=text]').addClass('form-control')
         $(this).parent().parent().next().find('.apps-to-fo-agreement').find('select').addClass('form-control')
 	} else {
         $(this).parent().parent().next().find('.apps-to-fo-agreement').hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().find('.apps-to-fo-agreement').find('input').removeClass('form-control')
+            $(this).parent().parent().next().find('.apps-to-fo-agreement').find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().next().find('.apps-to-fo-agreement').find('select').removeClass('form-control')
         }, 200)
 	}
@@ -1269,7 +1284,7 @@ function addExpertizeApp(appsToFoId) {
                 <input id = "apps_to_fo_expertise_app_number_${appsToFoId}_${appsToFoExpertiseApp}" class="apps_to_fo_expertise_app_number_${appsToFoId} apps_to_fo_expertise_app_numbers form-control" placeholder="№ заключения" type="text" size="8" required>
             </div>
             <div class="form-group col-md-4">
-                <input id = "apps_to_fo_expertise_app_orgainzation_${appsToFoId}_${appsToFoExpertiseApp}" class="apps_to_fo_expertise_app_orgainzation_${appsToFoId} apps_to_fo_expertise_app_orgainzations form-control" placeholder="Наименование экспертной организации" type="text" size="8" required>
+                <input id = "apps_to_fo_expertise_app_orgainzation_${appsToFoId}_${appsToFoExpertiseApp}" class="apps_to_fo_expertise_app_orgainzation_${appsToFoId} apps_to_fo_expertise_app_orgainzations form-control li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
             </div>
             <div class="form-group col-ms-1">
                 <button id="add_apps_to_fo_expertise_app_info_btn_${appsToFoId}_${appsToFoExpertiseApp}" class="add_apps_to_fo_expertise_app_info_btn_${appsToFoId} add_apps_to_fo_expertise_app_info_btns btn btn-outline-warning add_info">
@@ -1284,59 +1299,74 @@ function addExpertizeApp(appsToFoId) {
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <div class="input-group">
-                        <input id="apps_to_fo_expertise_app_summ_without_${appsToFoId}_${appsToFoExpertiseApp}" class = "apps_to_fo_expertise_app_summ_without_${appsToFoId} apps_to_fo_expertise_app_summ_withouts input-numeral form-control" aria-describedby="apps_to_fo_expertise_app_summ_without_help_block_${appsToFoId}_${appsToFoExpertiseApp}" placeholder="Сумма" type="text" size="10" required>
+                        <input id="apps_to_fo_expertise_app_summ_without_${appsToFoId}_${appsToFoExpertiseApp}" class = "apps_to_fo_expertise_app_summ_without_${appsToFoId} apps_to_fo_expertise_app_summ_withouts input-numeral form-control deactivation" aria-describedby="apps_to_fo_expertise_app_summ_without_help_block_${appsToFoId}_${appsToFoExpertiseApp}" placeholder="Сумма" type="text" size="10" required>
                         <div class="input-group-append">
                             <span class="input-group-text">&#8381;</span>
                         </div>
                     </div>
                     <small id="apps_to_fo_expertise_app_summ_without_help_block_${appsToFoId}_${appsToFoExpertiseApp}" class="form-text">
-                        Без износа
+                        <div class="form-inline">
+                            <input id="apps_to_fo_expertise_app_summ_without_deactivate_${appsToFoId}_${appsToFoExpertiseApp}" class="deactivator" type="checkbox">
+                            <label for="apps_to_fo_expertise_app_summ_without_deactivate_${appsToFoId}_${appsToFoExpertiseApp}" class="ml-2 form-check-label">Без износа</label>
+                        </div>
                     </small>
                 </div>
                 <div class="form-group col-md-3">
                     <div class="input-group">
-                        <input id="apps_to_fo_expertise_app_summ_with_${appsToFoId}_${appsToFoExpertiseApp}" class = "apps_to_fo_expertise_app_summ_with_${appsToFoId} apps_to_fo_expertise_app_summ_withs input-numeral form-control" aria-describedby="apps_to_fo_expertise_app_summ_with_help_block_${appsToFoId}_${appsToFoExpertiseApp}" placeholder="Сумма" type="text" size="10" required>
+                        <input id="apps_to_fo_expertise_app_summ_with_${appsToFoId}_${appsToFoExpertiseApp}" class = "apps_to_fo_expertise_app_summ_with_${appsToFoId} apps_to_fo_expertise_app_summ_withs input-numeral form-control deactivation" aria-describedby="apps_to_fo_expertise_app_summ_with_help_block_${appsToFoId}_${appsToFoExpertiseApp}" placeholder="Сумма" type="text" size="10" required>
                         <div class="input-group-append">
                             <span class="input-group-text">&#8381;</span>
                         </div>
                     </div>
                     <small id="apps_to_fo_expertise_app_summ_with_help_block_${appsToFoId}_${appsToFoExpertiseApp}" class="form-text">
-                        С износом
+                        <div class="form-inline">
+                            <input id="apps_to_fo_expertise_app_summ_with_deactivate_${appsToFoId}_${appsToFoExpertiseApp}" class="deactivator" type="checkbox">
+                            <label for="apps_to_fo_expertise_app_summ_with_deactivate_${appsToFoId}_${appsToFoExpertiseApp}" class="ml-2 form-check-label">С износом</label>
+                        </div>
                     </small>
                 </div>
                 <div class="form-group col-md-3">
                     <div class="input-group">
-                        <input id="apps_to_fo_expertise_app_summ_market_${appsToFoId}_${appsToFoExpertiseApp}" class = "apps_to_fo_expertise_app_summ_market_${appsToFoId} apps_to_fo_expertise_app_summ_markets input-numeral form-control" aria-describedby="apps_to_fo_expertise_app_summ_market_help_block_${appsToFoId}_${appsToFoExpertiseApp}" placeholder="Сумма" type="text" size="10" required>
+                        <input id="apps_to_fo_expertise_app_summ_market_${appsToFoId}_${appsToFoExpertiseApp}" class = "apps_to_fo_expertise_app_summ_market_${appsToFoId} apps_to_fo_expertise_app_summ_markets input-numeral form-control deactivation" aria-describedby="apps_to_fo_expertise_app_summ_market_help_block_${appsToFoId}_${appsToFoExpertiseApp}" placeholder="Сумма" type="text" size="10" required>
                         <div class="input-group-append">
                             <span class="input-group-text">&#8381;</span>
                         </div>
                     </div>
                     <small id="apps_to_fo_expertise_app_summ_market_help_block_${appsToFoId}_${appsToFoExpertiseApp}" class="form-text">
-                        Рыночная стоимость
+                        <div class="form-inline">
+                            <input id="apps_to_fo_expertise_app_summ_market_deactivate_${appsToFoId}_${appsToFoExpertiseApp}" class="deactivator" type="checkbox">
+                            <label for="apps_to_fo_expertise_app_summ_market_deactivate_${appsToFoId}_${appsToFoExpertiseApp}" class="ml-2 form-check-label">Рыночная стоимость</label>
+                        </div>
                     </small>
                 </div>
                 <div class="form-group col-md-3">
                     <div class="input-group">
-                        <input id="apps_to_fo_expertise_app_summ_leftovers_${appsToFoId}_${appsToFoExpertiseApp}" class = "apps_to_fo_expertise_app_summ_leftovers_${appsToFoId} apps_to_fo_expertise_app_summ_leftovers input-numeral form-control" aria-describedby="apps_to_fo_expertise_app_summ_leftovers_help_block_${appsToFoId}_${appsToFoExpertiseApp}" placeholder="Сумма" type="text" size="10" required>
+                        <input id="apps_to_fo_expertise_app_summ_leftovers_${appsToFoId}_${appsToFoExpertiseApp}" class = "apps_to_fo_expertise_app_summ_leftovers_${appsToFoId} apps_to_fo_expertise_app_summ_leftovers input-numeral form-control deactivation" aria-describedby="apps_to_fo_expertise_app_summ_leftovers_help_block_${appsToFoId}_${appsToFoExpertiseApp}" placeholder="Сумма" type="text" size="10" required>
                         <div class="input-group-append">
                             <span class="input-group-text">&#8381;</span>
                         </div>
                     </div>
                     <small id="apps_to_fo_expertise_app_summ_leftovers_help_block_${appsToFoId}_${appsToFoExpertiseApp}" class="form-text">
-                        Годные остатки
+                        <div class="form-inline">
+                            <input id="apps_to_fo_expertise_app_summ_leftovers_deactivate_${appsToFoId}_${appsToFoExpertiseApp}" class="deactivator" type="checkbox">
+                            <label for="apps_to_fo_expertise_app_summ_leftovers_deactivate_${appsToFoId}_${appsToFoExpertiseApp}" class="ml-2 form-check-label">Годные остатки</label>
+                        </div>
                     </small>
                 </div>
             </div>
             <div class="form-row ">
                 <div class="form-group col-md-3">
                     <div class="input-group">
-                        <input id="apps_to_fo_expertise_app_summ_uts_${appsToFoId}_${appsToFoExpertiseApp}" class = "apps_to_fo_expertise_app_summ_uts_${appsToFoId} apps_to_fo_expertise_app_summ_uts input-numeral form-control" aria-describedby="apps_to_fo_expertise_app_summ_uts_help_block_${appsToFoId}_${appsToFoExpertiseApp}" placeholder="Сумма" type="text" size="10" required>
+                        <input id="apps_to_fo_expertise_app_summ_uts_${appsToFoId}_${appsToFoExpertiseApp}" class = "apps_to_fo_expertise_app_summ_uts_${appsToFoId} apps_to_fo_expertise_app_summ_uts input-numeral form-control deactivation" aria-describedby="apps_to_fo_expertise_app_summ_uts_help_block_${appsToFoId}_${appsToFoExpertiseApp}" placeholder="Сумма" type="text" size="10" required>
                         <div class="input-group-append">
                             <span class="input-group-text">&#8381;</span>
                         </div>
                     </div>
                     <small id="apps_to_fo_expertise_app_summ_uts_help_block_${appsToFoId}_${appsToFoExpertiseApp}" class="form-text">
-                        УТС
+                        <div class="form-inline">
+                            <input id="apps_to_fo_expertise_app_summ_uts_deactivate_${appsToFoId}_${appsToFoExpertiseApp}" class="deactivator" type="checkbox">
+                            <label for="apps_to_fo_expertise_app_summ_uts_deactivate_${appsToFoId}_${appsToFoExpertiseApp}" class="ml-2 form-check-label">УТС</label>
+                        </div>
                     </small>
                 </div>
             </div>
@@ -1382,11 +1412,11 @@ $(document).on("change", ".apps_to_fo_expertise_app_infos", function (event) {
 	if ($(this).find(':selected').text() == "Сведения имеются") {
         $(this).parent().parent().next().show('fast')
 
-        $(this).parent().parent().next().find('input').addClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
 	} else {
         $(this).parent().parent().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
+            $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
         }, 200)
 	}
     validationCheckUpdate('apps-to-fo')
@@ -1411,12 +1441,12 @@ $(document).on("change", ".apps_to_fo_agreement_phone_infos", function (event) {
 	if ($(this).find(':selected').text() == "Сведения имеются") {
         $(this).parent().parent().next().show('fast')
 
-        $(this).parent().parent().next().find('input').addClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
         $(this).parent().parent().next().find('select').addClass('form-control')
 	} else {
         $(this).parent().parent().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
+            $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().next().find('select').removeClass('form-control')
         }, 200)
 	}
@@ -1428,11 +1458,11 @@ $(document).on("change", ".apps_to_fo_agreement_phone_infos", function (event) {
 $(document).on("change", ".apps_to_fo_agreement_phones", function (event) {
 	if ($(this).find(':selected').text() == "Дано") {
         $(this).parent().next().show('fast')
-        $(this).parent().next().find('input').addClass('form-control')
+        $(this).parent().next().find('input[type=text]').addClass('form-control')
 	} else {
         $(this).parent().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().next().find('input').removeClass('form-control')
+            $(this).parent().next().find('input[type=text]').removeClass('form-control')
         }, 200)
 	}
     validationCheckUpdate('apps-to-fo')
@@ -1444,12 +1474,12 @@ $(document).on("change", ".apps_to_fo_request_infos", function (event) {
 	if ($(this).find(':selected').text() == "Сведения имеются") {
         $(this).parent().parent().next().show('fast')
 
-        $(this).parent().parent().next().find('input').addClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
         $(this).parent().parent().next().find('textarea').addClass('form-control')
 	} else {
         $(this).parent().parent().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
+            $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().next().find('textarea').removeClass('form-control')
         }, 200)
 	}
@@ -1562,7 +1592,7 @@ function addInspectionNotice(appsToFoId) {
             </div>
             <div class="form-row">
                 <div class="form-group col-md-6">
-                    <input id = "apps_to_fo_inspection_notice_letter_organization_${appsToFoId}_${inspectionNotice}" class="apps_to_fo_inspection_notice_letter_organization_${appsToFoId} apps_to_fo_inspection_notice_letter_organizations form-control" aria-describedby="apps_to_fo_inspection_notice_letter_organization_help_block_${appsToFoId}_${inspectionNotice}" placeholder="Наименование организации" type="text" size="8" required>
+                    <input id = "apps_to_fo_inspection_notice_letter_organization_${appsToFoId}_${inspectionNotice}" class="apps_to_fo_inspection_notice_letter_organization_${appsToFoId} apps_to_fo_inspection_notice_letter_organizations form-control li-quotes" aria-describedby="apps_to_fo_inspection_notice_letter_organization_help_block_${appsToFoId}_${inspectionNotice}" placeholder="Наименование организации" type="text" size="8" required>
                     <small id="apps_to_fo_inspection_notice_letter_organization_help_block_${appsToFoId}_${inspectionNotice}" class="form-text">
                         Наименование организации
                         <i class="fa fa-question-circle" aria-hidden="true" tabindex="0" data-trigger="focus" data-toggle="popover"></i>
@@ -1666,11 +1696,11 @@ $(document).on("change", ".apps_to_fo_inspection_notice_infos", function (event)
 	if ($(this).find(':selected').text() == "Сведения имеются") {
         $(this).parent().parent().next().show('fast')
 
-        $(this).parent().parent().next().find('input').addClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
 	} else {
         $(this).parent().parent().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
+            $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
         }, 200)
 	}
     validationCheckUpdate('apps-to-fo')
@@ -1722,28 +1752,28 @@ $(document).on("change", ".apps_to_fo_inspection_notice_types", function (event)
 	if ($(this).find(':selected').text() == "Телеграмма") {
         //Показываем сведения по телеграмме
         $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').show('fast')
-        $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('input').addClass('form-control')
+        $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('input[type=text]').addClass('form-control')
         $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('select').addClass('form-control')
         $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('textarea').addClass('form-control')
 
         //Скрываем сведения по письму
         $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('input').removeClass('form-control')
+            $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('select').removeClass('form-control')
             $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('textarea').removeClass('form-control')
         }, 200)
 	} else if ($(this).find(':selected').text() == "Письмо") {
         //Показываем сведения по письму
         $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').show('fast')
-        $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('input').addClass('form-control')
+        $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('input[type=text]').addClass('form-control')
         $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('select').addClass('form-control')
         $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('textarea').addClass('form-control')
 
         //Скрываем сведения по телеграмме
         $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('input').removeClass('form-control')
+            $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('select').removeClass('form-control')
             $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('textarea').removeClass('form-control')
         }, 200)
@@ -1754,10 +1784,10 @@ $(document).on("change", ".apps_to_fo_inspection_notice_types", function (event)
         $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').hide('fast')
 
         setTimeout(() => {
-            $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('input').removeClass('form-control')
+            $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('select').removeClass('form-control')
             $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_letters').find('textarea').removeClass('form-control')
-            $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('input').removeClass('form-control')
+            $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('select').removeClass('form-control')
             $(this).parent().parent().parent().find('.apps_to_fo_inspection_notice_telegrams').find('textarea').removeClass('form-control')
         }, 200)
@@ -1775,11 +1805,11 @@ $(document).on("change", ".apps_to_fo_inspection_infos", function (event) {
 	if ($(this).find(':selected').text() == "Сведения имеются") {
         $(this).parent().parent().next().show('fast')
 
-        $(this).parent().parent().next().find('input').addClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
 	} else {
         $(this).parent().parent().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
+            $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
         }, 200)
 	}
     validationCheckUpdate('apps-to-fo')
@@ -1798,7 +1828,7 @@ function addExpertize(appsToFoId) {
                 <input id = "apps_to_fo_expertise_number_${appsToFoId}_${appsToFoExpertise}" class="apps_to_fo_expertise_number_${appsToFoId} apps_to_fo_expertise_numbers form-control" placeholder="№ заключения" type="text" size="8" required>
             </div>
             <div class="form-group col-md-4">
-                <input id = "apps_to_fo_expertise_orgainzation_${appsToFoId}_${appsToFoExpertise}" class="apps_to_fo_expertise_orgainzation_${appsToFoId} apps_to_fo_expertise_orgainzations form-control" placeholder="Наименование экспертной организации" type="text" size="8" required>
+                <input id = "apps_to_fo_expertise_orgainzation_${appsToFoId}_${appsToFoExpertise}" class="apps_to_fo_expertise_orgainzation_${appsToFoId} apps_to_fo_expertise_orgainzations form-control li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
             </div>
             <div class="form-group col-ms-1">
                 <button id="add_apps_to_fo_expertise_info_btn_${appsToFoId}_${appsToFoExpertise}" class="add_apps_to_fo_expertise_info_btn_${appsToFoId} add_apps_to_fo_expertise_info_btns btn btn-outline-warning add_info">
@@ -1910,11 +1940,11 @@ $(document).on("change", ".apps_to_fo_expertise_infos", function (event) {
 	if ($(this).find(':selected').text() == "Сведения имеются") {
         $(this).parent().parent().next().show('fast')
 
-        $(this).parent().parent().next().find('input').addClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
 	} else {
         $(this).parent().parent().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
+            $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
         }, 200)
 	}
     validationCheckUpdate('apps-to-fo')
@@ -1937,12 +1967,12 @@ $(document).on("change", ".apps_to_fo_answer_fo_infos", function (event) {
 	if ($(this).find(':selected').text() == "Сведения имеются") {
         $(this).parent().parent().next().show('fast')
 
-        $(this).parent().parent().next().find('input').addClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
         $(this).parent().parent().next().find('select').addClass('form-control')
 	} else {
         $(this).parent().parent().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
+            $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().next().find('select').removeClass('form-control')
         }, 200)
 	}
@@ -1955,26 +1985,26 @@ $(document).on("change", ".apps_to_fo_answer_fos", function (event) {
 	if ($(this).find(':selected').text() == "Осуществление выплаты") {
         $(this).parent().parent().next().show('fast')
 
-        $(this).parent().parent().next().find('input').addClass('form-control')
+        $(this).parent().parent().next().find('input[type=text]').addClass('form-control')
         $(this).parent().parent().next().find('select').addClass('form-control')
         
 	} else {
         $(this).parent().parent().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().find('input').removeClass('form-control')
+            $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().next().find('select').removeClass('form-control')
         }, 200)
 	}
     if ($(this).find(':selected').text() == "Выдача направления на ремонт") {
         $(this).parent().parent().next().next().show('fast')
 
-        $(this).parent().parent().next().next().find('input').addClass('form-control')
+        $(this).parent().parent().next().next().find('input[type=text]').addClass('form-control')
         $(this).parent().parent().next().next().find('select').addClass('form-control')
         
 	} else {
         $(this).parent().parent().next().next().hide('fast')
         setTimeout(() => {
-            $(this).parent().parent().next().next().find('input').removeClass('form-control')
+            $(this).parent().parent().next().next().find('input[type=text]').removeClass('form-control')
             $(this).parent().parent().next().next().find('select').removeClass('form-control')
         }, 200)
 	}

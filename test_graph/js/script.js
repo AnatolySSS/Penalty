@@ -25,6 +25,7 @@ import { renderDOM } from "./moduls/react/react.js";
 import { makeDecisionFile } from './moduls/docx.js';
 import { all_paragraphs } from "./moduls/makeTextDecision";
 import { AppToFo } from "./moduls/appToFos";
+import { changeQuotes } from "./moduls/changeQuotes";
 
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
@@ -597,58 +598,63 @@ document.getElementById('btn_fu_decision_analyze').onclick = function (){
 
 //Выбор и копирование текста в буфер обмена
 function selectText(containerid) {
-		if (document.selection) { // IE
-			var range = document.body.createTextRange();
-			range.moveToElementText(document.getElementById(containerid));
-			range.select();
-		} else if (window.getSelection) {
-			var range = document.createRange();
-			range.selectNode(document.getElementById(containerid));
-			window.getSelection().removeAllRanges();
-			window.getSelection().addRange(range);
-		}
-    document.execCommand('copy');
+  if (document.selection) { // IE
+    var range = document.body.createTextRange();
+    range.moveToElementText(document.getElementById(containerid));
+    range.select();
+  } else if (window.getSelection) {
+    var range = document.createRange();
+    range.selectNode(document.getElementById(containerid));
+    window.getSelection().removeAllRanges();
+    window.getSelection().addRange(range);
+  }
+  document.execCommand('copy');
 
-    if (window.getSelection) {
-      window.getSelection().removeAllRanges();
-    } else { // старый IE
-      document.selection.empty();
-    }
+  if (window.getSelection) {
+    window.getSelection().removeAllRanges();
+  } else { // старый IE
+    document.selection.empty();
+  }
 
-    iziToast.show({
-        timeout: 3000,
-        color: '#F5E1A6',
-        //title: 'Hey',
-        message: 'Текст решения скопирован',
-    });
-	}
-
-  //Автопоиск наименований ФО
-  var fo = []
-  fo_data.fo_data.forEach(element => {
-    fo.push(element.fo_name)
+  iziToast.show({
+      timeout: 3000,
+      color: '#F5E1A6',
+      //title: 'Hey',
+      message: 'Текст решения скопирован',
   });
+}
 
-  $('.autocomplete input').toArray().forEach(element => {
-    autocomplete(element, fo)
-  });
+//Автопоиск наименований ФО
+var fo = []
+fo_data.fo_data.forEach(element => {
+  fo.push(element.fo_name)
+});
 
-  //Автопоиск марок ТС
-  var car_brands = []
-  car_brands = Object.keys(allCars)
-  $('.car_brands').toArray().forEach(element => {
-    autocomplete(element, car_brands)
+$('.autocomplete input').toArray().forEach(element => {
+  autocomplete(element, fo)
+});
+
+//Автопоиск марок ТС
+var car_brands = []
+car_brands = Object.keys(allCars)
+$('.car_brands').toArray().forEach(element => {
+  autocomplete(element, car_brands)
+})
+
+//Автопоиск моделей ТС
+var car_models = []
+$('.car_brands').focusout(function () {
+  // console.log(allCars[$(this).val()])
+  car_models = allCars[$(this).val()]
+  $('.car_models').toArray().forEach(element => {
+    autocomplete(element, car_models)
   })
+})
 
-  //Автопоиск моделей ТС
-  var car_models = []
-  $('.car_brands').focusout(function () {
-    // console.log(allCars[$(this).val()])
-    car_models = allCars[$(this).val()]
-    $('.car_models').toArray().forEach(element => {
-      autocomplete(element, car_models)
-    })
-  })
+//Заменяет кавычки "палочки" на кавычки «елочки»
+$('.li-quotes').focusout(function () {
+  $(this).val(changeQuotes($(this).val()))
+})
 
 //По клику на любую клавишу вызов функции автозаполнения
 $(document).on("click", "button", function (event) {
@@ -761,23 +767,6 @@ function validationCheckUpdate(className) {
     }
   }, 200); 
 }
-
-//Добавляет popover
-// $(document).on("click", '[data-toggle="popover"]', function (event) {
-//   allPopovers.popovers.forEach(element => {
-//     if ($(this).parent().prev().hasClass(`${element.type}`)) {
-//       $(function () {
-//           $(`.${element.type} + small [data-toggle="popover"]`).popover({
-//           html: true,
-//           title: element.title,
-//           content: function () {
-//               return element.content
-//           }
-//         })
-//       })
-//     }
-//   })
-// })
 
 $(document).on( "mouseenter", '[data-toggle="popover"]', function( event ) {
   $(this).css("cursor", "pointer")
