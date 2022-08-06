@@ -1,6 +1,7 @@
 //Формирование Word файла
 import { Document, Packer, Paragraph, AlignmentType, LineRuleType, TextRun, Table, TableRow, 
-         TableCell, BorderStyle, VerticalAlign, HeightRule, ImageRun, PageNumber, Header } from 'docx'
+         TableCell, BorderStyle, VerticalAlign, HeightRule, ImageRun, PageNumber, Header, WidthType,
+         convertInchesToTwip } from 'docx'
 import { saveAs } from 'file-saver';
 import { Buffer } from 'buffer'
 import { fu_data } from './objects/fuData';
@@ -76,9 +77,10 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
     style: "myCustomStyle", 
     children: [
       new TextRun({
-        text: "РЕШЕНИЕ ОБ УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ",
+        text: "ОБ УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ",
         bold: true,
         size: 28,
+        characterSpacing: 20,
       }),
     ],
     alignment: AlignmentType.CENTER,
@@ -146,19 +148,19 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
 
   const borders = {
     top: {
-        style: BorderStyle.DASHED,
+        style: BorderStyle.NIL,
         size: 0,
     },
     bottom: {
-        style: BorderStyle.DASHED,
+        style: BorderStyle.NIL,
         size: 0,
     },
     left: {
-        style: BorderStyle.DASHED,
+        style: BorderStyle.NIL,
         size: 0,
     },
     right: {
-        style: BorderStyle.DASHED,
+        style: BorderStyle.NIL,
         size: 0,
     },
 };
@@ -191,11 +193,15 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
       },
       children: [
         new Table({
-          columnWidths: [4610, 4610],
+          alignment: AlignmentType.CENTER,
           rows: [
             new TableRow({ 
               children: [
                 new TableCell({
+                  width: {
+                    size: 100,
+                    type: WidthType.PERCENTAGE,
+                  },
                   children: [
                     paragraphs_special[3],
                     paragraphs_special[0],
@@ -223,6 +229,10 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
               ],
             }),
             new TableRow({ 
+              width: {
+                size: 50,
+                type: WidthType.PERCENTAGE,
+              },
               children: [
                 new TableCell({
                   children: [
@@ -246,6 +256,10 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
                   borders,
                 }),
                 new TableCell({
+                  width: {
+                    size: 50,
+                    type: WidthType.PERCENTAGE,
+                  },
                   children: [],
                   borders,
                 }),
@@ -296,15 +310,25 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
                 }),
               ],
             }),
-          ]
+          ],
+          width: {
+            size: 100,
+            type: WidthType.PERCENTAGE,
+          },
+          columnWidths: [convertInchesToTwip(8), convertInchesToTwip(8)],
         }),
         new Paragraph({
+          style: "myCustomStyle", 
           children: [
             new TextRun({
               text: "",
               size: 28,
             }),
           ],
+          spacing: {
+            before: 180,
+            after: 180,
+          },
         }),
         paragraphs_special[2],
         paragraphs[0],
@@ -418,11 +442,15 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
           },
         }),
         new Table({
-          columnWidths: [3073, 3073, 3073],
+          alignment: AlignmentType.CENTER,
           rows: [
             new TableRow({ 
               children: [
                 new TableCell({
+                  width: {
+                    size: 33,
+                    type: WidthType.PERCENTAGE,
+                  },
                   children: [
                     paragraphs_special[6]
                   ],
@@ -430,10 +458,18 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
                   verticalAlign: VerticalAlign.BOTTOM,
                 }),
                 new TableCell({
+                  width: {
+                    size: 33,
+                    type: WidthType.PERCENTAGE,
+                  },
                   children: [],
                   borders,
                 }),
                 new TableCell({
+                  width: {
+                    size: 33,
+                    type: WidthType.PERCENTAGE,
+                  },
                   children: [
                     paragraphs_special[4],
                     paragraphs_special[5],
@@ -444,12 +480,17 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
               ],
               style: {
                 height: {
-                  rule: HeightRule.ATLEAST,
-                  value: 700, 
+                  rule: HeightRule.AUTO,
+                  value: 1700, 
                 },
               }
             }),
-          ]
+          ],
+          width: {
+            size: 100,
+            type: WidthType.PERCENTAGE,
+          },
+          columnWidths: [convertInchesToTwip(5), convertInchesToTwip(5), convertInchesToTwip(5)],
         }),
       ],
     },
