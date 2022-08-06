@@ -652,7 +652,6 @@ document.getElementById('make_decision_file').onclick = function (){
   $(`#decision`).find('p').each(function(index){
     decision_paragraphs[index] = $(this).text()
   })
-  makeDecisionFile($('#appeal_number').val(), decision_paragraphs)
 
   iziToast.show({
     timeout: 3000,
@@ -661,6 +660,8 @@ document.getElementById('make_decision_file').onclick = function (){
     //title: 'Hey',
     message: 'Файл решения сгенерирован',
   });
+
+  makeDecisionFile($('#appeal_number').val(), decision_paragraphs)
 
 }
 
