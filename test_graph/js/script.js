@@ -614,10 +614,10 @@ document.getElementById('show_decision').onclick = function show_decision(){
   dragAndDrop()
 }
 
-//Отслеживает нажатие кнопки "Копирвоать текст решения"
-document.getElementById('copy_text_decision').onclick = function (){
-  copy_text_decision('decision')
-}
+//Отслеживает нажатие кнопки "Копировать текст решения"
+// document.getElementById('copy_text_decision').onclick = function (){
+//   copy_text_decision('decision')
+// }
 
 //Отслеживает нажатие кнопки "Сформировать файл решения"
 document.getElementById('make_decision_file').onclick = function (){
