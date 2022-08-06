@@ -25,7 +25,6 @@ $(document).ready(function(){
 		$(".main-request").hide();
 		$(".dtp-description").hide();
 		$(".apps-to-fo").hide();
-		$(".first_app").hide();
 		$(".payments_all").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
@@ -39,7 +38,6 @@ $(document).ready(function(){
 		$(".main-request").hide();
 		$(".dtp-description").hide();
 		$(".apps-to-fo").hide();
-		$(".first_app").hide();
 		$(".payments_all").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
@@ -53,7 +51,6 @@ $(document).ready(function(){
 		$(".main-claims-all").hide();
 		$(".dtp-description").hide();
 		$(".apps-to-fo").hide();
-		$(".first_app").hide();
 		$(".payments_all").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
@@ -67,7 +64,6 @@ $(document).ready(function(){
 		$(".main-claims-all").hide();
 		$(".main-request").hide();
 		$(".apps-to-fo").hide();
-		$(".first_app").hide();
 		$(".payments_all").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
@@ -80,7 +76,6 @@ $(document).ready(function(){
 		$(".main-claims-all").hide();
 		$(".main-request").hide();
 		$(".dtp-description").hide();
-		$(".first_app").hide();
 		$(".payments_all").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
@@ -94,7 +89,6 @@ $(document).ready(function(){
 		$(".main-claims-all").hide();
 		$(".main-request").hide();
 		$(".dtp-description").hide();
-		$(".first_app").hide();
 		$(".payments_all").hide();
 		$(".apps-to-fo").hide();
 		$(".courts-all").hide();
@@ -108,7 +102,6 @@ $(document).ready(function(){
 		$(".main-claims-all").hide();
 		$(".main-request").hide();
 		$(".dtp-description").hide();
-		$(".first_app").hide();
 		$(".payments_all").hide();
 		$(".apps-to-fo").hide();
 		$(".fus-all").hide();
@@ -121,7 +114,6 @@ $(document).ready(function(){
 		$(".main-claims-all").hide();
 		$(".main-request").hide();
 		$(".dtp-description").hide();
-		$(".first_app").hide();
 		$(".payments_all").hide();
 		$(".apps-to-fo").hide();
 		$(".fus-all").hide();

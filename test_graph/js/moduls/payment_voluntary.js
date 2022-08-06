@@ -10,6 +10,7 @@ import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './variables.js';
 import { DAY } from './variables.js';
 import { AppToFo } from "./appToFos";
+import { allClaims } from './objects/allClaims';
 
 /* Объект для добровольной выплаты
 
@@ -63,6 +64,7 @@ export class PaymentVoluntary {
   date_stor
 
   type
+  type_text
   date
   summ
   order
@@ -103,7 +105,7 @@ export class PaymentVoluntary {
       courtPenalty[i] = new CourtPenalty(i + 1,
                                    court_dates[i]);
      for (var j = 0; j < courtPenalty[i].claim.length; j++) {
-       if (courtPenalty[i].claim[j].name.options.selectedIndex == 4) {
+       if (courtPenalty[i].claim[j].name.options.selectedIndex == 5) {
          this.penalty_court_period[numberOfPenaltyCourtPeriod] = new PenaltyCourtPeriod(courtPenalty[i].claim[j].from,
                                                                        courtPenalty[i].claim[j].to);
          numberOfPenaltyCourtPeriod++;
@@ -114,6 +116,15 @@ export class PaymentVoluntary {
     this.app_id = app_id;
     this.payment_id = payment_id;
     this.type = type;
+
+    allClaims.claims.forEach(element => {
+      if (this.type.value == element.claim) {
+          this.type_text = element.short
+          if (this.type.value == "УТС") {
+            this.type_text = "страхового возмещения в части УТС"
+          }
+      }
+    })
     //обработка значения даты выплаты (преобразование в количество миллисекунд)
     this.date = Date.parse(changeDateType(date.value) + 'T00:00:00');
     this.order = order;

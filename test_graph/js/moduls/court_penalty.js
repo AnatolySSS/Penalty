@@ -15,13 +15,18 @@ import { DAY } from './variables.js';
     // * last_day - последний день 20го срока
     // * penalty_day - первый день начисления неустойки (21й день)
 */
-let date_sv = new AppDate("date_sv")
-let date_uts = new AppDate("date_uts")
-let date_ev = new AppDate("date_ev")
-let date_stor = new AppDate("date_stor")
+// let date_sv = new AppDate("date_sv")
+// let date_uts = new AppDate("date_uts")
+// let date_ev = new AppDate("date_ev")
+// let date_stor = new AppDate("date_stor")
 
 class ClaimCourt {
   id
+
+  date_sv
+  date_uts
+  date_ev
+  date_stor
 
   name
   type
@@ -34,6 +39,12 @@ class ClaimCourt {
   penalty_day
 
   constructor(id, name, type, summ, from, to, without) {
+
+    this.date_sv = new AppDate("date_sv")
+    this.date_uts = new AppDate("date_uts")
+    this.date_ev = new AppDate("date_ev")
+    this.date_stor = new AppDate("date_stor")
+
     this.id = id;
     this.name = name;
     this.type = type;
@@ -44,22 +55,22 @@ class ClaimCourt {
 
     //Вычисление количества дней между датой выплаты и 20м днем
     switch (this.name.options.selectedIndex) {
-      case 0:
-      case 4:
-        this.last_day = date_sv.getLastDay();
-        this.penalty_day = date_sv.getPenaltyDay();
-        break;
       case 1:
-        this.last_day = date_uts.getLastDay();
-        this.penalty_day = date_uts.getPenaltyDay();
+      case 5:
+        this.last_day = this.date_sv.getLastDay();
+        this.penalty_day = this.date_sv.getPenaltyDay();
         break;
       case 2:
-        this.last_day = date_ev.getLastDay();
-        this.penalty_day = date_ev.getPenaltyDay();
+        this.last_day = this.date_uts.getLastDay();
+        this.penalty_day = this.date_uts.getPenaltyDay();
         break;
       case 3:
-        this.last_day = date_stor.getLastDay();
-        this.penalty_day = date_stor.getPenaltyDay();
+        this.last_day = this.date_ev.getLastDay();
+        this.penalty_day = this.date_ev.getPenaltyDay();
+        break;
+      case 4:
+        this.last_day = this.date_stor.getLastDay();
+        this.penalty_day = this.date_stor.getPenaltyDay();
         break;
     }
   }

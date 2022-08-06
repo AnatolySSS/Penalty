@@ -69,11 +69,9 @@ export class AppDate {
         }
         break;
       default:
-        // this.date_id = this.firstDateClaim[0].appDate
         break;
     }
-
-    this.count_days = (this.getPenaltyDay() - this.getAppDate()) / DAY;
+    this.count_days = (this.getPenaltyDay() - this.getAppDate()) / DAY
   }
 
   getAppDate() {return Date.parse(changeDateType(this.date_id.value) + 'T00:00:00') }

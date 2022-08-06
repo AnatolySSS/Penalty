@@ -32,7 +32,7 @@ export class MainClaim {
             if (this.type.value == element.claim) {
                 this.type_text = element.short
             }
-        });
+        })
 
     }
 

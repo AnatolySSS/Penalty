@@ -68,9 +68,27 @@ export function autocomplete(inp, arr) {
         var fo_name = document.querySelector("#fo_name").value
         fo_data.fo_data.forEach(element => {
           if (fo_name == element.fo_name) {
+            var fo_post_address_adapted = element.fo_post_address.replaceAll("город", "г.")
+            fo_post_address_adapted = fo_post_address_adapted.replaceAll("улица", "ул.")
+            fo_post_address_adapted = fo_post_address_adapted.replaceAll("дом", "д.")
+            fo_post_address_adapted = fo_post_address_adapted.replaceAll("строение", "стр.")
+            fo_post_address_adapted = fo_post_address_adapted.replaceAll("переулок", "пер.")
+            fo_post_address_adapted = fo_post_address_adapted.replaceAll("помещение", "пом.")
+            fo_post_address_adapted = fo_post_address_adapted.replaceAll("проспект", "пр-кт")
+            fo_post_address_adapted = fo_post_address_adapted.replaceAll("набережная", "наб.")
+
+            var fo_registration_address_adapted = element.fo_registration_address.replaceAll("город", "г.")
+            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("улица", "ул.")
+            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("дом", "д.")
+            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("строение", "стр.")
+            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("переулок", "пер.")
+            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("помещение", "пом.")
+            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("проспект", "пр-кт")
+            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("набережная", "наб.")
+
             document.querySelector("#fo_inn").value = element.fo_inn
-            document.querySelector("#fo_post_address").value = element.fo_post_address
-            document.querySelector("#fo_registration_address").value = element.fo_registration_address
+            document.querySelector("#fo_post_address").value = fo_post_address_adapted
+            document.querySelector("#fo_registration_address").value = fo_registration_address_adapted
             document.querySelector("#fo_registration_date").value = element.fo_registration_date
             document.querySelector("#fo_site_check").innerHTML = "Ссылка на сайт ЦБ РФ для проверки ФО"
             document.querySelector("#fo_site_check").href = "https://cbr.ru/finorg/foinfo/?ogrn=" + element.fo_ogrn

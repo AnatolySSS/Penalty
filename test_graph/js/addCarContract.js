@@ -36,7 +36,13 @@ function addDtpParticipant() {
     <div id="dtp_description_participant_info_${dtpParticipant}" class="dtp_description_participant_infos" style="display:none">
       <div class="form-row">
         <div class="form-group col-md-3">
-          <input id = "car_year_${dtpParticipant}" class="car_years form-control" placeholder="год выпуска" type="text" size="8" required>
+          <input id = "car_year_${dtpParticipant}" class="car_years form-control deactivation" aria-describedby="car_year_help_block_${dtpParticipant}" placeholder="год выпуска" type="text" size="8" required>
+            <small id="car_year_help_block_${dtpParticipant}" class="form-text">
+              <div class="form-inline">
+                <input id="car_year_deactivate_${dtpParticipant}" class="deactivator" type="checkbox">
+                <label for="car_year_deactivate_${dtpParticipant}" class="ml-2 form-check-label">Сведений не имеется</label>
+              </div>
+            </small>
         </div>
         <div class="form-group col-md-3">
           <select id="car_type_${dtpParticipant}" class="car_types custom-select form-control" required>
@@ -45,6 +51,8 @@ function addDtpParticipant() {
             <option>грузовой</option>
             <option>автобус</option>
             <option>такси</option>
+            <option>мотоцикл</option>
+            <option>велосипед</option>
           </select>
         </div>
         <div class="form-group col-md-2" style="display:none">
@@ -56,10 +64,22 @@ function addDtpParticipant() {
       </div>
       <div class="form-row">
         <div class="form-group col-md-6">
-          <input id = "driver_name_${dtpParticipant}" class="driver_names form-control" placeholder="ФИО водителя" type="text" size="8" required>
+          <input id = "driver_name_${dtpParticipant}" class="driver_names form-control deactivation" aria-describedby="driver_name_help_block_${dtpParticipant}" placeholder="ФИО водителя" type="text" size="8" required>
+            <small id="driver_name_help_block_${dtpParticipant}" class="form-text">
+              <div class="form-inline">
+                <input id="driver_name_deactivate_${dtpParticipant}" class="deactivator" type="checkbox">
+                <label for="driver_name_deactivate_${dtpParticipant}" class="ml-2 form-check-label">Сведений не имеется</label>
+              </div>
+            </small>
         </div>
         <div class="form-group col-md-6">
-          <input id = "owner_name_${dtpParticipant}" class="owner_names form-control li-quotes" placeholder="ФИО собственника" type="text" size="8" required>
+          <input id = "owner_name_${dtpParticipant}" class="owner_names form-control deactivation li-quotes" aria-describedby="owner_name_help_block_${dtpParticipant}" placeholder="ФИО (наименование) собственника" type="text" size="8" required>
+            <small id="owner_name_help_block_${dtpParticipant}" class="form-text">
+              <div class="form-inline">
+                <input id="owner_name_deactivate_${dtpParticipant}" class="deactivator" type="checkbox">
+                <label for="owner_name_deactivate_${dtpParticipant}" class="ml-2 form-check-label">Сведений не имеется</label>
+              </div>
+            </small>
         </div>
       </div>
       <div class="form-row">
@@ -120,21 +140,30 @@ function addDtpParticipant() {
             </div>
             <div class="form-row">
               <div class="form-group col-md-3">
-                <input id = "car_contract_osago_fo_date_conclusion_${dtpParticipant}_1" class = "car_contract_osago_fo_date_conclusion_${dtpParticipant} car_contract_osago_fo_date_conclusions datepicker-here" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_osago_fo_date_conclusion_${dtpParticipant}_1" class = "car_contract_osago_fo_date_conclusion_${dtpParticipant} car_contract_osago_fo_date_conclusions datepicker-here deactivation" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_${dtpParticipant}_1" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_osago_fo_date_conclusion_help_block_${dtpParticipant}_1" class="form-text">
-                  Заключение договора
+                  <div class="form-inline">
+                    <input id="car_contract_osago_fo_date_conclusion_deactivate_${dtpParticipant}_1" class="deactivator" type="checkbox">
+                    <label for="car_contract_osago_fo_date_conclusion_deactivate_${dtpParticipant}_1" class="ml-2 form-check-label">Заключение договора</label>
+                  </div>
                 </small>
               </div>
               <div class="form-group col-md-3">
-                <input id = "car_contract_osago_fo_date_start_${dtpParticipant}_1" class = "car_contract_osago_fo_date_start_${dtpParticipant} car_contract_osago_fo_date_starts datepicker-here" aria-describedby="car_contract_osago_fo_date_start_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_osago_fo_date_start_${dtpParticipant}_1" class = "car_contract_osago_fo_date_start_${dtpParticipant} car_contract_osago_fo_date_starts datepicker-here deactivation" aria-describedby="car_contract_osago_fo_date_start_help_block_${dtpParticipant}_1" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_osago_fo_date_start_help_block_${dtpParticipant}_1" class="form-text">
-                  Начало срока действия
+                  <div class="form-inline">
+                    <input id="car_contract_osago_fo_date_start_deactivate_${dtpParticipant}_1" class="deactivator" type="checkbox">
+                    <label for="car_contract_osago_fo_date_start_deactivate_${dtpParticipant}_1" class="ml-2 form-check-label">Начало срока действия</label>
+                  </div>
                 </small>
               </div>
               <div class="form-group col-md-3">
-                <input id = "car_contract_osago_fo_date_end_${dtpParticipant}_1" class = "car_contract_osago_fo_date_end_${dtpParticipant} car_contract_osago_fo_date_ends datepicker-here" aria-describedby="car_contract_osago_fo_date_end_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                <input id = "car_contract_osago_fo_date_end_${dtpParticipant}_1" class = "car_contract_osago_fo_date_end_${dtpParticipant} car_contract_osago_fo_date_ends datepicker-here deactivation" aria-describedby="car_contract_osago_fo_date_end_help_block_${dtpParticipant}_1" placeholder="Дата" type="text" size="10" required>
                 <small id="car_contract_osago_fo_date_end_help_block_${dtpParticipant}_1" class="form-text">
-                  Окончание срока действия
+                  <div class="form-inline">
+                    <input id="car_contract_osago_fo_date_end_deactivate_${dtpParticipant}_1" class="deactivator" type="checkbox">
+                    <label for="car_contract_osago_fo_date_end_deactivate_${dtpParticipant}_1" class="ml-2 form-check-label">Окончание срока действия</label>
+                  </div>
                 </small>
               </div>
             </div>
@@ -165,21 +194,30 @@ function addDtpParticipant() {
               </div>
               <div class="form-row">
                 <div class="form-group col-md-3">
-                  <input id = "car_contract_casco_fo_date_conclusion_${dtpParticipant}_1" class = "car_contract_casco_fo_date_conclusion_${dtpParticipant} car_contract_casco_fo_date_conclusions datepicker-here" aria-describedby="car_contract_casco_fo_date_conclusion_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                  <input id = "car_contract_casco_fo_date_conclusion_${dtpParticipant}_1" class = "car_contract_casco_fo_date_conclusion_${dtpParticipant} car_contract_casco_fo_date_conclusions datepicker-here deactivation" aria-describedby="car_contract_casco_fo_date_conclusion_help_block_${dtpParticipant}_1" placeholder="Дата" type="text" size="10" required>
                   <small id="car_contract_casco_fo_date_conclusion_help_block_${dtpParticipant}_1" class="form-text">
-                    Заключение договора
+                    <div class="form-inline">
+                      <input id="car_contract_casco_fo_date_conclusion_deactivate_${dtpParticipant}_1" class="deactivator" type="checkbox">
+                      <label for="car_contract_casco_fo_date_conclusion_deactivate_${dtpParticipant}_1" class="ml-2 form-check-label">Заключение договора</label>
+                    </div>
                   </small>
                 </div>
                 <div class="form-group col-md-3">
-                  <input id = "car_contract_casco_fo_date_start_${dtpParticipant}_1" class = "car_contract_casco_fo_date_start_${dtpParticipant} car_contract_casco_fo_date_starts datepicker-here" aria-describedby="car_contract_casco_fo_date_start_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                  <input id = "car_contract_casco_fo_date_start_${dtpParticipant}_1" class = "car_contract_casco_fo_date_start_${dtpParticipant} car_contract_casco_fo_date_starts datepicker-here deactivation" aria-describedby="car_contract_casco_fo_date_start_help_block_${dtpParticipant}_1" placeholder="Дата" type="text" size="10" required>
                   <small id="car_contract_casco_fo_date_start_help_block_${dtpParticipant}_1" class="form-text">
-                    Начало срока действия
+                    <div class="form-inline">
+                      <input id="car_contract_casco_fo_date_start_deactivate_${dtpParticipant}_1" class="deactivator" type="checkbox">
+                      <label for="car_contract_casco_fo_date_start_deactivate_${dtpParticipant}_1" class="ml-2 form-check-label">Начало срока действия</label>
+                    </div>
                   </small>
                 </div>
                 <div class="form-group col-md-3">
-                  <input id = "car_contract_casco_fo_date_end_${dtpParticipant}_1" class = "car_contract_casco_fo_date_end_${dtpParticipant} car_contract_casco_fo_date_ends datepicker-here" aria-describedby="car_contract_casco_fo_date_end_help_block_1_1" placeholder="Дата" type="text" size="10" required>
+                  <input id = "car_contract_casco_fo_date_end_${dtpParticipant}_1" class = "car_contract_casco_fo_date_end_${dtpParticipant} car_contract_casco_fo_date_ends datepicker-here deactivation" aria-describedby="car_contract_casco_fo_date_end_help_block_${dtpParticipant}_1" placeholder="Дата" type="text" size="10" required>
                   <small id="car_contract_casco_fo_date_end_help_block_${dtpParticipant}_1" class="form-text">
-                    Окончание срока действия
+                    <div class="form-inline">
+                      <input id="car_contract_casco_fo_date_end_deactivate_${dtpParticipant}_1" class="deactivator" type="checkbox">
+                      <label for="car_contract_casco_fo_date_end_deactivate_${dtpParticipant}_1" class="ml-2 form-check-label">Окончание срока действия</label>
+                    </div>
                   </small>
                 </div>
               </div>
@@ -446,8 +484,8 @@ function addDtpParticipant() {
   });
 
   //Вызывает функцию, изменяющую общую картинку валидации
-  validationCheck('dtp-description')
-  validationCheckUpdate('dtp-description')
+  // validationCheck('dtp-description')
+  // validationCheckUpdate('dtp-description')
 
 }
 
@@ -456,8 +494,8 @@ function removeDtpParticipant() {
   if ($(`#add_dtp_description_participant_info_btn_${dtpParticipant}`).find(".toggle").hasClass("rotate")) {
     $(`#add_dtp_description_participant_info_btn_${dtpParticipant}`).find(".toggle").removeClass("rotate");
   }
-  validationCheckUpdate('dtp-description')
-  validationCheck('dtp-description')
+  // validationCheckUpdate('dtp-description')
+  // validationCheck('dtp-description')
   dtpParticipant--;
 }
 
@@ -471,8 +509,8 @@ $(document).on("click", ".add_dtp_description_participant_info_btns", function (
     $(this).find(".toggle").removeClass("rotate");
   }
 
-  validationCheckUpdate('dtp-description')
-  validationCheck('dtp-description')
+  // validationCheckUpdate('dtp-description')
+  // validationCheck('dtp-description')
 });
 
 //Добавляет информацию о массе ТС
@@ -487,8 +525,8 @@ $(document).on("change", ".car_types", function (event) {
     }, 200);
         
 	}
-    validationCheckUpdate('dtp-description')
-    validationCheck('dtp-description')
+    // validationCheckUpdate('dtp-description')
+    // validationCheck('dtp-description')
 });
 
 //Добавляет VIN если выбран договор КАСКО
@@ -503,8 +541,8 @@ $(document).on("change", ".car_contract_types", function (event) {
     }, 200);
         
 	}
-    validationCheckUpdate('dtp-description')
-    validationCheck('dtp-description')
+    // validationCheckUpdate('dtp-description')
+    // validationCheck('dtp-description')
 });
 
 function addCarContract(id) {
@@ -551,21 +589,30 @@ function addCarContract(id) {
       </div>
       <div class="form-row">
         <div class="form-group col-md-3">
-          <input id = "car_contract_osago_fo_date_conclusion_${id}_${carContractId}" class = "car_contract_osago_fo_date_conclusion_${id} car_contract_osago_fo_date_conclusions datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+          <input id = "car_contract_osago_fo_date_conclusion_${id}_${carContractId}" class = "car_contract_osago_fo_date_conclusion_${id} car_contract_osago_fo_date_conclusions datepicker-here form-control deactivation" aria-describedby="car_contract_osago_fo_date_conclusion_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
           <small id="car_contract_osago_fo_date_conclusion_help_block_${id}_${carContractId}" class="form-text">
-              Заключение дговора
+            <div class="form-inline">
+              <input id="car_contract_osago_fo_date_conclusion_deactivate_${id}_${carContractId}" class="deactivator" type="checkbox">
+              <label for="car_contract_osago_fo_date_conclusion_deactivate_${id}_${carContractId}" class="ml-2 form-check-label">Заключение договора</label>
+            </div>
           </small>
         </div>
         <div class="form-group col-md-3">
-          <input id = "car_contract_osago_fo_date_start_${id}_${carContractId}" class = "car_contract_osago_fo_date_start_${id} car_contract_osago_fo_date_starts datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_start_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+          <input id = "car_contract_osago_fo_date_start_${id}_${carContractId}" class = "car_contract_osago_fo_date_start_${id} car_contract_osago_fo_date_starts datepicker-here form-control deactivation" aria-describedby="car_contract_osago_fo_date_start_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
           <small id="car_contract_osago_fo_date_start_help_block_${id}_${carContractId}" class="form-text">
-              Начало срока действия
+            <div class="form-inline">
+              <input id="car_contract_osago_fo_date_start_deactivate_${id}_${carContractId}" class="deactivator" type="checkbox">
+              <label for="car_contract_osago_fo_date_start_deactivate_${id}_${carContractId}" class="ml-2 form-check-label">Начало срока действия</label>
+            </div>
           </small>
         </div>
         <div class="form-group col-md-3">
-          <input id = "car_contract_osago_fo_date_end_${id}_${carContractId}" class = "car_contract_osago_fo_date_end_${id} car_contract_osago_fo_date_ends datepicker-here form-control" aria-describedby="car_contract_osago_fo_date_end_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+          <input id = "car_contract_osago_fo_date_end_${id}_${carContractId}" class = "car_contract_osago_fo_date_end_${id} car_contract_osago_fo_date_ends datepicker-here form-control deactivation" aria-describedby="car_contract_osago_fo_date_end_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
           <small id="car_contract_osago_fo_date_end_help_block_${id}_${carContractId}" class="form-text">
-              Окончание срока действия
+            <div class="form-inline">
+              <input id="car_contract_osago_fo_date_end_deactivate_${id}_${carContractId}" class="deactivator" type="checkbox">
+              <label for="car_contract_osago_fo_date_end_deactivate_${id}_${carContractId}" class="ml-2 form-check-label">Окончание срока действия</label>
+            </div>
           </small>
         </div>
       </div>
@@ -580,39 +627,48 @@ function addCarContract(id) {
 
       <div class="car_contract_casco_general_info">
         <div class="form-row">
-            <div class="form-group col-md-9">
-                <h6>Общие сведения о договоре страхования КАСКО</h6>
-            </div>
+          <div class="form-group col-md-9">
+            <h6>Общие сведения о договоре страхования КАСКО</h6>
+          </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-md-6">
-                <div class="autocomplete">
-                    <input id="car_contract_casco_fo_name_${id}_${carContractId}" class="car_contract_casco_fo_name_${id} car_contract_casco_fo_names form-control li-quotes" type="text" placeholder="Введите наименование ФО" size="40" required>
-                </div>
+          <div class="form-group col-md-6">
+            <div class="autocomplete">
+              <input id="car_contract_casco_fo_name_${id}_${carContractId}" class="car_contract_casco_fo_name_${id} car_contract_casco_fo_names form-control li-quotes" type="text" placeholder="Введите наименование ФО" size="40" required>
             </div>
-            <div class="form-group col-md-6">
-                <input id = "car_contract_casco_fo_number_${id}_${carContractId}" class="car_contract_casco_fo_number_${id} car_contract_casco_fo_numbers orm-control" placeholder="серия и № полиса" type="text" size="8" required>
-            </div>
+          </div>
+          <div class="form-group col-md-6">
+            <input id = "car_contract_casco_fo_number_${id}_${carContractId}" class="car_contract_casco_fo_number_${id} car_contract_casco_fo_numbers orm-control" placeholder="серия и № полиса" type="text" size="8" required>
+          </div>
         </div>
         <div class="form-row">
-            <div class="form-group col-md-3">
-                <input id = "car_contract_casco_fo_date_conclusion_${id}_${carContractId}" class = "car_contract_casco_fo_date_conclusion_${id} car_contract_casco_fo_date_conclusions datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_conclusion_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
-                <small id="car_contract_casco_fo_date_conclusion_help_block_${id}_${carContractId}" class="form-text">
-                    Заключение договора
-                </small>
-            </div>
-            <div class="form-group col-md-3">
-                <input id = "car_contract_casco_fo_date_start_${id}_${carContractId}" class = "car_contract_casco_fo_date_start_${id} car_contract_casco_fo_date_starts datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_start_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
-                <small id="car_contract_casco_fo_date_start_help_block_${id}_${carContractId}" class="form-text">
-                    Начало срока действия
-                </small>
-            </div>
-            <div class="form-group col-md-3">
-                <input id = "car_contract_casco_fo_date_end_${id}_${carContractId}" class = "car_contract_casco_fo_date_end_${id} car_contract_casco_fo_date_ends datepicker-here form-control" aria-describedby="car_contract_casco_fo_date_end_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
-                <small id="car_contract_casco_fo_date_end_help_block_${id}_${carContractId}" class="form-text">
-                    Окончание срока действия
-                </small>
-            </div>
+          <div class="form-group col-md-3">
+            <input id = "car_contract_casco_fo_date_conclusion_${id}_${carContractId}" class = "car_contract_casco_fo_date_conclusion_${id} car_contract_casco_fo_date_conclusions datepicker-here form-control deactivation" aria-describedby="car_contract_casco_fo_date_conclusion_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+            <small id="car_contract_casco_fo_date_conclusion_help_block_${id}_${carContractId}" class="form-text">
+              <div class="form-inline">
+                <input id="car_contract_casco_fo_date_conclusion_deactivate_${id}_${carContractId}" class="deactivator" type="checkbox">
+                <label for="car_contract_casco_fo_date_conclusion_deactivate_${id}_${carContractId}" class="ml-2 form-check-label">Заключение договора</label>
+              </div>
+            </small>
+          </div>
+          <div class="form-group col-md-3">
+            <input id = "car_contract_casco_fo_date_start_${id}_${carContractId}" class = "car_contract_casco_fo_date_start_${id} car_contract_casco_fo_date_starts datepicker-here form-control deactivation" aria-describedby="car_contract_casco_fo_date_start_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+            <small id="car_contract_casco_fo_date_start_help_block_${id}_${carContractId}" class="form-text">
+              <div class="form-inline">
+                <input id="car_contract_casco_fo_date_start_deactivate_${id}_${carContractId}" class="deactivator" type="checkbox">
+                <label for="car_contract_casco_fo_date_start_deactivate_${id}_${carContractId}" class="ml-2 form-check-label">Начало срока действия</label>
+              </div>
+            </small>
+          </div>
+          <div class="form-group col-md-3">
+            <input id = "car_contract_casco_fo_date_end_${id}_${carContractId}" class = "car_contract_casco_fo_date_end_${id} car_contract_casco_fo_date_ends datepicker-here form-control deactivation" aria-describedby="car_contract_casco_fo_date_end_help_block_${id}_${carContractId}" placeholder="Дата" type="text" size="10" required>
+            <small id="car_contract_casco_fo_date_end_help_block_${id}_${carContractId}" class="form-text">
+              <div class="form-inline">
+                <input id="car_contract_casco_fo_date_end_deactivate_${id}_${carContractId}" class="deactivator" type="checkbox">
+                <label for="car_contract_casco_fo_date_end_deactivate_${id}_${carContractId}" class="ml-2 form-check-label">Окончание срока действия</label>
+              </div>
+            </small>
+          </div>
         </div>
       </div>
 
@@ -870,14 +926,14 @@ function addCarContract(id) {
   });
 
   //Вызывает функцию, изменяющую общую картинку валидации
-  validationCheck('dtp-description')
-  validationCheckUpdate('dtp-description')
+  // validationCheck('dtp-description')
+  // validationCheckUpdate('dtp-description')
 }
 
 function removeCarContract(id, claimContractId) {
     $(`#car_contract_${id}_${claimContractId}`).remove();
-    validationCheckUpdate('dtp-description')
-    validationCheck('dtp-description')
+    // validationCheckUpdate('dtp-description')
+    // validationCheck('dtp-description')
     carContractId--
 }
 
@@ -914,8 +970,8 @@ $(document).on("click", ".add_car_contract_info_btns", function (event) {
      $(this).parent().parent().next().next().hide('fast')
   }
 
-  validationCheckUpdate('dtp-description')
-  validationCheck('dtp-description')
+  // validationCheckUpdate('dtp-description')
+  // validationCheck('dtp-description')
 
 });
 
@@ -981,8 +1037,8 @@ $(document).on("change", ".car_contract_types", function (event) {
     }, 200);
   }
 
-  validationCheckUpdate('dtp-description')
-  validationCheck('dtp-description')
+  // validationCheckUpdate('dtp-description')
+  // validationCheck('dtp-description')
 
 });
 
@@ -1002,8 +1058,8 @@ $(document).on("change", ".car_contract_casco_insurance_inspection_informations"
         $(this).parent().parent().next().find('textarea').removeClass('form-control')
     }, 200);
 	}
-    validationCheckUpdate('dtp-description')
-    validationCheck('dtp-description')
+    // validationCheckUpdate('dtp-description')
+    // validationCheck('dtp-description')
 });
 
 //Добавляет информацию о страховой премии
@@ -1022,8 +1078,8 @@ $(document).on("change", ".car_contract_casco_insurance_premium_informations", f
     }, 200);
 	}
 
-    validationCheckUpdate('dtp-description')
-    validationCheck('dtp-description')
+    // validationCheckUpdate('dtp-description')
+    // validationCheck('dtp-description')
 
 });
 
@@ -1039,8 +1095,8 @@ $(document).on("change", ".car_contract_casco_beneficiary_subjects", function (e
     }, 200);
         
 	}
-    validationCheckUpdate('dtp-description')
-    validationCheck('dtp-description')
+    // validationCheckUpdate('dtp-description')
+    // validationCheck('dtp-description')
 });
 
 //Добавляет информацию о франшизе
@@ -1065,31 +1121,31 @@ $(document).on("change", ".car_contract_casco_franchise_presences", function (ev
         
 	}
 
-    validationCheckUpdate('dtp-description')
-    validationCheck('dtp-description')
+    // validationCheckUpdate('dtp-description')
+    // validationCheck('dtp-description')
 
 });
 
 //Изменяет картинку валидации
-function validationCheck(className) {
-  $(`.${className} .form-control`).focusout(function(){
-    validationCheckUpdate(className)
-  })
-}
+// function validationCheck(className) {
+//   $(`.${className} .form-control`).focusout(function(){
+//     validationCheckUpdate(className)
+//   })
+// }
 
 //Обновлет сведения о валидации инпутов
-function validationCheckUpdate(className) {
-  setTimeout(() => {
-    var isOk = true
-    $(`.${className} .form-control`).each(function() {
-      if ($(this).css('border-color') == 'rgb(220, 53, 69)') {
-        isOk = false
-      }
-    })
-    if (isOk) {
-      $(`#${className}`).children().first().children().first().children().first().next().html(`<i class="fa fa-check-square-o fa-2x" aria-hidden="true" style="color: #28a745;"></i>`)
-    } else {
-      $(`#${className}`).children().first().children().first().children().first().next().html(`<i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>`)
-    }
-  }, 200); 
-}
+// function validationCheckUpdate(className) {
+//   setTimeout(() => {
+//     var isOk = true
+//     $(`.${className} .form-control`).each(function() {
+//       if ($(this).css('border-color') == 'rgb(220, 53, 69)') {
+//         isOk = false
+//       }
+//     })
+//     if (isOk) {
+//       $(`#${className}`).children().first().children().first().children().first().next().html(`<i class="fa fa-check-square-o fa-2x" aria-hidden="true" style="color: #28a745;"></i>`)
+//     } else {
+//       $(`#${className}`).children().first().children().first().children().first().next().html(`<i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>`)
+//     }
+//   }, 200); 
+// }
