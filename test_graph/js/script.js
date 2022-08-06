@@ -622,6 +622,31 @@ document.getElementById('copy_text_decision').onclick = function (){
 //Отслеживает нажатие кнопки "Сформировать файл решения"
 document.getElementById('make_decision_file').onclick = function (){
 
+  try {
+    decision = makeTextDecision(claimsContract,
+                                dtpParticipant,
+                                appToFo,
+                                paymentVoluntary,
+                                paymentFu,
+                                paymentCourt,
+                                total_penalty_summ_accrued,
+                                total_penalty_summ_paid,
+                                max_summ,
+                                fu_claim_set);
+  } catch (error) {
+    alert("Ошибка в коде, позвоните Анатолию!")
+  }
+  
+  decision = decision.replace("ОСАГО", "обязательного страхования гражданской ответственности владельцев транспортных средств (далее – ОСАГО)")
+  decision = decision.replace("Закона № 40-ФЗ", "Федерального закона от 25.04.2002 № 40-ФЗ «Об обязательном страховании гражданской ответственности владельцев транспортных средств» (далее – Закон № 40-ФЗ)")
+  decision = decision.replace("Закона № 123-ФЗ", "Федерального закона от 04.06.2018 № 123-ФЗ «Об уполномоченном по правам потребителей финансовых услуг» (далее – Закон № 123-ФЗ)")
+  decision = decision.replace("Законом № 123-ФЗ", "Федеральным законом от 04.06.2018 № 123-ФЗ «Об уполномоченном по правам потребителей финансовых услуг» (далее – Закон № 123-ФЗ)")
+  while (decision.indexOf("  ") != -1) {
+    decision = decision.replaceAll("  ", " ")
+  }
+
+  document.querySelector('#decision').innerHTML = decision;
+
   let decision_paragraphs = []
 
   $(`#decision`).find('p').each(function(index){

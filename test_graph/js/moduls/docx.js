@@ -1,6 +1,6 @@
 //Формирование Word файла
 import { Document, Packer, Paragraph, AlignmentType, LineRuleType, TextRun, Table, TableRow, 
-         TableCell, BorderStyle, VerticalAlign, HeightRule, ImageRun } from 'docx'
+         TableCell, BorderStyle, VerticalAlign, HeightRule, ImageRun, PageNumber, Header } from 'docx'
 import { saveAs } from 'file-saver';
 import { Buffer } from 'buffer'
 import { fu_data } from './objects/fuData';
@@ -165,7 +165,30 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
 
   const doc = new Document({
   sections: [
-    {
+    { 
+      properties: {
+        page: {
+          pageNumbers: {
+            start: 1,
+          },
+        },
+        titlePage: true,
+      },
+      headers: {
+        default: new Header({
+          children: [
+            new Paragraph({
+              style: "myCustomStyle", 
+              children: [
+                new TextRun({
+                    children: [PageNumber.CURRENT],
+                }),
+              ],
+              alignment: AlignmentType.CENTER,
+            }),
+          ],
+        }),
+      },
       children: [
         new Table({
           columnWidths: [4610, 4610],
@@ -398,10 +421,6 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
           columnWidths: [3073, 3073, 3073],
           rows: [
             new TableRow({ 
-              height: {
-                value: 500, 
-                rule: HeightRule.ATLEAST
-              },
               children: [
                 new TableCell({
                   children: [
@@ -423,6 +442,12 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
                   verticalAlign: VerticalAlign.BOTTOM,
                 }),
               ],
+              style: {
+                height: {
+                  rule: HeightRule.ATLEAST,
+                  value: 700, 
+                },
+              }
             }),
           ]
         }),
