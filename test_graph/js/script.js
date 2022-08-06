@@ -26,6 +26,7 @@ import { makeDecisionFile } from './moduls/docx.js';
 import { all_paragraphs } from "./moduls/makeTextDecision";
 import { AppToFo } from "./moduls/appToFos";
 import { changeQuotes } from "./moduls/changeQuotes";
+import { dragAndDrop } from "./moduls/drag&Drop";
 
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
@@ -58,6 +59,7 @@ let decision = '';
 let europrotocol;
 let date_dtp;
 let max_summ;
+let range;
 
 // $('#app_date_1').focusout(function(){
 //   date_sv = new AppDate("date_sv")
@@ -95,9 +97,23 @@ $(document).on("focusout", ".fu_dates", function(){
   var fu_types = $('.fu_types'); //Получение массива дат решений ФУ
   var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
   var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
+
+  var fu_app_dates = $('.fu_app_dates'); //Получение массива номеров решений ФУ
+  var fu_orders = $('.fu_orders'); //Получение массива номеров решений ФУ
+
   var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
   var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
   var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
+
+  var add_fu_info_suspension_types = $('.add_fu_info_suspension_types'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_dates = $('.add_fu_info_suspension_dates'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_numbers = $('.add_fu_info_suspension_numbers'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_names = $('.add_fu_info_suspension_court_names'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_numbers = $('.add_fu_info_suspension_court_numbers'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_results = $('.add_fu_info_suspension_court_results'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_dates = $('.add_fu_info_suspension_court_dates'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_date_end_forms = $('.add_fu_info_suspension_court_date_end_forms'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_date_in_forces = $('.add_fu_info_suspension_court_date_in_forces'); //Получение массива номеров решений ФУ
 
   //Создание экземпляров решений ФУ
   for (var i = 0; i < number_of_fus; i++) {
@@ -106,9 +122,20 @@ $(document).on("focusout", ".fu_dates", function(){
                                  fu_types[i],
                                  fu_dates[i],
                                  fu_numbers[i],
+                                 fu_app_dates[i],
+                                 fu_orders[i],
                                  fu_pay_dates[i],
                                  fu_in_force_dates[i],
-                                 fu_last_day_for_pay_dates[i]);
+                                 fu_last_day_for_pay_dates[i],
+                                 add_fu_info_suspension_types[i],
+                                 add_fu_info_suspension_dates[i],
+                                 add_fu_info_suspension_numbers[i],
+                                 add_fu_info_suspension_court_names[i],
+                                 add_fu_info_suspension_court_numbers[i],
+                                 add_fu_info_suspension_court_results[i],
+                                 add_fu_info_suspension_court_dates[i],
+                                 add_fu_info_suspension_court_date_end_forms[i],
+                                 add_fu_info_suspension_court_date_in_forces[i]);
     paymentFu[i].fillDates();
   }
   // paymentFu[$(this).index('.fu_dates')].fillDates();
@@ -252,6 +279,7 @@ $('#btn_desicion').click(function() {
   var apps_to_fo_inspection_info = $('.apps_to_fo_inspection_infos')
   var apps_to_fo_expertise_info = $('.apps_to_fo_expertise_infos')
   var apps_to_fo_answer_fo_infos = $('.apps_to_fo_answer_fo_infos')
+  var apps_to_fo_answer_fos = $('.apps_to_fo_answer_fos')
 
   for (let i = 0; i < number_of_apps_to_fo; i++) {
     appToFo[i] = new AppToFo(i + 1,
@@ -266,7 +294,8 @@ $('#btn_desicion').click(function() {
                              apps_to_fo_request_info[i],
                              apps_to_fo_inspection_info[i],
                              apps_to_fo_expertise_info[i],
-                             apps_to_fo_answer_fo_infos[i])
+                             apps_to_fo_answer_fo_infos[i],
+                             apps_to_fo_answer_fos[i])
   }
 
   //Получение массива значений всех переменных добровольных выплат
@@ -300,14 +329,28 @@ $('#btn_desicion').click(function() {
   }
 
   //Получение массива значений всех переменных решений ФУ
-  number_of_fus = $('.fus').length; //Получение количества строк с выплатами
+  number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
   var fu_names = $('.fu_names'); //Получение массива ФУ
-  var fu_types = $('.fu_types'); //Получение массива типов решений ФУ
+  var fu_types = $('.fu_types'); //Получение массива дат решений ФУ
   var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
   var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
+
+  var fu_app_dates = $('.fu_app_dates'); //Получение массива номеров решений ФУ
+  var fu_orders = $('.fu_orders'); //Получение массива номеров решений ФУ
+
   var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
   var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
   var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
+
+  var add_fu_info_suspension_types = $('.add_fu_info_suspension_types'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_dates = $('.add_fu_info_suspension_dates'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_numbers = $('.add_fu_info_suspension_numbers'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_names = $('.add_fu_info_suspension_court_names'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_numbers = $('.add_fu_info_suspension_court_numbers'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_results = $('.add_fu_info_suspension_court_results'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_dates = $('.add_fu_info_suspension_court_dates'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_date_end_forms = $('.add_fu_info_suspension_court_date_end_forms'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_date_in_forces = $('.add_fu_info_suspension_court_date_in_forces'); //Получение массива номеров решений ФУ
 
   //Создание экземпляров решений ФУ
   for (var i = 0; i < number_of_fus; i++) {
@@ -316,18 +359,29 @@ $('#btn_desicion').click(function() {
                                  fu_types[i],
                                  fu_dates[i],
                                  fu_numbers[i],
+                                 fu_app_dates[i],
+                                 fu_orders[i],
                                  fu_pay_dates[i],
                                  fu_in_force_dates[i],
-                                 fu_last_day_for_pay_dates[i]);
+                                 fu_last_day_for_pay_dates[i],
+                                 add_fu_info_suspension_types[i],
+                                 add_fu_info_suspension_dates[i],
+                                 add_fu_info_suspension_numbers[i],
+                                 add_fu_info_suspension_court_names[i],
+                                 add_fu_info_suspension_court_numbers[i],
+                                 add_fu_info_suspension_court_results[i],
+                                 add_fu_info_suspension_court_dates[i],
+                                 add_fu_info_suspension_court_date_end_forms[i],
+                                 add_fu_info_suspension_court_date_in_forces[i]);
     count_fu_days[i] = paymentFu[i].count_days;
     // payment_fu_last_days[i] = (paymentFu[i].getLastDayForPayFu() - date_sv.getAppDate()) / DAY;
     payment_fu_summs[i] = [];
     payment_fu_types[i] = [];
     for (var j = 0; j < paymentFu[i].claim.length; j++) {
-      if (paymentFu[i].claim[j].name.options.selectedIndex == 0 ||
-          paymentFu[i].claim[j].name.options.selectedIndex == 1 ||
+      if (paymentFu[i].claim[j].name.options.selectedIndex == 1 ||
           paymentFu[i].claim[j].name.options.selectedIndex == 2 ||
-          paymentFu[i].claim[j].name.options.selectedIndex == 3) {
+          paymentFu[i].claim[j].name.options.selectedIndex == 3 ||
+          paymentFu[i].claim[j].name.options.selectedIndex == 4) {
         payment_fu_summs[i][j] = paymentFu[i].claim[j].summ / 1000;
         payment_fu_types[i][j] = paymentFu[i].claim[j].name.options.selectedIndex;
       }
@@ -363,10 +417,10 @@ $('#btn_desicion').click(function() {
     payment_court_summs[i] = [];
     payment_court_types[i] = [];
     for (var j = 0; j < paymentCourt[i].claim.length; j++) {
-      if (paymentCourt[i].claim[j].name.options.selectedIndex == 0 ||
-          paymentCourt[i].claim[j].name.options.selectedIndex == 1 ||
+      if (paymentCourt[i].claim[j].name.options.selectedIndex == 1 ||
           paymentCourt[i].claim[j].name.options.selectedIndex == 2 ||
-          paymentCourt[i].claim[j].name.options.selectedIndex == 3) {
+          paymentCourt[i].claim[j].name.options.selectedIndex == 3 ||
+          paymentCourt[i].claim[j].name.options.selectedIndex == 4) {
         payment_court_summs[i][j] = paymentCourt[i].claim[j].summ / 1000;
         payment_court_types[i][j] = paymentCourt[i].claim[j].name.options.selectedIndex;
       }
@@ -543,7 +597,11 @@ document.getElementById('show_decision').onclick = function show_decision(){
     decision = decision.replace("ОСАГО", "обязательного страхования гражданской ответственности владельцев транспортных средств (далее – ОСАГО)")
     decision = decision.replace("Закона № 40-ФЗ", "Федерального закона от 25.04.2002 № 40-ФЗ «Об обязательном страховании гражданской ответственности владельцев транспортных средств» (далее – Закон № 40-ФЗ)")
     decision = decision.replace("Закона № 123-ФЗ", "Федерального закона от 04.06.2018 № 123-ФЗ «Об уполномоченном по правам потребителей финансовых услуг» (далее – Закон № 123-ФЗ)")
-    // makeDecisionFile(all_paragraphs);
+    decision = decision.replace("Законом № 123-ФЗ", "Федеральным законом от 04.06.2018 № 123-ФЗ «Об уполномоченном по правам потребителей финансовых услуг» (далее – Закон № 123-ФЗ)")
+    while (decision.indexOf("  ") != -1) {
+      decision = decision.replaceAll("  ", " ")
+    }
+
     document.querySelector('#decision').innerHTML = decision;
     // $('#decision_text_text_area').show();
     // document.querySelector('#decision_text_text_area').value = decision;
@@ -553,6 +611,57 @@ document.getElementById('show_decision').onclick = function show_decision(){
     // $('#decision_text_text_area').hide();
     $('#show_decision').html("Показать текст решения");
   }
+  dragAndDrop()
+}
+
+//Отслеживает нажатие кнопки "Копирвоать текст решения"
+document.getElementById('copy_text_decision').onclick = function (){
+  copy_text_decision('decision')
+}
+
+//Отслеживает нажатие кнопки "Сформировать файл решения"
+document.getElementById('make_decision_file').onclick = function (){
+
+  try {
+    decision = makeTextDecision(claimsContract,
+                                dtpParticipant,
+                                appToFo,
+                                paymentVoluntary,
+                                paymentFu,
+                                paymentCourt,
+                                total_penalty_summ_accrued,
+                                total_penalty_summ_paid,
+                                max_summ,
+                                fu_claim_set);
+  } catch (error) {
+    alert("Ошибка в коде, позвоните Анатолию!")
+  }
+  
+  decision = decision.replace("ОСАГО", "обязательного страхования гражданской ответственности владельцев транспортных средств (далее – ОСАГО)")
+  decision = decision.replace("Закона № 40-ФЗ", "Федерального закона от 25.04.2002 № 40-ФЗ «Об обязательном страховании гражданской ответственности владельцев транспортных средств» (далее – Закон № 40-ФЗ)")
+  decision = decision.replace("Закона № 123-ФЗ", "Федерального закона от 04.06.2018 № 123-ФЗ «Об уполномоченном по правам потребителей финансовых услуг» (далее – Закон № 123-ФЗ)")
+  decision = decision.replace("Законом № 123-ФЗ", "Федеральным законом от 04.06.2018 № 123-ФЗ «Об уполномоченном по правам потребителей финансовых услуг» (далее – Закон № 123-ФЗ)")
+  while (decision.indexOf("  ") != -1) {
+    decision = decision.replaceAll("  ", " ")
+  }
+
+  document.querySelector('#decision').innerHTML = decision;
+
+  let decision_paragraphs = []
+
+  $(`#decision`).find('p').each(function(index){
+    decision_paragraphs[index] = $(this).text()
+  })
+  makeDecisionFile($('#appeal_number').val(), decision_paragraphs)
+
+  iziToast.show({
+    timeout: 3000,
+    messageColor: 'white',
+    color: '#17a2b8',
+    //title: 'Hey',
+    message: 'Файл решения сгенерирован',
+  });
+
 }
 
 //Показать график неустоек
@@ -578,6 +687,12 @@ document.getElementById('show_graph').onclick = function show_graph(){
                        paymentVoluntary,
                        paymentFu,
                        paymentCourt);
+    iziToast.show({
+      timeout: 3000,
+      messageColor: 'white',
+      color: '#28a745',
+      message: 'График неустоек отображен',
+    })
   } else {
     $('#div_svg').hide();
     $('#show_graph').html("Показать график неустоек");
@@ -597,13 +712,38 @@ document.getElementById('btn_fu_decision_analyze').onclick = function (){
 }
 
 //Выбор и копирование текста в буфер обмена
+function copy_text_decision(containerid) {
+
+  let decision_paragraphs = []
+
+  $(`#${containerid}`).find('p').each(function(index){
+    decision_paragraphs[index] = $(this).text()
+  })
+
+  let full_text_decision = ""
+  for (let i = 0; i < decision_paragraphs.length; i++) {
+    full_text_decision = `${full_text_decision} ${decision_paragraphs[i]} \r\n`
+  }
+
+  navigator.clipboard.writeText(full_text_decision)
+
+  iziToast.show({
+    timeout: 3000,
+    messageColor: 'white',
+    color: '#007bff',
+    //title: 'Hey',
+    message: 'Текст решения скопирован c учетом изменений',
+  });
+}
+
+//Выбор и копирование текста в буфер обмена
 function selectText(containerid) {
   if (document.selection) { // IE
-    var range = document.body.createTextRange();
+    range = document.body.createTextRange();
     range.moveToElementText(document.getElementById(containerid));
     range.select();
   } else if (window.getSelection) {
-    var range = document.createRange();
+    range = document.createRange();
     range.selectNode(document.getElementById(containerid));
     window.getSelection().removeAllRanges();
     window.getSelection().addRange(range);
@@ -618,7 +758,7 @@ function selectText(containerid) {
 
   iziToast.show({
       timeout: 3000,
-      color: '#F5E1A6',
+      color: '#ffc107',
       //title: 'Hey',
       message: 'Текст решения скопирован',
   });
@@ -644,7 +784,6 @@ $('.car_brands').toArray().forEach(element => {
 //Автопоиск моделей ТС
 var car_models = []
 $('.car_brands').focusout(function () {
-  // console.log(allCars[$(this).val()])
   car_models = allCars[$(this).val()]
   $('.car_models').toArray().forEach(element => {
     autocomplete(element, car_models)
@@ -652,8 +791,10 @@ $('.car_brands').focusout(function () {
 })
 
 //Заменяет кавычки "палочки" на кавычки «елочки»
-$('.li-quotes').focusout(function () {
-  $(this).val(changeQuotes($(this).val()))
+$(document).on( "mouseenter", '.li-quotes', function( event ) {
+  $('.li-quotes').focusout(function () {
+    $(this).val(changeQuotes($(this).val()))
+  })
 })
 
 //По клику на любую клавишу вызов функции автозаполнения
@@ -738,10 +879,6 @@ $(document).on("click", ".deactivator", function (event) {
   } else {
     $(this).parent().parent().parent().find('.deactivation').attr('disabled', false)
   }
-  validationCheckUpdate('preambula')
-  validationCheckUpdate('main-claims-all')
-  validationCheckUpdate('main-request')
-  validationCheckUpdate('dtp-description')
 })
 
 //Изменяет картинку валидации
@@ -765,7 +902,7 @@ function validationCheckUpdate(className) {
     } else {
       $(`#${className}`).children().first().children().first().children().first().next().html(`<i class="fa fa-exclamation-circle fa-2x" aria-hidden="true" style="color: #dc3545;"></i>`)
     }
-  }, 200); 
+  }, 300); 
 }
 
 $(document).on( "mouseenter", '[data-toggle="popover"]', function( event ) {
@@ -785,7 +922,38 @@ $(document).on( "mouseenter", '[data-toggle="popover"]', function( event ) {
   })
 });
 
-validationCheck('preambula')
-validationCheck('main-claims-all')
-validationCheck('main-request')
-validationCheck('dtp-description')
+$(document).on("click", "input[type=checkbox]", function (event) {
+  validationCheckUpdate('preambula')
+  validationCheckUpdate('main-claims-all')
+  validationCheckUpdate('main-request')
+  validationCheckUpdate('dtp-description')
+  validationCheckUpdate('apps-to-fo')
+  validationCheckUpdate('fus-all')
+})
+
+$(document).on("click", "button", function (event) {
+  validationCheckUpdate('preambula')
+  validationCheckUpdate('main-claims-all')
+  validationCheckUpdate('main-request')
+  validationCheckUpdate('dtp-description')
+  validationCheckUpdate('apps-to-fo')
+  validationCheckUpdate('fus-all')
+})
+
+$(document).on("change", "select", function (event) {
+  validationCheckUpdate('preambula')
+  validationCheckUpdate('main-claims-all')
+  validationCheckUpdate('main-request')
+  validationCheckUpdate('dtp-description')
+  validationCheckUpdate('apps-to-fo')
+  validationCheckUpdate('fus-all')
+})
+
+$(document).on( "mouseenter", '.form-control', function( event ) {
+  validationCheck('preambula')
+  validationCheck('main-claims-all')
+  validationCheck('main-request')
+  validationCheck('dtp-description')
+  validationCheck('apps-to-fo')
+  validationCheck('fus-all')
+})

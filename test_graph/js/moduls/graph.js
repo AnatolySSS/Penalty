@@ -363,16 +363,16 @@ export function fillPenaltyGraph(swg_graph,
       payment_fu_last_days[i] = (paymentFu[i].getLastDayForPayFu() - date_sv.getAppDate()) / DAY;
       for (var j = 0; j < payment_fu_types[i].length; j++) {
         switch (payment_fu_types[i][j]) {
-          case 0:
+          case 1:
             type = 0;
             break;
-          case 1:
+          case 2:
             type = 1;
             break;
-          case 2:
+          case 3:
             type = 2;
             break;
-          case 3:
+          case 4:
             type = 3;
             break;
           default:
@@ -552,16 +552,16 @@ export function fillPenaltyGraph(swg_graph,
       payment_court_in_force_dates[i] = (paymentCourt[i].getInForceDate() - date_sv.getAppDate()) / DAY;
       for (var j = 0; j < payment_court_types[i].length; j++) {
         switch (payment_court_types[i][j]) {
-          case 0:
+          case 1:
             type = 0;
             break;
-          case 1:
+          case 2:
             type = 1;
             break;
-          case 2:
+          case 3:
             type = 2;
             break;
-          case 3:
+          case 4:
             type = 3;
             break;
           default:

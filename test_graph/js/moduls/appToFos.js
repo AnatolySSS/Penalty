@@ -123,6 +123,7 @@ class ExpertiseApp {
     summ_market
     summ_leftovers
     summ_uts
+    trasa
 
     summ_without_text
     summ_with_text
@@ -130,7 +131,7 @@ class ExpertiseApp {
     summ_leftovers_text
     summ_uts_text
 
-    constructor (app_id, expertise_id, date, number, orgainzation, summ_without, summ_with, summ_market, summ_leftovers, summ_uts) {
+    constructor (app_id, expertise_id, date, number, orgainzation, summ_without, summ_with, summ_market, summ_leftovers, summ_uts, trasa) {
         this.app_id = app_id
         this.expertise_id = expertise_id
         this.date = date
@@ -146,6 +147,7 @@ class ExpertiseApp {
         this.summ_leftovers_text = makeRubText_genitive(this.summ_leftovers)
         this.summ_uts = Number(summ_uts.value.replace(/\s+/g, ''))
         this.summ_uts_text = makeRubText_genitive(this.summ_uts)
+        this.trasa = trasa
     }
 
     getExpertiseDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
@@ -218,6 +220,7 @@ class Expertise {
     summ_market
     summ_leftovers
     summ_uts
+    trasa
 
     summ_without_text
     summ_with_text
@@ -225,7 +228,7 @@ class Expertise {
     summ_leftovers_text
     summ_uts_text
 
-    constructor (app_id, expertise_id, date, number, orgainzation, summ_without, summ_with, summ_market, summ_leftovers, summ_uts) {
+    constructor (app_id, expertise_id, date, number, orgainzation, summ_without, summ_with, summ_market, summ_leftovers, summ_uts, trasa) {
         this.app_id = app_id
         this.expertise_id = expertise_id
         this.date = date
@@ -241,10 +244,31 @@ class Expertise {
         this.summ_leftovers_text = makeRubText_genitive(this.summ_leftovers)
         this.summ_uts = Number(summ_uts.value.replace(/\s+/g, ''))
         this.summ_uts_text = makeRubText_genitive(this.summ_uts)
+        this.trasa = trasa
     }
 
     getExpertiseDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
     getExpertiseDateFormatted() { return formatDate(new Date(this.getExpertiseDate())); }
+}
+
+class Refusal {
+
+    app_id
+    type
+    date
+    number
+    text
+
+    constructor (app_id, type, date, number, text) {
+        this.app_id = app_id
+        this.type = type
+        this.date = date
+        this.number = number
+        this.text = text
+    }
+
+    getRefusalDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
+    getRefusalDateFormatted() { return formatDate(new Date(this.getRefusalDate())); }
 }
 
 export class AppToFo {
@@ -264,6 +288,7 @@ export class AppToFo {
     requests_paragraph
     inspections_paragraph
     expertises_paragraph
+    answerFo_paragraph
 
     main_paragraph
 
@@ -286,7 +311,9 @@ export class AppToFo {
     expertises = []
 
     answerFoInfo
+    answerFo
     paymentVoluntary = []
+    refusal = []
 
     claimsContract = []
 
@@ -302,7 +329,8 @@ export class AppToFo {
                 requestInfo,
                 inspectionInfo, 
                 expertiseInfo, 
-                answerFoInfo) {
+                answerFoInfo,
+                answerFo) {
 
         this.id = id
         this.appDate = appDate
@@ -320,6 +348,7 @@ export class AppToFo {
         this.inspections_paragraph = ""
         this.expertises_paragraph = ""
         this.main_paragraph = ""
+        this.answerFo_paragraph = ""
 
         this.claimsContractToFoInfo = claimsContractToFoInfo
         this.expertiseAppInfo = expertiseAppInfo
@@ -328,6 +357,7 @@ export class AppToFo {
         this.inspectionInfo = inspectionInfo
         this.expertiseInfo = expertiseInfo
         this.answerFoInfo = answerFoInfo
+        this.answerFo = answerFo
         
         //Создание экземпляров класса Требований, заявленных в данном уведомлении
         var number_of_apps_to_fo_claims_contracts = $(`.apps_to_fo_claims_contract_${id}`).length
@@ -349,6 +379,7 @@ export class AppToFo {
         var apps_to_fo_expertise_app_summ_markets = $(`.apps_to_fo_expertise_app_summ_market_${id}`)
         var apps_to_fo_expertise_app_summ_leftovers = $(`.apps_to_fo_expertise_app_summ_leftovers_${id}`)
         var apps_to_fo_expertise_app_summ_uts = $(`.apps_to_fo_expertise_app_summ_uts_${id}`)
+        var apps_to_fo_expertise_app_trasa = $(`.apps_to_fo_expertise_app_trasa_${id}`)
 
         for (let i = 0; i < number_of_apps_to_fo_expertise_apps; i++) {
             this.expertiseApps[i] = new ExpertiseApp(id,
@@ -360,7 +391,8 @@ export class AppToFo {
                                             apps_to_fo_expertise_app_summ_withs[i],
                                             apps_to_fo_expertise_app_summ_markets[i],
                                             apps_to_fo_expertise_app_summ_leftovers[i],
-                                            apps_to_fo_expertise_app_summ_uts[i])
+                                            apps_to_fo_expertise_app_summ_uts[i],
+                                            apps_to_fo_expertise_app_trasa[i])
         }
 
         //Создание экземпляра класса Согласия на уведомление по СМС
@@ -410,6 +442,7 @@ export class AppToFo {
         var apps_to_fo_expertise_summ_markets = $(`.apps_to_fo_expertise_summ_market_${id}`)
         var apps_to_fo_expertise_summ_leftovers = $(`.apps_to_fo_expertise_summ_leftovers_${id}`)
         var apps_to_fo_expertise_summ_uts = $(`.apps_to_fo_expertise_summ_uts_${id}`)
+        var apps_to_fo_expertise_trasa = $(`.apps_to_fo_expertise_trasa_${id}`)
 
         for (let i = 0; i < number_of_apps_to_fo_expertises; i++) {
             this.expertises[i] = new Expertise(id,
@@ -421,7 +454,8 @@ export class AppToFo {
                                             apps_to_fo_expertise_summ_withs[i],
                                             apps_to_fo_expertise_summ_markets[i],
                                             apps_to_fo_expertise_summ_leftovers[i],
-                                            apps_to_fo_expertise_summ_uts[i])
+                                            apps_to_fo_expertise_summ_uts[i],
+                                            apps_to_fo_expertise_trasa[i])
         }
 
         //Получение массива значений всех переменных добровольных выплат
@@ -445,6 +479,21 @@ export class AppToFo {
                                                             penalty_ndfl_summs[i])
         }
 
+        //Создание экземпляра класса Согласия на уведомление по СМС
+        var number_of_apps_to_fo_refusals = $(`.apps_to_fo_refusal_${id}`).length
+        var apps_to_fo_refusal_type = $(`.apps_to_fo_refusal_type_${id}`)
+        var apps_to_fo_refusal_date = $(`.apps_to_fo_refusal_date_${id}`)
+        var apps_to_fo_refusal_number = $(`.apps_to_fo_refusal_number_${id}`)
+        var apps_to_fo_refusal_type_trasa_text = $(`.apps_to_fo_refusal_type_trasa_text_${id}`)
+
+        for (var i = 0; i < number_of_apps_to_fo_refusals; i++) {
+            this.refusal[i] = new Refusal(id,
+                                    apps_to_fo_refusal_type[i],
+                                    apps_to_fo_refusal_date[i],
+                                    apps_to_fo_refusal_number[i],
+                                    apps_to_fo_refusal_type_trasa_text[i])
+            }
+
         //Получение массива значений всех требований к ФУ
         var number_of_main_claims_contracts = $('.main_claims_contracts').length
         var claims_contract_types = $('.claims_contract_types')
@@ -452,7 +501,6 @@ export class AppToFo {
         for (var i = 0; i < number_of_main_claims_contracts; i++) {
             this.claimsContract[i] = new ClaimsContract(i + 1,
                                                 claims_contract_types[i])
-            
         }
 
         var main_fo_name = document.querySelector("#fo_name").value
@@ -463,6 +511,7 @@ export class AppToFo {
             if (this.claimsContract[0].type.options.selectedIndex == 1) {
                 //Если заявитель обратился с заявлением о страховом возмещении
                 if (this.type.options.selectedIndex == 1) {
+                    
                     //Формирование процедуры обращения в ФО
                     var procedure_helper = ""
                     if (this.procedure.options.selectedIndex == 1) {
@@ -470,47 +519,102 @@ export class AppToFo {
                     } else if (this.procedure.options.selectedIndex == 2) {
                         procedure_helper = "о страховом возмещении по Договору ОСАГО"
                     }
+
                     //Формирование первого параграфа заявления в ФО
-                    this.app_paragraph = `${this.getAppDateFormatted()} Заявитель обратился в ${main_fo_name} с заявлением 
+                    this.app_paragraph = `<p>${this.getAppDateFormatted()} Заявитель обратился в ${main_fo_name} с заявлением 
                     ${procedure_helper}, предоставив все документы, предусмотренные Правилами обязательного 
                     страхования гражданской ответственности владельцев транспортных средств, утвержденными 
-                    Положением Банка России от 19.09.2014 № 431-П (далее – Правила ОСАГО).<br>`
+                    Положением Банка России от 19.09.2014 № 431-П (далее – Правила ОСАГО).</p>`
 
                     //Формирование параграфа с согласием на уведомление по СМС
                     if (this.agreementInfo.options.selectedIndex == 1) {
                         if (this.agreement.agreement_phone.options.selectedIndex == 1) {
-                            this.agreement_paragraph = `В заявлении ${procedure_helper} Заявитель дал свое согласие 
+                            this.agreement_paragraph = `<p>В заявлении ${procedure_helper} Заявитель дал свое согласие 
                             на получение уведомлений о ходе рассмотрения заявления путем смс-сообщений на номер 
-                            телефона ${this.agreement.phone_number.value}.<br>`
+                            телефона ${this.agreement.phone_number.value}.</p>`
                         } else {
                             
+                        }
+                    }
+
+                    //Формирование параграфа о проведении экспертиз ТС Заявителя
+                    if (this.expertiseAppInfo.options.selectedIndex == 1) {
+                        var expertiseApps_paragraph_one = ""
+                        var expertiseApps_paragraph_helper = ""
+                        var expertiseApps_summ_paragraph
+                        for (let i = 0; i < this.expertiseApps.length; i++) {
+
+                            if (i == 0) {
+                                expertiseApps_paragraph_helper = `К заявлению было приложено`
+                            } else if (i == 1) {
+                                expertiseApps_paragraph_helper = `Кроме того, Заявитель предоставил`
+                            } else {
+                                expertiseApps_paragraph_helper = `Также Заявителем предоставлено`
+                            }
+                            expertiseApps_summ_paragraph = ""
+                            if (this.expertiseApps[i].trasa.value != "") {
+                                expertiseApps_summ_paragraph = expertiseApps_summ_paragraph + `${this.expertiseApps[i].trasa.value}, `
+                            }
+                            if (this.expertiseApps[i].summ_without != 0) {
+                                expertiseApps_summ_paragraph = expertiseApps_summ_paragraph + `стоимость восстановительного ремонта 
+                                Транспортного средства без учета износа составила ${this.expertiseApps[i].summ_without_text}, `
+                            }
+                            if (this.expertiseApps[i].summ_with != 0) {
+                                expertiseApps_summ_paragraph = expertiseApps_summ_paragraph + `стоимость восстановительного ремонта 
+                                Транспортного средства с учетом износа составила ${this.expertiseApps[i].summ_with_text}, `
+                            }
+                            if (this.expertiseApps[i].summ_market != 0) {
+                                expertiseApps_summ_paragraph = expertiseApps_summ_paragraph + `средняя рыночная стоимость 
+                                Транспортного средства до повреждения по состоянию на дату ДТП составляла ${this.expertiseApps[i].summ_market_text}, `
+                            }
+                            if (this.expertiseApps[i].summ_leftovers != 0) {
+                                expertiseApps_summ_paragraph = expertiseApps_summ_paragraph + `стоимость годных остатков поврежденного 
+                                Транспортного средства составила ${this.expertiseApps[i].summ_leftovers_text}, `
+                            }
+                            if (this.expertiseApps[i].summ_uts != 0) {
+                                expertiseApps_summ_paragraph = expertiseApps_summ_paragraph + `сумма УТС составила ${this.expertiseApps[i].summ_uts_text}, `
+                            }
+                            expertiseApps_summ_paragraph = expertiseApps_summ_paragraph.slice(0, -2)
+                            expertiseApps_paragraph_one = `<p>${expertiseApps_paragraph_helper} экспертное заключение  
+                            ${this.expertiseApps[i].orgainzation.value} от ${this.expertiseApps[i].getExpertiseDateFormatted()} 
+                            № ${this.expertiseApps[i].number.value}, в соответствии с которым ${expertiseApps_summ_paragraph}.</p>`
+
+                            this.expertise_apps_paragraph = this.expertise_apps_paragraph + expertiseApps_paragraph_one
                         }
                     }
 
                     //Формирование параграфа о запросе документов
                     if (this.requestInfo.options.selectedIndex == 1) {
                         var request_helper = ` письмом от ${this.requests[0].getRequestDateFormatted()} № ${this.requests[0].number.value}`
-                        this.requests_paragraph = `${this.requests[0].getRequestDateFormatted()} 
+                        this.requests_paragraph = `<p>${this.requests[0].getRequestDateFormatted()} 
                         ${main_fo_name} в ответ на заявление от ${this.getAppDateFormatted()} ${request_helper} 
-                        запросило у Заявителя ${this.requests[0].documents.value}.<br>`
+                        запросило у Заявителя ${this.requests[0].documents.value}.</p>`
                     }
 
                     //Формирование параграфа о проведении осмотра ТС
                     if (this.inspectionInfo.options.selectedIndex == 1) {
+                        var inspections_data_helper_1 = ""
+                        if (this.inspections[0].date.value != "") {
+                            inspections_data_helper_1 = `${this.inspections[0].getInspectionDateFormatted()}`
+                        }
+                        var inspections_data_helper_2 = ""
+                        if (this.inspections[0].date.value != "") {
+                            inspections_data_helper_2 = ` от ${this.inspections[0].getInspectionDateFormatted()}`
+                        }
                         var inspections_orgainzation_helper = ""
                         if (this.inspections[0].orgainzation.value != "") {
-                            inspections_orgainzation_helper = `с привлечением независимой экспертной организации ${this.inspections[0].orgainzation.value}`
+                            inspections_orgainzation_helper = ` с привлечением независимой экспертной организации ${this.inspections[0].orgainzation.value}`
                         }
                         var inspections_number_helper = ""
                         if (this.inspections[0].number.value != "") {
-                            inspections_number_helper = `, о чем составлен акт осмотра № ${this.inspections[0].number.value} от ${this.inspections[0].getInspectionDateFormatted()}`
+                            inspections_number_helper = `, о чем составлен акт осмотра № ${this.inspections[0].number.value}${inspections_data_helper_2}`
                         }
-                        this.inspections_paragraph = `${this.inspections[0].getInspectionDateFormatted()} 
-                        ${main_fo_name} проведен осмотр принадлежащего Заявителю Транспортного средства 
-                        ${inspections_orgainzation_helper}${inspections_number_helper}.<br>`
+                        this.inspections_paragraph = `<p>${inspections_data_helper_1} 
+                        ${main_fo_name} проведен осмотр принадлежащего Заявителю 
+                        Транспортного средства${inspections_orgainzation_helper}${inspections_number_helper}.</p>`
                     }
 
-                    //Формирование параграфа о проведении экспертиз ТС
+                    //Формирование параграфа о проведении экспертиз ТС ФО
                     if (this.expertiseInfo.options.selectedIndex == 1) {
                         var expertises_paragraph_one = ""
                         var expertises_paragraph_helper = ""
@@ -522,6 +626,9 @@ export class AppToFo {
                         }
                         for (let i = 0; i < this.expertises.length; i++) {
                             expertises_summ_paragraph = ""
+                            if (this.expertises[i].trasa.value != "") {
+                                expertises_summ_paragraph = expertises_summ_paragraph + `${this.expertises[i].trasa.value}, `
+                            }
                             if (this.expertises[i].summ_without != 0) {
                                 expertises_summ_paragraph = expertises_summ_paragraph + `стоимость восстановительного ремонта 
                                 Транспортного средства без учета износа составила ${this.expertises[i].summ_without_text}, `
@@ -542,24 +649,84 @@ export class AppToFo {
                                 expertises_summ_paragraph = expertises_summ_paragraph + `сумма УТС составила ${this.expertises[i].summ_uts_text}, `
                             }
                             expertises_summ_paragraph = expertises_summ_paragraph.slice(0, -2)
-                            expertises_paragraph_one = `${expertises_paragraph_helper} независимой экспертной организацией 
+                            expertises_paragraph_one = `<p>${expertises_paragraph_helper} независимой экспертной организацией 
                             ${this.expertises[i].orgainzation.value} подготовлено экспертное заключение от ${this.expertises[i].getExpertiseDateFormatted()} 
-                            № ${this.expertises[i].number.value}, согласно которому ${expertises_summ_paragraph}.<br>`
+                            № ${this.expertises[i].number.value}, согласно которому ${expertises_summ_paragraph}.</p>`
 
                             this.expertises_paragraph = this.expertises_paragraph + expertises_paragraph_one
                         }
                     }
+
+                    //Формирование абзаца ответом ФО на заявление
+                    if (this.answerFoInfo.options.selectedIndex == 1) {
+                        if (this.answerFo.options.selectedIndex == 1) {
+                            
+                        } else if (this.answerFo.options.selectedIndex == 2) {
+                            var answerFo_paragraph_one = ""
+                            if (this.paymentVoluntary.length == 1) {
+                                answerFo_paragraph_one = `<p>${this.paymentVoluntary[0].getDateFormatted()} ${main_fo_name} 
+                                на расчетный счет Заявителя была произведена выплата ${this.paymentVoluntary[0].type_text} 
+                                в размере ${makeRubText_genitive(this.paymentVoluntary[0].summ)}, что подтверждается 
+                                платежным поручением от ${this.paymentVoluntary[0].getDateFormatted()} № ${this.paymentVoluntary[0].order.value}.</p>`
+                            } else if (this.paymentVoluntary.length > 1) {
+                                var paymentVoluntary_total_summ = 0
+                                var paymentVoluntary_summ_helper = ""
+                                for (let i = 0; i < this.paymentVoluntary.length; i++) {
+                                    paymentVoluntary_total_summ = paymentVoluntary_total_summ + this.paymentVoluntary[i].summ
+                                    paymentVoluntary_summ_helper = paymentVoluntary_summ_helper + `${makeRubText_genitive(this.paymentVoluntary[i].summ)} – 
+                                    в счет ${this.paymentVoluntary[i].type_text}, `
+                                }
+                                paymentVoluntary_summ_helper = paymentVoluntary_summ_helper.slice(0, -2)
+                                for (let i = 0; i < this.paymentVoluntary.length; i++) {
+                                    answerFo_paragraph_one = `<p>${this.paymentVoluntary[i].getDateFormatted()} ${main_fo_name} 
+                                    на расчетный счет Заявителя была произведена выплата в размере 
+                                    ${makeRubText_genitive(paymentVoluntary_total_summ)} (${paymentVoluntary_summ_helper}), 
+                                    что подтверждается платежным поручением от ${this.paymentVoluntary[i].getDateFormatted()} № 
+                                    ${this.paymentVoluntary[i].order.value}.</p>`
+                                }
+                                answerFo_paragraph_one = answerFo_paragraph_one.replaceAll("расходов", "возмещения расходов")
+                            }
+                            
+                            this.answerFo_paragraph = this.answerFo_paragraph + answerFo_paragraph_one
+                        } else if (this.answerFo.options.selectedIndex == 3) {
+                            
+                        } else if (this.answerFo.options.selectedIndex == 4) {
+                            if (this.refusal[0].type.options.selectedIndex == 1) {
+                                this.answerFo_paragraph = `<p>${main_fo_name} направило Заявителю письмо от 
+                                ${this.refusal[0].getRefusalDateFormatted()} № ${this.refusal[0].number.value}, в котором сообщалось 
+                                что согласно выводам проведенной экспертизы, все повреждения Транспортного средства Заявителя 
+                                не могли образоваться при заявленных обстоятельствах ДТП, в связи с чем, правовых оснований 
+                                для урегулирования данного убытка у ${main_fo_name} не имеется.</p>`
+                            } else if (this.refusal[0].type.options.selectedIndex == 2) {
+                                
+                            } else if (this.refusal[0].type.options.selectedIndex == 3) {
+                                this.answerFo_paragraph = `<p>${this.refusal[0].getRefusalDateFormatted()} ${main_fo_name} 
+                                в ответ на заявление от ${this.getAppDateFormatted()} письмом № ${this.refusal[0].number.value} 
+                                отказало Заявителю в удовлетворении заявленных требований.</p>`
+                            } else if (this.refusal[0].type.options.selectedIndex == 4) {
+                                
+                            }
+                        }
+                    } else if (this.answerFoInfo.options.selectedIndex == 2) {
+                        this.answerFo_paragraph = `<p>Сведений об осуществлении выплаты страхового возмещения или 
+                        направлении Заявителю мотивированного отказа на заявление от ${this.getAppDateFormatted()} 
+                        ${main_fo_name} не предоставлено.</p>`
+                    }
+
                 //Если заявитель обратился с претензией
                 } else if (this.type.options.selectedIndex == 2) {
                     //Формирование процедуры обращения в ФО
                     var procedure_helper = ""
                     var procedure_helper_2 = ""
+                    var procedure_helper_3 = ""
                     if (this.getAppDate() >= DATE_FZ_123_START) {
                         procedure_helper = "заявлением (претензией)"
                         procedure_helper_2 = "содержащим"
+                        procedure_helper_3 = "заявление (претензию)"
                     } else {
                         procedure_helper = "претензией"
                         procedure_helper_2 = "содержащей"
+                        procedure_helper_3 = "претензию"
                     }
                     var type_of_claim_helper_1 = ""
                     var type_of_claim_helper_2 = ""
@@ -576,9 +743,9 @@ export class AppToFo {
                     }
                     app_claims_paragraph_helper = app_claims_paragraph_helper.slice(0, -1)
                     //Формирование первого параграфа заявления в ФО
-                    this.app_paragraph = `${this.getAppDateFormatted()} Заявитель обратился в ${main_fo_name} с 
+                    this.app_paragraph = `<p>${this.getAppDateFormatted()} Заявитель обратился в ${main_fo_name} с 
                     ${procedure_helper} о несогласии с ${type_of_claim_helper_1} страхового возмещения, ${procedure_helper_2} требование о 
-                    ${type_of_claim_helper_2} ${app_claims_paragraph_helper}.<br>`
+                    ${type_of_claim_helper_2} ${app_claims_paragraph_helper}.</p>`
 
                     //Формирование параграфа о проведении экспертиз ТС Заявителя
                     if (this.expertiseAppInfo.options.selectedIndex == 1) {
@@ -614,9 +781,9 @@ export class AppToFo {
                                 expertiseApps_summ_paragraph = expertiseApps_summ_paragraph + `сумма УТС составила ${this.expertiseApps[i].summ_uts_text}, `
                             }
                             expertiseApps_summ_paragraph = expertiseApps_summ_paragraph.slice(0, -2)
-                            expertiseApps_paragraph_one = `${expertiseApps_paragraph_helper} экспертное заключение  
+                            expertiseApps_paragraph_one = `<p>${expertiseApps_paragraph_helper} экспертное заключение  
                             ${this.expertiseApps[i].orgainzation.value} от ${this.expertiseApps[i].getExpertiseDateFormatted()} 
-                            № ${this.expertiseApps[i].number.value}, в соответствии с которым ${expertiseApps_summ_paragraph}.<br>`
+                            № ${this.expertiseApps[i].number.value}, в соответствии с которым ${expertiseApps_summ_paragraph}.</p>`
 
                             this.expertise_apps_paragraph = this.expertise_apps_paragraph + expertiseApps_paragraph_one
                         }
@@ -628,12 +795,71 @@ export class AppToFo {
                         this.claim_answer_time_count_days = 30
                     }
                     if (this.getAppDate() >= DATE_FZ_123_START) {
-                        this.app_claim_answer_time_paragraph = `В соответствии со статьей 16 Закона № 123-ФЗ ${main_fo_name} 
-                        должно рассмотреть заявление (претензию) и направить Заявителю ответ не позднее ${this.getLastClaimFoDayFormatted()}.<br>`
+                        this.app_claim_answer_time_paragraph = `<p>В соответствии со статьей 16 Закона № 123-ФЗ ${main_fo_name} 
+                        должно рассмотреть заявление (претензию) и направить Заявителю ответ не позднее ${this.getLastClaimFoDayFormatted()}.</p>`
+                    }
+
+                    //Формирование абзаца с отсутствием сведений об ответе ФО на заявление
+                    if (this.answerFoInfo.options.selectedIndex == 1) {
+                        if (this.answerFo.options.selectedIndex == 1) {
+                            
+                        } else if (this.answerFo.options.selectedIndex == 2) {
+                            var answerFo_paragraph_one = ""
+                            if (this.paymentVoluntary.length == 1) {
+                                answerFo_paragraph_one = `<p>${this.paymentVoluntary[0].getDateFormatted()} ${main_fo_name} 
+                                на расчетный счет Заявителя была произведена выплата ${this.paymentVoluntary[0].type_text} 
+                                в размере ${makeRubText_genitive(this.paymentVoluntary[0].summ)}, что подтверждается 
+                                платежным поручением от ${this.paymentVoluntary[0].getDateFormatted()} № ${this.paymentVoluntary[0].order.value}.</p>`
+                            } else if (this.paymentVoluntary.length > 1) {
+                                var paymentVoluntary_total_summ = 0
+                                var paymentVoluntary_summ_helper = ""
+                                for (let i = 0; i < this.paymentVoluntary.length; i++) {
+                                    paymentVoluntary_total_summ = paymentVoluntary_total_summ + this.paymentVoluntary[i].summ
+                                    paymentVoluntary_summ_helper = paymentVoluntary_summ_helper + `${makeRubText_genitive(this.paymentVoluntary[i].summ)} – 
+                                    в счет ${this.paymentVoluntary[i].type_text}, `
+                                }
+                                paymentVoluntary_summ_helper = paymentVoluntary_summ_helper.slice(0, -2)
+                                for (let i = 0; i < this.paymentVoluntary.length; i++) {
+                                    answerFo_paragraph_one = `<p>${this.paymentVoluntary[i].getDateFormatted()} ${main_fo_name} 
+                                    на расчетный счет Заявителя была произведена выплата в размере 
+                                    ${makeRubText_genitive(paymentVoluntary_total_summ)} (${paymentVoluntary_summ_helper}), 
+                                    что подтверждается платежным поручением от ${this.paymentVoluntary[i].getDateFormatted()} № 
+                                    ${this.paymentVoluntary[i].order.value}.</p>`
+                                }
+                                answerFo_paragraph_one = answerFo_paragraph_one.replaceAll("расходов", "возмещения расходов")
+                            }
+                            
+                            this.answerFo_paragraph = this.answerFo_paragraph + answerFo_paragraph_one
+                        } else if (this.answerFo.options.selectedIndex == 3) {
+                            
+                        } else if (this.answerFo.options.selectedIndex == 4) {
+                            if (this.refusal[0].type.options.selectedIndex == 1) {
+                                this.answerFo_paragraph = `<p>${main_fo_name} направило Заявителю письмо от 
+                                ${this.refusal[0].getRefusalDateFormatted()} № ${this.refusal[0].number.value}, в котором сообщалось 
+                                что согласно выводам проведенной экспертизы, все повреждения Транспортного средства Заявителя 
+                                не могли образоваться при заявленных обстоятельствах ДТП, в связи с чем, правовых оснований 
+                                для урегулирования данного убытка у ${main_fo_name} не имеется.</p>`
+                            } else if (this.refusal[0].type.options.selectedIndex == 2) {
+                                
+                            } else if (this.refusal[0].type.options.selectedIndex == 3) {
+                                this.answerFo_paragraph = `<p>${this.refusal[0].getRefusalDateFormatted()} ${main_fo_name} 
+                                в ответ на ${procedure_helper_3} от ${this.getAppDateFormatted()} письмом № ${this.refusal[0].number.value} 
+                                отказало Заявителю в удовлетворении заявленных требований.</p>`
+                            } else if (this.refusal[0].type.options.selectedIndex == 4) {
+                                this.answerFo_paragraph = `<p>${main_fo_name} в ответ на ${procedure_helper_3} от 
+                                ${this.getAppDateFormatted()} письмом от ${this.refusal[0].getRefusalDateFormatted()} № 
+                                ${this.refusal[0].number.value} уведомило Заявителя о том, что позиция ${main_fo_name} по 
+                                данному вопросу не изменилась.</p>`
+                            }
+                        }
+                    } else if (this.answerFoInfo.options.selectedIndex == 2) {
+                        this.answerFo_paragraph = `<p>Сведений об осуществлении выплаты страхового возмещения или 
+                        направлении Заявителю мотивированного отказа на ${procedure_helper_3} от ${this.getAppDateFormatted()} 
+                        ${main_fo_name} не предоставлено.</p>`
                     }
                     
                 }
-            } else {
+            } else if (this.claimsContract[0].type.options.selectedIndex == 2) {
                 
             }
             
@@ -646,7 +872,8 @@ export class AppToFo {
                               this.agreement_paragraph + 
                               this.requests_paragraph + 
                               this.inspections_paragraph + 
-                              this.expertises_paragraph
+                              this.expertises_paragraph +
+                              this.answerFo_paragraph
 
     }
 

@@ -61,6 +61,7 @@ function addCourt() {
 	'<div id="add_court_info_row_' + courtId + '_1" class="add_court_info_' + courtId + ' add_court_infos form-row">' +
 		'<div class="form-group col-md-4 form-inline">' +
 			'<select id="court_claim_' + courtId + '_1" class="court_claim_' + courtId + ' court_claims custom-select col-md-12">' +
+				'<option value="">Выберите требование</option>' +
 				'<option>Страховое возмещение</option>' +
 				'<option>УТС</option>' +
 				'<option>Эвакуатор</option>' +
@@ -75,6 +76,7 @@ function addCourt() {
 		'<div class="form-group col-md-3">' +
 			'<div class="input-group">' +
 				'<select id="court_claim_type_' + courtId + '_1" class="court_claim_type_' + courtId + ' court_claim_types custom-select col-md-12">' +
+					'<option value="">Тип решения</option>' +
 					'<option>Удовлетворено</option>' +
 					'<option>Отказано</option>' +
 				'</select>' +
@@ -140,6 +142,7 @@ function addClaim(id) {
   var str = '<div id="add_court_info_row_' + id + '_' + claimId + '" class="add_court_info_' + id + ' add_court_infos form-row">' +
 		'<div class="form-group col-md-4 form-inline">' +
 			'<select id="court_claim_' + id + '_' + claimId + '" class="court_claim_' + id + ' court_claims custom-select col-md-12">' +
+				'<option value="">Выберите требование</option>' +
 				'<option>Страховое возмещение</option>' +
 				'<option>УТС</option>' +
 				'<option>Эвакуатор</option>' +
@@ -154,6 +157,7 @@ function addClaim(id) {
 		'<div class="form-group col-md-3">' +
 			'<div class="input-group">' +
 				'<select id="court_claim_type_' + id + '_' + claimId + '" class="court_claim_type_' + id + ' court_claim_types custom-select col-md-12">' +
+					'<option value="">Тип решения</option>' +
 					'<option>Удовлетворено</option>' +
 					'<option>Отказано</option>' +
 				'</select>' +

@@ -4,12 +4,14 @@ import { declinationDays } from './declinationDays.js';
 import { changeDateType } from './changeDateType.js';
 import { formatDate } from './formatDate.js';
 import { findInForceFuDay, findLastDayForPayFu } from './findInForceFuDay.js';
+import { findLastDayForPayFuSuspension } from "./findLastDayForPayFuSuspension";
 import { courtPenalty } from './variables.js';
 import { CourtPenalty } from './court_penalty.js';
 import { AppDate } from './app_date.js';
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './variables.js';
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './variables.js';
 import { DAY } from './variables.js';
+import { allClaims } from './objects/allClaims';
 
 /* Объект для выплаты по решению ФУ
 
@@ -24,10 +26,10 @@ import { DAY } from './variables.js';
     // * last_day - последний день 20го срока
     // * penalty_day - первый день начисления неустойки (21й день)
 */
-let date_sv = new AppDate("date_sv")
-let date_uts = new AppDate("date_uts")
-let date_ev = new AppDate("date_ev")
-let date_stor = new AppDate("date_stor")
+// let date_sv = new AppDate("date_sv")
+// let date_uts = new AppDate("date_uts")
+// let date_ev = new AppDate("date_ev")
+// let date_stor = new AppDate("date_stor")
 
 class PenaltyCourtPeriod {
   start_date
@@ -56,9 +58,18 @@ class PenaltyPeriod {
 class ClaimFu {
   id
 
+  date_sv
+  date_uts
+  date_ev
+  date_stor
+
   name
   type
+  type_text
+  type_text_nominative
+  type_text_full
   summ
+  summ_text
   from
   to
   without
@@ -77,47 +88,64 @@ class ClaimFu {
 
   constructor(id, name, type, summ, from, to, without) {
 
+    this.date_sv = new AppDate("date_sv")
+    this.date_uts = new AppDate("date_uts")
+    this.date_ev = new AppDate("date_ev")
+    this.date_stor = new AppDate("date_stor")
+
     this.id = id;
     this.name = name;
     this.type = type;
     this.summ = Number(summ.value.replace(/\s+/g, ''));
+    this.summ_text = makeRubText_genitive(this.summ)
     this.from = from;
     this.to = to;
     this.without = without;
 
+    allClaims.claims.forEach(element => {
+      if (this.name.value == element.claim) {
+          this.type_text = element.short
+          this.type_text_nominative = element.res
+          if (this.name.value == "УТС") {
+            this.type_text = "страхового возмещения в части УТС"
+            this.type_text_nominative = "страховое возмещение в части УТС"
+          }
+      }
+    })
+
     //Вычисление количества дней между датой выплаты и 20м днем
     switch (this.name.options.selectedIndex) {
-      case 0:
-        this.app_day = date_sv.getAppDate();
-        this.app_day_form = date_sv.getAppDateFormatted();
-        this.last_day = date_sv.getLastDay();
-        this.last_day_form = date_sv.getLastDayFormatted();
-        this.penalty_day = date_sv.getPenaltyDay();
-        this.penalty_day_form = date_sv.getPenaltyDayFormatted();
-        break;
       case 1:
-        this.app_day = date_uts.getAppDate();
-        this.app_day_form = date_uts.getAppDateFormatted();
-        this.last_day = date_uts.getLastDay();
-        this.last_day_form = date_uts.getLastDayFormatted();
-        this.penalty_day = date_uts.getPenaltyDay();
-        this.penalty_day_form = date_uts.getPenaltyDayFormatted();
+        this.app_day = this.date_sv.getAppDate();
+        this.app_day_form = this.date_sv.getAppDateFormatted();
+        this.last_day = this.date_sv.getLastDay();
+        this.last_day_form = this.date_sv.getLastDayFormatted();
+        this.penalty_day = this.date_sv.getPenaltyDay();
+        this.penalty_day_form = this.date_sv.getPenaltyDayFormatted();
         break;
       case 2:
-        this.app_day = date_ev.getAppDate();
-        this.app_day_form = date_ev.getAppDateFormatted();
-        this.last_day = date_ev.getLastDay();
-        this.last_day_form = date_ev.getLastDayFormatted();
-        this.penalty_day = date_ev.getPenaltyDay();
-        this.penalty_day_form = date_ev.getPenaltyDayFormatted();
+        this.app_day = this.date_uts.getAppDate();
+        this.app_day_form = this.date_uts.getAppDateFormatted();
+        this.last_day = this.date_uts.getLastDay();
+        this.last_day_form = this.date_uts.getLastDayFormatted();
+        this.penalty_day = this.date_uts.getPenaltyDay();
+        this.penalty_day_form = this.date_uts.getPenaltyDayFormatted();
         break;
       case 3:
-        this.app_day = date_stor.getAppDate();
-        this.app_day_form = date_stor.getAppDateFormatted();
-        this.last_day = date_stor.getLastDay();
-        this.last_day_form = date_stor.getLastDayFormatted();
-        this.penalty_day = date_stor.getPenaltyDay();
-        this.penalty_day_form = date_stor.getPenaltyDayFormatted();
+        this.app_day = this.date_ev.getAppDate();
+        this.app_day_form = this.date_ev.getAppDateFormatted();
+        this.last_day = this.date_ev.getLastDay();
+        this.last_day_form = this.date_ev.getLastDayFormatted();
+        this.penalty_day = this.date_ev.getPenaltyDay();
+        this.penalty_day_form = this.date_ev.getPenaltyDayFormatted();
+        break;
+      case 4:
+        this.app_day = this.date_stor.getAppDate();
+        this.app_day_form = this.date_stor.getAppDateFormatted();
+        this.last_day = this.date_stor.getLastDay();
+        this.last_day_form = this.date_stor.getLastDayFormatted();
+        this.penalty_day = this.date_stor.getPenaltyDay();
+        this.penalty_day_form = this.date_stor.getPenaltyDayFormatted();
         break;
     }
   }
@@ -131,11 +159,24 @@ export class PaymentFu {
   type
   date
   number
+
+  app_date
   order
 
   pay_date
   in_force_date
   last_day_for_pay_date
+
+  suspension_type
+  suspension_date
+  suspension_number
+
+  suspension_court_name
+  suspension_court_number
+  suspension_court_result
+  suspension_court_date
+  suspension_court_date_end_form
+  suspension_court_date_in_force
 
   claim = [];
   total_penalty_summ_fu
@@ -144,7 +185,28 @@ export class PaymentFu {
   max_days_delay
   count_days
 
-  constructor(id, fu, type, date, number, pay_date, in_force_date, last_day_for_pay_date) {
+  app_to_fu_paragraph
+  fu_decision_paragraph
+  fu_decision_paragraph_motivation
+  fu_suspension_paragraph
+  fu_suspension_paragraph_motivation
+  fu_court_paragraph
+  fu_court_paragraph_motivation
+  fu_analize_period_paragraph_motivation
+  fu_execution_paragraph
+  fu_execution_paragraph_motivation
+  main_paragraph
+
+  constructor(id, fu, type, date, number, app_date, order, pay_date, in_force_date, last_day_for_pay_date,
+              suspension_type,
+              suspension_date,
+              suspension_number,
+              suspension_court_name,
+              suspension_court_number,
+              suspension_court_result,
+              suspension_court_date,
+              suspension_court_date_end_form,
+              suspension_court_date_in_force) {
 
     //Получение массива значений всех переменных решений судов
     var number_of_courts = $('.courts').length; //Получение количества строк с выплатами
@@ -156,7 +218,7 @@ export class PaymentFu {
       courtPenalty[i] = new CourtPenalty(i + 1,
                                    court_dates[i]);
      for (var j = 0; j < courtPenalty[i].claim.length; j++) {
-       if (courtPenalty[i].claim[j].name.options.selectedIndex == 4) {
+       if (courtPenalty[i].claim[j].name.options.selectedIndex == 5) {
          this.penalty_court_period[numberOfPenaltyCourtPeriod] = new PenaltyCourtPeriod(courtPenalty[i].claim[j].from,
                                                                        courtPenalty[i].claim[j].to);
          numberOfPenaltyCourtPeriod++;
@@ -169,15 +231,40 @@ export class PaymentFu {
     this.type = type;
     this.date = date;
     this.number = number;
+    this.app_date = app_date;
+    this.order = order;
     this.pay_date = pay_date;
     this.in_force_date = in_force_date;
     this.last_day_for_pay_date = last_day_for_pay_date;
 
+    this.suspension_type = suspension_type;
+    this.suspension_date = suspension_date;
+    this.suspension_number = suspension_number;
+    this.suspension_court_name = suspension_court_name;
+    this.suspension_court_number = suspension_court_number;
+    this.suspension_court_result = suspension_court_result;
+    this.suspension_court_date = suspension_court_date;
+    this.suspension_court_date_end_form = suspension_court_date_end_form;
+    this.suspension_court_date_in_force = suspension_court_date_in_force;
+
     this.total_penalty_summ_fu = 0;
     this.max_penalty_period = 0;
     this.max_days_delay = 0;
-    //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
-    this.count_days = (this.getPayDate() - date_sv.getAppDate()) / DAY;
+
+    var main_fo_name = document.querySelector("#fo_name").value
+
+    this.app_to_fu_paragraph = ""
+    this.fu_decision_paragraph = ""
+    this.fu_decision_paragraph_motivation = ""
+    this.fu_suspension_paragraph = ""
+    this.fu_suspension_paragraph_motivation = ""
+    this.fu_court_paragraph = ""
+    this.fu_court_paragraph_motivation = ""
+    this.fu_analize_period_paragraph_motivation = ""
+    this.fu_execution_paragraph = ""
+    this.fu_execution_paragraph_motivation = ""
+    this.main_paragraph = ""
+    
     //Получение количества удовлетворенных требований для каждого решения
     var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
     var number_of_claims = $('.fu_claim_' + id).length;
@@ -187,6 +274,18 @@ export class PaymentFu {
     var froms = $('.date_fu_penalty_from_' + id); //Получение массива дат начала периода судебных неустоек
     var tos = $('.date_fu_penalty_to_' + id); //Получение массива дат конца периода судебных неустоек
     var without_periods = $('.fu_without_period_' + id); //Получение массива неустоек без периода
+
+    var app_to_fu_paragraph_all_claims = ""
+    var fu_decision_paragraph_all_claims = ""
+    var fu_decision_paragraph_all_claims_count = 0
+    var fu_decision_paragraph_claims_denied = ""
+    var fu_decision_paragraph_claims_denied_count = 0
+    var fu_decision_paragraph_claims_without_consideration = ""
+    var fu_decision_paragraph_claims_without_consideration_count = 0
+    var fu_decision_paragraph_has_penalty = ""
+    var fu_decision_paragraph_has_penalty_boolean = false
+    var fu_execution_paragraph_all_claims = ""
+    
     for (var i = 0; i < number_of_claims; i++) {
       numberOfPenaltyPeriod = 0;
       this.claim[i] = new ClaimFu(i + 1,
@@ -196,6 +295,9 @@ export class PaymentFu {
                                   froms[i],
                                   tos[i],
                                   without_periods[i]);
+
+      //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
+      this.count_days = (this.getPayDate() - this.claim[i].date_sv.getAppDate()) / DAY;
       //Если решение ФУ исполнено не в срок, то начисляется неустойка с 21го дня, если в срок, то неустойка равна 0
       if (this.getPayDate() > this.getLastDayForPayFu()) {
         this.claim[i].days_delay = (this.getPayDate() - this.claim[i].last_day) / DAY;
@@ -279,7 +381,7 @@ export class PaymentFu {
             }
           }
         }
-        //Сложение всех сумма неустоек по одному решению ФУ
+        //Сложение всех сумм неустоек по одному решению ФУ
         for (var j = 0; j < this.claim[i].penalty_period.length; j++) {
           this.claim[i].penalty_summ = this.claim[i].penalty_summ + this.claim[i].penalty_period[j].penalty_summ;
         }
@@ -289,7 +391,217 @@ export class PaymentFu {
         }
       }
       this.total_penalty_summ_fu = this.total_penalty_summ_fu + this.claim[i].penalty_summ;
+
+      //ФОРМИРОВАНИЕ ТЕКСТОВОЙ ЧАСТИ РЕШЕНИЯ ФУ
+      var current_claim_summ = ""
+      if (this.claim[i].summ != 0) {
+          current_claim_summ = " в размере " + this.claim[i].summ_text
+      } else {
+          current_claim_summ = ""
+      }
+      //Собирание требований, заявленных к ФУ
+      app_to_fu_paragraph_all_claims = app_to_fu_paragraph_all_claims + this.claim[i].type_text + ", "
+
+      if (this.claim[i].type.options.selectedIndex == 1) {
+        //Собирание требований, удовлетворенных ФУ
+        fu_decision_paragraph_all_claims_count++
+        fu_decision_paragraph_all_claims = fu_decision_paragraph_all_claims + this.claim[i].type_text_nominative + 
+                                         current_claim_summ + ", "
+        //Собирание требований, исполненных ФО
+        fu_execution_paragraph_all_claims = fu_execution_paragraph_all_claims + this.claim[i].type_text + 
+                                         current_claim_summ + ", "
+      } else if (this.claim[i].type.options.selectedIndex == 2) {
+        //Собирание требований, оставленных ФУ без удовлетворения
+        fu_decision_paragraph_claims_denied_count++
+        fu_decision_paragraph_claims_denied = fu_decision_paragraph_claims_denied + this.claim[i].type_text + 
+                                         current_claim_summ + ", "
+      } else if (this.claim[i].type.options.selectedIndex == 3) {
+        //Собирание требований, оставленных ФУ без рассмотрения
+        fu_decision_paragraph_claims_without_consideration_count++
+        fu_decision_paragraph_claims_without_consideration = fu_decision_paragraph_claims_without_consideration + this.claim[i].type_text + 
+                                         current_claim_summ + ", "
+      }
+      //Определение рассматривалось ли требование о взыскании неустойки
+      if (this.claim[i].name.options.selectedIndex == 5) {
+        fu_decision_paragraph_has_penalty_boolean = true
+      }
     }
+    var fu_decision_paragraph_all_claims_help_str = "требование"
+    var fu_decision_paragraph_all_claims_help_str1 = "требованием"
+    var fu_decision_paragraph_all_claims_help_str2 = "удовлетворено"
+    var fu_decision_paragraph_all_claims_help_str3 = ""
+    //Изменений вспомогательных значений в случае нескольких требований к ФУ
+    if ((fu_decision_paragraph_all_claims_count + fu_decision_paragraph_claims_denied_count + 
+      fu_decision_paragraph_claims_without_consideration_count) > 1) {
+      fu_decision_paragraph_all_claims_help_str = "требования"
+      fu_decision_paragraph_all_claims_help_str1 = "требованиями"
+      fu_decision_paragraph_all_claims_help_str2 = "удовлетворены"
+    }
+    app_to_fu_paragraph_all_claims = app_to_fu_paragraph_all_claims.slice(0, -2)
+    fu_decision_paragraph_all_claims = fu_decision_paragraph_all_claims.slice(0, -2)
+    //Если есть требования, в удовлетворении которых отказано ФУ
+    if (fu_decision_paragraph_claims_denied_count > 0) {
+      fu_decision_paragraph_all_claims_help_str3 = " частично"
+      var fu_decision_paragraph_claims_denied_help_str = "требования"
+      if (fu_decision_paragraph_claims_denied_count > 1) {
+        fu_decision_paragraph_claims_denied_help_str = "требований"
+      }
+      fu_decision_paragraph_claims_denied = `. В удовлетворении ${fu_decision_paragraph_claims_denied_help_str} 
+      Заявителя к ${main_fo_name} о взыскании ${fu_decision_paragraph_claims_denied.slice(0, -2)} отказано`
+    }
+    //Если есть требования, оставленные без рассмотрения ФУ
+    if (fu_decision_paragraph_claims_without_consideration_count > 0) {
+      fu_decision_paragraph_all_claims_help_str3 = " частично"
+      var fu_decision_paragraph_claims_without_consideration_help_str = ". Требование"
+      var fu_decision_paragraph_claims_without_consideration_help_str2 = "оставлено"
+      if (fu_decision_paragraph_claims_without_consideration_count > 1) {
+        fu_decision_paragraph_claims_without_consideration_help_str = ". Требования"
+        fu_decision_paragraph_claims_without_consideration_help_str2 = "оставлены"
+      }
+      fu_decision_paragraph_claims_without_consideration = `${fu_decision_paragraph_claims_without_consideration_help_str} 
+      о взыскании с ${main_fo_name} ${fu_decision_paragraph_claims_without_consideration.slice(0, -2)} 
+      ${fu_decision_paragraph_claims_without_consideration_help_str2} без рассмотрения`
+    }
+    
+    fu_execution_paragraph_all_claims = fu_execution_paragraph_all_claims.slice(0, -2)
+
+    //Формирование абзаца с обращением к ФУ
+    this.app_to_fu_paragraph = `<p>Не согласившись с позицией ${main_fo_name}, ${this.getAppDateFormatted()} Заявитель, 
+    руководствуясь досудебным порядком урегулирования страхового спора, в порядке, предусмотренном Законом № 123-ФЗ обратился 
+    в Службу финансового уполномоченного с ${fu_decision_paragraph_all_claims_help_str1} о взыскании ${app_to_fu_paragraph_all_claims}.</p>`
+
+    var fu_name = ""
+    var fu_post = ""
+    switch (this.fu.value) {
+      case "Воронин Ю.В.":
+        fu_name = "Воронина Ю.В."
+        fu_post = "Главного финансового уполномоченного"
+        break;
+      case "Климов В.В.":
+        fu_name = "Климова В.В."
+        fu_post = "Финансового уполномоченного в сферах страхования, " +
+        "кредитной кооперации, деятельности кредитных организаций, " +
+        "ломбардов и негосударственных пенсионных фондов"
+        break;
+      case "Максимова С.В.":
+        fu_name = "Максимовой С.В."
+        fu_post = "Финансового уполномоченного в сферах " +
+        "страхования, микрофинансирования, кредитной кооперации " +
+        "и деятельности кредитных организаций"
+        break;
+      case "Писаревский Е.Л.":
+        fu_name = "Писаревского Е.Л."
+        fu_post = "Финансового уполномоченного по правам потребителей " + 
+        "финансовых услуг в сферах страхования, микрофинансирования, " + 
+        "кредитной кооперации и деятельности кредитных организаций"
+        break;
+      case "Новак Д.В.":
+        fu_name = "Новака Д.В."
+        fu_post = "Финансового уполномоченного в сферах страхования, микрофинансирования, " +
+        "кредитной кооперации, деятельности кредитных организаций"
+        break;
+      case "Савицкая Т.М.":
+        fu_name = "Савицкой Т.М."
+        fu_post = "Финансового уполномоченного в сферах кредитной " +
+        "кооперации, деятельности кредитных организаций, " +
+        "ломбардов и негосударственных пенсионных фондов"
+        break;
+      default:
+        break;
+    }
+
+    //Формирование абзаца с указанием на то, что требвоание о взыскании неустойки ФУ не рассматривалось в данном решении
+    if (!fu_decision_paragraph_has_penalty_boolean) {
+      fu_decision_paragraph_has_penalty = `<p>Решением финансового уполномоченного от ${this.getDateFormatted()} 
+      требование о взыскании c ${main_fo_name} неустойки не рассматривалось.</p>`
+    }
+    //Формирование абзаца с описанием решения ФУ
+    var app_number = this.number.value.slice(0, this.number.value.indexOf("/"))
+    //Если вынесено решение об удовлетворении требований Заявителя
+    if (this.type.options.selectedIndex == 1) {
+
+      //Для резолютивной части
+      this.fu_decision_paragraph = `<p>${this.getDateFormatted()} решением ${fu_post} ${fu_name} № ${this.number.value} 
+      по результатам рассмотрения обращения от ${this.getAppDateFormatted()} № ${app_number} (далее – Решение финансового 
+      уполномоченного от ${this.getDateFormatted()}) ${fu_decision_paragraph_all_claims_help_str} Заявителя 
+      ${fu_decision_paragraph_all_claims_help_str2}${fu_decision_paragraph_all_claims_help_str3}. В пользу Заявителя c ${main_fo_name} 
+      взыскано ${fu_decision_paragraph_all_claims}${fu_decision_paragraph_claims_denied}${fu_decision_paragraph_claims_without_consideration}.</p>
+      ${fu_decision_paragraph_has_penalty}
+      <p>Решение финансового уполномоченного от ${this.getDateFormatted()} вступило в силу ${this.getInForceDateFormatted()}.</p>`
+      
+      //Для мотивированной части
+      this.fu_decision_paragraph_motivation = `<p>Решением финансового уполномоченного от ${this.getDateFormatted()} 
+      ${fu_decision_paragraph_all_claims_help_str} Заявителя ${fu_decision_paragraph_all_claims_help_str2}${fu_decision_paragraph_all_claims_help_str3}. 
+      В пользу Заявителя c ${main_fo_name} взыскано ${fu_decision_paragraph_all_claims}${fu_decision_paragraph_claims_denied}${fu_decision_paragraph_claims_without_consideration}.</p>
+      <p>В резолютивной части Решения финансового уполномоченного от ${this.getDateFormatted()} указано, что 
+      Решение финансового уполномоченного от ${this.getDateFormatted()} подлежит исполнению ${main_fo_name} в течение 10 рабочих дней после дня вступления в силу.</p>`
+    } else {
+      
+    }
+
+    //Формирование абзаца c решением ФУ о приостановлении сроков
+    if (this.suspension_type.options.selectedIndex == 1) {
+
+      //Для резолютивной части
+      this.fu_suspension_paragraph = `<p>Решением финансового уполномоченного от ${this.getSuspensionDateFormatted()} 
+      № ${this.suspension_number.value} срок исполнения Решения финансового уполномоченного от ${this.getDateFormatted()} 
+      приостановлен в связи с обращением ${main_fo_name} в ${this.suspension_court_name.value} (далее – Суд) с заявлением об 
+      обжаловании Решения финансового уполномоченного от ${this.getDateFormatted()}.</p>`
+
+      //Для мотивированной части
+      this.fu_suspension_paragraph_motivation = `<p>Решением финансового уполномоченного от ${this.getSuspensionDateFormatted()} 
+      № ${this.suspension_number.value} срок исполнения Решения финансового уполномоченного от 
+      ${this.getDateFormatted()} приостановлен до вынесения решения Судом.</p>`
+
+      //Формирование абзацев в судом (в случае, если требования ФО оставлены без удовлетворения)
+      if (this.suspension_court_result.options.selectedIndex == 2) {
+        //Для резолютивной части
+        this.fu_court_paragraph = `<p>Решением Суда от ${this.getSuspensionCourtDateFormatted()} по гражданскому делу № 
+        ${this.suspension_court_number.value} Решение финансового уполномоченного 
+        от ${this.getDateFormatted()} оставлено без изменений (далее – Решение суда).</p>
+        <p>Решение суда в окончательной форме изготовлено ${this.getSuspensionCourtDateEndFormDateFormatted()}.</p>`
+
+        //Для мотивированной части
+        this.fu_court_paragraph_motivation = `<p>Решением Суда исковое заявление ${main_fo_name} 
+        оставлено без удовлетворения. Резолютивная часть Решения Суда объявлена ${this.getSuspensionCourtDateFormatted()}, 
+        мотивированное Решение Суда в окончательной форме составлено ${this.getSuspensionCourtDateEndFormDateFormatted()}. 
+        Решение Суда вступило в законную силу ${this.getSuspensionCourtDateInForceDateFormatted()}.</p>`
+      }
+
+      //Формирование абзаца с выводом по срокам исполнения
+      this.fu_analize_period_paragraph_motivation = `<p>Таким образом, Решение финансового уполномоченного 
+      от ${this.getDateFormatted()} вступило в силу ${this.getInForceDateFormatted()} и подлежало исполнению 
+      в течение 10 рабочих дней после даты вступления в законную силу 
+      Решения Суда, за вычетом количества дней с момента вступления в силу Решение финансового уполномоченного 
+      от ${this.getDateFormatted()} и до даты приостановления срока исполнения Решение финансового уполномоченного 
+      от ${this.getDateFormatted()}, то есть до ${this.getLastDayForPayFuFormatted()}.</p>`
+    } else {
+      this.fu_analize_period_paragraph_motivation = `<p>Таким образом, Решение финансового уполномоченного от 
+      ${this.getDateFormatted()} вступило в силу ${this.getInForceDateFormatted()} и подлежало исполнению 
+      ${main_fo_name} до ${this.getLastDayForPayFuFormatted()} включительно (в течение 10 рабочих дней после 
+        дня вступления в силу).</p>`
+    }
+    
+    //Формирование абзацев с исполнением решения ФУ
+    //Для резолютивной части
+    this.fu_execution_paragraph = `<p>${this.getPayDateFormatted()} ${main_fo_name} в рамках добровольного исполнения Решения 
+    финансового уполномоченного от ${this.getDateFormatted()} осуществило Заявителю выплату ${fu_execution_paragraph_all_claims}, 
+    что подтверждается платежным поручением № ${this.order.value}.</p>`
+
+    //Для мотивированной части
+    if (this.getPayDate() <= this.getLastDayForPayFu()) {
+      this.fu_execution_paragraph_motivation = `<p>${this.getPayDateFormatted()}, то есть в срок, установленный 
+      Законом № 123-ФЗ, ${main_fo_name} исполнило Решение финансового уполномоченного от ${this.getDateFormatted()}.</p>`
+    } else {
+      this.fu_execution_paragraph_motivation = `<p>${this.getPayDateFormatted()}, то есть с нарушением срока, установленного 
+      Законом № 123-ФЗ, ${main_fo_name} исполнило Решение финансового уполномоченного от ${this.getDateFormatted()}.</p>`
+    }
+
+    this.main_paragraph = this.app_to_fu_paragraph +
+                          this.fu_decision_paragraph +
+                          this.fu_suspension_paragraph +
+                          this.fu_court_paragraph +
+                          this.fu_execution_paragraph
   }
 
   getDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
@@ -299,8 +611,44 @@ export class PaymentFu {
 
   getInForceDate(){ return findInForceFuDay(this.getDate()); }
   getInForceDateFormatted(){ return formatDate(new Date(this.getInForceDate()));}
-  getLastDayForPayFu(){ return findLastDayForPayFu(this.getInForceDate()); }
+  getLastDayForPayFu(){ 
+    //Если решение ФУ было приостановлено
+    if (this.suspension_type.options.selectedIndex == 1) {
+      //Если значения дат вступления в силу решения ФУ, приостановки решения ФУ и вступления  силу решения суда заполнены
+      if (!isNaN(this.getInForceDate()) && 
+          !isNaN(this.getSuspensionDate()) && 
+          !isNaN(this.getSuspensionCourtDateInForceDate())) {
+        //Если дата приостановки ранее либо равна дате окончания срока на исполнения без приостановки (приостановка сроков произошла в течение 10 дней)
+        if (this.getSuspensionDate() <= findLastDayForPayFu(this.getInForceDate())) {
+          //Если дата приостановки позднее даты вступления в силу решения ФУ
+          if (this.getSuspensionDate() > this.getInForceDate()) {
+            return findLastDayForPayFuSuspension(this.getInForceDate(), this.getSuspensionDate(), this.getSuspensionCourtDateInForceDate())
+          //Если дата приостановки ранее даты вступления в силу решения ФУ
+          } else {
+            return findLastDayForPayFuSuspension(this.getInForceDate(), this.getInForceDate() + DAY, this.getSuspensionCourtDateInForceDate())
+
+          }
+        }
+      }
+    //Если решение ФУ не было приостановлено
+    } else {
+      return findLastDayForPayFu(this.getInForceDate())
+    }
+  }
+  
   getLastDayForPayFuFormatted(){ return formatDate(new Date(this.getLastDayForPayFu())); }
+
+  getAppDate() {return Date.parse(changeDateType(this.app_date.value) + 'T00:00:00');}
+  getAppDateFormatted() { return formatDate(new Date(this.getAppDate())); }
+
+  getSuspensionDate() {return Date.parse(changeDateType(this.suspension_date.value) + 'T00:00:00');}
+  getSuspensionDateFormatted() { return formatDate(new Date(this.getSuspensionDate())); }
+  getSuspensionCourtDate() {return Date.parse(changeDateType(this.suspension_court_date.value) + 'T00:00:00');}
+  getSuspensionCourtDateFormatted() { return formatDate(new Date(this.getSuspensionCourtDate())); }
+  getSuspensionCourtDateEndFormDate() {return Date.parse(changeDateType(this.suspension_court_date_end_form.value) + 'T00:00:00');}
+  getSuspensionCourtDateEndFormDateFormatted() { return formatDate(new Date(this.getSuspensionCourtDateEndFormDate())); }
+  getSuspensionCourtDateInForceDate() {return Date.parse(changeDateType(this.suspension_court_date_in_force.value) + 'T00:00:00');}
+  getSuspensionCourtDateInForceDateFormatted() { return formatDate(new Date(this.getSuspensionCourtDateInForceDate())); }
 
   //Вывод на экран значений дня вступления в силу и последнего дня для исполнения решения ФУ
   fillDates() {
@@ -308,8 +656,8 @@ export class PaymentFu {
     this.last_day_for_pay_date.innerHTML = "";
 
     if (!isNaN(findInForceFuDay(this.getDate()))) {
-      this.in_force_date.innerHTML = this.getInForceDateFormatted();
-      this.last_day_for_pay_date.innerHTML = this.getLastDayForPayFuFormatted();
+      this.in_force_date.value = this.getInForceDateFormatted();
+      this.last_day_for_pay_date.value = this.getLastDayForPayFuFormatted();
     }
   }
 
@@ -319,12 +667,12 @@ export class PaymentFu {
     for (var i = 0; i < this.claim.length; i++) {
       str_payment_dataled_helper = '';
       if (this.date.value != "" &&
-          this.type.selectedIndex == 0 &&
-          this.claim[i].type.selectedIndex == 0) {
-        if (this.claim[i].name.selectedIndex == 0 ||
-            this.claim[i].name.selectedIndex == 1 ||
+          this.type.selectedIndex == 1 &&
+          this.claim[i].type.selectedIndex == 1) {
+        if (this.claim[i].name.selectedIndex == 1 ||
             this.claim[i].name.selectedIndex == 2 ||
-            this.claim[i].name.selectedIndex == 3) {
+            this.claim[i].name.selectedIndex == 3 ||
+            this.claim[i].name.selectedIndex == 4) {
           let number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
 
           if (this.claim[i].penalty_period.length > 0 && this.claim[i].days_delay > 0) {

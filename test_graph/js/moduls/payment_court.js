@@ -26,10 +26,10 @@ import { DAY } from './variables.js';
     // * last_day - последний день 20го срока
     // * penalty_day - первый день начисления неустойки (21й день)
 */
-let date_sv = new AppDate("date_sv")
-let date_uts = new AppDate("date_uts")
-let date_ev = new AppDate("date_ev")
-let date_stor = new AppDate("date_stor")
+// let date_sv = new AppDate("date_sv")
+// let date_uts = new AppDate("date_uts")
+// let date_ev = new AppDate("date_ev")
+// let date_stor = new AppDate("date_stor")
 
 class PenaltyCourtPeriod {
   start_date
@@ -60,6 +60,11 @@ class PenaltyPeriod {
 class ClaimCourt {
   id
 
+  date_sv
+  date_uts
+  date_ev
+  date_stor
+
   name
   type
   summ
@@ -78,6 +83,12 @@ class ClaimCourt {
   penalty_period = [];
 
   constructor(id, name, type, summ, from, to, without) {
+
+    this.date_sv = new AppDate("date_sv")
+    this.date_uts = new AppDate("date_uts")
+    this.date_ev = new AppDate("date_ev")
+    this.date_stor = new AppDate("date_stor")
+
     this.id = id;
     this.name = name;
     this.type = type;
@@ -88,38 +99,38 @@ class ClaimCourt {
 
     //Вычисление количества дней между датой выплаты и 20м днем
     switch (this.name.options.selectedIndex) {
-      case 0:
-      case 4:
-        this.app_day = date_sv.getAppDate();
-        this.app_day_form = date_sv.getAppDateFormatted();
-        this.last_day = date_sv.getLastDay();
-        this.last_day_form = date_sv.getLastDayFormatted();
-        this.penalty_day = date_sv.getPenaltyDay();
-        this.penalty_day_form = date_sv.getPenaltyDayFormatted();
-        break;
       case 1:
-        this.app_day = date_uts.getAppDate();
-        this.app_day_form = date_uts.getAppDateFormatted();
-        this.last_day = date_uts.getLastDay();
-        this.last_day_form = date_uts.getLastDayFormatted();
-        this.penalty_day = date_uts.getPenaltyDay();
-        this.penalty_day_form = date_uts.getPenaltyDayFormatted();
+      case 5:
+        this.app_day = this.date_sv.getAppDate();
+        this.app_day_form = this.date_sv.getAppDateFormatted();
+        this.last_day = this.date_sv.getLastDay();
+        this.last_day_form = this.date_sv.getLastDayFormatted();
+        this.penalty_day = this.date_sv.getPenaltyDay();
+        this.penalty_day_form = this.date_sv.getPenaltyDayFormatted();
         break;
       case 2:
-        this.app_day = date_ev.getAppDate();
-        this.app_day_form = date_ev.getAppDateFormatted();
-        this.last_day = date_ev.getLastDay();
-        this.last_day_form = date_ev.getLastDayFormatted();
-        this.penalty_day = date_ev.getPenaltyDay();
-        this.penalty_day_form = date_ev.getPenaltyDayFormatted();
+        this.app_day = this.date_uts.getAppDate();
+        this.app_day_form = this.date_uts.getAppDateFormatted();
+        this.last_day = this.date_uts.getLastDay();
+        this.last_day_form = this.date_uts.getLastDayFormatted();
+        this.penalty_day = this.date_uts.getPenaltyDay();
+        this.penalty_day_form = this.date_uts.getPenaltyDayFormatted();
         break;
       case 3:
-        this.app_day = date_stor.getAppDate();
-        this.app_day_form = date_stor.getAppDateFormatted();
-        this.last_day = date_stor.getLastDay();
-        this.last_day_form = date_stor.getLastDayFormatted();
-        this.penalty_day = date_stor.getPenaltyDay();
-        this.penalty_day_form = date_stor.getPenaltyDayFormatted();
+        this.app_day = this.date_ev.getAppDate();
+        this.app_day_form = this.date_ev.getAppDateFormatted();
+        this.last_day = this.date_ev.getLastDay();
+        this.last_day_form = this.date_ev.getLastDayFormatted();
+        this.penalty_day = this.date_ev.getPenaltyDay();
+        this.penalty_day_form = this.date_ev.getPenaltyDayFormatted();
+        break;
+      case 4:
+        this.app_day = this.date_stor.getAppDate();
+        this.app_day_form = this.date_stor.getAppDateFormatted();
+        this.last_day = this.date_stor.getLastDay();
+        this.last_day_form = this.date_stor.getLastDayFormatted();
+        this.penalty_day = this.date_stor.getPenaltyDay();
+        this.penalty_day_form = this.date_stor.getPenaltyDayFormatted();
         break;
     }
   }
@@ -151,29 +162,55 @@ export class PaymentCourt {
     //Получение массива значений всех переменных решений ФУ
     var number_of_fus = $('.fus').length; //Получение количества строк с выплатами
     var fu_names = $('.fu_names'); //Получение массива ФУ
-    var fu_types = $('.fu_types'); //Получение массива типов решений ФУ
+    var fu_types = $('.fu_types'); //Получение массива дат решений ФУ
     var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
     var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
+
+    var fu_app_dates = $('.fu_app_dates'); //Получение массива номеров решений ФУ
+    var fu_orders = $('.fu_orders'); //Получение массива номеров решений ФУ
+
     var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
     var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
     var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
+
+    var add_fu_info_suspension_types = $('.add_fu_info_suspension_types'); //Получение массива номеров решений ФУ
+    var add_fu_info_suspension_dates = $('.add_fu_info_suspension_dates'); //Получение массива номеров решений ФУ
+    var add_fu_info_suspension_numbers = $('.add_fu_info_suspension_numbers'); //Получение массива номеров решений ФУ
+    var add_fu_info_suspension_court_names = $('.add_fu_info_suspension_court_names'); //Получение массива номеров решений ФУ
+    var add_fu_info_suspension_court_numbers = $('.add_fu_info_suspension_court_numbers'); //Получение массива номеров решений ФУ
+    var add_fu_info_suspension_court_results = $('.add_fu_info_suspension_court_results'); //Получение массива номеров решений ФУ
+    var add_fu_info_suspension_court_dates = $('.add_fu_info_suspension_court_dates'); //Получение массива номеров решений ФУ
+    var add_fu_info_suspension_court_date_end_forms = $('.add_fu_info_suspension_court_date_end_forms'); //Получение массива номеров решений ФУ
+    var add_fu_info_suspension_court_date_in_forces = $('.add_fu_info_suspension_court_date_in_forces'); //Получение массива номеров решений ФУ
+
     this.fu_claim_set = new Set();
     this.fu_claim_set.clear();
 
     //Создание экземпляров решений ФУ
     for (var i = 0; i < number_of_fus; i++) {
       paymentFu[i] = new PaymentFu(i + 1,
-                                   fu_names[i],
-                                   fu_types[i],
-                                   fu_dates[i],
-                                   fu_numbers[i],
-                                   fu_pay_dates[i],
-                                   fu_in_force_dates[i],
-                                   fu_last_day_for_pay_dates[i]);
+                                 fu_names[i],
+                                 fu_types[i],
+                                 fu_dates[i],
+                                 fu_numbers[i],
+                                 fu_app_dates[i],
+                                 fu_orders[i],
+                                 fu_pay_dates[i],
+                                 fu_in_force_dates[i],
+                                 fu_last_day_for_pay_dates[i],
+                                 add_fu_info_suspension_types[i],
+                                 add_fu_info_suspension_dates[i],
+                                 add_fu_info_suspension_numbers[i],
+                                 add_fu_info_suspension_court_names[i],
+                                 add_fu_info_suspension_court_numbers[i],
+                                 add_fu_info_suspension_court_results[i],
+                                 add_fu_info_suspension_court_dates[i],
+                                 add_fu_info_suspension_court_date_end_forms[i],
+                                 add_fu_info_suspension_court_date_in_forces[i]);
       for (var j = 0; j < paymentFu[i].claim.length; j++) {
         if (paymentFu[i].claim[j].summ != "" ||
-            paymentFu[i].claim[j].type.options.selectedIndex == 1 ||
-            (paymentFu[i].type.options.selectedIndex == 1 && paymentFu[i].date != "")) {
+            paymentFu[i].claim[j].type.options.selectedIndex == 2 ||
+            (paymentFu[i].type.options.selectedIndex == 2 && paymentFu[i].date != "")) {
           this.fu_claim_set.add(paymentFu[i].claim[j].name.options.selectedIndex);
         }
       }
@@ -189,7 +226,7 @@ export class PaymentCourt {
       courtPenalty[i] = new CourtPenalty(i + 1,
                                    court_dates[i]);
      for (var j = 0; j < courtPenalty[i].claim.length; j++) {
-       if (courtPenalty[i].claim[j].name.options.selectedIndex == 4) {
+       if (courtPenalty[i].claim[j].name.options.selectedIndex == 5) {
          this.penalty_court_period[numberOfPenaltyCourtPeriod] = new PenaltyCourtPeriod(courtPenalty[i].claim[j].from,
                                                                        courtPenalty[i].claim[j].to);
          numberOfPenaltyCourtPeriod++;
@@ -208,8 +245,7 @@ export class PaymentCourt {
     this.max_penalty_period = 0;
     this.max_days_delay = 0;
     this.fu_claim_set_type = 0;
-    //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
-    this.count_days = (this.getPayDate() - date_sv.getAppDate()) / DAY;
+    
     //Получение количества удовлетворенных требований для каждого решения
     var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
     var number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
@@ -230,6 +266,9 @@ export class PaymentCourt {
                                   tos[i],
                                   without_periods[i]);
 
+      //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
+      this.count_days = (this.getPayDate() - this.claim[i].date_sv.getAppDate()) / DAY;
+      
       //Вычисление периода задержки
       if (this.fu_claim_set.has(this.claim[i].name.options.selectedIndex)) {
         this.claim[i].days_delay = (this.getPayDate() - this.getInForceDate() + DAY) / DAY;
@@ -343,11 +382,11 @@ export class PaymentCourt {
     for (var i = 0; i < this.claim.length; i++) {
       str_payment_dataled_helper = '';
       if (this.date.value != "" &&
-          this.claim[i].type.selectedIndex == 0) {
-        if (this.claim[i].name.selectedIndex == 0 ||
-            this.claim[i].name.selectedIndex == 1 ||
+          this.claim[i].type.selectedIndex == 1) {
+        if (this.claim[i].name.selectedIndex == 1 ||
             this.claim[i].name.selectedIndex == 2 ||
-            this.claim[i].name.selectedIndex == 3) {
+            this.claim[i].name.selectedIndex == 3 ||
+            this.claim[i].name.selectedIndex == 4) {
           let number_of_payment_rows = $('.payment_row').length; //Получение количества строк с выплатами
 
           if (this.claim[i].penalty_period.length > 0 && this.claim[i].days_delay > 0) {
