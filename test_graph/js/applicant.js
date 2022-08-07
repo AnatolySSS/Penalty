@@ -1,4 +1,4 @@
-//Добавляет поле для ввода номера телефона
+//Меняет поля в зависимости от типа Заявителя (ФЛ / ИП / ЮЛ)
 $(document).on("change", ".app_type", function (event) {
 	if ($(this).find(':selected').text() == "ФЛ") {
         $(this).parent().parent().parent().find('.fl').show('fast')
@@ -40,6 +40,6 @@ $(document).on("change", ".app_type", function (event) {
             $(this).parent().parent().parent().find('.ul').find('input[type=text]').removeClass('form-control')
         }, 200)
     }
-    validationCheckUpdate('preambula')
-    validationCheck('preambula')
+    // validationCheckUpdate('preambula')
+    // validationCheck('preambula')
 });

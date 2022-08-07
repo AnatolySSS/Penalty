@@ -229,17 +229,41 @@ function removeClaim(id, claimId) {
   $('#add_court_claim_info_' + id + '_' + claimId).remove();
 }
 
+//Показывает сведения о решении суда
+$(document).on("change", ".courts_info", function (event) {
+	if ($(this).find(':selected').text() == "Сведения имеются") {
+		$(this).parent().parent().next().show('fast')
+		//Добавление класса form-control в группе fu_form_rows
+		$(this).parent().parent().next().find('.court_form_rows').find('input[type=text]').addClass('form-control')
+		$(this).parent().parent().next().find('.court_form_rows').find('select').addClass('form-control')
+		//Добавление класса form-control в группе add_fu_info_dates
+		$(this).parent().parent().next().find('.add_court_info_dates').find('input[type=text]').addClass('form-control')
+		$(this).parent().parent().next().find('.add_court_info_dates').find('select').addClass('form-control')
+		//Добавление класса form-control для всех input в группе fu_form_rows кроме суммы НДФЛ (т.к. для него данный класс добавляется при клике на checkbox)
+        $(this).parent().parent().next().find('.add_court_info_rows').find('input[type=text]').each(function(index){
+            if (!$(this).hasClass('date_court_froms') && !$(this).hasClass('date_court_tos')) {
+                $(this).addClass('form-control')
+            }
+        })
+		$(this).parent().parent().next().find('.add_court_info_rows').find('select').addClass('form-control')
+		//Добавление класса form-control к select с вариантом приостановления сроков
+		
+	} else {
+    	$(this).parent().parent().next().hide('fast')
+		setTimeout(() => {
+            $(this).parent().parent().next().find('input[type=text]').removeClass('form-control')
+			$(this).parent().parent().next().find('select').removeClass('form-control')
+        }, 200)
+	}
+});
+
 //Показать дополнительную информацию по суду
 $(document).on("click", ".add_court_info_btns", function (event) {
 	if (!($(this).find(".toggle").hasClass("rotate"))) {
     $(this).parent().parent().next().show('fast'); //Показывает .add_court_info
     $(this).find(".toggle").addClass("rotate");
-		if ($(this).parent().parent().next().children().first().find(':selected').text() == "Неустойка"){
-			$(this).parent().parent().next().children().first().next().show('fast'); //Показывает .add_court_claim_info
-		}
   } else {
     $(this).parent().parent().next().hide('fast'); //Скрывает .add_court_info
-		// $(this).parent().parent().next().children().first().next().hide('fast'); //Скрывает .add_court_claim_info
     $(this).find(".toggle").removeClass("rotate");
   }
 });
@@ -249,7 +273,7 @@ $(document).on("change", ".court_claims", function (event) {
 	if ($(this).find(':selected').text() == "Неустойка") {
 		$(this).parent().parent().next().show('fast');
 	} else {
-    $(this).parent().parent().next().hide('fast');
+    	$(this).parent().parent().next().hide('fast');
 	}
 });
 
