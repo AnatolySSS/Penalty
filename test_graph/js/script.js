@@ -933,6 +933,7 @@ $(document).on("click", "input[type=checkbox]", function (event) {
   validationCheckUpdate('dtp-description')
   validationCheckUpdate('apps-to-fo')
   validationCheckUpdate('fus-all')
+  validationCheckUpdate('courts-all')
 })
 
 $(document).on("click", "button", function (event) {
@@ -942,6 +943,7 @@ $(document).on("click", "button", function (event) {
   validationCheckUpdate('dtp-description')
   validationCheckUpdate('apps-to-fo')
   validationCheckUpdate('fus-all')
+  validationCheckUpdate('courts-all')
 })
 
 $(document).on("change", "select", function (event) {
@@ -951,6 +953,7 @@ $(document).on("change", "select", function (event) {
   validationCheckUpdate('dtp-description')
   validationCheckUpdate('apps-to-fo')
   validationCheckUpdate('fus-all')
+  validationCheckUpdate('courts-all')
 })
 
 $(document).on( "mouseenter", '.form-control', function( event ) {
@@ -960,4 +963,5 @@ $(document).on( "mouseenter", '.form-control', function( event ) {
   validationCheck('dtp-description')
   validationCheck('apps-to-fo')
   validationCheck('fus-all')
+  validationCheck('courts-all')
 })
