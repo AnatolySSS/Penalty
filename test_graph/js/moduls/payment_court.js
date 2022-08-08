@@ -12,6 +12,7 @@ import { AppDate } from './app_date.js';
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './variables.js';
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './variables.js';
 import { DAY } from './variables.js';
+import { allClaims } from './objects/allClaims';
 
 /* Объект для выплаты по решению ФУ
 
@@ -67,7 +68,11 @@ class ClaimCourt {
 
   name
   type
+  type_text
+  type_text_nominative
+  type_text_full
   summ
+  summ_text
   from
   to
   without
@@ -93,9 +98,21 @@ class ClaimCourt {
     this.name = name;
     this.type = type;
     this.summ = Number(summ.value.replace(/\s+/g, ''));
+    this.summ_text = makeRubText_genitive(this.summ)
     this.from = Date.parse(changeDateType(from.value) + 'T00:00:00');
     this.to = Date.parse(changeDateType(to.value) + 'T00:00:00');
     this.without = without;
+
+    allClaims.claims.forEach(element => {
+      if (this.name.value == element.claim) {
+          this.type_text = element.short
+          this.type_text_nominative = element.res
+          if (this.name.value == "УТС") {
+            this.type_text = "страхового возмещения в части УТС"
+            this.type_text_nominative = "страховое возмещение в части УТС"
+          }
+      }
+    })
 
     //Вычисление количества дней между датой выплаты и 20м днем
     switch (this.name.options.selectedIndex) {
@@ -141,10 +158,12 @@ export class PaymentCourt {
   id
 
   court
+  type
   number
   order
 
   date
+  date_end_form
   in_force_date
   pay_date
 
@@ -157,7 +176,15 @@ export class PaymentCourt {
   fu_claim_set
   fu_claim_set_type
 
-  constructor(id, court, number, date, in_force_date, pay_date) {
+  app_to_court_paragraph
+  court_decision_paragraph
+  court_decision_paragraph_motivation
+  court_analize_period_paragraph_motivation
+  court_execution_paragraph
+  court_execution_paragraph_motivation
+  main_paragraph
+
+  constructor(id, court, type, number, date, date_end_form, in_force_date, pay_date, order) {
 
     //Получение массива значений всех переменных решений ФУ
     var number_of_fus = $('.fus').length; //Получение количества строк с выплатами
@@ -236,15 +263,28 @@ export class PaymentCourt {
 
     this.id = id;
     this.court = court;
+    this.type = type
     this.number = number;
     this.date = date;
+    this.date_end_form = date_end_form
     this.in_force_date = in_force_date;
     this.pay_date = pay_date;
+    this.order = order
 
     this.total_penalty_summ_court = 0;
     this.max_penalty_period = 0;
     this.max_days_delay = 0;
     this.fu_claim_set_type = 0;
+
+    var main_fo_name = document.querySelector("#fo_name").value
+
+    this.app_to_court_paragraph = ""
+    this.court_decision_paragraph = ""
+    this.court_decision_paragraph_motivation = ""
+    this.court_analize_period_paragraph_motivation = ""
+    this.court_execution_paragraph = ""
+    this.court_execution_paragraph_motivation = ""
+    this.main_paragraph = ""
     
     //Получение количества удовлетворенных требований для каждого решения
     var number_of_payments = $('div.payments').length; //Получение количества строк с выплатами
@@ -256,6 +296,19 @@ export class PaymentCourt {
     var froms = $('.date_court_penalty_from_' + id); //Получение массива дат начала периода судебных неустоек
     var tos = $('.date_court_penalty_to_' + id); //Получение массива дат конца периода судебных неустоек
     var without_periods = $('.court_without_period_' + id); //Получение массива неустоек без периода
+
+    var app_to_court_paragraph_all_claims = ""
+    var court_decision_paragraph_all_claims = ""
+    var court_decision_paragraph_all_claims_count = 0
+    var court_decision_paragraph_claims_denied = ""
+    var court_decision_paragraph_claims_denied_count = 0
+    var court_decision_paragraph_claims_without_consideration = ""
+    var court_decision_paragraph_claims_without_consideration_count = 0
+    var court_decision_paragraph_has_penalty = ""
+    var court_decision_paragraph_has_penalty_boolean = false
+    var court_execution_paragraph_all_claims = ""
+    var court_execution_paragraph_all_claims_summ = 0
+
     for (var i = 0; i < number_of_claims; i++) {
       numberOfPenaltyPeriod = 0;
       this.claim[i] = new ClaimCourt(i + 1,
@@ -366,11 +419,128 @@ export class PaymentCourt {
         }
       }
       this.total_penalty_summ_court = this.total_penalty_summ_court + this.claim[i].penalty_summ;
+
+      //ФОРМИРОВАНИЕ ТЕКСТОВОЙ ЧАСТИ РЕШЕНИЯ ФУ
+      var current_claim_summ = ""
+      if (this.claim[i].summ != 0) {
+          current_claim_summ = " в размере " + this.claim[i].summ_text
+      } else {
+          current_claim_summ = ""
+      }
+      //Собирание требований, заявленных к ФУ
+      app_to_court_paragraph_all_claims = app_to_court_paragraph_all_claims + this.claim[i].type_text + ", "
+
+      if (this.claim[i].type.options.selectedIndex == 1) {
+        //Собирание требований, удовлетворенных ФУ
+        court_decision_paragraph_all_claims_count++
+        court_decision_paragraph_all_claims = court_decision_paragraph_all_claims + this.claim[i].type_text_nominative + 
+                                         current_claim_summ + ", "
+        //Собирание требований, исполненных ФО
+        court_execution_paragraph_all_claims_summ = court_execution_paragraph_all_claims_summ + this.claim[i].summ
+        court_execution_paragraph_all_claims = court_execution_paragraph_all_claims + this.claim[i].type_text_nominative + 
+                                         current_claim_summ + ", "
+      } else if (this.claim[i].type.options.selectedIndex == 2) {
+        //Собирание требований, оставленных ФУ без удовлетворения
+        court_decision_paragraph_claims_denied_count++
+        court_decision_paragraph_claims_denied = court_decision_paragraph_claims_denied + this.claim[i].type_text + 
+                                         current_claim_summ + ", "
+      } else if (this.claim[i].type.options.selectedIndex == 3) {
+        //Собирание требований, оставленных ФУ без рассмотрения
+        court_decision_paragraph_claims_without_consideration_count++
+        court_decision_paragraph_claims_without_consideration = court_decision_paragraph_claims_without_consideration + this.claim[i].type_text + 
+                                         current_claim_summ + ", "
+      }
+      //Определение рассматривалось ли требование о взыскании неустойки
+      if (this.claim[i].name.options.selectedIndex == 5) {
+        court_decision_paragraph_has_penalty_boolean = true
+      }
     }
+
+    var court_decision_paragraph_all_claims_help_str = "требование"
+    var court_decision_paragraph_all_claims_help_str1 = "требованием"
+    var court_decision_paragraph_all_claims_help_str2 = "удовлетворено"
+    var court_decision_paragraph_all_claims_help_str3 = ""
+    //Изменений вспомогательных значений в случае нескольких требований к ФУ
+    if ((court_decision_paragraph_all_claims_count + court_decision_paragraph_claims_denied_count + 
+      court_decision_paragraph_claims_without_consideration_count) > 1) {
+      court_decision_paragraph_all_claims_help_str = "требования"
+      court_decision_paragraph_all_claims_help_str1 = "требованиями"
+      court_decision_paragraph_all_claims_help_str2 = "удовлетворены"
+    }
+    app_to_court_paragraph_all_claims = app_to_court_paragraph_all_claims.slice(0, -2)
+    court_decision_paragraph_all_claims = court_decision_paragraph_all_claims.slice(0, -2)
+    //Если есть требования, в удовлетворении которых отказано ФУ
+    if (court_decision_paragraph_claims_denied_count > 0 || court_decision_paragraph_claims_without_consideration_count > 0) {
+      court_decision_paragraph_all_claims_help_str3 = " частично"
+      var court_decision_paragraph_claims_denied_help_str = "требования"
+      if (court_decision_paragraph_claims_denied_count > 1) {
+        court_decision_paragraph_claims_denied_help_str = "требований"
+      }
+      court_decision_paragraph_claims_denied = `. В удовлетворении ${court_decision_paragraph_claims_denied_help_str} 
+      Заявителя к ${main_fo_name} о взыскании ${court_decision_paragraph_claims_denied.slice(0, -2)} отказано`
+    }
+    //Если есть требования, оставленные без рассмотрения ФУ
+    if (court_decision_paragraph_claims_without_consideration_count > 0) {
+      court_decision_paragraph_all_claims_help_str3 = " частично"
+      var court_decision_paragraph_claims_without_consideration_help_str = ". Требование"
+      var court_decision_paragraph_claims_without_consideration_help_str2 = "оставлено"
+      if (court_decision_paragraph_claims_without_consideration_count > 1) {
+        court_decision_paragraph_claims_without_consideration_help_str = ". Требования"
+        court_decision_paragraph_claims_without_consideration_help_str2 = "оставлены"
+      }
+      court_decision_paragraph_claims_without_consideration = `${court_decision_paragraph_claims_without_consideration_help_str} 
+      о взыскании с ${main_fo_name} ${court_decision_paragraph_claims_without_consideration.slice(0, -2)} 
+      ${court_decision_paragraph_claims_without_consideration_help_str2} без рассмотрения`
+    }
+    
+    court_execution_paragraph_all_claims = court_execution_paragraph_all_claims.slice(0, -2)
+
+    //Формирование абзаца с обращением к ФУ
+    this.app_to_court_paragraph = `<p>Заявитель, обратился в ${this.court.value} (далее – Суд) с исковым заявлением к ${main_fo_name} 
+    о взыскании ${app_to_court_paragraph_all_claims}.</p>`
+
+    //Формирование абзаца с указанием на то, что требвоание о взыскании неустойки ФУ не рассматривалось в данном решении
+    if (!court_decision_paragraph_has_penalty_boolean) {
+      court_decision_paragraph_has_penalty = `<p>Требование о взыскании c ${main_fo_name} неустойки не заявлялось, Судом не рассматривалось.</p>`
+    }
+
+    //Формирование абзаца с описанием решения суда
+    if (this.type.options.selectedIndex == 1) {
+
+      //Для резолютивной части
+      this.court_decision_paragraph = `<p>${this.getDateFormatted()} решением Суда по делу № ${this.number.value} 
+      ${court_decision_paragraph_all_claims_help_str} Заявителя 
+      ${court_decision_paragraph_all_claims_help_str2}${court_decision_paragraph_all_claims_help_str3} 
+      (далее – Решение Суда от ${this.getDateFormatted()}). 
+      В пользу Заявителя c ${main_fo_name} взыскано 
+      ${court_decision_paragraph_all_claims}${court_decision_paragraph_claims_denied}${court_decision_paragraph_claims_without_consideration}.</p>
+      ${court_decision_paragraph_has_penalty}
+      <p>Решение Суда от ${this.getDateFormatted()} вступило в силу ${this.getInForceDateFormatted()}.</p>`
+      
+      //Для мотивированной части
+      this.court_decision_paragraph_motivation = `<p>Решением Суда от ${this.getDateFormatted()} 
+      ${court_decision_paragraph_all_claims_help_str} Заявителя ${court_decision_paragraph_all_claims_help_str2}${court_decision_paragraph_all_claims_help_str3}. 
+      В пользу Заявителя c ${main_fo_name} взыскано ${court_decision_paragraph_all_claims}${court_decision_paragraph_claims_denied}${court_decision_paragraph_claims_without_consideration}.</p>`
+    } else {
+      
+    }
+
+    //Формирование абзацев с исполнением решения суда
+    //Для резолютивной части
+    this.court_execution_paragraph = `<p>${this.getPayDateFormatted()} ${main_fo_name} в рамках исполнения Решения Суда 
+    от ${this.getDateFormatted()} перечислило Заявителю ${makeRubText_genitive(court_execution_paragraph_all_claims_summ)} 
+    (в том числе ${court_execution_paragraph_all_claims}), 
+    что подтверждается платежным поручением № ${this.order.value}.</p>`
+
+    this.main_paragraph = this.app_to_court_paragraph +
+                          this.court_decision_paragraph +
+                          this.court_execution_paragraph
   }
 
   getDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
   getDateFormatted() { return formatDate(new Date(this.getDate())); }
+  getDateEndForm() {return Date.parse(changeDateType(this.date_end_form.value) + 'T00:00:00');}
+  getDateEndFormFormatted() { return formatDate(new Date(this.getDateEndForm())); }
   getInForceDate() {return Date.parse(changeDateType(this.in_force_date.value) + 'T00:00:00');}
   getInForceDateFormatted() { return formatDate(new Date(this.getInForceDate())); }
   getPayDate() {return Date.parse(changeDateType(this.pay_date.value) + 'T00:00:00');}

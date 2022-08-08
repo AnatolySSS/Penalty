@@ -141,6 +141,58 @@ $(document).on("focusout", ".fu_dates", function(){
   // paymentFu[$(this).index('.fu_dates')].fillDates();
 });
 
+//Обработка события потери фокуса даты решения ФУ
+$(document).on("focusout", ".add_fu_info_suspension_court_date_in_forces", function(){
+  //Получение массива значений всех переменных решений ФУ
+  number_of_fus = $('div.fus').length; //Получение количества строк с выплатами
+  var fu_names = $('.fu_names'); //Получение массива ФУ
+  var fu_types = $('.fu_types'); //Получение массива дат решений ФУ
+  var fu_dates = $('.fu_dates'); //Получение массива дат решений ФУ
+  var fu_numbers = $('.fu_numbers'); //Получение массива номеров решений ФУ
+
+  var fu_app_dates = $('.fu_app_dates'); //Получение массива номеров решений ФУ
+  var fu_orders = $('.fu_orders'); //Получение массива номеров решений ФУ
+
+  var fu_pay_dates = $('.fu_pay_dates'); //Получение массива дат решений ФУ
+  var fu_in_force_dates = $('.fu_in_force_dates'); //Получение массива дат решений ФУ
+  var fu_last_day_for_pay_dates = $('.fu_last_day_for_pay_dates'); //Получение массива дат решений ФУ
+
+  var add_fu_info_suspension_types = $('.add_fu_info_suspension_types'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_dates = $('.add_fu_info_suspension_dates'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_numbers = $('.add_fu_info_suspension_numbers'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_names = $('.add_fu_info_suspension_court_names'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_numbers = $('.add_fu_info_suspension_court_numbers'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_results = $('.add_fu_info_suspension_court_results'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_dates = $('.add_fu_info_suspension_court_dates'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_date_end_forms = $('.add_fu_info_suspension_court_date_end_forms'); //Получение массива номеров решений ФУ
+  var add_fu_info_suspension_court_date_in_forces = $('.add_fu_info_suspension_court_date_in_forces'); //Получение массива номеров решений ФУ
+
+  //Создание экземпляров решений ФУ
+  for (var i = 0; i < number_of_fus; i++) {
+    paymentFu[i] = new PaymentFu(i + 1,
+                                 fu_names[i],
+                                 fu_types[i],
+                                 fu_dates[i],
+                                 fu_numbers[i],
+                                 fu_app_dates[i],
+                                 fu_orders[i],
+                                 fu_pay_dates[i],
+                                 fu_in_force_dates[i],
+                                 fu_last_day_for_pay_dates[i],
+                                 add_fu_info_suspension_types[i],
+                                 add_fu_info_suspension_dates[i],
+                                 add_fu_info_suspension_numbers[i],
+                                 add_fu_info_suspension_court_names[i],
+                                 add_fu_info_suspension_court_numbers[i],
+                                 add_fu_info_suspension_court_results[i],
+                                 add_fu_info_suspension_court_dates[i],
+                                 add_fu_info_suspension_court_date_end_forms[i],
+                                 add_fu_info_suspension_court_date_in_forces[i]);
+    paymentFu[i].fillDates();
+  }
+  // paymentFu[$(this).index('.fu_dates')].fillDates();
+});
+
 $('#btn_desicion').click(function() {
 
   date_sv = new AppDate("date_sv")
@@ -398,19 +450,25 @@ $('#btn_desicion').click(function() {
   //Получение массива значений всех переменных решений судов
   number_of_courts = $('.courts').length; //Получение количества строк с выплатами
   var court_names = $('.court_names'); //Получение массива наименований судов
-  var court_numbers = $('.court_numbers'); //Получение массива номеров решений судов
+  var court_types = $('.court_types'); //Получение массива номеров решений судов
+  var court_numbers = $('.court_numbers'); //Получение массива наименований судов
   var court_dates = $('.court_dates'); //Получение массива дат решений судов
+  var court_date_end_forms = $('.court_date_end_forms'); //Получение массива дат решений судов
   var court_in_force_dates = $('.court_in_force_dates'); //Получение массива дат решений судов
   var court_pay_dates = $('.court_pay_dates'); //Получение массива дат решений судов
+  var court_orders = $('.court_orders'); //Получение массива дат решений судов
 
   //Создание экземпляров решений ФУ
   for (var i = 0; i < number_of_courts; i++) {
     paymentCourt[i] = new PaymentCourt(i + 1,
                                  court_names[i],
+                                 court_types[i],
                                  court_numbers[i],
                                  court_dates[i],
+                                 court_date_end_forms[i],
                                  court_in_force_dates[i],
-                                 court_pay_dates[i]);
+                                 court_pay_dates[i],
+                                 court_orders[i])
     count_court_days[i] = paymentCourt[i].count_days;
     // payment_court_in_force_dates[i] = (paymentCourt[i].getInForceDate() - date_sv.getAppDate()) / DAY;
     fu_claim_set = paymentCourt[i].fu_claim_set;
