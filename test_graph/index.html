@@ -2337,8 +2337,11 @@
               <!-- BEGIN courts -->
               <div id="courts" style="display:none">
                 <div class="courts_colunm_names form-row">
-                  <div class="form-group col-md-6">
+                  <div class="form-group col-md-4">
                     <h6>Наименование суда</h6>
+                  </div>
+                  <div class="form-group col-md-3">
+                    <h6>Тип решения</h6>
                   </div>
                   <div class="form-group col-md-3">
                     <h6>№ решения</h6>
@@ -2348,8 +2351,15 @@
                 <!-- BEGIN court_1 -->
                 <div id="court_1" class="courts">
                   <div id="court_form_row_1" class="court_form_rows form-row">
-                    <div class="form-group col-md-6">
+                    <div class="form-group col-md-4">
                       <input id="court_name_1" class="court_names" type="text" placeholder="Наименование суда" size="40" required>
+                    </div>
+                    <div class="form-group col-md-3">
+                      <select id="court_type_1" class="court_types custom-select" required>
+                        <option value="">Результат суда</option>
+                        <option>Иск удовлетворен</option>
+                        <option>В иске отказано</option>
+                      </select>
                     </div>
                     <div class="form-group col-md-3">
                       <div class="input-group">
@@ -2370,9 +2380,46 @@
                   </div>
 
                   <!-- BEGIN add_court_info_1 -->
-                  <div id="add_court_info_1" class="add_court_infos ml-3" style="display:none">
+                  <div id="add_court_info_1" class="add_court_infos" style="display:none">
+
+                    <!-- BEGIN add_court_info_dates -->
                     <div class="add_court_info_dates">
                       <div class="form-row">
+                        <div class="form-group col-md-3">
+                          <input id = "court_date_1" class = "court_dates datepicker-here" aria-describedby="court_date_help_block_1" placeholder="Дата" type="text" size="10" required>
+                          <small id="court_date_help_block_1" class="form-text">
+                            Дата решения
+                          </small>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <input id = "court_date_end_form_1" class = "court_date_end_forms datepicker-here" aria-describedby="court_date_end_form_help_block_1" placeholder="Дата" type="text" size="10" required>
+                          <small id="court_date_end_form_help_block_1" class="form-text">
+                            Дата изготовления в окончательной форме
+                          </small>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <input id = "court_in_force_date_1" class = "court_in_force_dates datepicker-here" aria-describedby="court_in_force_date_help_block_1" placeholder="Дата" type="text" size="10" required>
+                          <small id="court_in_force_date_help_block_1" class="form-text">
+                            Дата вступления в силу
+                          </small>
+                        </div>
+                        <div class="form-group col-md-3">
+                          <input id = "court_pay_date_1" class = "court_pay_dates datepicker-here" aria-describedby="court_pay_date_help_block_1" placeholder="Дата" type="text" size="10" required>
+                          <small id="court_pay_date_help_block_1" class="form-text">
+                            Дата исполнения
+                          </small>
+                        </div>
+                      </div>
+                      <div class="form-row">
+                        <div class="form-group col-md-3">
+                          <input id = "court_order_1" class="court_orders" aria-describedby="court_order_help_block_1" placeholder="№ ПП" type="text" size="8" required>
+                          <small id="court_order_help_block_1" class="form-text">
+                            № ПП об исполнении решения суда
+                          </small>
+                        </div>
+                      </div>
+
+                      <!-- <div class="form-row">
                         <div class="form-group col-md-3 form-inline justify-content-center">
                           <input id = "court_date_1" class = "court_dates datepicker-here" placeholder="Дата" type="text" size="10" required>
                         </div>
@@ -2395,8 +2442,9 @@
                         <div class="form-group col-md-3 form-inline">
                           <h6>Дата исполнения</h6>
                         </div>
-                      </div>
-                    </div><!-- add_court_info_dates -->
+                      </div> -->
+                    </div>
+                    <!-- END add_court_info_dates -->
 
                     <div class="form-row">
                       <div class="form-group col-md-6">
@@ -2415,18 +2463,31 @@
                             <option>Эвакуатор</option>
                             <option>Хранение</option>
                             <option>Неустойка</option>
+                            <option>Финансовая санкция</option>
                             <option>Экспертиза</option>
                             <option>Юрист</option>
+                            <option>Составление претензии</option>
                             <option>Нотариус</option>
                             <option>Почта</option>
+                            <option>Курьер</option>
+                            <option>Телеграмма</option>
+                            <option>Дефектовка</option>
+                            <option>Диагностика</option>
+                            <option>Моральный вред</option>
+                            <option>Штраф</option>
+                            <option>Аварком</option>
+                            <option>Здоровье</option>
+                            <option>Жизнь</option>
+                            <option>Иные расходы</option>
                           </select>
                         </div>
                         <div class="form-group col-md-3">
                           <div class="input-group">
                             <select id="court_claim_type_1_1" class="court_claim_type_1 court_claim_types custom-select col-md-12" required>
-                              <option value="">Тип решения</option>
+                              <option value="">Результат рассмотрения</option>
                               <option>Удовлетворено</option>
                               <option>Отказано</option>
+                              <option>Без рассмотрения</option>
                             </select>
                           </div>
                         </div>

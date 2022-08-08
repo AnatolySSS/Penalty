@@ -499,6 +499,21 @@ export function makeTextDecision(claimsContract,
   payment_fu_paragraph_all = payment_fu_paragraph_all.replaceAll("\r\n", "")
   payment_fu_paragraph_all = payment_fu_paragraph_all.replaceAll("\r", "")
   payment_fu_paragraph_all = payment_fu_paragraph_all.replaceAll("\n", "")
+
+
+  //ФОРМИРОВАНИЕ АБЗАЦЕВ С РЕШЕНИЯМИ СУДА
+  var payment_court_paragraph_all = ""
+  if ($('#courts_info').find(':selected').text() == "Сведения имеются") {
+    if ($('#courts-all .fa-2x').css('color') == 'rgb(40, 167, 69)') {
+      for (let i = 0; i < paymentCourt.length; i++) {
+        payment_court_paragraph_all = payment_court_paragraph_all + paymentCourt[i].main_paragraph
+      }
+    }
+  }
+
+  payment_court_paragraph_all = payment_court_paragraph_all.replaceAll("\r\n", "")
+  payment_court_paragraph_all = payment_court_paragraph_all.replaceAll("\r", "")
+  payment_court_paragraph_all = payment_court_paragraph_all.replaceAll("\n", "")
   
 
   //ФОРМИРОВАНИЕ МОТИВИРОВКИ ПО ТРЕБОВАНИЮ О НЕУСТОЙКЕ
@@ -1328,5 +1343,6 @@ export function makeTextDecision(claimsContract,
          dtp_description_with_contracts_paragraph +
          appToFo_paragraph_all +
          payment_fu_paragraph_all +
+         payment_court_paragraph_all +
          main_penalty_paragraph
 }
