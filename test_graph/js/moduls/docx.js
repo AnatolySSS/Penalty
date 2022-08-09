@@ -30,18 +30,19 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
       children: [
         new TextRun({
           text: all_paragraphs[i],
-          bold: all_paragraphs[i] == "УСТАНОВИЛ" ? true : false, 
+          bold: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? true : false,
+          characterSpacing: i == 0 ? 20 : 0,
         }),
       ],
       indent: {
-        firstLine: all_paragraphs[i] == "УСТАНОВИЛ" ? 0 : 711,
+        firstLine: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? 0 : 711,
       },
-      alignment: all_paragraphs[i] == "УСТАНОВИЛ" ? AlignmentType.CENTER : AlignmentType.JUSTIFIED,
+      alignment: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? AlignmentType.CENTER : AlignmentType.JUSTIFIED,
       spacing: {
         line: 357,
         lineRule: LineRuleType.AUTO,
         after: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? 180 : 0,
-        before: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? 180 : 0,
+        before: all_paragraphs[i] == "УСТАНОВИЛ" ? 180 : 0,
       },
     })
   }
@@ -331,8 +332,8 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
             after: 180,
           },
         }),
-        paragraphs_special[2],
-        // paragraphs[0],
+        // paragraphs_special[2],
+        paragraphs[0],
         paragraphs[1],
         paragraphs[2],
         paragraphs[3],
