@@ -84,7 +84,36 @@ export function makeTextDecision(claimsContract,
   court_set.add(1); //Добавляестя для того, чтобы первая строка не разбивалась на символы
 
 
+  //Создание таблицы с логотипом
+  let table_fu = ""
+  table_fu = `<table class="table table-borderless">
+                <tr align="center">
+                  <td colspan="2">
+                    <img src="./img/logo_empty.png">
+                    <br><br>
+                    <h5><b>СЛУЖБА ФИНАНСОВОГО УПОЛНОМОЧЕННОГО</b></h5>
+                    <h5><b>Р Е Ш Е Н И Е</b></h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    «_____» _______________20____ г.
+                    <br>
+                    дата подписания
+                  </td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>
+                      №<br>
+                      г. Москва
+                  </td>
+                  <td></td>
+                </tr>
+              <table>
+              <br>`
 
+  let decision_name = `<p class='text-center'><b>ОБ УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ</b></p>`
 
   //ФОРМИРОВАНИЕ ПРЕАМБУЛЫ РЕШЕНИЯ
   //Получение значения наименования ФО
@@ -1336,7 +1365,9 @@ export function makeTextDecision(claimsContract,
   main_penalty_paragraph = main_penalty_paragraph.replaceAll("\r", "")
   main_penalty_paragraph = main_penalty_paragraph.replaceAll("\n", "")
 
-  return preambula + 
+  return table_fu + 
+         decision_name +
+         preambula + 
          main_claims_paragraf +
          main_request_paragraph +
          transitional_paragraph + 

@@ -41,6 +41,7 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
         line: 357,
         lineRule: LineRuleType.AUTO,
         after: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? 180 : 0,
+        before: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? 180 : 0,
       },
     })
   }
@@ -77,7 +78,7 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
     style: "myCustomStyle", 
     children: [
       new TextRun({
-        text: "ОБ УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ",
+        text: paragraphs[0],
         bold: true,
         size: 28,
         characterSpacing: 20,
@@ -331,7 +332,7 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
           },
         }),
         paragraphs_special[2],
-        paragraphs[0],
+        // paragraphs[0],
         paragraphs[1],
         paragraphs[2],
         paragraphs[3],

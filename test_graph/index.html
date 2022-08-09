@@ -2564,14 +2564,54 @@
                           </div><!-- table_result -->
                         </div>
 
-                        <div id="div_svg" class="row" style="display:none"></div>
+                        <!-- BEGIN check_list_div -->
+                          <div id="check_list_div" style="display:none;">
+                            <div class="card card-body" style="background-color: #fefaec;">
+                              <div id="check_three_years">
+                                <div class="form-row">
+                                  <div class="form-group col-md-5 form-inline">
+                                    <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#check_three_years_help" aria-expanded="false" aria-controls="check_three_years_help">Соблюдение срока для обращения к ФУ</button>
+                                    <i class="fa fa-2x ml-3" aria-hidden="true"></i>
+                                  </div>
+                                  <!-- <div class="form-group col-md-1">
+                                    <i class="fa fa-2x ml-3" aria-hidden="true"></i>
+                                  </div> -->
+                                </div>
+                                <div id="check_three_years_help" class="form-row collapse">
+                                  <div class="form-group col">
+                                    <div class="card card-body"></div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div id="check_app_owner">
+                                <div class="form-row">
+                                  <div class="form-group col-md-5 form-inline">
+                                    <button type="button" class="btn btn-outline-secondary" data-toggle="collapse" data-target="#check_app_owner_help" aria-expanded="false" aria-controls="check_app_owner_help">Заявитель является собственником ТС</button>
+                                    <i class="fa fa-2x ml-3" aria-hidden="true"></i>
+                                  </div>
+                                  <!-- <div class="form-group col-md-1">
+                                    <i class="fa fa-2x ml-3" aria-hidden="true"></i>
+                                  </div> -->
+                                </div>
+                                <div id="check_app_owner_help" class="form-row collapse">
+                                  <div class="form-group col">
+                                    <div class="card card-body"></div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <br>
+                          </div>
+                        <!-- END check_list_div -->
+
+                        <div id="div_svg" class="row card card-body" style="display:none; background-color: #cddcdf;" ></div><br>
                         <!-- <div class="row">
                           <canvas id="penalty_graph" width="1000" height="500" style="display:none"></canvas>
                         </div> -->
 
                         <div class="row">
                           <div class="col text-justify">
-                            <div id="decision" style="display:none"></div>
+                            <div id="decision" class="card card-body" style="display:none; background-color: #f9f9f7;"></div>
                             <textarea id = "decision_text_text_area" class="form-control" type="text" size="8" style="display:none"></textarea>
                           </div>
                         </div><!-- decision -->
@@ -2579,6 +2619,7 @@
                     </div><!-- modal-body -->
                     <div class="modal-footer">
                       <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                      <button id="check_list" type="button" class="btn btn-primary">Показать чек-лист</button>
                       <button id="make_decision_file" type="button" class="btn btn-info">Сгенерировать файл решения</button>
                       <!-- <button id="copy_text_decision" type="button" class="btn btn-primary">Копировать текст решения</button> -->
                       <button id="show_graph" type="button" class="btn btn-success">Показать график неустоек</button>

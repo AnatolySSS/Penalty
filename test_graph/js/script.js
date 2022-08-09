@@ -27,6 +27,8 @@ import { all_paragraphs } from "./moduls/makeTextDecision";
 import { AppToFo } from "./moduls/appToFos";
 import { changeQuotes } from "./moduls/changeQuotes";
 import { dragAndDrop } from "./moduls/drag&Drop";
+import { findLastDay } from './moduls/findLastDay.js';
+import { formatDate } from "./moduls/formatDate";
 
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
@@ -458,7 +460,7 @@ $('#btn_desicion').click(function() {
   var court_pay_dates = $('.court_pay_dates'); //Получение массива дат решений судов
   var court_orders = $('.court_orders'); //Получение массива дат решений судов
 
-  //Создание экземпляров решений ФУ
+  //Создание экземпляров решений судов
   for (var i = 0; i < number_of_courts; i++) {
     paymentCourt[i] = new PaymentCourt(i + 1,
                                  court_names[i],
@@ -492,6 +494,95 @@ $('#btn_desicion').click(function() {
     }
 
   }
+
+
+//Проверка по чек-листу
+document.getElementById('check_list').onclick = function check_list(){
+  if ($('#check_list').html() == "Показать чек-лист") {
+    $('#check_list_div').show()
+    $('#check_list').html("Скрыть чек-лист");
+
+    //Проверка 3-летнего срока на обращения к ФУ
+    let date_appeal = $('#date_appeal').val()
+    date_appeal = changeDateType(date_appeal)
+    date_appeal = Date.parse(date_appeal + 'T00:00:00')
+    // console.log("Дата обращения к ФУ " + formatDate(new Date(date_appeal)));
+    let last_day_for_pay_fu = new Date(findLastDay(appToFo[0].appDate.value))
+    let year = last_day_for_pay_fu.getFullYear()
+    let month = last_day_for_pay_fu.getMonth()
+    let day = last_day_for_pay_fu.getDate()
+    let last_day_for_fu_app = new Date(year + 3, month, day + 1, 0);
+    last_day_for_fu_app = Date.parse(last_day_for_fu_app)
+    // console.log("Дата окончания 3летнего срока " + formatDate(new Date(last_day_for_fu_app)));
+    if (date_appeal > last_day_for_fu_app) {
+      $('#check_three_years .card').html(`Прошло больше 3х лет с момента когда Заявитель узнал о нарушении своего права:<br>
+      * дата первоначального обращения в ФО: ${appToFo[0].appDate.value}<br>
+      * дата окончания 20-дневного срока: ${formatDate(last_day_for_pay_fu)}<br>
+      * дата истечения 3-летнего срока для обращения к ФУ: ${formatDate(new Date(last_day_for_fu_app))}<br>
+      * дата обращения к ФУ: ${formatDate(new Date(date_appeal))}`)
+      
+      $('#check_three_years').find('i').removeClass('fa-check-square-o')
+      $('#check_three_years').find('i').removeClass('fa-question-circle-o')
+      $('#check_three_years').find('i').addClass('fa-exclamation-circle')
+      $('#check_three_years').find('i').css("color", "#dc3545")
+
+    } else if (date_appeal <= last_day_for_fu_app) {
+      $('#check_three_years .card').html(`Прошло менее 3х лет с момента когда Заявитель узнал о нарушении своего права:<br>
+      * дата первоначального обращения в ФО: ${appToFo[0].appDate.value}<br>
+      * дата окончания 20-дневного срока: ${formatDate(last_day_for_pay_fu)}<br>
+      * дата истечения 3-летнего срока для обращения к ФУ: ${formatDate(new Date(last_day_for_fu_app))}\<br>
+      * дата обращения к ФУ: ${formatDate(new Date(date_appeal))}`)
+      
+      $('#check_three_years').find('i').removeClass('fa-exclamation-circle')
+      $('#check_three_years').find('i').removeClass('fa-question-circle-o')
+      $('#check_three_years').find('i').addClass('fa-check-square-o')
+      $('#check_three_years').find('i').css("color", "#28a745")
+
+    } else {
+      $('#check_three_years .card').html(`Необходимо заполнить следующие данные:<br>
+      * дата первоначального обращения в ФО<br>
+      * дата обращения к ФУ`)
+      
+      $('#check_three_years').find('i').removeClass('fa-exclamation-circle')
+      $('#check_three_years').find('i').removeClass('fa-check-square-o')
+      $('#check_three_years').find('i').addClass('fa-question-circle-o')
+      $('#check_three_years').find('i').css("color", "#ffc107")
+    }
+
+    //Проверка статуса Заявителя
+    if ($('#app_name').val() != "" && $('#owner_name_deactivate_1').is(':checked')) {
+      $('#check_app_owner .card').html(`Заявитель является собственником ТС`)
+
+      $('#check_app_owner').find('i').removeClass('fa-exclamation-circle')
+      $('#check_app_owner').find('i').removeClass('fa-question-circle-o')
+      $('#check_app_owner').find('i').addClass('fa-check-square-o')
+      $('#check_app_owner').find('i').css("color", "#28a745")
+
+    } else if ($('#app_name').val() != "" && !$('#owner_name_deactivate_1').is(':checked')) {
+      $('#check_app_owner .card').html(`Заявитель не является собственником ТС<br>
+      * Заявитель - ${$('#app_name').val()}<br>
+      * Собственник ТС - ${$('#owner_name_1').val()}`)
+
+      $('#check_app_owner').find('i').removeClass('fa-check-square-o')
+      $('#check_app_owner').find('i').removeClass('fa-question-circle-o')
+      $('#check_app_owner').find('i').addClass('fa-exclamation-circle')
+      $('#check_app_owner').find('i').css("color", "#dc3545")
+
+    } else {
+      $('#check_app_owner .card').html(`Необходимо заполнить данные:<br>
+      * ФИО Заявителя<br>
+      * ФИО Собственника ТС`)
+      $('#check_app_owner').find('i').removeClass('fa-exclamation-circle')
+      $('#check_app_owner').find('i').removeClass('fa-check-square-o')
+      $('#check_app_owner').find('i').addClass('fa-question-circle-o')
+      $('#check_app_owner').find('i').css("color", "#ffc107")
+    }
+    
+  } else {
+    $('#check_list_div').hide();
+    $('#check_list').html("Показать чек-лист");
+  }
+}
 
   //Выведение заголовка таблицы на экран
   if (max_penalty_period > 0) {
@@ -766,7 +857,19 @@ document.getElementById('close_modal').onclick = function (){
   $('#show_graph').html("Показать график неустоек");
   $('#decision').hide();
   $('#show_decision').html("Показать текст решения");
+  $('#check_list_div').hide();
+  $('#check_list').html("Показать чек-лист");
 }
+
+$('#exampleModal').on('hidden.bs.modal', function (event) {
+  $('#div_svg').hide();
+  $('#show_graph').html("Показать график неустоек");
+  $('#decision').hide();
+  $('#show_decision').html("Показать текст решения");
+  $('#check_list_div').hide();
+  $('#check_list').html("Показать чек-лист");
+  $('#check_list_div .collapse').collapse('hide')
+})
 
 document.getElementById('btn_fu_decision_analyze').onclick = function (){
     let files = document.getElementById("fu_decision_file").files;
