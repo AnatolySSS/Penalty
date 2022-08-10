@@ -16,7 +16,13 @@ function addDtpParticipant() {
         <input id = "car_brand_${dtpParticipant}" class="car_brands form-control" placeholder="Марка ТС" type="text" size="8" required>
       </div>
       <div class="form-group col-md-3">
-        <input id = "car_model_${dtpParticipant}" class="car_models form-control" placeholder="Модель ТС" type="text" size="8" required>
+        <input id = "car_model_${dtpParticipant}" class="car_models form-control deactivation" aria-describedby="car_model_help_block_${dtpParticipant}" placeholder="Модель ТС" type="text" size="8" required>
+        <small id="car_model_help_block_${dtpParticipant}" class="form-text">
+          <div class="form-inline">
+            <input id="car_model_deactivate_${dtpParticipant}" class="deactivator" type="checkbox">
+            <label for="car_model_deactivate_${dtpParticipant}" class="ml-2 form-check-label">Сведений не имеется</label>
+          </div>
+        </small>
       </div>
       <div class="form-group col-md-3">
         <input id = "car_reg_number_${dtpParticipant}" class="car_reg_numbers form-control" placeholder="ГРН" type="text" size="8" required>

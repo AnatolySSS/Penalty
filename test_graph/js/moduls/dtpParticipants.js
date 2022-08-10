@@ -173,7 +173,12 @@ export class DtpParticipant {
         }
         this.is_guilty = is_guilty
 
-        this.full_car_name = `${this.car_brand.value} ${this.car_model.value}, государственный регистрационный номер 
+        var car_model_helper = ""
+        if (this.car_model.value != "") {
+            car_model_helper = ` ${this.car_model.value}`
+        }
+
+        this.full_car_name = `${this.car_brand.value}${car_model_helper}, государственный регистрационный номер 
         ${this.car_reg_number.value}`
         
         if (this.id == 1) {
@@ -191,7 +196,7 @@ export class DtpParticipant {
             } else if (this.car_type.options.selectedIndex == 6) {
                 car_type_helper = "велосипед "
             }
-            this.full_car_name = `${car_type_helper}${this.car_brand.value} ${this.car_model.value}, государственный регистрационный номер 
+            this.full_car_name = `${car_type_helper}${this.car_brand.value}${car_model_helper}, государственный регистрационный номер 
             ${this.car_reg_number.value}${vin}${year} (далее – Транспортное средство)`
         }
 
