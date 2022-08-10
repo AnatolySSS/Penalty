@@ -305,7 +305,7 @@ export class DtpParticipant {
                     case 1:
                         this.car_contracts[i].contract_paragraph = `<p>${this.car_contracts[i].getConclusionDateFormatted()} между Заявителем и ${this.car_contracts[i].fo_name.value} 
                         заключен договор ОСАГО серии ${this.car_contracts[i].number.value} со сроком страхования с ${this.car_contracts[i].getStartDateFormatted()} 
-                        до ${this.car_contracts[i].getEndDateFormatted()}${osago_def}.</p>`
+                        по ${this.car_contracts[i].getEndDateFormatted()}${osago_def}.</p>`
                         break
                     case 2:
                         //Формирование параграфа про предстраховой осмотр
@@ -403,7 +403,7 @@ export class DtpParticipant {
 
                         this.car_contracts[i].contract_paragraph = `<p>${this.car_contracts[i].getConclusionDateFormatted()} между Заявителем и ${this.car_contracts[i].fo_name.value} 
                         заключен договор добровольного страхования серии ${this.car_contracts[i].number.value}  со сроком страхования с ${this.car_contracts[i].getStartDateFormatted()} 
-                        до ${this.car_contracts[i].getEndDateFormatted()}${casco_def}, неотъемлемой частью которого являются ${this.car_contracts[i].insurance_rules.value} 
+                        по ${this.car_contracts[i].getEndDateFormatted()}${casco_def}, неотъемлемой частью которого являются ${this.car_contracts[i].insurance_rules.value} 
                         № ${this.car_contracts[i].insurance_rules_number.value} от ${this.car_contracts[i].getInsuranceRulesDateFormatted()}, утвержденные 
                         ${this.car_contracts[i].insurance_rules_approver_post.value} ${this.car_contracts[i].fo_name.value} ${this.car_contracts[i].insurance_rules_approver_name.value} 
                         (далее – Правила страхования).</p>
@@ -430,7 +430,7 @@ export class DtpParticipant {
                         if (this.car_contracts[i].date_start.value != "" && 
                             this.car_contracts[i].date_end.value != "") {
                             car_contract_date_start = ` со сроком страхования с ${this.car_contracts[i].getStartDateFormatted()}
-                            до ${this.car_contracts[i].getEndDateFormatted()}`
+                            по ${this.car_contracts[i].getEndDateFormatted()}`
                         }
                         this.car_contracts[i].contract_paragraph = `<p>Гражданская ответственность ${this.driver_name_genitive} 
                         застрахована в ${this.car_contracts[i].fo_name.value} в рамках договора ОСАГО серии 

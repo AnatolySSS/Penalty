@@ -466,7 +466,7 @@ export class PaymentFu {
     fu_execution_paragraph_all_claims = fu_execution_paragraph_all_claims.slice(0, -2)
 
     //Формирование абзаца с обращением к ФУ
-    this.app_to_fu_paragraph = `<p>Не согласившись с позицией ${main_fo_name}, ${this.getAppDateFormatted()} Заявитель, 
+    this.app_to_fu_paragraph = `<p>Не согласившись с позицией ${main_fo_name}, ${this.getAppDateFormatted()} Заявитель 
     руководствуясь досудебным порядком урегулирования страхового спора, в порядке, предусмотренном Законом № 123-ФЗ обратился 
     в Службу финансового уполномоченного с ${fu_decision_paragraph_all_claims_help_str1} о взыскании ${app_to_fu_paragraph_all_claims}.</p>`
 

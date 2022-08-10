@@ -141,7 +141,7 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
     style: "myCustomStyle", 
     children: [
       new TextRun({
-        text: fu_post,
+        text: "Финансовый уполномоченный",
         size: 28,
       })
     ],

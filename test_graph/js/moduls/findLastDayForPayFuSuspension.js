@@ -408,6 +408,6 @@ while (k != (10 - j)) {
     }
   }
 
-  date = suspension_court_date_in_force + DAY * (misteryDays + 1)
+  date = suspension_court_date_in_force + DAY * (misteryDays)
   return date;
 }
