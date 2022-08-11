@@ -121,24 +121,16 @@ export function makeTextDecision(claimsContract,
 
   //Если поле Финансовая организация не заполнено, то в текст решения
   //добавляется термин "Финансовая организация" в соответствующем падеже
-  if (fo_name != "") {
-    fo_name = document.querySelector("#fo_name").value;
-    fo_name_nominative = fo_name;
-    fo_name_genitive = fo_name;
-    fo_name_accusative = fo_name;
-    fo_name_instrumental = fo_name;
-    make_a_payment = " осуществило";
-    fulfill = " исполнило";
-    keep = " удержало";
+  // if (fo_name != "") {
+  //   fo_name_nominative = fo_name;
+  //   fo_name_genitive = fo_name;
+  //   fo_name_accusative = fo_name;
+  //   fo_name_instrumental = fo_name;
+  //   make_a_payment = " осуществило";
+  //   fulfill = " исполнило";
+  //   keep = " удержало";
 
-    fo_inn = document.querySelector("#fo_inn").value;
-    fo_registration_date = document.querySelector("#fo_registration_date").value;
-    fo_registration_date = Date.parse(changeDateType(fo_registration_date) + 'T00:00:00')
-    fo_registration_date = formatDate(new Date(fo_registration_date));
-    fo_registration_address = document.querySelector("#fo_registration_address").value;
-    fo_post_address = document.querySelector("#fo_post_address").value;
-
-  } else {
+  // } else {
     fo_name_nominative = "Финансовая организация";
     fo_name_genitive = "Финансовой организации";
     fo_name_accusative = "Финансовую организацию";
@@ -146,7 +138,13 @@ export function makeTextDecision(claimsContract,
     make_a_payment = " осуществила";
     fulfill = " исполнила";
     keep = " удержала";
-  }
+  // }
+  fo_inn = document.querySelector("#fo_inn").value;
+  fo_registration_date = document.querySelector("#fo_registration_date").value;
+  fo_registration_date = Date.parse(changeDateType(fo_registration_date) + 'T00:00:00')
+  fo_registration_date = formatDate(new Date(fo_registration_date));
+  fo_registration_address = document.querySelector("#fo_registration_address").value;
+  fo_post_address = document.querySelector("#fo_post_address").value;
 
   app_name = ""
   var app_helper = ""
@@ -264,7 +262,7 @@ export function makeTextDecision(claimsContract,
                   ${date_appeal} № ${appeal_number} (далее – Обращение) ${app_helper} 
                   (далее – Заявитель) в отношении ${fo_name} (место нахождения: ${fo_registration_address}; 
                   почтовый адрес: ${fo_post_address}; дата государственной регистрации: ${fo_registration_date}; 
-                  идентификационный номер налогоплательщика: ${fo_inn}),</p>`
+                  идентификационный номер налогоплательщика: ${fo_inn}) (далее – Финансовая организация),</p>`
 
     preambula = preambula.replaceAll("\r\n", "")
     preambula = preambula.replaceAll("\r", "")
@@ -283,7 +281,7 @@ export function makeTextDecision(claimsContract,
   var main_claims_paragraf = ""
   //В случае заполнения всех необходимых полей формируется абзац с требованиями к ФУ
   if ($('#main-claims-all .fa-2x').css('color') == 'rgb(40, 167, 69)') {
-    main_claims_paragraf = `<p>Финансовому уполномоченному на рассмотрение поступило Обращение в отношении ${fo_name} 
+    main_claims_paragraf = `<p>Финансовому уполномоченному на рассмотрение поступило Обращение в отношении ${fo_name_genitive} 
     с требованием о взыскании${main_claims_all_paragraph}.</p>`
   }
 
@@ -313,16 +311,16 @@ export function makeTextDecision(claimsContract,
   }
   var main_answer = ""
   if (main_answer_type == 1) {
-    main_answer = `${fo_name}${main_answer_helper} запрошенные сведения и документы предоставлены`
+    main_answer = `${fo_name_instrumental}${main_answer_helper} запрошенные сведения и документы предоставлены`
   } else {
-    main_answer = `${fo_name} запрошенные сведения и документы не предоставлены`
+    main_answer = `${fo_name_instrumental} запрошенные сведения и документы не предоставлены`
   }
 
   var main_request_paragraph = ""
   var transitional_paragraph = ""
   //В случае заполнения всех необходимых полей формируется абзац с запросом в ФО
   if ($('#main-request .fa-2x').css('color') == 'rgb(40, 167, 69)') {
-    main_request_paragraph = `<p>В рамках рассмотрения Обращения в адрес ${fo_name} направлено уведомление о принятии 
+    main_request_paragraph = `<p>В рамках рассмотрения Обращения в адрес ${fo_name_genitive} направлено уведомление о принятии 
     Обращения к рассмотрению от ${date_main_request} № ${number_main_request}, содержащее требование о предоставлении 
     сведений и документов по предмету спора, указанному в Обращении.</p>
     <p>${main_answer}.</p>`
@@ -498,7 +496,7 @@ export function makeTextDecision(claimsContract,
 
   //ФОРМИРОВАНИЕ АБЗАЦЕВ С ОБРАЩЕНИЯМИ В ФО
   var appToFo_paragraph_all = ""
-  var appToFo_paragraph_no_claim_123 = `<p>Сведений о направлении Заявителем в адрес ${fo_name} заявления (претензии) 
+  var appToFo_paragraph_no_claim_123 = `<p>Сведений о направлении Заявителем в адрес ${fo_name_genitive} заявления (претензии) 
   о досудебном урегулировании спора в порядке, установленным статьей 16 Закона № 123-ФЗ в материалах обращения не имеется.</p>`
   if ($('#apps-to-fo .fa-2x').css('color') == 'rgb(40, 167, 69)') {
     for (let i = 0; i < appToFo.length; i++) {

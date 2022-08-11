@@ -504,6 +504,18 @@ export class AppToFo {
         }
 
         var main_fo_name = document.querySelector("#fo_name").value
+        let fo_name_nominative = "Финансовая организация";
+        let fo_name_genitive = "Финансовой организации";
+        let fo_name_accusative = "Финансовую организацию";
+        let fo_name_instrumental = "Финансовой организацией";
+        let make_a_payment = " осуществила";
+        let fulfill = " исполнила";
+        let keep = " удержала";
+        let request = "запросила"
+        let send = "направила"
+        let deny = "отказала"
+        let must = "должна"
+        let notify = "уведомила"
 
         //Если ФУ заявлено требований только по одному договору
         if (number_of_main_claims_contracts == 1) {
@@ -521,7 +533,7 @@ export class AppToFo {
                     }
 
                     //Формирование первого параграфа заявления в ФО
-                    this.app_paragraph = `<p>${this.getAppDateFormatted()} Заявитель обратился в ${main_fo_name} с заявлением 
+                    this.app_paragraph = `<p>${this.getAppDateFormatted()} Заявитель обратился в ${fo_name_accusative} с заявлением 
                     ${procedure_helper}, предоставив все документы, предусмотренные Правилами обязательного 
                     страхования гражданской ответственности владельцев транспортных средств, утвержденными 
                     Положением Банка России от 19.09.2014 № 431-П (далее – Правила ОСАГО).</p>`
@@ -587,8 +599,8 @@ export class AppToFo {
                     if (this.requestInfo.options.selectedIndex == 1) {
                         var request_helper = ` письмом от ${this.requests[0].getRequestDateFormatted()} № ${this.requests[0].number.value}`
                         this.requests_paragraph = `<p>${this.requests[0].getRequestDateFormatted()} 
-                        ${main_fo_name} в ответ на заявление от ${this.getAppDateFormatted()} ${request_helper} 
-                        запросило у Заявителя ${this.requests[0].documents.value}.</p>`
+                        ${fo_name_nominative} в ответ на заявление от ${this.getAppDateFormatted()} ${request_helper} 
+                        ${request} у Заявителя ${this.requests[0].documents.value}.</p>`
                     }
 
                     //Формирование параграфа о проведении осмотра ТС
@@ -610,7 +622,7 @@ export class AppToFo {
                             inspections_number_helper = `, о чем составлен акт осмотра № ${this.inspections[0].number.value}${inspections_data_helper_2}`
                         }
                         this.inspections_paragraph = `<p>${inspections_data_helper_1} 
-                        ${main_fo_name} проведен осмотр принадлежащего Заявителю 
+                        ${fo_name_instrumental} проведен осмотр принадлежащего Заявителю 
                         Транспортного средства${inspections_orgainzation_helper}${inspections_number_helper}.</p>`
                     }
 
@@ -622,7 +634,7 @@ export class AppToFo {
                         if (this.inspectionInfo.options.selectedIndex == 1) {
                             expertises_paragraph_helper = `На основании результатов осмотра от ${this.inspections[0].getInspectionDateFormatted()}`
                         } else {
-                            expertises_paragraph_helper = `По инициативе ${main_fo_name}`
+                            expertises_paragraph_helper = `По инициативе ${fo_name_genitive}`
                         }
                         for (let i = 0; i < this.expertises.length; i++) {
                             expertises_summ_paragraph = ""
@@ -664,7 +676,7 @@ export class AppToFo {
                         } else if (this.answerFo.options.selectedIndex == 2) {
                             var answerFo_paragraph_one = ""
                             if (this.paymentVoluntary.length == 1) {
-                                answerFo_paragraph_one = `<p>${this.paymentVoluntary[0].getDateFormatted()} ${main_fo_name} 
+                                answerFo_paragraph_one = `<p>${this.paymentVoluntary[0].getDateFormatted()} ${fo_name_instrumental} 
                                 на расчетный счет Заявителя была произведена выплата ${this.paymentVoluntary[0].type_text} 
                                 в размере ${makeRubText_genitive(this.paymentVoluntary[0].summ)}, что подтверждается 
                                 платежным поручением от ${this.paymentVoluntary[0].getDateFormatted()} № ${this.paymentVoluntary[0].order.value}.</p>`
@@ -678,7 +690,7 @@ export class AppToFo {
                                 }
                                 paymentVoluntary_summ_helper = paymentVoluntary_summ_helper.slice(0, -2)
                                 for (let i = 0; i < this.paymentVoluntary.length; i++) {
-                                    answerFo_paragraph_one = `<p>${this.paymentVoluntary[i].getDateFormatted()} ${main_fo_name} 
+                                    answerFo_paragraph_one = `<p>${this.paymentVoluntary[i].getDateFormatted()} ${fo_name_instrumental} 
                                     на расчетный счет Заявителя была произведена выплата в размере 
                                     ${makeRubText_genitive(paymentVoluntary_total_summ)} (${paymentVoluntary_summ_helper}), 
                                     что подтверждается платежным поручением от ${this.paymentVoluntary[i].getDateFormatted()} № 
@@ -692,17 +704,17 @@ export class AppToFo {
                             
                         } else if (this.answerFo.options.selectedIndex == 4) {
                             if (this.refusal[0].type.options.selectedIndex == 1) {
-                                this.answerFo_paragraph = `<p>${main_fo_name} направило Заявителю письмо от 
+                                this.answerFo_paragraph = `<p>${fo_name_nominative} ${send} Заявителю письмо от 
                                 ${this.refusal[0].getRefusalDateFormatted()} № ${this.refusal[0].number.value}, в котором сообщалось 
                                 что согласно выводам проведенной экспертизы, все повреждения Транспортного средства Заявителя 
                                 не могли образоваться при заявленных обстоятельствах ДТП, в связи с чем, правовых оснований 
-                                для урегулирования данного убытка у ${main_fo_name} не имеется.</p>`
+                                для урегулирования данного убытка у ${fo_name_genitive} не имеется.</p>`
                             } else if (this.refusal[0].type.options.selectedIndex == 2) {
                                 
                             } else if (this.refusal[0].type.options.selectedIndex == 3) {
-                                this.answerFo_paragraph = `<p>${this.refusal[0].getRefusalDateFormatted()} ${main_fo_name} 
+                                this.answerFo_paragraph = `<p>${this.refusal[0].getRefusalDateFormatted()} ${fo_name_nominative} 
                                 в ответ на заявление от ${this.getAppDateFormatted()} письмом № ${this.refusal[0].number.value} 
-                                отказало Заявителю в удовлетворении заявленных требований.</p>`
+                                ${deny} Заявителю в удовлетворении заявленных требований.</p>`
                             } else if (this.refusal[0].type.options.selectedIndex == 4) {
                                 
                             }
@@ -710,7 +722,7 @@ export class AppToFo {
                     } else if (this.answerFoInfo.options.selectedIndex == 2) {
                         this.answerFo_paragraph = `<p>Сведений об осуществлении выплаты страхового возмещения или 
                         направлении Заявителю мотивированного отказа на заявление от ${this.getAppDateFormatted()} 
-                        ${main_fo_name} не предоставлено.</p>`
+                        ${fo_name_instrumental} не предоставлено.</p>`
                     }
 
                 //Если заявитель обратился с претензией
@@ -731,10 +743,10 @@ export class AppToFo {
                     var type_of_claim_helper_1 = ""
                     var type_of_claim_helper_2 = ""
                     if (this.type_of_claim.options.selectedIndex == 1) {
-                        type_of_claim_helper_1 = `размером выплаченного ${main_fo_name}`
+                        type_of_claim_helper_1 = `размером выплаченного ${fo_name_instrumental}`
                         type_of_claim_helper_2 = "доплате"
                     } else {
-                        type_of_claim_helper_1 = `отказом ${main_fo_name} в выплате`
+                        type_of_claim_helper_1 = `отказом ${fo_name_genitive} в выплате`
                         type_of_claim_helper_2 = "выплате"
                     }
                     var app_claims_paragraph_helper = ""
@@ -743,7 +755,7 @@ export class AppToFo {
                     }
                     app_claims_paragraph_helper = app_claims_paragraph_helper.slice(0, -1)
                     //Формирование первого параграфа заявления в ФО
-                    this.app_paragraph = `<p>${this.getAppDateFormatted()} Заявитель обратился в ${main_fo_name} с 
+                    this.app_paragraph = `<p>${this.getAppDateFormatted()} Заявитель обратился в ${fo_name_accusative} с 
                     ${procedure_helper} о несогласии с ${type_of_claim_helper_1} страхового возмещения, ${procedure_helper_2} требование о 
                     ${type_of_claim_helper_2} ${app_claims_paragraph_helper}.</p>`
 
@@ -795,8 +807,8 @@ export class AppToFo {
                         this.claim_answer_time_count_days = 30
                     }
                     if (this.getAppDate() >= DATE_FZ_123_START) {
-                        this.app_claim_answer_time_paragraph = `<p>В соответствии со статьей 16 Закона № 123-ФЗ ${main_fo_name} 
-                        должно рассмотреть заявление (претензию) и направить Заявителю ответ не позднее ${this.getLastClaimFoDayFormatted()}.</p>`
+                        this.app_claim_answer_time_paragraph = `<p>В соответствии со статьей 16 Закона № 123-ФЗ ${fo_name_nominative} 
+                        ${must} рассмотреть заявление (претензию) и направить Заявителю ответ не позднее ${this.getLastClaimFoDayFormatted()}.</p>`
                     }
 
                     //Формирование абзаца с отсутствием сведений об ответе ФО на заявление
@@ -806,7 +818,7 @@ export class AppToFo {
                         } else if (this.answerFo.options.selectedIndex == 2) {
                             var answerFo_paragraph_one = ""
                             if (this.paymentVoluntary.length == 1) {
-                                answerFo_paragraph_one = `<p>${this.paymentVoluntary[0].getDateFormatted()} ${main_fo_name} 
+                                answerFo_paragraph_one = `<p>${this.paymentVoluntary[0].getDateFormatted()} ${fo_name_instrumental} 
                                 на расчетный счет Заявителя была произведена выплата ${this.paymentVoluntary[0].type_text} 
                                 в размере ${makeRubText_genitive(this.paymentVoluntary[0].summ)}, что подтверждается 
                                 платежным поручением от ${this.paymentVoluntary[0].getDateFormatted()} № ${this.paymentVoluntary[0].order.value}.</p>`
@@ -820,7 +832,7 @@ export class AppToFo {
                                 }
                                 paymentVoluntary_summ_helper = paymentVoluntary_summ_helper.slice(0, -2)
                                 for (let i = 0; i < this.paymentVoluntary.length; i++) {
-                                    answerFo_paragraph_one = `<p>${this.paymentVoluntary[i].getDateFormatted()} ${main_fo_name} 
+                                    answerFo_paragraph_one = `<p>${this.paymentVoluntary[i].getDateFormatted()} ${fo_name_instrumental} 
                                     на расчетный счет Заявителя была произведена выплата в размере 
                                     ${makeRubText_genitive(paymentVoluntary_total_summ)} (${paymentVoluntary_summ_helper}), 
                                     что подтверждается платежным поручением от ${this.paymentVoluntary[i].getDateFormatted()} № 
@@ -834,28 +846,28 @@ export class AppToFo {
                             
                         } else if (this.answerFo.options.selectedIndex == 4) {
                             if (this.refusal[0].type.options.selectedIndex == 1) {
-                                this.answerFo_paragraph = `<p>${main_fo_name} направило Заявителю письмо от 
+                                this.answerFo_paragraph = `<p>${fo_name_nominative} ${send} Заявителю письмо от 
                                 ${this.refusal[0].getRefusalDateFormatted()} № ${this.refusal[0].number.value}, в котором сообщалось 
                                 что согласно выводам проведенной экспертизы, все повреждения Транспортного средства Заявителя 
                                 не могли образоваться при заявленных обстоятельствах ДТП, в связи с чем, правовых оснований 
-                                для урегулирования данного убытка у ${main_fo_name} не имеется.</p>`
+                                для урегулирования данного убытка у ${fo_name_genitive} не имеется.</p>`
                             } else if (this.refusal[0].type.options.selectedIndex == 2) {
                                 
                             } else if (this.refusal[0].type.options.selectedIndex == 3) {
-                                this.answerFo_paragraph = `<p>${this.refusal[0].getRefusalDateFormatted()} ${main_fo_name} 
+                                this.answerFo_paragraph = `<p>${this.refusal[0].getRefusalDateFormatted()} ${fo_name_nominative} 
                                 в ответ на ${procedure_helper_3} от ${this.getAppDateFormatted()} письмом № ${this.refusal[0].number.value} 
-                                отказало Заявителю в удовлетворении заявленных требований.</p>`
+                                ${deny} Заявителю в удовлетворении заявленных требований.</p>`
                             } else if (this.refusal[0].type.options.selectedIndex == 4) {
-                                this.answerFo_paragraph = `<p>${main_fo_name} в ответ на ${procedure_helper_3} от 
+                                this.answerFo_paragraph = `<p>${fo_name_nominative} в ответ на ${procedure_helper_3} от 
                                 ${this.getAppDateFormatted()} письмом от ${this.refusal[0].getRefusalDateFormatted()} № 
-                                ${this.refusal[0].number.value} уведомило Заявителя о том, что позиция ${main_fo_name} по 
+                                ${this.refusal[0].number.value} ${notify} Заявителя о том, что позиция ${fo_name_genitive} по 
                                 данному вопросу не изменилась.</p>`
                             }
                         }
                     } else if (this.answerFoInfo.options.selectedIndex == 2) {
                         this.answerFo_paragraph = `<p>Сведений об осуществлении выплаты страхового возмещения или 
                         направлении Заявителю мотивированного отказа на ${procedure_helper_3} от ${this.getAppDateFormatted()} 
-                        ${main_fo_name} не предоставлено.</p>`
+                        ${fo_name_instrumental} не предоставлено.</p>`
                     }
                     
                 }

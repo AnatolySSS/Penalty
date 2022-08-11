@@ -277,6 +277,19 @@ export class PaymentCourt {
     this.fu_claim_set_type = 0;
 
     var main_fo_name = document.querySelector("#fo_name").value
+    let fo_name_nominative = "Финансовая организация";
+    let fo_name_genitive = "Финансовой организации";
+    let fo_name_accusative = "Финансовую организацию";
+    let fo_name_instrumental = "Финансовой организацией";
+    let make_a_payment = " осуществила";
+    let fulfill = " исполнила";
+    let keep = " удержала";
+    let request = "запросила"
+    let send = "направила"
+    let deny = "отказала"
+    let must = "должна"
+    let notify = "уведомила"
+    let transfer = "перечислила"
 
     this.app_to_court_paragraph = ""
     this.court_decision_paragraph = ""
@@ -477,7 +490,7 @@ export class PaymentCourt {
         court_decision_paragraph_claims_denied_help_str = "требований"
       }
       court_decision_paragraph_claims_denied = `. В удовлетворении ${court_decision_paragraph_claims_denied_help_str} 
-      Заявителя к ${main_fo_name} о взыскании ${court_decision_paragraph_claims_denied.slice(0, -2)} отказано`
+      Заявителя к ${fo_name_genitive} о взыскании ${court_decision_paragraph_claims_denied.slice(0, -2)} отказано`
     }
     //Если есть требования, оставленные без рассмотрения ФУ
     if (court_decision_paragraph_claims_without_consideration_count > 0) {
@@ -489,19 +502,19 @@ export class PaymentCourt {
         court_decision_paragraph_claims_without_consideration_help_str2 = "оставлены"
       }
       court_decision_paragraph_claims_without_consideration = `${court_decision_paragraph_claims_without_consideration_help_str} 
-      о взыскании с ${main_fo_name} ${court_decision_paragraph_claims_without_consideration.slice(0, -2)} 
+      о взыскании с ${fo_name_genitive} ${court_decision_paragraph_claims_without_consideration.slice(0, -2)} 
       ${court_decision_paragraph_claims_without_consideration_help_str2} без рассмотрения`
     }
     
     court_execution_paragraph_all_claims = court_execution_paragraph_all_claims.slice(0, -2)
 
     //Формирование абзаца с обращением к ФУ
-    this.app_to_court_paragraph = `<p>Заявитель, обратился в ${this.court.value} (далее – Суд) с исковым заявлением к ${main_fo_name} 
+    this.app_to_court_paragraph = `<p>Заявитель, обратился в ${this.court.value} (далее – Суд) с исковым заявлением к ${fo_name_genitive} 
     о взыскании ${app_to_court_paragraph_all_claims}.</p>`
 
     //Формирование абзаца с указанием на то, что требвоание о взыскании неустойки ФУ не рассматривалось в данном решении
     if (!court_decision_paragraph_has_penalty_boolean) {
-      court_decision_paragraph_has_penalty = `<p>Требование о взыскании c ${main_fo_name} неустойки не заявлялось, Судом не рассматривалось.</p>`
+      court_decision_paragraph_has_penalty = `<p>Требование о взыскании c ${fo_name_genitive} неустойки не заявлялось, Судом не рассматривалось.</p>`
     }
 
     //Формирование абзаца с описанием решения суда
@@ -512,7 +525,7 @@ export class PaymentCourt {
       ${court_decision_paragraph_all_claims_help_str} Заявителя 
       ${court_decision_paragraph_all_claims_help_str2}${court_decision_paragraph_all_claims_help_str3} 
       (далее – Решение Суда от ${this.getDateFormatted()}). 
-      В пользу Заявителя c ${main_fo_name} взыскано 
+      В пользу Заявителя c ${fo_name_genitive} взыскано 
       ${court_decision_paragraph_all_claims}${court_decision_paragraph_claims_denied}${court_decision_paragraph_claims_without_consideration}.</p>
       ${court_decision_paragraph_has_penalty}
       <p>Решение Суда от ${this.getDateFormatted()} вступило в силу ${this.getInForceDateFormatted()}.</p>`
@@ -520,15 +533,15 @@ export class PaymentCourt {
       //Для мотивированной части
       this.court_decision_paragraph_motivation = `<p>Решением Суда от ${this.getDateFormatted()} 
       ${court_decision_paragraph_all_claims_help_str} Заявителя ${court_decision_paragraph_all_claims_help_str2}${court_decision_paragraph_all_claims_help_str3}. 
-      В пользу Заявителя c ${main_fo_name} взыскано ${court_decision_paragraph_all_claims}${court_decision_paragraph_claims_denied}${court_decision_paragraph_claims_without_consideration}.</p>`
+      В пользу Заявителя c ${fo_name_genitive} взыскано ${court_decision_paragraph_all_claims}${court_decision_paragraph_claims_denied}${court_decision_paragraph_claims_without_consideration}.</p>`
     } else {
       
     }
 
     //Формирование абзацев с исполнением решения суда
     //Для резолютивной части
-    this.court_execution_paragraph = `<p>${this.getPayDateFormatted()} ${main_fo_name} в рамках исполнения Решения Суда 
-    от ${this.getDateFormatted()} перечислило Заявителю ${makeRubText_genitive(court_execution_paragraph_all_claims_summ)} 
+    this.court_execution_paragraph = `<p>${this.getPayDateFormatted()} ${fo_name_nominative} в рамках исполнения Решения Суда 
+    от ${this.getDateFormatted()} ${transfer} Заявителю ${makeRubText_genitive(court_execution_paragraph_all_claims_summ)} 
     (в том числе ${court_execution_paragraph_all_claims}), 
     что подтверждается платежным поручением № ${this.order.value}.</p>`
 

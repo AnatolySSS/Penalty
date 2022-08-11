@@ -297,18 +297,26 @@ export class DtpParticipant {
                 franchise_risks[i])
             
             var main_fo_name = document.querySelector("#fo_name").value
+            let fo_name_nominative = this.car_contracts[i].fo_name.value
+            let fo_name_genitive = this.car_contracts[i].fo_name.value
+            let fo_name_accusative = this.car_contracts[i].fo_name.value
+            let fo_name_instrumental = this.car_contracts[i].fo_name.value
             var osago_def = ""
             var casco_def = ""
 
-            if (main_fo_name == this.car_contracts[i].fo_name.value) {
+            if (main_fo_name == fo_name_instrumental) {
                 osago_def = " (далее – Договор ОСАГО)"
                 casco_def = " (далее – Договор КАСКО)"
+                fo_name_nominative = "Финансовая организация"
+                fo_name_genitive = "Финансовой организации"
+                fo_name_instrumental = "Финансовой организацией"
+                fo_name_accusative = "Финансовую организацию"
             }
 
             if (this.id == 1) {
                 switch (this.car_contracts[i].type.options.selectedIndex) {
                     case 1:
-                        this.car_contracts[i].contract_paragraph = `<p>${this.car_contracts[i].getConclusionDateFormatted()} между Заявителем и ${this.car_contracts[i].fo_name.value} 
+                        this.car_contracts[i].contract_paragraph = `<p>${this.car_contracts[i].getConclusionDateFormatted()} между Заявителем и ${fo_name_instrumental} 
                         заключен договор ОСАГО серии ${this.car_contracts[i].number.value} со сроком страхования с ${this.car_contracts[i].getStartDateFormatted()} 
                         по ${this.car_contracts[i].getEndDateFormatted()}${osago_def}.</p>`
                         break
@@ -317,13 +325,13 @@ export class DtpParticipant {
                         var insurance_inspection_paragraph = ""
                         if (this.car_contracts[i].insurance_inspection_information.options.selectedIndex == 1) {
                             insurance_inspection_paragraph = `<p>${this.car_contracts[i].getInsuranceInspectionsDateFormatted()} 
-                            ${this.car_contracts[i].fo_name.value} проведен предстраховой осмотр принадлежащего Заявителю 
+                            ${fo_name_instrumental} проведен предстраховой осмотр принадлежащего Заявителю 
                             Транспортного средства. В результате осмотра выявлены повреждения следующих элементов и деталей 
                             Транспортного средства: ${this.car_contracts[i].insurance_inspection_damaged_parts.value}, что подтверждается 
                             актом осмотра Транспортного средства от ${this.car_contracts[i].getInsuranceInspectionsDateFormatted()}, 
                             подписанным Заявителем и представителем ${this.car_contracts[i].fo_name.value}.</p>`
                         } else if (this.car_contracts[i].insurance_inspection_information.options.selectedIndex == 2) {
-                            insurance_inspection_paragraph = `<p>Сведений о проведении ${this.car_contracts[i].fo_name.value} 
+                            insurance_inspection_paragraph = `<p>Сведений о проведении ${fo_name_instrumental} 
                             предстрахового осмотра Транспортного средства не имеется.</p>`
                         }
                         //Добавление "не" к типу страховой суммы индексируемыя, агрегатная
@@ -406,11 +414,11 @@ export class DtpParticipant {
                             franchise_paragraph = `<p>Договором КАСКО франшиза не установлена.</p>`
                         }
 
-                        this.car_contracts[i].contract_paragraph = `<p>${this.car_contracts[i].getConclusionDateFormatted()} между Заявителем и ${this.car_contracts[i].fo_name.value} 
+                        this.car_contracts[i].contract_paragraph = `<p>${this.car_contracts[i].getConclusionDateFormatted()} между Заявителем и ${fo_name_instrumental} 
                         заключен договор добровольного страхования серии ${this.car_contracts[i].number.value}  со сроком страхования с ${this.car_contracts[i].getStartDateFormatted()} 
                         по ${this.car_contracts[i].getEndDateFormatted()}${casco_def}, неотъемлемой частью которого являются ${this.car_contracts[i].insurance_rules.value} 
                         № ${this.car_contracts[i].insurance_rules_number.value} от ${this.car_contracts[i].getInsuranceRulesDateFormatted()}, утвержденные 
-                        ${this.car_contracts[i].insurance_rules_approver_post.value} ${this.car_contracts[i].fo_name.value} ${this.car_contracts[i].insurance_rules_approver_name.value} 
+                        ${this.car_contracts[i].insurance_rules_approver_post.value} ${fo_name_genitive} ${this.car_contracts[i].insurance_rules_approver_name.value} 
                         (далее – Правила страхования).</p>
                         <p>По Договору КАСКО застрахованы имущественные интересы Заявителя, связанные, в том числе, с риском утраты (гибели) или повреждения принадлежащего Заявителю 
                         на праве собственности транспортного средства ${this.full_car_name}.</p>
@@ -438,7 +446,7 @@ export class DtpParticipant {
                             по ${this.car_contracts[i].getEndDateFormatted()}`
                         }
                         this.car_contracts[i].contract_paragraph = `<p>Гражданская ответственность ${this.driver_name_genitive} 
-                        застрахована в ${this.car_contracts[i].fo_name.value} в рамках договора ОСАГО серии 
+                        застрахована в ${fo_name_genitive} в рамках договора ОСАГО серии 
                         ${this.car_contracts[i].number.value}${car_contract_date_start}${osago_def}.</p>`
                         break
                     case 2:

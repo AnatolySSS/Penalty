@@ -252,6 +252,19 @@ export class PaymentFu {
     this.max_days_delay = 0;
 
     var main_fo_name = document.querySelector("#fo_name").value
+    let fo_name_nominative = "Финансовая организация";
+    let fo_name_genitive = "Финансовой организации";
+    let fo_name_accusative = "Финансовую организацию";
+    let fo_name_instrumental = "Финансовой организацией";
+    let make_a_payment = " осуществила";
+    let fulfill = " исполнила";
+    let keep = " удержала";
+    let request = "запросила"
+    let send = "направила"
+    let deny = "отказала"
+    let must = "должна"
+    let notify = "уведомила"
+    let transfer = "перечислила"
 
     this.app_to_fu_paragraph = ""
     this.fu_decision_paragraph = ""
@@ -447,7 +460,7 @@ export class PaymentFu {
         fu_decision_paragraph_claims_denied_help_str = "требований"
       }
       fu_decision_paragraph_claims_denied = `. В удовлетворении ${fu_decision_paragraph_claims_denied_help_str} 
-      Заявителя к ${main_fo_name} о взыскании ${fu_decision_paragraph_claims_denied.slice(0, -2)} отказано`
+      Заявителя к ${fo_name_genitive} о взыскании ${fu_decision_paragraph_claims_denied.slice(0, -2)} отказано`
     }
     //Если есть требования, оставленные без рассмотрения ФУ
     if (fu_decision_paragraph_claims_without_consideration_count > 0) {
@@ -459,14 +472,14 @@ export class PaymentFu {
         fu_decision_paragraph_claims_without_consideration_help_str2 = "оставлены"
       }
       fu_decision_paragraph_claims_without_consideration = `${fu_decision_paragraph_claims_without_consideration_help_str} 
-      о взыскании с ${main_fo_name} ${fu_decision_paragraph_claims_without_consideration.slice(0, -2)} 
+      о взыскании с ${fo_name_genitive} ${fu_decision_paragraph_claims_without_consideration.slice(0, -2)} 
       ${fu_decision_paragraph_claims_without_consideration_help_str2} без рассмотрения`
     }
     
     fu_execution_paragraph_all_claims = fu_execution_paragraph_all_claims.slice(0, -2)
 
     //Формирование абзаца с обращением к ФУ
-    this.app_to_fu_paragraph = `<p>Не согласившись с позицией ${main_fo_name}, ${this.getAppDateFormatted()} Заявитель 
+    this.app_to_fu_paragraph = `<p>Не согласившись с позицией ${fo_name_genitive}, ${this.getAppDateFormatted()} Заявитель 
     руководствуясь досудебным порядком урегулирования страхового спора, в порядке, предусмотренном Законом № 123-ФЗ обратился 
     в Службу финансового уполномоченного с ${fu_decision_paragraph_all_claims_help_str1} о взыскании ${app_to_fu_paragraph_all_claims}.</p>`
 
@@ -513,7 +526,7 @@ export class PaymentFu {
     //Формирование абзаца с указанием на то, что требвоание о взыскании неустойки ФУ не рассматривалось в данном решении
     if (!fu_decision_paragraph_has_penalty_boolean) {
       fu_decision_paragraph_has_penalty = `<p>Решением финансового уполномоченного от ${this.getDateFormatted()} 
-      требование о взыскании c ${main_fo_name} неустойки не рассматривалось.</p>`
+      требование о взыскании c ${fo_name_genitive} неустойки не рассматривалось.</p>`
     }
     //Формирование абзаца с описанием решения ФУ
     var app_number = this.number.value.slice(0, this.number.value.indexOf("/"))
@@ -524,7 +537,7 @@ export class PaymentFu {
       this.fu_decision_paragraph = `<p>${this.getDateFormatted()} решением ${fu_post} ${fu_name} № ${this.number.value} 
       по результатам рассмотрения обращения от ${this.getAppDateFormatted()} № ${app_number} (далее – Решение финансового 
       уполномоченного от ${this.getDateFormatted()}) ${fu_decision_paragraph_all_claims_help_str} Заявителя 
-      ${fu_decision_paragraph_all_claims_help_str2}${fu_decision_paragraph_all_claims_help_str3}. В пользу Заявителя c ${main_fo_name} 
+      ${fu_decision_paragraph_all_claims_help_str2}${fu_decision_paragraph_all_claims_help_str3}. В пользу Заявителя c ${fo_name_genitive} 
       взыскано ${fu_decision_paragraph_all_claims}${fu_decision_paragraph_claims_denied}${fu_decision_paragraph_claims_without_consideration}.</p>
       ${fu_decision_paragraph_has_penalty}
       <p>Решение финансового уполномоченного от ${this.getDateFormatted()} вступило в силу ${this.getInForceDateFormatted()}.</p>`
@@ -532,9 +545,9 @@ export class PaymentFu {
       //Для мотивированной части
       this.fu_decision_paragraph_motivation = `<p>Решением финансового уполномоченного от ${this.getDateFormatted()} 
       ${fu_decision_paragraph_all_claims_help_str} Заявителя ${fu_decision_paragraph_all_claims_help_str2}${fu_decision_paragraph_all_claims_help_str3}. 
-      В пользу Заявителя c ${main_fo_name} взыскано ${fu_decision_paragraph_all_claims}${fu_decision_paragraph_claims_denied}${fu_decision_paragraph_claims_without_consideration}.</p>
+      В пользу Заявителя c ${fo_name_genitive} взыскано ${fu_decision_paragraph_all_claims}${fu_decision_paragraph_claims_denied}${fu_decision_paragraph_claims_without_consideration}.</p>
       <p>В резолютивной части Решения финансового уполномоченного от ${this.getDateFormatted()} указано, что 
-      Решение финансового уполномоченного от ${this.getDateFormatted()} подлежит исполнению ${main_fo_name} в течение 10 рабочих дней после дня вступления в силу.</p>`
+      Решение финансового уполномоченного от ${this.getDateFormatted()} подлежит исполнению ${fo_name_instrumental} в течение 10 рабочих дней после дня вступления в силу.</p>`
     } else {
       
     }
@@ -545,7 +558,7 @@ export class PaymentFu {
       //Для резолютивной части
       this.fu_suspension_paragraph = `<p>Решением финансового уполномоченного от ${this.getSuspensionDateFormatted()} 
       № ${this.suspension_number.value} срок исполнения Решения финансового уполномоченного от ${this.getDateFormatted()} 
-      приостановлен в связи с обращением ${main_fo_name} в ${this.suspension_court_name.value} (далее – Суд) с заявлением об 
+      приостановлен в связи с обращением ${fo_name_genitive} в ${this.suspension_court_name.value} (далее – Суд) с заявлением об 
       обжаловании Решения финансового уполномоченного от ${this.getDateFormatted()}.</p>`
 
       //Для мотивированной части
@@ -562,7 +575,7 @@ export class PaymentFu {
         <p>Решение суда в окончательной форме изготовлено ${this.getSuspensionCourtDateEndFormDateFormatted()}.</p>`
 
         //Для мотивированной части
-        this.fu_court_paragraph_motivation = `<p>Решением Суда исковое заявление ${main_fo_name} 
+        this.fu_court_paragraph_motivation = `<p>Решением Суда исковое заявление ${fo_name_genitive} 
         оставлено без удовлетворения. Резолютивная часть Решения Суда объявлена ${this.getSuspensionCourtDateFormatted()}, 
         мотивированное Решение Суда в окончательной форме составлено ${this.getSuspensionCourtDateEndFormDateFormatted()}. 
         Решение Суда вступило в законную силу ${this.getSuspensionCourtDateInForceDateFormatted()}.</p>`
@@ -578,23 +591,23 @@ export class PaymentFu {
     } else {
       this.fu_analize_period_paragraph_motivation = `<p>Таким образом, Решение финансового уполномоченного от 
       ${this.getDateFormatted()} вступило в силу ${this.getInForceDateFormatted()} и подлежало исполнению 
-      ${main_fo_name} до ${this.getLastDayForPayFuFormatted()} включительно (в течение 10 рабочих дней после 
+      ${fo_name_instrumental} до ${this.getLastDayForPayFuFormatted()} включительно (в течение 10 рабочих дней после 
         дня вступления в силу).</p>`
     }
     
     //Формирование абзацев с исполнением решения ФУ
     //Для резолютивной части
-    this.fu_execution_paragraph = `<p>${this.getPayDateFormatted()} ${main_fo_name} в рамках добровольного исполнения Решения 
-    финансового уполномоченного от ${this.getDateFormatted()} осуществило Заявителю выплату ${fu_execution_paragraph_all_claims}, 
+    this.fu_execution_paragraph = `<p>${this.getPayDateFormatted()} ${fo_name_nominative} в рамках добровольного исполнения Решения 
+    финансового уполномоченного от ${this.getDateFormatted()} ${make_a_payment} Заявителю выплату ${fu_execution_paragraph_all_claims}, 
     что подтверждается платежным поручением № ${this.order.value}.</p>`
 
     //Для мотивированной части
     if (this.getPayDate() <= this.getLastDayForPayFu()) {
       this.fu_execution_paragraph_motivation = `<p>${this.getPayDateFormatted()}, то есть в срок, установленный 
-      Законом № 123-ФЗ, ${main_fo_name} исполнило Решение финансового уполномоченного от ${this.getDateFormatted()}.</p>`
+      Законом № 123-ФЗ, ${fo_name_nominative} ${fulfill} Решение финансового уполномоченного от ${this.getDateFormatted()}.</p>`
     } else {
       this.fu_execution_paragraph_motivation = `<p>${this.getPayDateFormatted()}, то есть с нарушением срока, установленного 
-      Законом № 123-ФЗ, ${main_fo_name} исполнило Решение финансового уполномоченного от ${this.getDateFormatted()}.</p>`
+      Законом № 123-ФЗ, ${fo_name_nominative} ${fulfill} Решение финансового уполномоченного от ${this.getDateFormatted()}.</p>`
     }
 
     this.main_paragraph = this.app_to_fu_paragraph +
