@@ -316,9 +316,17 @@ export class DtpParticipant {
             if (this.id == 1) {
                 switch (this.car_contracts[i].type.options.selectedIndex) {
                     case 1:
-                        this.car_contracts[i].contract_paragraph = `<p>${this.car_contracts[i].getConclusionDateFormatted()} между Заявителем и ${fo_name_instrumental} 
-                        заключен договор ОСАГО серии ${this.car_contracts[i].number.value} со сроком страхования с ${this.car_contracts[i].getStartDateFormatted()} 
-                        по ${this.car_contracts[i].getEndDateFormatted()}${osago_def}.</p>`
+                        let date_conclusion_helper = "Между"
+                        if (this.car_contracts[i].date_conclusion.value != "") {
+                            date_conclusion_helper = `${this.car_contracts[i].getConclusionDateFormatted()} между`
+                        }
+                        let contract_period_helper = ""
+                        if (this.car_contracts[i].date_start.value != "" && this.car_contracts[i].date_end.value != "") {
+                            contract_period_helper = ` со сроком страхования с ${this.car_contracts[i].getStartDateFormatted()} 
+                            по ${this.car_contracts[i].getEndDateFormatted()}`
+                        }
+                        this.car_contracts[i].contract_paragraph = `<p>${date_conclusion_helper} Заявителем и ${fo_name_instrumental} 
+                        заключен договор ОСАГО серии ${this.car_contracts[i].number.value}${contract_period_helper}${osago_def}.</p>`
                         break
                     case 2:
                         //Формирование параграфа про предстраховой осмотр
@@ -439,15 +447,15 @@ export class DtpParticipant {
             } else {
                 switch (this.car_contracts[i].type.options.selectedIndex) {
                     case 1:
-                        var car_contract_date_start = ""
+                        let contract_period_helper = ""
                         if (this.car_contracts[i].date_start.value != "" && 
                             this.car_contracts[i].date_end.value != "") {
-                            car_contract_date_start = ` со сроком страхования с ${this.car_contracts[i].getStartDateFormatted()}
+                                contract_period_helper = ` со сроком страхования с ${this.car_contracts[i].getStartDateFormatted()}
                             по ${this.car_contracts[i].getEndDateFormatted()}`
                         }
                         this.car_contracts[i].contract_paragraph = `<p>Гражданская ответственность ${this.driver_name_genitive} 
                         застрахована в ${fo_name_genitive} в рамках договора ОСАГО серии 
-                        ${this.car_contracts[i].number.value}${car_contract_date_start}${osago_def}.</p>`
+                        ${this.car_contracts[i].number.value}${contract_period_helper}${osago_def}.</p>`
                         break
                     case 2:
         
