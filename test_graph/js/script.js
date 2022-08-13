@@ -4,11 +4,12 @@ import { AppDate } from './moduls/app_date.js';
 import { PaymentVoluntary } from './moduls/payment_voluntary.js';
 import { PaymentFu } from './moduls/payment_fu.js';
 import { PaymentCourt } from './moduls/payment_court.js';
+import { FuExpertise } from "./moduls/fuExpertise";
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './moduls/variables.js';
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './moduls/variables.js';
 import { COLUMN_NAME_20, COLUMN_NAME_21 } from './moduls/variables.js';
 import { DAY, STR_PAYMENT_DETALED_HEADER, STR_PAYMENT_DETALED, DATE_EURO_START } from './moduls/variables.js';
-import { paymentVoluntary, paymentFu, paymentCourt } from './moduls/variables.js';
+import { paymentVoluntary, paymentFu, paymentCourt, fuExpertise } from './moduls/variables.js';
 import { claimsContract, dtpParticipant, appToFo } from "./moduls/variables.js";
 import { makeRubText_nominative } from './moduls/makeRubText_nominative.js';
 import { makeRubText_genitive } from './moduls/makeRubText_genitive.js';
@@ -495,6 +496,37 @@ $('#btn_desicion').click(function() {
 
   }
 
+  //Создание экземпляров класса Экспертиз ФУ
+  var number_of_fu_expertises = $(`.fu_expertises`).length
+  var fu_expertise_dates = $(`.fu_expertise_dates`)
+  var fu_expertise_numbers = $(`.fu_expertise_numbers`)
+  var fu_expertise_orgainzations = $(`.fu_expertise_orgainzations`)
+  var fu_expertise_summ_withouts = $(`.fu_expertise_summ_withouts`)
+  var fu_expertise_summ_withs = $(`.fu_expertise_summ_withs`)
+  var fu_expertise_summ_markets = $(`.fu_expertise_summ_markets`)
+  var fu_expertise_summ_leftovers = $(`.fu_expertise_summ_leftovers`)
+  var fu_expertise_summ_uts = $(`.fu_expertise_summ_uts`)
+  var fu_expertise_trasas = $(`.fu_expertise_trasas`)
+  var fu_expertise_technicians = $(`.fu_expertise_technicians`)
+  var fu_expertise_typical_questions = $(`.fu_expertise_typical_questions`)
+  var fu_expertise_questions = $(`.fu_expertise_questions`)
+
+  for (let i = 0; i < number_of_fu_expertises; i++) {
+      fuExpertise[i] = new FuExpertise(i + 1,
+                                      fu_expertise_dates[i],
+                                      fu_expertise_numbers[i],
+                                      fu_expertise_orgainzations[i],
+                                      fu_expertise_summ_withouts[i],
+                                      fu_expertise_summ_withs[i],
+                                      fu_expertise_summ_markets[i],
+                                      fu_expertise_summ_leftovers[i],
+                                      fu_expertise_summ_uts[i],
+                                      fu_expertise_trasas[i],
+                                      fu_expertise_technicians[i],
+                                      fu_expertise_typical_questions[i],
+                                      fu_expertise_questions[i])
+  }
+
 
 //Проверка по чек-листу
 document.getElementById('check_list').onclick = function check_list(){
@@ -727,26 +759,29 @@ document.getElementById('show_decision').onclick = function show_decision(){
   if ($('#show_decision').html() == "Показать текст решения") {
     $('#decision').show();
     $('#show_decision').html("Скрыть текст решения");
-    try {
+    // try {
       decision = makeTextDecision(claimsContract,
                                   dtpParticipant,
                                   appToFo,
                                   paymentVoluntary,
                                   paymentFu,
                                   paymentCourt,
+                                  fuExpertise,
                                   total_penalty_summ_accrued,
                                   total_penalty_summ_paid,
-                                  max_summ,
-                                  fu_claim_set);
-    } catch (error) {
-      alert("Ошибка в коде, позвоните Анатолию!")
-    }
+                                  max_summ);
+    // } catch (error) {
+    //   alert("Ошибка в коде, позвоните Анатолию!")
+    // }
     
     
     decision = decision.replace("ОСАГО", "обязательного страхования гражданской ответственности владельцев транспортных средств (далее – ОСАГО)")
     decision = decision.replace("Закона № 40-ФЗ", "Федерального закона от 25.04.2002 № 40-ФЗ «Об обязательном страховании гражданской ответственности владельцев транспортных средств» (далее – Закон № 40-ФЗ)")
     decision = decision.replace("Закона № 123-ФЗ", "Федерального закона от 04.06.2018 № 123-ФЗ «Об уполномоченном по правам потребителей финансовых услуг» (далее – Закон № 123-ФЗ)")
     decision = decision.replace("Законом № 123-ФЗ", "Федеральным законом от 04.06.2018 № 123-ФЗ «Об уполномоченном по правам потребителей финансовых услуг» (далее – Закон № 123-ФЗ)")
+    decision = decision.replace("ГК РФ", "Гражданского кодекса Российской Федерации (далее – ГК РФ)")
+    decision = decision.replace("Постановления Пленума ВС РФ № 58", "постановления Пленума Верховного Суда Российской Федерации от 26.12.2017 № 58 «О применении судами законодательства об обязательном страховании гражданской ответственности владельцев транспортных средств» (далее – Постановление Пленума ВС РФ № 58)")
+
     while (decision.indexOf("  ") != -1) {
       decision = decision.replaceAll("  ", " ")
     }
@@ -780,10 +815,10 @@ document.getElementById('make_decision_file').onclick = function (){
                                   paymentVoluntary,
                                   paymentFu,
                                   paymentCourt,
+                                  fuExpertise,
                                   total_penalty_summ_accrued,
                                   total_penalty_summ_paid,
-                                  max_summ,
-                                  fu_claim_set);
+                                  max_summ);
     } catch (error) {
       alert("Ошибка в коде, позвоните Анатолию!")
     }
@@ -792,6 +827,9 @@ document.getElementById('make_decision_file').onclick = function (){
     decision = decision.replace("Закона № 40-ФЗ", "Федерального закона от 25.04.2002 № 40-ФЗ «Об обязательном страховании гражданской ответственности владельцев транспортных средств» (далее – Закон № 40-ФЗ)")
     decision = decision.replace("Закона № 123-ФЗ", "Федерального закона от 04.06.2018 № 123-ФЗ «Об уполномоченном по правам потребителей финансовых услуг» (далее – Закон № 123-ФЗ)")
     decision = decision.replace("Законом № 123-ФЗ", "Федеральным законом от 04.06.2018 № 123-ФЗ «Об уполномоченном по правам потребителей финансовых услуг» (далее – Закон № 123-ФЗ)")
+    decision = decision.replace("ГК РФ", "Гражданского кодекса Российской Федерации (далее – ГК РФ)")
+    decision = decision.replace("Постановления Пленума ВС РФ № 58", "постановления Пленума Верховного Суда Российской Федерации от 26.12.2017 № 58 «О применении судами законодательства об обязательном страховании гражданской ответственности владельцев транспортных средств» (далее – Постановление Пленума ВС РФ № 58)")
+    
     while (decision.indexOf("  ") != -1) {
       decision = decision.replaceAll("  ", " ")
     }
@@ -1095,6 +1133,7 @@ $(document).on("click", "input[type=checkbox]", function (event) {
   validationCheckUpdate('apps-to-fo')
   validationCheckUpdate('fus-all')
   validationCheckUpdate('courts-all')
+  validationCheckUpdate('fu-expertise-all')
 })
 
 $(document).on("click", "button", function (event) {
@@ -1105,6 +1144,7 @@ $(document).on("click", "button", function (event) {
   validationCheckUpdate('apps-to-fo')
   validationCheckUpdate('fus-all')
   validationCheckUpdate('courts-all')
+  validationCheckUpdate('fu-expertise-all')
 })
 
 $(document).on("change", "select", function (event) {
@@ -1115,6 +1155,7 @@ $(document).on("change", "select", function (event) {
   validationCheckUpdate('apps-to-fo')
   validationCheckUpdate('fus-all')
   validationCheckUpdate('courts-all')
+  validationCheckUpdate('fu-expertise-all')
 })
 
 $(document).on( "mouseenter", '.form-control', function( event ) {
@@ -1125,4 +1166,5 @@ $(document).on( "mouseenter", '.form-control', function( event ) {
   validationCheck('apps-to-fo')
   validationCheck('fus-all')
   validationCheck('courts-all')
+  validationCheck('fu-expertise-all')
 })

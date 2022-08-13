@@ -28,6 +28,7 @@ $(document).ready(function(){
 		$(".payments_all").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
+		$(".fu-expertise-all").hide();
 		$(".fu-decision-analyze").hide();
 	})
 
@@ -41,6 +42,7 @@ $(document).ready(function(){
 		$(".payments_all").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
+		$(".fu-expertise-all").hide();
 		$(".fu-decision-analyze").hide();
 	})
 
@@ -54,6 +56,7 @@ $(document).ready(function(){
 		$(".payments_all").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
+		$(".fu-expertise-all").hide();
 		$(".fu-decision-analyze").hide();
 	})
 
@@ -67,6 +70,7 @@ $(document).ready(function(){
 		$(".payments_all").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
+		$(".fu-expertise-all").hide();
 		$(".fu-decision-analyze").hide();
 	})
 
@@ -79,6 +83,7 @@ $(document).ready(function(){
 		$(".payments_all").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
+		$(".fu-expertise-all").hide();
 		$(".fu-decision-analyze").hide();
 	})
 
@@ -92,6 +97,7 @@ $(document).ready(function(){
 		$(".payments_all").hide();
 		$(".apps-to-fo").hide();
 		$(".courts-all").hide();
+		$(".fu-expertise-all").hide();
 		$(".fu-decision-analyze").hide();
 	})
 
@@ -105,6 +111,21 @@ $(document).ready(function(){
 		$(".payments_all").hide();
 		$(".apps-to-fo").hide();
 		$(".fus-all").hide();
+		$(".fu-expertise-all").hide();
+		$(".fu-decision-analyze").hide();
+	})
+
+	$("#fu-expertise-all").on('click', function(){
+		$(".fu-expertise-all").show();
+		$(".btn-desicion").show();
+		$(".preambula").hide();
+		$(".main-claims-all").hide();
+		$(".main-request").hide();
+		$(".dtp-description").hide();
+		$(".payments_all").hide();
+		$(".apps-to-fo").hide();
+		$(".fus-all").hide();
+		$(".courts-all").hide();
 		$(".fu-decision-analyze").hide();
 	})
 
@@ -118,6 +139,7 @@ $(document).ready(function(){
 		$(".apps-to-fo").hide();
 		$(".fus-all").hide();
 		$(".courts-all").hide();
+		$(".fu-expertise-all").hide();
 		$(".btn-desicion").hide();
 	})
 })
