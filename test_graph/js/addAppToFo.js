@@ -57,6 +57,26 @@ function addAppToFo() {
         <!-- BEGIN apps_to_fo_add_info_${appsToFoId} -->
         <div class="apps_to_fo_add_info_${appsToFoId}" style="display:none">
 
+            <!-- BEGIN apps-to-fo-form -->
+            <div class="apps-to-fo-form">
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <h6>Сведения о форме страхового возмещения, выбранной Заявителем</h6>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <select id="apps_to_fo_form_${appsToFoId}" class="apps_to_fo_forms custom-select form-control col-md-12" required>
+                            <option value="">Форма страхового возмещения</option>
+                            <option>Выплата денежных средств безналичным расчетом</option>
+                            <option>Направление на ремонт</option>
+                            <option>Не выбрана</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <!-- END apps-to-fo-form -->
+
             <!-- BEGIN apps-to-fo-contract -->
             <div id="apps_to_fo_claims_contract_${appsToFoId}">
                 <div class="form-row">

@@ -279,6 +279,7 @@ export class AppToFo {
     procedure //По ПВУ, в ФО виновника
     type_of_claim //Несогласие с размером, несогласие с отказом в выплате
     method //Лично, по почте
+    form
     claim_answer_time_count_days
 
     app_paragraph
@@ -323,6 +324,7 @@ export class AppToFo {
                 procedure,
                 type_of_claim,
                 method,
+                form,
                 claimsContractToFoInfo,
                 expertiseAppInfo,
                 agreementInfo,
@@ -339,6 +341,7 @@ export class AppToFo {
         this.procedure = procedure
         this.type_of_claim = type_of_claim
         this.method = method
+        this.form = form
 
         this.app_paragraph = ""
         this.expertise_apps_paragraph = ""

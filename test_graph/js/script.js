@@ -327,6 +327,7 @@ $('#btn_desicion').click(function() {
   var apps_to_fo_procedures = $('.apps_to_fo_procedures')
   var apps_to_fo_type_of_claims = $('.apps_to_fo_type_of_claims')
   var apps_to_fo_methods = $('.apps_to_fo_methods')
+  var apps_to_fo_forms = $('.apps_to_fo_forms')
   var apps_to_fo_claims_contract_info = $('.apps_to_fo_claims_contract_infos')
   var apps_to_fo_expertise_app_info = $('.apps_to_fo_expertise_app_infos')
   var apps_to_fo_agreement_phone_info = $('.apps_to_fo_agreement_phone_infos')
@@ -343,6 +344,7 @@ $('#btn_desicion').click(function() {
                              apps_to_fo_procedures[i],
                              apps_to_fo_type_of_claims[i],
                              apps_to_fo_methods[i],
+                             apps_to_fo_forms[i],
                              apps_to_fo_claims_contract_info[i],
                              apps_to_fo_expertise_app_info[i],
                              apps_to_fo_agreement_phone_info[i],
