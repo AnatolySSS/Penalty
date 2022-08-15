@@ -421,11 +421,17 @@
                       </div>
                       <div class="form-group col-md-3">
                         <div class="input-group">
-                          <input id="main_claim_summ_1_1" class = "main_claim_summ_1 main_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+                          <input id="main_claim_summ_1_1" class = "main_claim_summ_1 main_claim_summs input-numeral form-control deactivation" aria-describedby="main_claim_summ_deactivate_1_1" placeholder="Сумма" type="text" size="10" required>
                           <div class="input-group-append">
                             <span class="input-group-text">&#8381;</span>
                           </div>
                         </div>
+                        <small id="main_claim_summ_help_block_1_1" class="form-text">
+                          <div class="form-inline">
+                            <input id="main_claim_summ_deactivate_1_1" class="deactivator" type="checkbox">
+                            <label for="main_claim_summ_deactivate_1_1" class="ml-2 form-check-label">Сведений не имеется</label>
+                          </div>
+                        </small>
                       </div>
                       <div class="form-group col-ms-1">
                         <button id="main_claim_btn_1_1" class="main_claim_btn_1 main_claim_btns btn btn-outline-warning" onclick="addFuMainClaim(1)">+</button>
@@ -1158,11 +1164,17 @@
                           </div>
                           <div class="form-group col-md-3">
                             <div class="input-group">
-                              <input id="apps_to_fo_claim_summ_1_1_1" class = "apps_to_fo_claim_summ_1_1 apps_to_fo_claim_summ_1 apps_to_fo_claim_summs input-numeral" placeholder="Сумма" type="text" size="10" required>
+                              <input id="apps_to_fo_claim_summ_1_1_1" class = "apps_to_fo_claim_summ_1_1 apps_to_fo_claim_summ_1 apps_to_fo_claim_summs input-numeral deactivation" aria-describedby="apps_to_fo_claim_summ_help_block_1_1" placeholder="Сумма" type="text" size="10" required>
                               <div class="input-group-append">
                                 <span class="input-group-text">&#8381;</span>
                               </div>
                             </div>
+                            <small id="apps_to_fo_claim_summ_help_block_1_1" class="form-text">
+                              <div class="form-inline">
+                                <input id="apps_to_fo_claim_summ_deactivate_1_1" class="deactivator" type="checkbox">
+                                <label for="apps_to_fo_claim_summ_deactivate_1_1" class="ml-2 form-check-label">Сведений не имеется</label>
+                              </div>
+                            </small>
                           </div>
                           <div class="form-group col-ms-1">
                             <button id="apps_to_fo_claim_btn_1_1_1" class="apps_to_fo_claim_btn_1_1 apps_to_fo_claim_btn_1 apps_to_fo_claim_btns btn btn-outline-warning" onclick="addAppsToFoClaim(1, 1)">+</button>
@@ -2195,7 +2207,7 @@
                     <!-- BEGIN add_fu_info_row_1 -->
                     <div class="add_fu_info_row_1 add_fu_info_rows">
                       <div id="add_fu_info_row_1_1" class="add_fu_info_1 add_fu_infos form-row">
-                        <div class="form-group col-md-4 form-inline">
+                        <div class="form-group col-md-4">
                           <select id="fu_claim_1_1" class="fu_claim_1 fu_claims custom-select col-md-12" required>
                             <option value="">Выберите требование</option>
                             <option>Страховое возмещение</option>
@@ -2231,11 +2243,17 @@
                         </div>
                         <div class="form-group col-md-3">
                           <div class="input-group">
-                            <input id="fu_claim_summ_1_1" class = "fu_claim_summ_1 fu_claim_summs input-numeral" placeholder="Сумма" type="text" size="10" required>
+                            <input id="fu_claim_summ_1_1" class = "fu_claim_summ_1 fu_claim_summs input-numeral deactivation" aria-describedby="fu_claim_summ_help_block_1_1" placeholder="Сумма" type="text" size="10" required>
                             <div class="input-group-append">
                               <span class="input-group-text">&#8381;</span>
                             </div>
                           </div>
+                          <small id="fu_claim_summ_help_block_1_1" class="form-text">
+                            <div class="form-inline">
+                              <input id="fu_claim_summ_deactivate_1_1" class="deactivator" type="checkbox">
+                              <label for="fu_claim_summ_deactivate_1_1" class="ml-2 form-check-label">Сведений не имеется</label>
+                            </div>
+                          </small>
                         </div>
                         <div class="form-group col-ms-1">
                           <button id="fu_claim_btn_1_1" class="fu_claim_btn_1 btn btn-outline-warning" onclick="addFuClaim(1)">+</button>
@@ -2494,7 +2512,7 @@
                     <!-- BEGIN add_court_info_row_1 -->
                     <div class="add_court_info_row_1 add_court_info_rows">
                       <div id="add_court_info_row_1_1" class="add_court_info_1 add_court_infos form-row">
-                        <div class="form-group col-md-4 form-inline">
+                        <div class="form-group col-md-4">
                           <select id="court_claim_1_1" class="court_claim_1 court_claims custom-select col-md-12" required>
                             <option value="">Выберите требование</option>
                             <option>Страховое возмещение</option>
@@ -2532,11 +2550,17 @@
                         </div>
                         <div class="form-group col-md-3">
                           <div class="input-group">
-                            <input id="court_claim_summ_1_1" class = "court_claim_summ_1 court_claim_summs input-numeral" placeholder="Сумма" type="text" size="10" required>
+                            <input id="court_claim_summ_1_1" class = "court_claim_summ_1 court_claim_summs input-numeral deactivation" aria-describedby="court_claim_summ_help_block_1_1" placeholder="Сумма" type="text" size="10" required>
                             <div class="input-group-append">
                               <span class="input-group-text">&#8381;</span>
                             </div>
                           </div>
+                          <small id="court_claim_summ_help_block_1_1" class="form-text">
+                            <div class="form-inline">
+                              <input id="court_claim_summ_deactivate_1_1" class="deactivator" type="checkbox">
+                              <label for="court_claim_summ_deactivate_1_1" class="ml-2 form-check-label">Сведений не имеется</label>
+                            </div>
+                          </small>
                         </div>
                         <div class="form-group col-ms-1">
                           <button id="court_claim_btn_1_1" class="court_claim_btn_1 btn btn-outline-warning" onclick="addClaim(1)">+</button>

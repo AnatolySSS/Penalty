@@ -97,7 +97,7 @@ function addFu() {
 					<!-- BEGIN add_fu_info_row_${fuId} -->
                     <div class="add_fu_info_row_${fuId} add_fu_info_rows">
 						<div id="add_fu_info_row_${fuId}_1" class="add_fu_info_${fuId} add_fu_infos form-row">
-							<div class="form-group col-md-4 form-inline">
+							<div class="form-group col-md-4">
 								<select id="fu_claim_${fuId}_1" class="fu_claim_${fuId} fu_claims custom-select col-md-12 form-control" required>
 									<option value="">Выберите требование</option>
 									<option>Страховое возмещение</option>
@@ -133,11 +133,17 @@ function addFu() {
 							</div>
 							<div class="form-group col-md-3">
 								<div class="input-group">
-									<input id="fu_claim_summ_${fuId}_1" class = "fu_claim_summ_${fuId} fu_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+									<input id="fu_claim_summ_${fuId}_1" class = "fu_claim_summ_${fuId} fu_claim_summs input-numeral form-control deactivation" aria-describedby="fu_claim_summ_help_block_${fuId}_1" placeholder="Сумма" type="text" size="10" required>
 									<div class="input-group-append">
 										<span class="input-group-text">&#8381;</span>
 									</div>
 								</div>
+								<small id="fu_claim_summ_help_block_${fuId}_1" class="form-text">
+									<div class="form-inline">
+										<input id="fu_claim_summ_deactivate_${fuId}_1" class="deactivator" type="checkbox">
+										<label for="fu_claim_summ_deactivate_${fuId}_1" class="ml-2 form-check-label">Сведений не имеется</label>
+									</div>
+								</small>
 							</div>
 							<div class="form-group col-ms-1">
 								<button id="fu_claim_btn_${fuId}_1" class="fu_claim_btn_${fuId} btn btn-outline-warning" onclick="addFuClaim(${fuId}, 1)">+</button>
@@ -292,7 +298,7 @@ function addFuClaim(id) {
 	}
 	claimFuId++;
   var str = `<div id="add_fu_info_row_${id}_${claimFuId}" class="add_fu_info_${id} add_fu_infos form-row">
-				<div class="form-group col-md-4 form-inline">
+				<div class="form-group col-md-4">
 					<select id="fu_claim_${id}_${claimFuId}" class="fu_claim_${id} fu_claims custom-select col-md-12 form-control" required>
 						<option value="">Выберите требование</option>
 						<option>Страховое возмещение</option>
@@ -328,11 +334,17 @@ function addFuClaim(id) {
 				</div>
 				<div class="form-group col-md-3">
 					<div class="input-group">
-						<input id="fu_claim_summ_${id}_${claimFuId}" class = "fu_claim_summ_${id} fu_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+						<input id="fu_claim_summ_${id}_${claimFuId}" class = "fu_claim_summ_${id} fu_claim_summs input-numeral form-control deactivation" aria-describedby="fu_claim_summ_help_block_${id}_${claimFuId}" placeholder="Сумма" type="text" size="10" required>
 						<div class="input-group-append">
 							<span class="input-group-text">&#8381;</span>
 						</div>
 					</div>
+					<small id="fu_claim_summ_help_block_${id}_${claimFuId}" class="form-text">
+						<div class="form-inline">
+							<input id="fu_claim_summ_deactivate_${id}_${claimFuId}" class="deactivator" type="checkbox">
+							<label for="fu_claim_summ_deactivate_${id}_${claimFuId}" class="ml-2 form-check-label">Сведений не имеется</label>
+						</div>
+					</small>
 				</div>
 				<div class="form-group col-ms-1">
 					<button id="fu_claim_btn_${id}_${claimFuId}" class="fu_claim_btn_${id} btn btn-outline-danger" onclick="removeFuClaim(${id}, ${claimFuId})">×</button>

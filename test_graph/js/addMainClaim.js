@@ -61,11 +61,17 @@ function addClaimsContract() {
                     </div>
                     <div class="form-group col-md-3">
                       <div class="input-group">
-                        <input id="main_claim_summ_${ContractId}_1" class = "main_claim_summ_${ContractId} main_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+                        <input id="main_claim_summ_${ContractId}_1" class = "main_claim_summ_${ContractId} main_claim_summs input-numeral form-control deactivation" aria-describedby="main_claim_summ_deactivate_${ContractId}_1" placeholder="Сумма" type="text" size="10" required>
                         <div class="input-group-append">
                           <span class="input-group-text">&#8381;</span>
                         </div>
                       </div>
+                      <small id="main_claim_summ_help_block_${ContractId}_1" class="form-text">
+                        <div class="form-inline">
+                          <input id="main_claim_summ_deactivate_${ContractId}_1" class="deactivator" type="checkbox">
+                          <label for="main_claim_summ_deactivate_${ContractId}_1" class="ml-2 form-check-label">Сведений не имеется</label>
+                        </div>
+                      </small>
                     </div>
                     <div class="form-group col-ms-1">
                       <button id="main_claim_btn_${ContractId}_1" class="main_claim_btn_${ContractId} main_claim_btns btn btn-outline-warning" onclick="addFuMainClaim(${ContractId})">+</button>
@@ -195,11 +201,17 @@ function addFuMainClaim(id) {
               </div>
               <div class="form-group col-md-3">
                 <div class="input-group">
-                <input id="main_claim_summ_${id}_${claimContractId}" class = "main_claim_summ_${id} main_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
-                <div class="input-group-append">
-                  <span class="input-group-text">&#8381;</span>
+                  <input id="main_claim_summ_${id}_${claimContractId}" class = "main_claim_summ_${id} main_claim_summs input-numeral form-control deactivation" aria-describedby="main_claim_summ_deactivate_${id}_${claimContractId}" placeholder="Сумма" type="text" size="10" required>
+                  <div class="input-group-append">
+                    <span class="input-group-text">&#8381;</span>
+                  </div>
                 </div>
-                </div>
+                <small id="main_claim_summ_help_block_${id}_${claimContractId}" class="form-text">
+                  <div class="form-inline">
+                    <input id="main_claim_summ_deactivate_${id}_${claimContractId}" class="deactivator" type="checkbox">
+                    <label for="main_claim_summ_deactivate_${id}_${claimContractId}" class="ml-2 form-check-label">Сведений не имеется</label>
+                  </div>
+                </small>
               </div>
               <div class="form-group col-ms-1">
                 <button id="main_claim_btn_${id}_${claimContractId}" class="main_claim_btn_${id} main_claim_btns btn btn-outline-danger" onclick="removeFuMainClaim(${id}, ${claimContractId})">×</button>

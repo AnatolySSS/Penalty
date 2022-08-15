@@ -133,11 +133,17 @@ function addAppToFo() {
                             </div>
                             <div class="form-group col-md-3">
                                 <div class="input-group">
-                                    <input id="apps_to_fo_claim_summ_${appsToFoId}_1_1" class = "apps_to_fo_claim_summ_${appsToFoId}_1 apps_to_fo_claim_summ_${appsToFoId} apps_to_fo_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+                                    <input id="apps_to_fo_claim_summ_${appsToFoId}_1_1" class = "apps_to_fo_claim_summ_${appsToFoId}_1 apps_to_fo_claim_summ_${appsToFoId} apps_to_fo_claim_summs input-numeral form-control deactivation" aria-describedby="apps_to_fo_claim_summ_help_block_${appsToFoId}_1" placeholder="Сумма" type="text" size="10" required>
                                     <div class="input-group-append">
                                         <span class="input-group-text">&#8381;</span>
                                     </div>
                                 </div>
+                                <small id="apps_to_fo_claim_summ_help_block_${appsToFoId}_1" class="form-text">
+                                    <div class="form-inline">
+                                        <input id="apps_to_fo_claim_summ_deactivate_${appsToFoId}_1" class="deactivator" type="checkbox">
+                                        <label for="apps_to_fo_claim_summ_deactivate_${appsToFoId}_1" class="ml-2 form-check-label">Сведений не имеется</label>
+                                    </div>
+                                </small>
                             </div>
                             <div class="form-group col-ms-1">
                                 <button id="apps_to_fo_claim_btn_${appsToFoId}_1_1" class="apps_to_fo_claim_btn_${appsToFoId}_1 apps_to_fo_claim_btn_${appsToFoId} apps_to_fo_claim_btns btn btn-outline-warning" onclick="addAppsToFoClaim(${appsToFoId}, 1)">+</button>
@@ -1163,11 +1169,17 @@ function addAppsToFoContract(id) {
                         </div>
                         <div class="form-group col-md-3">
                             <div class="input-group">
-                                <input id="apps_to_fo_claim_summ_${id}_${appsToFoContractId}_1" class = "apps_to_fo_claim_summ_${id}_${appsToFoContractId} apps_to_fo_claim_summ_1 apps_to_fo_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+                                <input id="apps_to_fo_claim_summ_${id}_${appsToFoContractId}_1" class = "apps_to_fo_claim_summ_${id}_${appsToFoContractId} apps_to_fo_claim_summ_1 apps_to_fo_claim_summs input-numeral form-control deactivation" aria-describedby="apps_to_fo_claim_summ_help_block_${id}_${appsToFoContractId}" placeholder="Сумма" type="text" size="10" required>
                                 <div class="input-group-append">
                                     <span class="input-group-text">&#8381;</span>
                                 </div>
                             </div>
+                            <small id="apps_to_fo_claim_summ_help_block_${id}_${appsToFoContractId}" class="form-text">
+                                <div class="form-inline">
+                                    <input id="apps_to_fo_claim_summ_deactivate_${id}_${appsToFoContractId}" class="deactivator" type="checkbox">
+                                    <label for="apps_to_fo_claim_summ_deactivate_${id}_${appsToFoContractId}" class="ml-2 form-check-label">Сведений не имеется</label>
+                                </div>
+                            </small>
                         </div>
                         <div class="form-group col-ms-1">
                             <button id="apps_to_fo_claim_btn_${id}_${appsToFoContractId}_1" class="apps_to_fo_claim_btn_${id}_${appsToFoContractId} apps_to_fo_claim_btn_1 apps_to_fo_claim_btns btn btn-outline-warning" onclick="addAppsToFoClaim(${id}, ${appsToFoContractId})">+</button>
@@ -1300,11 +1312,17 @@ function addAppsToFoClaim(id, conrtactId) {
     </div>
     <div class="form-group col-md-3">
         <div class="input-group">
-            <input id="apps_to_fo_claim_summ_${id}_${conrtactId}_${appsToFoClaimsContractId}" class = "apps_to_fo_claim_summ_${id}_${conrtactId} apps_to_fo_claim_summ_${id} apps_to_fo_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+            <input id="apps_to_fo_claim_summ_${id}_${conrtactId}_${appsToFoClaimsContractId}" class = "apps_to_fo_claim_summ_${id}_${conrtactId} apps_to_fo_claim_summ_${id} apps_to_fo_claim_summs input-numeral form-control deactivation" aria-describedby="apps_to_fo_claim_summ_help_block_${id}_${conrtactId}_${appsToFoClaimsContractId}" placeholder="Сумма" type="text" size="10" required>
             <div class="input-group-append">
                 <span class="input-group-text">&#8381;</span>
             </div>
         </div>
+        <small id="apps_to_fo_claim_summ_help_block_${id}_${conrtactId}_${appsToFoClaimsContractId}" class="form-text">
+            <div class="form-inline">
+                <input id="apps_to_fo_claim_summ_deactivate_${id}_${conrtactId}_${appsToFoClaimsContractId}" class="deactivator" type="checkbox">
+                <label for="apps_to_fo_claim_summ_deactivate_${id}_${conrtactId}_${appsToFoClaimsContractId}" class="ml-2 form-check-label">Сведений не имеется</label>
+            </div>
+        </small>
     </div>
     <div class="form-group col-ms-1">
         <button id="apps_to_fo_claim_btn_${id}_${conrtactId}_${appsToFoClaimsContractId}" class="apps_to_fo_claim_btn_${id}_${conrtactId} apps_to_fo_claim_btn_${id} apps_to_fo_claim_btns btn btn-outline-danger" onclick="removeAppsToFoClaim(${id}, ${conrtactId}, ${appsToFoClaimsContractId})">×</button>

@@ -285,6 +285,7 @@ export class AppToFo {
     app_paragraph
     expertise_apps_paragraph
     app_claim_answer_time_paragraph
+    form_paragraph
     agreement_paragraph
     requests_paragraph
     inspections_paragraph
@@ -347,6 +348,7 @@ export class AppToFo {
         this.expertise_apps_paragraph = ""
         this.app_claim_answer_time_paragraph = ""
         this.agreement_paragraph = ""
+        this.form_paragraph = ""
         this.requests_paragraph = ""
         this.inspections_paragraph = ""
         this.expertises_paragraph = ""
@@ -540,6 +542,13 @@ export class AppToFo {
                     ${procedure_helper}, предоставив все документы, предусмотренные Правилами обязательного 
                     страхования гражданской ответственности владельцев транспортных средств, утвержденными 
                     Положением Банка России от 19.09.2014 № 431-П (далее – Правила ОСАГО).</p>`
+
+                    //Формирование абзаца с формой страхового возмещения
+                    if (this.form.options.selectedIndex == 1) {
+                        this.form_paragraph = `<p>В Заявлении указано о выплате безналичным расчетом на банковские реквизиты при 
+                        наличии условий, предусмотренных пунктом 16.1 статьи 12 Закона № 40-ФЗ. К Заявлению приложены банковские 
+                        реквизиты Заявителя.</p>`
+                    }
 
                     //Формирование параграфа с согласием на уведомление по СМС
                     if (this.agreementInfo.options.selectedIndex == 1) {
@@ -814,7 +823,7 @@ export class AppToFo {
                         ${must} рассмотреть заявление (претензию) и направить Заявителю ответ не позднее ${this.getLastClaimFoDayFormatted()}.</p>`
                     }
 
-                    //Формирование абзаца с отсутствием сведений об ответе ФО на заявление
+                    //Формирование абзаца с ответом ФО на Заявление
                     if (this.answerFoInfo.options.selectedIndex == 1) {
                         if (this.answerFo.options.selectedIndex == 1) {
                             
@@ -885,6 +894,7 @@ export class AppToFo {
                               this.expertise_apps_paragraph +
                               this.app_claim_answer_time_paragraph +
                               this.agreement_paragraph + 
+                              this.form_paragraph +
                               this.requests_paragraph + 
                               this.inspections_paragraph + 
                               this.expertises_paragraph +

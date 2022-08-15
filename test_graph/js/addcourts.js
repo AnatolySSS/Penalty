@@ -87,7 +87,7 @@ function addCourt() {
 						<!-- BEGIN add_court_info_row_${courtId} -->
 						<div class="add_court_info_row_${courtId} add_court_info_rows">
 							<div id="add_court_info_row_${courtId}_1" class="add_court_info_${courtId} add_court_infos form-row ">
-								<div class="form-group col-md-4 form-inline">
+								<div class="form-group col-md-4">
 									<select id="court_claim_${courtId}_1" class="court_claim_${courtId} court_claims custom-select col-md-12 form-control" required>
 										<option value="">Выберите требование</option>
 										<option>Страховое возмещение</option>
@@ -125,11 +125,17 @@ function addCourt() {
 								</div>
 								<div class="form-group col-md-3">
 									<div class="input-group">
-										<input id="court_claim_summ_${courtId}_1" class = "court_claim_summ_${courtId} court_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+										<input id="court_claim_summ_${courtId}_1" class = "court_claim_summ_${courtId} court_claim_summs input-numeral form-control deactivation" aria-describedby="court_claim_summ_help_block_${courtId}_1" placeholder="Сумма" type="text" size="10" required>
 										<div class="input-group-append">
 											<span class="input-group-text">&#8381;</span>
 										</div>
 									</div>
+									<small id="court_claim_summ_help_block_${courtId}_1" class="form-text">
+										<div class="form-inline">
+											<input id="court_claim_summ_deactivate_${courtId}_1" class="deactivator" type="checkbox">
+											<label for="court_claim_summ_deactivate_${courtId}_1" class="ml-2 form-check-label">Сведений не имеется</label>
+										</div>
+									</small>
 								</div>
 								<div class="form-group col-ms-1">
 									<button id="court_claim_btn_${courtId}_1" class="court_claim_btn_${courtId} btn btn-outline-warning" onclick="addClaim(${courtId})">+</button>
@@ -187,7 +193,7 @@ function addClaim(id) {
 	}
 	claimId++;
 	var str = `<div id="add_court_info_row_${id}_${claimId}" class="add_court_info_${id} add_court_infos form-row">
-					<div class="form-group col-md-4 form-inline">
+					<div class="form-group col-md-4">
 						<select id="court_claim_${id}_${claimId}" class="court_claim_${id} court_claims custom-select col-md-12 form-control" required>
 							<option value="">Выберите требование</option>
 							<option>Страховое возмещение</option>
@@ -225,11 +231,17 @@ function addClaim(id) {
 					</div>
 					<div class="form-group col-md-3">
 						<div class="input-group">
-							<input id="court_claim_summ_${id}_${claimId}" class = "court_claim_summ_${id} court_claim_summs input-numeral form-control" placeholder="Сумма" type="text" size="10" required>
+							<input id="court_claim_summ_${id}_${claimId}" class = "court_claim_summ_${id} court_claim_summs input-numeral form-control deactivation" aria-describedby="court_claim_summ_help_block_${id}_${claimId}" placeholder="Сумма" type="text" size="10" required>
 							<div class="input-group-append">
 								<span class="input-group-text">&#8381;</span>
 							</div>
 						</div>
+						<small id="court_claim_summ_help_block_${id}_${claimId}" class="form-text">
+							<div class="form-inline">
+								<input id="court_claim_summ_deactivate_${id}_${claimId}" class="deactivator" type="checkbox">
+								<label for="court_claim_summ_deactivate_${id}_${claimId}" class="ml-2 form-check-label">Сведений не имеется</label>
+							</div>
+						</small>
 					</div>
 					<div class="form-group col-ms-1">
 						<button id="court_claim_btn_${id}_${claimId}" class="court_claim_btn_${id} btn btn-outline-danger" onclick="removeClaim(${id}, ${claimId})">×</button>

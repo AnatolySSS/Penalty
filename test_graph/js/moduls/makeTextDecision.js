@@ -517,6 +517,7 @@ export function makeTextDecision(claimsContract,
         //Если среди заявленных требований есть требование о взыскании страхового возмещения
         if (claimsContract[i].claim[j].type.options.selectedIndex == 1) {
           let main_claim_osago_sv = claimsContract[i].claim[j].summ
+          //Если ФО была осуществлена выплата
           if (paymentVoluntary[0].summ > 0) {
             if (appToFo[0].form.options.selectedIndex == 1) {
               osago_surcharge_sv =  osagoSurchargeSV(main_claim_osago_sv, paymentVoluntary, fuExpertise)
