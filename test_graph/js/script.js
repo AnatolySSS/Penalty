@@ -1170,3 +1170,9 @@ $(document).on( "mouseenter", '.form-control', function( event ) {
   validationCheck('courts-all')
   validationCheck('fu-expertise-all')
 })
+
+if (window.openDatabase){
+
+} else{
+	alert("It seems your browser does not have support for WebSQL. Please use a browser which does, otherwise parts of this application may not run as intended."); //or any other similar message
+}

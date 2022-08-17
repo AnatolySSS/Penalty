@@ -519,9 +519,7 @@ export function makeTextDecision(claimsContract,
           let main_claim_osago_sv = claimsContract[i].claim[j].summ
           //Если ФО была осуществлена выплата
           if (paymentVoluntary[0].summ > 0) {
-            if (appToFo[0].form.options.selectedIndex == 1) {
-              osago_surcharge_sv =  osagoSurchargeSV(main_claim_osago_sv, paymentVoluntary, fuExpertise)
-            }
+            osago_surcharge_sv =  osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary, fuExpertise, max_summ)
           }
         }
       }
