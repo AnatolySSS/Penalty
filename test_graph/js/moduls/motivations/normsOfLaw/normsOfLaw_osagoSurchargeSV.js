@@ -156,7 +156,7 @@ export function fu_expertise_paragraph (date_dtp, fuExpertise, expertiseQuestion
         ${fuExpertise[i].getFuExpertiseDateFormatted()} № ${fuExpertise[i].number.value} (далее – Экспертное заключение) 
         ${expertises_summ_paragraph_helper}.</p>`
 
-        paragraphs[2] = `<p>Для решения вопросов, связанных с рассмотрением Обращения, Финансовым уполномоченным 
+        paragraphs[i + 2] = `<p>Для решения вопросов, связанных с рассмотрением Обращения, Финансовым уполномоченным 
         назначено проведение независимой технической экспертизы поврежденного Транспортного средства, проводимой в 
         соответствии с требованиями Закона № 40-ФЗ, в экспертной организации ${fuExpertise[i].orgainzation.value} 
         (эксперт-техник ${fuExpertise[i].technician.value}), предметом которой являлось исследование 
@@ -168,7 +168,7 @@ export function fu_expertise_paragraph (date_dtp, fuExpertise, expertiseQuestion
 
     paragraphs.forEach(element => {
         text = text + element
-    });
+    })
     return text
 }
 

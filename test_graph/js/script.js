@@ -509,6 +509,7 @@ $('#btn_desicion').click(function() {
   var fu_expertise_summ_leftovers = $(`.fu_expertise_summ_leftovers`)
   var fu_expertise_summ_uts = $(`.fu_expertise_summ_uts`)
   var fu_expertise_trasas = $(`.fu_expertise_trasas`)
+  var fu_expertise_trasa_results = $(`.fu_expertise_trasa_results`)
   var fu_expertise_technicians = $(`.fu_expertise_technicians`)
   var fu_expertise_typical_questions = $(`.fu_expertise_typical_questions`)
   var fu_expertise_questions = $(`.fu_expertise_questions`)
@@ -524,6 +525,7 @@ $('#btn_desicion').click(function() {
                                       fu_expertise_summ_leftovers[i],
                                       fu_expertise_summ_uts[i],
                                       fu_expertise_trasas[i],
+                                      fu_expertise_trasa_results[i],
                                       fu_expertise_technicians[i],
                                       fu_expertise_typical_questions[i],
                                       fu_expertise_questions[i])
@@ -901,6 +903,7 @@ document.getElementById('close_modal').onclick = function (){
   $('#check_list').html("Показать чек-лист");
 }
 
+//Скрыть все разделы модуля при закрытии модуля
 $('#exampleModal').on('hidden.bs.modal', function (event) {
   $('#div_svg').hide();
   $('#show_graph').html("Показать график неустоек");
@@ -1170,9 +1173,3 @@ $(document).on( "mouseenter", '.form-control', function( event ) {
   validationCheck('courts-all')
   validationCheck('fu-expertise-all')
 })
-
-if (window.openDatabase){
-
-} else{
-	alert("It seems your browser does not have support for WebSQL. Please use a browser which does, otherwise parts of this application may not run as intended."); //or any other similar message
-}

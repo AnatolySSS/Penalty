@@ -36,6 +36,7 @@ export function autocomplete(inp, arr) {
                 /*close the list of autocompleted values,
                 (or any other open lists of autocompleted values:*/
                 closeAllLists();
+                fillFoData()
             });
             a.appendChild(b);
           }
@@ -65,36 +66,7 @@ export function autocomplete(inp, arr) {
           /*and simulate a click on the "active" item:*/
           if (x) x[currentFocus].click();
         }
-        var fo_name = document.querySelector("#fo_name").value
-        fo_data.fo_data.forEach(element => {
-          if (fo_name == element.fo_name) {
-            var fo_post_address_adapted = element.fo_post_address.replaceAll("город", "г.")
-            fo_post_address_adapted = fo_post_address_adapted.replaceAll("улица", "ул.")
-            fo_post_address_adapted = fo_post_address_adapted.replaceAll("дом", "д.")
-            fo_post_address_adapted = fo_post_address_adapted.replaceAll("строение", "стр.")
-            fo_post_address_adapted = fo_post_address_adapted.replaceAll("переулок", "пер.")
-            fo_post_address_adapted = fo_post_address_adapted.replaceAll("помещение", "пом.")
-            fo_post_address_adapted = fo_post_address_adapted.replaceAll("проспект", "пр-кт")
-            fo_post_address_adapted = fo_post_address_adapted.replaceAll("набережная", "наб.")
-
-            var fo_registration_address_adapted = element.fo_registration_address.replaceAll("город", "г.")
-            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("улица", "ул.")
-            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("дом", "д.")
-            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("строение", "стр.")
-            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("переулок", "пер.")
-            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("помещение", "пом.")
-            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("проспект", "пр-кт")
-            fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("набережная", "наб.")
-
-            document.querySelector("#fo_inn").value = element.fo_inn
-            document.querySelector("#fo_post_address").value = fo_post_address_adapted
-            document.querySelector("#fo_registration_address").value = fo_registration_address_adapted
-            document.querySelector("#fo_registration_date").value = element.fo_registration_date
-            document.querySelector("#fo_site_check").innerHTML = "Ссылка на сайт ЦБ РФ для проверки ФО"
-            document.querySelector("#fo_site_check").href = "https://cbr.ru/finorg/foinfo/?ogrn=" + element.fo_ogrn
-            document.querySelector("#fo_site_check_div").setAttribute("style", "display")
-          }
-        })
+        fillFoData()
       }
   });
   function addActive(x) {
@@ -119,30 +91,45 @@ export function autocomplete(inp, arr) {
     var x = document.getElementsByClassName("autocomplete-items");
     for (var i = 0; i < x.length; i++) {
       if (elmnt != x[i] && elmnt != inp) {
-      x[i].parentNode.removeChild(x[i]);
+        x[i].parentNode.removeChild(x[i]);
+      }
     }
   }
-}
-/*execute a function when someone clicks in the document:*/
-document.addEventListener("click", function (e) {
-    closeAllLists(e.target);
-});
-}
+  /*execute a function when someone clicks in the document:*/
+  document.addEventListener("click", function (e) {
+      closeAllLists(e.target);
+  })
 
-// var fo = ["АО «АльфаСтрахование»", "АО «Группа Ренессанс Страхование»",
-// "АО «ГСК «Югория»", "АО «МАКС»", "АО «НАСКО»", "АО «ОСК»", "АО «СК «АСТРО-ВОЛГА»",
-// "АО «СОГАЗ»", "АО «Страховая Компания «ПОЛИС-ГАРАНТ»", "АО «Тинькофф Страхование»",
-// "АО СК «Армеец»", "АО СК «БАСК»", "АО СК «Стерх»", "АО СК «Чулпан»", "ООО «Абсолют Страхование»",
-// "ООО «НСГ - «РОСЭНЕРГО»", "ООО «СК «АНГАРА»", "ООО «СК «Согласие»", "ООО «Страховая компания «СДС»",
-// "ООО «Страховое общество «Сургутнефтегаз»", "ООО СК «Паритет-СК»", "ООО СО «ВЕРНА»",
-// "ООО Страховая Компания «Гелиос»", "ПАО «АСКО-СТРАХОВАНИЕ»", "ПАО «САК «Энергогарант»",
-// "ПАО СК «Росгосстрах»", "САО «ВСК»", "САО «Надежда»", "САО ЭРГО", "СПАО «Ингосстрах»",
-// "АО «Страховая бизнес группа»", "ООО «СФ «Адонис»", "ПАО «МСЦ»", "ООО «СК «СЕРВИСРЕЗЕРВ»",
-// "АО «СО «Талисман»", "ООО «Зетта Страхование»", "АО СК «Сибирский спас»", "АО Страховое общество «Якорь»",
-// "АО СГ «Спасские ворота»", "АО «СК ОПОРА»", "ООО РСО «ЕВРОИНС»", "АО СК «Двадцать первый век»",
-// "ООО «СК Екатеринбург»", "ООО «Абсолют Страхование»", "САО «Медэкспресс»", "АО «СК ГАЙДЕ»",
-// "Либерти Страхование (АО)", "ООО «ПРОМИНСТРАХ»", "«Совкомбанк страхование» (АО)",
-// "ООО «СК «Мегарусс-Д»", "АО «ЮНИТИ СТРАХОВАНИЕ»", "АО «Боровицкое страховое общество»",
-// "САО «РЕСО-Гарантия»", "АО «Страховая Компания  «ПОЛИС-ГАРАНТ»"];
+  function fillFoData() {
+    var fo_name = document.querySelector("#fo_name").value
+    fo_data.fo_data.forEach(element => {
+      if (fo_name == element.fo_name) {
+        var fo_post_address_adapted = element.fo_post_address.replaceAll("город", "г.")
+        fo_post_address_adapted = fo_post_address_adapted.replaceAll("улица", "ул.")
+        fo_post_address_adapted = fo_post_address_adapted.replaceAll("дом", "д.")
+        fo_post_address_adapted = fo_post_address_adapted.replaceAll("строение", "стр.")
+        fo_post_address_adapted = fo_post_address_adapted.replaceAll("переулок", "пер.")
+        fo_post_address_adapted = fo_post_address_adapted.replaceAll("помещение", "пом.")
+        fo_post_address_adapted = fo_post_address_adapted.replaceAll("проспект", "пр-кт")
+        fo_post_address_adapted = fo_post_address_adapted.replaceAll("набережная", "наб.")
 
-// autocomplete(document.getElementById("fo_name"), fo);
+        var fo_registration_address_adapted = element.fo_registration_address.replaceAll("город", "г.")
+        fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("улица", "ул.")
+        fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("дом", "д.")
+        fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("строение", "стр.")
+        fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("переулок", "пер.")
+        fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("помещение", "пом.")
+        fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("проспект", "пр-кт")
+        fo_registration_address_adapted = fo_registration_address_adapted.replaceAll("набережная", "наб.")
+
+        document.querySelector("#fo_inn").value = element.fo_inn
+        document.querySelector("#fo_post_address").value = fo_post_address_adapted
+        document.querySelector("#fo_registration_address").value = fo_registration_address_adapted
+        document.querySelector("#fo_registration_date").value = element.fo_registration_date
+        document.querySelector("#fo_site_check").innerHTML = "Ссылка на сайт ЦБ РФ для проверки ФО"
+        document.querySelector("#fo_site_check").href = "https://cbr.ru/finorg/foinfo/?ogrn=" + element.fo_ogrn
+        document.querySelector("#fo_site_check_div").setAttribute("style", "display")
+      }
+    })
+  }
+}

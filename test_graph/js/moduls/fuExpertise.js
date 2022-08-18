@@ -15,6 +15,7 @@ export class FuExpertise {
     summ_leftovers
     summ_uts
     trasa
+    trasa_results
 
     summ_without_text
     summ_with_text
@@ -27,7 +28,7 @@ export class FuExpertise {
     question
 
     constructor (id, date, number, orgainzation, 
-                 summ_without, summ_with, summ_market, summ_leftovers, summ_uts, trasa,
+                 summ_without, summ_with, summ_market, summ_leftovers, summ_uts, trasa, trasa_results,
                  technician, typical_question, question) {
         this.id = id
         this.date = date
@@ -44,6 +45,7 @@ export class FuExpertise {
         this.summ_uts = Number(summ_uts.value.replace(/\s+/g, ''))
         this.summ_uts_text = makeRubText_genitive(this.summ_uts)
         this.trasa = trasa
+        this.trasa_results = trasa_results
         this.technician = technician
         this.typical_question = typical_question
         this.question = question

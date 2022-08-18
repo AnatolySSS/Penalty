@@ -18,8 +18,27 @@ $(document).ready(function(){
 	// 	$("#jumbotron_osago_penalty").hide();
 	// })
 
+	// $("#collapse_1").find("li").each(function(index){
+	// 	$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+	// 	$(this).mouseleave(function() {$(this).css("background", "#d6dbe0");})
+	// })
+
 	$("#preambula").on('click', function(){
 		$(".preambula").show();
+		$(this).css("background", "#ffc107");
+		$(this).find("a").css("color", "#fff");
+		$(this).parent().find('li').each(function(index){
+            if ($(this).attr('id') != "preambula") {
+                $(this).css("background", "#d6dbe0");
+				$(this).find("a").css("color", "#61656b");
+
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#d6dbe0");})
+            } else {
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#ffc107");})
+			}
+        })
 		$(".btn-desicion").show();
 		$(".main-claims-all").hide();
 		$(".main-request").hide();
@@ -33,6 +52,20 @@ $(document).ready(function(){
 	})
 
 	$("#main-claims-all").on('click', function(){
+		$(this).css("background", "#ffc107");
+		$(this).find("a").css("color", "#fff");
+		$(this).parent().find('li').each(function(index){
+            if ($(this).attr('id') != "main-claims-all") {
+                $(this).css("background", "#d6dbe0");
+				$(this).find("a").css("color", "#61656b");
+
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#d6dbe0");})
+            } else {
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#ffc107");})
+			}
+        })
 		$(".main-claims-all").show();
 		$(".btn-desicion").show();
 		$(".preambula").hide();
@@ -47,6 +80,20 @@ $(document).ready(function(){
 	})
 
 	$("#main-request").on('click', function(){
+		$(this).css("background", "#ffc107");
+		$(this).find("a").css("color", "#fff");
+		$(this).parent().find('li').each(function(index){
+            if ($(this).attr('id') != "main-request") {
+                $(this).css("background", "#d6dbe0");
+				$(this).find("a").css("color", "#61656b");
+
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#d6dbe0");})
+            } else {
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#ffc107");})
+			}
+        })
 		$(".main-request").show();
 		$(".btn-desicion").show();
 		$(".preambula").hide();
@@ -61,6 +108,20 @@ $(document).ready(function(){
 	})
 
 	$("#dtp-description").on('click', function(){
+		$(this).css("background", "#ffc107");
+		$(this).find("a").css("color", "#fff");
+		$(this).parent().find('li').each(function(index){
+            if ($(this).attr('id') != "dtp-description") {
+                $(this).css("background", "#d6dbe0");
+				$(this).find("a").css("color", "#61656b");
+
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#d6dbe0");})
+            } else {
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#ffc107");})
+			}
+        })
 		$(".dtp-description").show();
 		$(".btn-desicion").show();
 		$(".preambula").hide();
@@ -75,6 +136,20 @@ $(document).ready(function(){
 	})
 
 	$("#apps-to-fo").on('click', function(){
+		$(this).css("background", "#ffc107");
+		$(this).find("a").css("color", "#fff");
+		$(this).parent().find('li').each(function(index){
+            if ($(this).attr('id') != "apps-to-fo") {
+                $(this).css("background", "#d6dbe0");
+				$(this).find("a").css("color", "#61656b");
+
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#d6dbe0");})
+            } else {
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#ffc107");})
+			}
+        })
 		$(".apps-to-fo").show();
 		$(".preambula").hide();
 		$(".main-claims-all").hide();
@@ -88,6 +163,20 @@ $(document).ready(function(){
 	})
 
 	$("#fus-all").on('click', function(){
+		$(this).css("background", "#ffc107");
+		$(this).find("a").css("color", "#fff");
+		$(this).parent().find('li').each(function(index){
+            if ($(this).attr('id') != "fus-all") {
+                $(this).css("background", "#d6dbe0");
+				$(this).find("a").css("color", "#61656b");
+
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#d6dbe0");})
+            } else {
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#ffc107");})
+			}
+        })
 		$(".fus-all").show();
 		$(".btn-desicion").show();
 		$(".preambula").hide();
@@ -102,6 +191,20 @@ $(document).ready(function(){
 	})
 
 	$("#courts-all").on('click', function(){
+		$(this).css("background", "#ffc107");
+		$(this).find("a").css("color", "#fff");
+		$(this).parent().find('li').each(function(index){
+            if ($(this).attr('id') != "courts-all") {
+                $(this).css("background", "#d6dbe0");
+				$(this).find("a").css("color", "#61656b");
+
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#d6dbe0");})
+            } else {
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#ffc107");})
+			}
+        })
 		$(".courts-all").show();
 		$(".btn-desicion").show();
 		$(".preambula").hide();
@@ -116,6 +219,20 @@ $(document).ready(function(){
 	})
 
 	$("#fu-expertise-all").on('click', function(){
+		$(this).css("background", "#ffc107");
+		$(this).find("a").css("color", "#fff");
+		$(this).parent().find('li').each(function(index){
+            if ($(this).attr('id') != "fu-expertise-all") {
+                $(this).css("background", "#d6dbe0");
+				$(this).find("a").css("color", "#61656b");
+
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#d6dbe0");})
+            } else {
+				$(this).mouseenter(function() {$(this).css("background", "#ffc107");})
+				$(this).mouseleave(function() {$(this).css("background", "#ffc107");})
+			}
+        })
 		$(".fu-expertise-all").show();
 		$(".btn-desicion").show();
 		$(".preambula").hide();

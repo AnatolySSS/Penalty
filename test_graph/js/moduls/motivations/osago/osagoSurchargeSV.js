@@ -1,5 +1,3 @@
-import { DATE_NEW_OSAGO_METHODOKOGY } from "../../variables"
-import { changeDateType } from '../../changeDateType.js';
 import { expertiseQuestions } from "../../objects/allExpertiseQuestions"
 import { conclusive_agreement_paragraph, 
          fu_expertise_paragraph, 
@@ -12,15 +10,10 @@ import { conclusive_agreement_paragraph,
          form_change_conclusion_paragraph,
          total_count_paragraph,
          ten_percent_motive_paragraph,
-         conclusion_paragraph } from "../normsOfLaw/normsOfLaw";
+         conclusion_paragraph } from "../normsOfLaw/normsOfLaw_osagoSurchargeSV";
 
-export function osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary, fuExpertise, max_summ) {
+export function osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary, fuExpertise, max_summ, date_dtp) {
     let main_paragraph = ""
-
-    //Определение даты ДТП
-    let date_dtp = document.querySelector('#date_dtp').value;
-    date_dtp = changeDateType(date_dtp);
-    date_dtp = Date.parse(date_dtp + 'T00:00:00');
 
     //Определение общей суммы выплаты ФО
     let total_summ_payment = 0

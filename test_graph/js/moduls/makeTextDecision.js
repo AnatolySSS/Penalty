@@ -9,6 +9,7 @@ import { changeDateType } from './changeDateType.js';
 import { DATE_FZ_123_START } from "./variables";
 import { osagoPenaltyParagraph } from "./motivations/osago/osagoPenalty";
 import { osagoSurchargeSV } from "./motivations/osago/osagoSurchargeSV";
+import { osagoRefusalSvTrasa } from "./motivations/osago/osagoRefusalSvTrasa";
 
 export var all_paragraphs =[]
 
@@ -35,6 +36,7 @@ export function makeTextDecision(claimsContract,
   var make_a_payment, fulfill, keep;
   var osago_penalty_paragraph = ""
   var osago_surcharge_sv = ""
+  var osago_refusal_sv_trasa = ""
   var main_claims_all_paragraph = "";
   var court_set = new Set();
   court_set.clear();
@@ -261,7 +263,7 @@ export function makeTextDecision(claimsContract,
   }
 
   var main_request_paragraph = ""
-  var transitional_paragraph = ""
+  var transitional_to_description_paragraph = ""
   //В случае заполнения всех необходимых полей формируется абзац с запросом в ФО
   if ($('#main-request .fa-2x').css('color') == 'rgb(40, 167, 69)') {
     main_request_paragraph = `<p>В рамках рассмотрения Обращения в адрес ${fo_name_genitive} направлено уведомление о принятии 
@@ -269,7 +271,7 @@ export function makeTextDecision(claimsContract,
     сведений и документов по предмету спора, указанному в Обращении.</p>
     <p>${main_answer}.</p>`
 
-    transitional_paragraph = `<p>Рассмотрев имеющиеся в деле документы, Финансовый уполномоченный установил следующее.</p>`
+    transitional_to_description_paragraph = `<p>Рассмотрев имеющиеся в деле документы, Финансовый уполномоченный установил следующее.</p>`
   }
 
   main_request_paragraph = main_request_paragraph.replaceAll("\r\n", "")
@@ -282,7 +284,7 @@ export function makeTextDecision(claimsContract,
   var date_dtp = document.querySelector('#date_dtp').value;
   date_dtp = changeDateType(date_dtp);
   date_dtp = Date.parse(date_dtp + 'T00:00:00');
-  date_dtp = formatDate(new Date(date_dtp));
+  var date_dtp_formatted = formatDate(new Date(date_dtp));
   var dtp_description_paragraph = ""
   var all_innocent_participants = ""
   var contracts_except_app = ""
@@ -300,7 +302,7 @@ export function makeTextDecision(claimsContract,
     if (dtpParticipant[0].is_guilty.options.selectedIndex == 2 &&
         dtpParticipant[1].is_guilty.options.selectedIndex == 1) {
       //Фомрирование абзаца с описанием ДТП
-      dtp_description_paragraph = `<p>В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 
+      dtp_description_paragraph = `<p>В результате дорожно-транспортного происшествия, произошедшего ${date_dtp_formatted} 
       (далее – ДТП) вследствие действий ${dtpParticipant[1].driver_name_genitive}, ${dtpParticipant[1].driver_declination} 
       транспортным средством ${dtpParticipant[1].full_car_name}, был причинен ущерб принадлежащему Заявителю 
       транспортному средству ${dtpParticipant[0].full_car_name}.</p>`
@@ -319,7 +321,7 @@ export function makeTextDecision(claimsContract,
           app_driver_name = dtpParticipant[0].driver_name_genitive
         }
         //Фомрирование абзаца с описанием ДТП
-        dtp_description_paragraph = `<p>${date_dtp} произошло дорожно-транспортного происшествия (далее – ДТП), 
+        dtp_description_paragraph = `<p>${date_dtp_formatted} произошло дорожно-транспортного происшествия (далее – ДТП), 
         с участием транспортного средства ${dtpParticipant[1].full_car_name}, под управлением 
         ${dtpParticipant[1].driver_name_genitive} и транспортного средства ${dtpParticipant[1].full_car_name} 
         (далее – Транспортное средство), принадлежащего Заявителю на праве собственности, под управлением 
@@ -365,7 +367,7 @@ export function makeTextDecision(claimsContract,
           }
         }
         //Фомрирование абзаца с описанием ДТП
-        dtp_description_paragraph = `<p>В результате дорожно-транспортного происшествия, произошедшего ${date_dtp} 
+        dtp_description_paragraph = `<p>В результате дорожно-транспортного происшествия, произошедшего ${date_dtp_formatted} 
         (далее – ДТП), вследствие действий ${dtpParticipant[dtp_culpit_one_number].driver_name_genitive}, 
         ${dtpParticipant[1].driver_declination} транспортным средством ${dtpParticipant[dtp_culpit_one_number].full_car_name}, 
         с участием ${all_innocent_participants} был причинен ущерб принадлежащему Заявителю транспортному средству 
@@ -400,7 +402,7 @@ export function makeTextDecision(claimsContract,
         all_innocent_participants = all_innocent_participants.slice(0, -1)
         
         //Фомрирование абзаца с описанием ДТП
-        dtp_description_paragraph = `<p>${date_dtp} произошло дорожно-транспортного происшествия (далее – ДТП), с участием 
+        dtp_description_paragraph = `<p>${date_dtp_formatted} произошло дорожно-транспортного происшествия (далее – ДТП), с участием 
         ${all_innocent_participants} и транспортного средства ${dtpParticipant[0].full_car_name}, принадлежащего Заявителю 
         на праве собственности, под управлением ${app_driver_name}, в результате которого Транспортному средству был причинен ущерб.</p>
         ${administrative_documents_parahraph}`
@@ -507,6 +509,26 @@ export function makeTextDecision(claimsContract,
     }
   }
 
+  osago_penalty_paragraph = osago_penalty_paragraph.replaceAll("\r\n", "")
+  osago_penalty_paragraph = osago_penalty_paragraph.replaceAll("\r", "")
+  osago_penalty_paragraph = osago_penalty_paragraph.replaceAll("\n", "")
+
+  //Определение общей суммы выплаты ФО
+  let total_summ_payment = 0
+  for (let i = 0; i < paymentVoluntary.length; i++) {
+      if (paymentVoluntary[i].type.options.selectedIndex == 1) {
+          total_summ_payment = total_summ_payment + paymentVoluntary[i].summ
+      }
+  }
+
+
+  let transitional_to_motivation_paragraph = `<p>Рассмотрев представленные Заявителем и Финансовой организацией документы, Финансовый уполномоченный 
+  приходит к следующим выводам.</p>`
+
+  transitional_to_motivation_paragraph = transitional_to_motivation_paragraph.replaceAll("\r\n", "")
+  transitional_to_motivation_paragraph = transitional_to_motivation_paragraph.replaceAll("\r", "")
+  transitional_to_motivation_paragraph = transitional_to_motivation_paragraph.replaceAll("\n", "")
+
   //Формирование мотивировочной части с недоплатой по ОСАГО
   //Перебор всех договоров, по которым заявлены требования
   for (let i = 0; i < claimsContract.length; i++) {
@@ -518,26 +540,38 @@ export function makeTextDecision(claimsContract,
         if (claimsContract[i].claim[j].type.options.selectedIndex == 1) {
           let main_claim_osago_sv = claimsContract[i].claim[j].summ
           //Если ФО была осуществлена выплата
-          if (paymentVoluntary[0].summ > 0) {
-            osago_surcharge_sv =  osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary, fuExpertise, max_summ)
+          if (total_summ_payment > 0) {
+            osago_surcharge_sv =  osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary, fuExpertise, max_summ, date_dtp)
+          //Если был отказ по трасе в первом обращении
+          } else if (appToFo[0].refusal[0].type.options.selectedIndex == 1) {
+            osago_refusal_sv_trasa = osagoRefusalSvTrasa(fuExpertise, date_dtp)
           }
         }
       }
     }
   }
+
+  osago_surcharge_sv = osago_surcharge_sv.replaceAll("\r\n", "")
+  osago_surcharge_sv = osago_surcharge_sv.replaceAll("\r", "")
+  osago_surcharge_sv = osago_surcharge_sv.replaceAll("\n", "")
+
+  osago_refusal_sv_trasa = osago_refusal_sv_trasa.replaceAll("\r\n", "")
+  osago_refusal_sv_trasa = osago_refusal_sv_trasa.replaceAll("\r", "")
+  osago_refusal_sv_trasa = osago_refusal_sv_trasa.replaceAll("\n", "")
   
 
-  motivation_part = osago_surcharge_sv + osago_penalty_paragraph
+  motivation_part = osago_surcharge_sv + osago_penalty_paragraph + osago_refusal_sv_trasa
 
   return table_fu + 
          decision_name +
          preambula + 
          main_claims_paragraf +
          main_request_paragraph +
-         transitional_paragraph + 
+         transitional_to_description_paragraph + 
          dtp_description_with_contracts_paragraph +
          appToFo_paragraph_all +
          payment_fu_paragraph_all +
          payment_court_paragraph_all +
+         transitional_to_motivation_paragraph +
          motivation_part
 }

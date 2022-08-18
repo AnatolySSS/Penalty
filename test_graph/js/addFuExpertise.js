@@ -120,6 +120,17 @@ function addFuExpertise() {
 		</div>
 	  </div>
 	  <div class="form-row">
+			<div class="form-group col-md-6">
+				<select id="fu_expertise_trasa_result_${fuExpertiseId}" class="fu_expertise_trasa_results custom-select col-md-12" required>
+					<option value="">Результаты трасологической экспертизы</option>
+					<option>Повреждения ТС полностью соответствуют ДТП</option>
+					<option>Повреждения ТС частично соответствуют ДТП</option>
+					<option>Повреждения ТС не соответствуют ДТП</option>
+					<option>Трасологическая экспертиза не проводилась</option>
+				</select>
+			</div>
+	  </div>
+	  <div class="form-row">
 		<div class="form-group col-md-12">
 		  <textarea id = "fu_expertise_trasa_${fuExpertiseId}" class="fu_expertise_trasas deactivation form-control" aria-describedby="fu_expertise_trasa_help_block_${fuExpertiseId}" placeholder="Выводы трасологической экспертизы" type="text" size="8" required></textarea>
 		  <small id="fu_expertise_trasa_help_block_${fuExpertiseId}" class="form-text">
