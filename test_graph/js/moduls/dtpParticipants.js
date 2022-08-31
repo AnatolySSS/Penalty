@@ -110,6 +110,48 @@ export class DtpParticipantContract {
     getInsuranceInspectionsDateFormatted() { return formatDate(new Date(this.getInsuranceInspectionsDate())); }
     getInsurancePremiumDate() {return Date.parse(changeDateType(this.insurance_premium_date.value) + 'T00:00:00');}
     getInsurancePremiumDateFormatted() { return formatDate(new Date(this.getInsurancePremiumDate())); }
+
+    setObject() {
+        return {
+            id : this.id,
+            type : this.type.value,
+            fo_name : this.fo_name.value,
+            number : this.number.value,
+            date_conclusion : this.date_conclusion.value,
+            date_start : this.date_start.value,
+            date_end : this.date_end.value,
+
+            insurance_rules : this.insurance_rules.value,
+            insurance_rules_approver_name : this.insurance_rules_approver_name.value,
+            insurance_rules_approver_post : this.insurance_rules_approver_post.value,
+            insurance_rules_date : this.insurance_rules_date.value,
+            insurance_rules_number : this.insurance_rules_number.value,
+
+            insurance_inspection_information : this.insurance_inspection_information.value,
+            insurance_inspection_date : this.insurance_inspection_date.value,
+            insurance_inspection_damaged_parts : this.insurance_inspection_damaged_parts.value,
+
+            insurance_summ_summ : this.insurance_summ_summ.value,
+            insurance_summ_index : this.insurance_summ_index.value,
+            insurance_summ_aggregate : this.insurance_summ_aggregate.value,
+            insurance_summ_risks : this.insurance_summ_risks.value,
+
+            insurance_premium_information : this.insurance_premium_information.value,
+            insurance_premium_summ : this.insurance_premium_summ.value,
+            insurance_premium_date : this.insurance_premium_date.value,
+            insurance_premium_number : this.insurance_premium_number.value,
+            insurance_premium_risks : this.insurance_premium_risks.value,
+
+            beneficiary_subject : this.beneficiary_subject.value,
+            beneficiary_subject_bank_name : this.beneficiary_subject_bank_name.value,
+            beneficiary_risks : this.beneficiary_risks.value,
+
+            franchise_presence : this.franchise_presence.value,
+            franchise_type : this.franchise_type.value,
+            franchise_summ : this.franchise_summ.value,
+            franchise_risks : this.franchise_risks.value,
+        }
+    }
 }
 
 export class DtpParticipant {
@@ -137,6 +179,7 @@ export class DtpParticipant {
     contract_paragraph_all
 
     car_contracts = []
+    car_contractsObjects = []
 
     constructor (id, car_brand, car_model, car_reg_number, car_vin_number,
                  car_year, car_type, car_weight, driver_name, owner_name, is_guilty) {
@@ -295,6 +338,7 @@ export class DtpParticipant {
                 franchise_type[i],
                 franchise_summ[i],
                 franchise_risks[i])
+            this.car_contractsObjects[i] = this.car_contracts[i].setObject()
             
             var main_fo_name = document.querySelector("#fo_name").value
             let fo_name_nominative = this.car_contracts[i].fo_name.value
@@ -469,6 +513,25 @@ export class DtpParticipant {
                 }
             }
             this.contract_paragraph_all = this.contract_paragraph_all + this.car_contracts[i].contract_paragraph
+        }
+    }
+
+    setObject() {
+        return {
+            id : this.id,
+            car_brand : this.car_brand.value,
+            car_model : this.car_model.value,
+            car_reg_number : this.car_reg_number.value,
+            car_vin_number : this.car_vin_number.value,
+            car_year : this.car_year.value,
+            car_type : this.car_type.value,
+            car_weight : this.car_weight.value,
+            driver_name : this.driver_name.value,
+            driver_gender : this.driver_gender,
+            owner_name : this.owner_name.value,
+            owner_gender : this.owner_gender,
+            is_guilty : this.is_guilty.value,
+            car_contractsObjects : this.car_contractsObjects,
         }
     }
 }

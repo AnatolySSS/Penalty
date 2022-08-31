@@ -152,13 +152,13 @@ export function fu_expertise_paragraph (date_dtp, fuExpertise, expertiseQuestion
             expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `сумма УТС составила ${fuExpertise[i].summ_uts_text}, `
         }
         expertises_summ_paragraph_helper = expertises_summ_paragraph_helper.slice(0, -2)
-        expertises_summ_paragraph = `<p>Согласно экспертному заключению ${fuExpertise[i].orgainzation.value} от 
+        expertises_summ_paragraph = `<p>Согласно экспертному заключению ${fuExpertise[i].organization.value} от 
         ${fuExpertise[i].getFuExpertiseDateFormatted()} № ${fuExpertise[i].number.value} (далее – Экспертное заключение) 
         ${expertises_summ_paragraph_helper}.</p>`
 
         paragraphs[i + 2] = `<p>Для решения вопросов, связанных с рассмотрением Обращения, Финансовым уполномоченным 
         назначено проведение независимой технической экспертизы поврежденного Транспортного средства, проводимой в 
-        соответствии с требованиями Закона № 40-ФЗ, в экспертной организации ${fuExpertise[i].orgainzation.value} 
+        соответствии с требованиями Закона № 40-ФЗ, в экспертной организации ${fuExpertise[i].organization.value} 
         (эксперт-техник ${fuExpertise[i].technician.value}), предметом которой являлось исследование 
         стоимости восстановительного ремонта Транспортного средства Заявителя.</p>
         <p>На разрешение специалисту поставлены следующие вопросы:</p>

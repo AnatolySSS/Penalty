@@ -4,7 +4,7 @@ export let DAY = 24*60*60*1000;
 export let DATE_EURO_START = Date.parse(new Date(2018, 5, 1, 0));
 //Дата вступления в силу ФЗ-123
 export let DATE_FZ_123_START = Date.parse(new Date(2019, 5, 1, 0));
-//Дата ДТП? с которой применяется новая методика
+//Дата ДТП с которой применяется новая методика
 export let DATE_NEW_OSAGO_METHODOKOGY = Date.parse(new Date(2021, 8, 20, 0));
 
 export let COLUMN_NAME_0 = "№";

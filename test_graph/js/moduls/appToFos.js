@@ -44,6 +44,17 @@ class ClaimToFo {
     getFromDateFormatted() { return formatDate(new Date(this.getFromDate())); }
     getToDate() {return Date.parse(changeDateType(this.to.value) + 'T00:00:00');}
     getToDateFormatted() { return formatDate(new Date(this.getToDate())); }
+
+    setObject() {
+        return {
+            type : this.type.value,
+            summ : this.summ,
+            from : this.from.value,
+            to : this.to.value,
+            without : this.without.checked,
+            pdf : this.pdf.checked,
+        }
+    }
 }
 
 class ClaimsContractToFo {
@@ -53,6 +64,7 @@ class ClaimsContractToFo {
 
     type
     claim = []
+    claimObjects = []
     claims_all
 
     constructor (app_id, contract_id, type) {
@@ -77,6 +89,7 @@ class ClaimsContractToFo {
                                           tos[i],
                                           without_periods[i],
                                           pdfs[i])
+            this.claimObjects[i] = this.claim[i].setObject()
             
             var current_claim_summ = ""
             if (this.claim[i].summ != 0) {
@@ -108,6 +121,13 @@ class ClaimsContractToFo {
             this.claims_all = this.claims_all + " " + this.claim[i].type_text_full + ","
         }
     }
+
+    setObject() {
+        return {
+            type : this.type,
+            claim : this.claimObjects,
+        }
+    }
 }
 
 class ExpertiseApp {
@@ -116,7 +136,7 @@ class ExpertiseApp {
     expertise_id
     date
     number
-    orgainzation
+    organization
 
     summ_without
     summ_with
@@ -131,12 +151,12 @@ class ExpertiseApp {
     summ_leftovers_text
     summ_uts_text
 
-    constructor (app_id, expertise_id, date, number, orgainzation, summ_without, summ_with, summ_market, summ_leftovers, summ_uts, trasa) {
+    constructor (app_id, expertise_id, date, number, organization, summ_without, summ_with, summ_market, summ_leftovers, summ_uts, trasa) {
         this.app_id = app_id
         this.expertise_id = expertise_id
         this.date = date
         this.number = number
-        this.orgainzation = orgainzation
+        this.organization = organization
         this.summ_without = Number(summ_without.value.replace(/\s+/g, ''))
         this.summ_without_text = makeRubText_genitive(this.summ_without)
         this.summ_with = Number(summ_with.value.replace(/\s+/g, ''))
@@ -152,6 +172,20 @@ class ExpertiseApp {
 
     getExpertiseDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
     getExpertiseDateFormatted() { return formatDate(new Date(this.getExpertiseDate())); }
+
+    setObject() {
+        return {
+            date : this.date.value,
+            number : this.number.value,
+            organization : this.organization.value,
+            summ_without : this.summ_without,
+            summ_with : this.summ_with,
+            summ_market : this.summ_market,
+            summ_leftovers : this.summ_leftovers,
+            summ_uts : this.summ_uts,
+            trasa : this.trasa.value,
+        }
+    }
 }
 
 class Agreement {
@@ -164,6 +198,12 @@ class Agreement {
         this.app_id = app_id
         this.agreement_phone = agreement_phone
         this.phone_number = phone_number
+    }
+    setObject() {
+        return {
+            agreement_phone : this.agreement_phone.value,
+            phone_number : this.phone_number.value,
+        }
     }
 }
 
@@ -185,6 +225,14 @@ class Request {
 
     getRequestDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
     getRequestDateFormatted() { return formatDate(new Date(this.getRequestDate())); }
+
+    setObject() {
+        return {
+            date : this.date.value,
+            number : this.number.value,
+            documents : this.documents.value,
+        }
+    }
 }
 
 class Inspection {
@@ -193,18 +241,26 @@ class Inspection {
     inspection_id
     date
     number
-    orgainzation
+    organization
 
-    constructor (app_id, inspection_id, date, number, orgainzation) {
+    constructor (app_id, inspection_id, date, number, organization) {
         this.app_id = app_id
         this.inspection_id = inspection_id
         this.date = date
         this.number = number
-        this.orgainzation = orgainzation
+        this.organization = organization
     }
 
     getInspectionDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
     getInspectionDateFormatted() { return formatDate(new Date(this.getInspectionDate())); }
+
+    setObject() {
+        return {
+            date : this.date.value,
+            number : this.number.value,
+            organization : this.organization.value,
+        }
+    }
 }
 
 class Expertise {
@@ -213,7 +269,7 @@ class Expertise {
     expertise_id
     date
     number
-    orgainzation
+    organization
 
     summ_without
     summ_with
@@ -228,12 +284,12 @@ class Expertise {
     summ_leftovers_text
     summ_uts_text
 
-    constructor (app_id, expertise_id, date, number, orgainzation, summ_without, summ_with, summ_market, summ_leftovers, summ_uts, trasa) {
+    constructor (app_id, expertise_id, date, number, organization, summ_without, summ_with, summ_market, summ_leftovers, summ_uts, trasa) {
         this.app_id = app_id
         this.expertise_id = expertise_id
         this.date = date
         this.number = number
-        this.orgainzation = orgainzation
+        this.organization = organization
         this.summ_without = Number(summ_without.value.replace(/\s+/g, ''))
         this.summ_without_text = makeRubText_genitive(this.summ_without)
         this.summ_with = Number(summ_with.value.replace(/\s+/g, ''))
@@ -249,6 +305,20 @@ class Expertise {
 
     getExpertiseDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
     getExpertiseDateFormatted() { return formatDate(new Date(this.getExpertiseDate())); }
+
+    setObject() {
+        return {
+            date : this.date.value,
+            number : this.number.value,
+            organization : this.organization.value,
+            summ_without : this.summ_without,
+            summ_with : this.summ_with,
+            summ_market : this.summ_market,
+            summ_leftovers : this.summ_leftovers,
+            summ_uts : this.summ_uts,
+            trasa : this.trasa.value,
+        }
+    }
 }
 
 class Refusal {
@@ -269,6 +339,15 @@ class Refusal {
 
     getRefusalDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
     getRefusalDateFormatted() { return formatDate(new Date(this.getRefusalDate())); }
+
+    setObject() {
+        return {
+            type : this.type.value,
+            date : this.date.value,
+            number : this.number.value,
+            text : this.text.value,
+        }
+    }
 }
 
 export class AppToFo {
@@ -296,26 +375,33 @@ export class AppToFo {
 
     claimsContractToFoInfo
     claimsContractToFo = []
+    claimsContractToFoObjects = []
 
     expertiseAppInfo
     expertiseApps = []
+    expertiseAppsObjects = []
 
     agreementInfo
     agreement
+    agreementObjects
 
     requestInfo
     requests = []
+    requestsObjects = []
 
     inspectionInfo
     inspections = []
+    inspectionsObjects = []
 
     expertiseInfo
     expertises = []
+    expertiseObjects = []
 
     answerFoInfo
     answerFo
     paymentVoluntary = []
     refusal = []
+    refusalObjects = []
 
     claimsContract = []
 
@@ -372,13 +458,14 @@ export class AppToFo {
             this.claimsContractToFo[i] = new ClaimsContractToFo(id,
                                                            i + 1,
                                                            apps_to_fo_claims_contract_type[i])
+            this.claimsContractToFoObjects[i] = this.claimsContractToFo[i].setObject()
         }
 
         //Создание экземпляров класса Экспертиз Заявителя
         var number_of_apps_to_fo_expertise_apps = $(`.apps_to_fo_expertise_apps_${id}`).length
         var apps_to_fo_expertise_app_dates = $(`.apps_to_fo_expertise_app_date_${id}`)
         var apps_to_fo_expertise_app_numbers = $(`.apps_to_fo_expertise_app_number_${id}`)
-        var apps_to_fo_expertise_app_orgainzations = $(`.apps_to_fo_expertise_app_orgainzation_${id}`)
+        var apps_to_fo_expertise_app_organizations = $(`.apps_to_fo_expertise_app_organization_${id}`)
         var apps_to_fo_expertise_app_summ_withouts = $(`.apps_to_fo_expertise_app_summ_without_${id}`)
         var apps_to_fo_expertise_app_summ_withs = $(`.apps_to_fo_expertise_app_summ_with_${id}`)
         var apps_to_fo_expertise_app_summ_markets = $(`.apps_to_fo_expertise_app_summ_market_${id}`)
@@ -391,13 +478,14 @@ export class AppToFo {
                                             i + 1,
                                             apps_to_fo_expertise_app_dates[i],
                                             apps_to_fo_expertise_app_numbers[i],
-                                            apps_to_fo_expertise_app_orgainzations[i],
+                                            apps_to_fo_expertise_app_organizations[i],
                                             apps_to_fo_expertise_app_summ_withouts[i],
                                             apps_to_fo_expertise_app_summ_withs[i],
                                             apps_to_fo_expertise_app_summ_markets[i],
                                             apps_to_fo_expertise_app_summ_leftovers[i],
                                             apps_to_fo_expertise_app_summ_uts[i],
                                             apps_to_fo_expertise_app_trasa[i])
+            this.expertiseAppsObjects[i] = this.expertiseApps[i].setObject()
         }
 
         //Создание экземпляра класса Согласия на уведомление по СМС
@@ -407,41 +495,44 @@ export class AppToFo {
         this.agreement = new Agreement(id,
                                        apps_to_fo_agreement_phone[0],
                                        apps_to_fo_phone_number[0])
+        this.agreementObjects = this.agreement.setObject()
 
 
         //Создание экземпляров класса Осмотров
         var number_of_apps_to_fo_request = $(`.apps_to_fo_requests_${id}`).length
         var apps_to_fo_request_dates = $(`.apps_to_fo_request_date_${id}`)
         var apps_to_fo_request_numbers = $(`.apps_to_fo_request_number_${id}`)
-        var apps_to_fo_request_orgainzations = $(`.apps_to_fo_request_documents_${id}`)
+        var apps_to_fo_request_organizations = $(`.apps_to_fo_request_documents_${id}`)
 
         for (let i = 0; i < number_of_apps_to_fo_request; i++) {
             this.requests[i] = new Request(id,
                                             i + 1,
                                             apps_to_fo_request_dates[i],
                                             apps_to_fo_request_numbers[i],
-                                            apps_to_fo_request_orgainzations[i])
+                                            apps_to_fo_request_organizations[i])
+            this.requestsObjects[i] = this.requests[i].setObject()
         }
 
         //Создание экземпляров класса Осмотров
         var number_of_apps_to_fo_inspection = $(`.apps_to_fo_inspections_${id}`).length
         var apps_to_fo_inspection_dates = $(`.apps_to_fo_inspection_date_${id}`)
         var apps_to_fo_inspection_numbers = $(`.apps_to_fo_inspection_number_${id}`)
-        var apps_to_fo_inspection_orgainzations = $(`.apps_to_fo_inspection_orgainzation_${id}`)
+        var apps_to_fo_inspection_organizations = $(`.apps_to_fo_inspection_organization_${id}`)
 
         for (let i = 0; i < number_of_apps_to_fo_inspection; i++) {
             this.inspections[i] = new Inspection(id,
                                             i + 1,
                                             apps_to_fo_inspection_dates[i],
                                             apps_to_fo_inspection_numbers[i],
-                                            apps_to_fo_inspection_orgainzations[i])
+                                            apps_to_fo_inspection_organizations[i])
+            this.inspectionsObjects[i] = this.inspections[i].setObject()
         }
         
         //Создание экземпляров класса Экспертиз
         var number_of_apps_to_fo_expertises = $(`.apps_to_fo_expertises_${id}`).length
         var apps_to_fo_expertise_dates = $(`.apps_to_fo_expertise_date_${id}`)
         var apps_to_fo_expertise_numbers = $(`.apps_to_fo_expertise_number_${id}`)
-        var apps_to_fo_expertise_orgainzations = $(`.apps_to_fo_expertise_orgainzation_${id}`)
+        var apps_to_fo_expertise_organizations = $(`.apps_to_fo_expertise_organization_${id}`)
         var apps_to_fo_expertise_summ_withouts = $(`.apps_to_fo_expertise_summ_without_${id}`)
         var apps_to_fo_expertise_summ_withs = $(`.apps_to_fo_expertise_summ_with_${id}`)
         var apps_to_fo_expertise_summ_markets = $(`.apps_to_fo_expertise_summ_market_${id}`)
@@ -454,13 +545,14 @@ export class AppToFo {
                                             i + 1,
                                             apps_to_fo_expertise_dates[i],
                                             apps_to_fo_expertise_numbers[i],
-                                            apps_to_fo_expertise_orgainzations[i],
+                                            apps_to_fo_expertise_organizations[i],
                                             apps_to_fo_expertise_summ_withouts[i],
                                             apps_to_fo_expertise_summ_withs[i],
                                             apps_to_fo_expertise_summ_markets[i],
                                             apps_to_fo_expertise_summ_leftovers[i],
                                             apps_to_fo_expertise_summ_uts[i],
                                             apps_to_fo_expertise_trasa[i])
+            this.expertiseObjects[i] = this.expertises[i].setObject()
         }
 
         //Получение массива значений всех переменных добровольных выплат
@@ -497,6 +589,7 @@ export class AppToFo {
                                     apps_to_fo_refusal_date[i],
                                     apps_to_fo_refusal_number[i],
                                     apps_to_fo_refusal_type_trasa_text[i])
+            this.refusalObjects[i] = this.refusal[i].setObject()
             }
 
         //Получение массива значений всех требований к ФУ
@@ -600,7 +693,7 @@ export class AppToFo {
                             }
                             expertiseApps_summ_paragraph = expertiseApps_summ_paragraph.slice(0, -2)
                             expertiseApps_paragraph_one = `<p>${expertiseApps_paragraph_helper} экспертное заключение  
-                            ${this.expertiseApps[i].orgainzation.value} от ${this.expertiseApps[i].getExpertiseDateFormatted()} 
+                            ${this.expertiseApps[i].organization.value} от ${this.expertiseApps[i].getExpertiseDateFormatted()} 
                             № ${this.expertiseApps[i].number.value}, в соответствии с которым ${expertiseApps_summ_paragraph}.</p>`
 
                             this.expertise_apps_paragraph = this.expertise_apps_paragraph + expertiseApps_paragraph_one
@@ -625,9 +718,9 @@ export class AppToFo {
                         if (this.inspections[0].date.value != "") {
                             inspections_data_helper_2 = ` от ${this.inspections[0].getInspectionDateFormatted()}`
                         }
-                        var inspections_orgainzation_helper = ""
-                        if (this.inspections[0].orgainzation.value != "") {
-                            inspections_orgainzation_helper = ` с привлечением независимой экспертной организации ${this.inspections[0].orgainzation.value}`
+                        var inspections_organization_helper = ""
+                        if (this.inspections[0].organization.value != "") {
+                            inspections_organization_helper = ` с привлечением независимой экспертной организации ${this.inspections[0].organization.value}`
                         }
                         var inspections_number_helper = ""
                         if (this.inspections[0].number.value != "") {
@@ -635,7 +728,7 @@ export class AppToFo {
                         }
                         this.inspections_paragraph = `<p>${inspections_data_helper_1} 
                         ${fo_name_instrumental} проведен осмотр принадлежащего Заявителю 
-                        Транспортного средства${inspections_orgainzation_helper}${inspections_number_helper}.</p>`
+                        Транспортного средства${inspections_organization_helper}${inspections_number_helper}.</p>`
                     }
 
                     //Формирование параграфа о проведении экспертиз ТС ФО
@@ -674,7 +767,7 @@ export class AppToFo {
                             }
                             expertises_summ_paragraph = expertises_summ_paragraph.slice(0, -2)
                             expertises_paragraph_one = `<p>${expertises_paragraph_helper} независимой экспертной организацией 
-                            ${this.expertises[i].orgainzation.value} подготовлено экспертное заключение от ${this.expertises[i].getExpertiseDateFormatted()} 
+                            ${this.expertises[i].organization.value} подготовлено экспертное заключение от ${this.expertises[i].getExpertiseDateFormatted()} 
                             № ${this.expertises[i].number.value}, согласно которому ${expertises_summ_paragraph}.</p>`
 
                             this.expertises_paragraph = this.expertises_paragraph + expertises_paragraph_one
@@ -806,7 +899,7 @@ export class AppToFo {
                             }
                             expertiseApps_summ_paragraph = expertiseApps_summ_paragraph.slice(0, -2)
                             expertiseApps_paragraph_one = `<p>${expertiseApps_paragraph_helper} экспертное заключение  
-                            ${this.expertiseApps[i].orgainzation.value} от ${this.expertiseApps[i].getExpertiseDateFormatted()} 
+                            ${this.expertiseApps[i].organization.value} от ${this.expertiseApps[i].getExpertiseDateFormatted()} 
                             № ${this.expertiseApps[i].number.value}, в соответствии с которым ${expertiseApps_summ_paragraph}.</p>`
 
                             this.expertise_apps_paragraph = this.expertise_apps_paragraph + expertiseApps_paragraph_one
@@ -906,5 +999,30 @@ export class AppToFo {
     getAppDateFormatted() { return formatDate(new Date(this.getAppDate())); }
     getLastClaimFoDay() { return findLastClaimFoDay(this.getAppDate(), this.claim_answer_time_count_days) }
     getLastClaimFoDayFormatted() { return formatDate(new Date(this.getLastClaimFoDay())); }
-
+    setObject() {
+        return {
+            id : this.id,
+            appDate : this.appDate.value,
+            type : this.type.value,
+            procedure : this.procedure.value,
+            type_of_claim : this.type_of_claim.value,
+            method : this.method.value,
+            form : this.form.value,
+            claimsContractToFoInfo : this.claimsContractToFoInfo.value,
+            claimsContractToFo : this.claimsContractToFoObjects,
+            expertiseAppInfo : this.expertiseAppInfo.value,
+            expertiseAppsObjects : this.expertiseAppsObjects,
+            agreementInfo : this.agreementInfo.value,
+            agreementObjects : this.agreementObjects,
+            requestInfo : this.requestInfo.value,
+            requestsObjects : this.requestsObjects,
+            inspectionInfo : this.inspectionInfo.value,
+            inspectionsObjects : this.inspectionsObjects,
+            expertiseInfo : this.expertiseInfo.value,
+            expertiseObjects : this.expertiseObjects,
+            answerFoInfo : this.answerFoInfo.value,
+            answerFo : this.answerFo.value,
+            refusalObjects : this.refusalObjects,
+        }
+    }
 }

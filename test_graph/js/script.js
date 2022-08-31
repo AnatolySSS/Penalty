@@ -1,10 +1,10 @@
-import { ClaimsContract } from "./moduls/mainClaim";
-import { DtpParticipant } from "./moduls/dtpParticipants";
+import { ClaimsContract } from "./moduls/mainClaim.js";
+import { DtpParticipant } from "./moduls/dtpParticipants.js";
 import { AppDate } from './moduls/app_date.js';
 import { PaymentVoluntary } from './moduls/payment_voluntary.js';
 import { PaymentFu } from './moduls/payment_fu.js';
 import { PaymentCourt } from './moduls/payment_court.js';
-import { FuExpertise } from "./moduls/fuExpertise";
+import { FuExpertise } from "./moduls/fuExpertise.js";
 import { COLUMN_NAME_0, COLUMN_NAME_1, COLUMN_NAME_2, COLUMN_NAME_3, COLUMN_NAME_4 } from './moduls/variables.js';
 import { COLUMN_NAME_5, COLUMN_NAME_6, COLUMN_NAME_7, COLUMN_NAME_8 } from './moduls/variables.js';
 import { COLUMN_NAME_20, COLUMN_NAME_21 } from './moduls/variables.js';
@@ -19,17 +19,20 @@ import { fillPenaltyGraph } from './moduls/graph.js';
 import { makeTextDecision } from './moduls/makeTextDecision.js';
 import { decision_analize } from './moduls/analyze_fu_decision.js';
 import { autocomplete } from './moduls/autocomplete.js';
-import { fo_data } from './moduls/objects/foData';
-import { allCars } from './moduls/objects/allCars';
-import { allPopovers } from "./moduls/objects/allPopovers";
-import { renderDOM } from "./moduls/react/react.js";
+import { fo_data } from './moduls/objects/foData.js';
+import { allCars } from './moduls/objects/allCars.js';
+import { allPopovers } from "./moduls/objects/allPopovers.js";
+// import { renderDOM } from "./moduls/react/react.js";
 import { makeDecisionFile } from './moduls/docx.js';
-import { all_paragraphs } from "./moduls/makeTextDecision";
-import { AppToFo } from "./moduls/appToFos";
-import { changeQuotes } from "./moduls/changeQuotes";
-import { dragAndDrop } from "./moduls/drag&Drop";
+import { all_paragraphs } from "./moduls/makeTextDecision.js";
+import { AppToFo } from "./moduls/appToFos.js";
+import { changeQuotes } from "./moduls/changeQuotes.js";
+import { dragAndDrop } from "./moduls/drag&Drop.js";
 import { findLastDay } from './moduls/findLastDay.js';
-import { formatDate } from "./moduls/formatDate";
+import { formatDate } from "./moduls/formatDate.js";
+import { objToJSON, appDataToJSON, motive_download, motive_delete, show_motivations } from "./moduls/server.js";
+import { findMaxSumm } from "./moduls/findMaxSumm.js";
+// import { reader } from "xlsx";
 
 // import { total_penalty_summ_accrued, total_penalty_summ_paid } from './moduls/variables.js';
 
@@ -61,8 +64,9 @@ let fu_claim_set = new Set();
 let decision = '';
 let europrotocol;
 let date_dtp;
-let max_summ;
+let max_summ = findMaxSumm()
 let range;
+let data_from_db = {}
 
 // $('#app_date_1').focusout(function(){
 //   date_sv = new AppDate("date_sv")
@@ -262,34 +266,107 @@ $('#btn_desicion').click(function() {
   date_dtp = changeDateType(date_dtp);
   date_dtp = Date.parse(date_dtp + 'T00:00:00');
 
-  if (date_dtp >= DATE_EURO_START && europrotocol) { // Если дата ДТП после 01.06.2018 И Европротокол
-    max_summ = 100000;
-    // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
-  } else if (date_dtp >= DATE_EURO_START && !europrotocol){ // Если дата ДТП после 01.06.2018 И НЕ Европротокол
-    max_summ = 400000;
-    // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
-  } else if (date_dtp < DATE_EURO_START && europrotocol) { // Если дата ДТП до 01.06.2018 И Европротокол
-    max_summ = 50000;
-    // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 50 000₽";
-  } else if (date_dtp < DATE_EURO_START && !europrotocol) { // Если дата ДТП до 01.06.2018 И НЕ Европротокол
-    max_summ = 400000;
-    // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
-  } else if (europrotocol) { //Если Европротокол (без указания даты)
-    max_summ = 100000;
-    // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
-  } else { // остальные случаи
-    max_summ = 400000;
-    // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
-  }
+  // if (date_dtp >= DATE_EURO_START && europrotocol) { // Если дата ДТП после 01.06.2018 И Европротокол
+  //   max_summ = 100000;
+  //   // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
+  // } else if (date_dtp >= DATE_EURO_START && !europrotocol){ // Если дата ДТП после 01.06.2018 И НЕ Европротокол
+  //   max_summ = 400000;
+  //   // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
+  // } else if (date_dtp < DATE_EURO_START && europrotocol) { // Если дата ДТП до 01.06.2018 И Европротокол
+  //   max_summ = 50000;
+  //   // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 50 000₽";
+  // } else if (date_dtp < DATE_EURO_START && !europrotocol) { // Если дата ДТП до 01.06.2018 И НЕ Европротокол
+  //   max_summ = 400000;
+  //   // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
+  // } else if (europrotocol) { //Если Европротокол (без указания даты)
+  //   max_summ = 100000;
+  //   // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 100 000₽";
+  // } else { // остальные случаи
+  //   max_summ = 400000;
+  //   // document.querySelector('#max_summ').innerHTML = "Страховая сумма: 400 000₽";
+  // }
 
   //Получение массива значений всех требований к ФУ
   var number_of_main_claims_contracts = $('.main_claims_contracts').length
   var claims_contract_types = $('.claims_contract_types')
-
+  let claimsContractAll = []
   for (var i = 0; i < number_of_main_claims_contracts; i++) {
     claimsContract[i] = new ClaimsContract(i + 1,
                                            claims_contract_types[i])
-    
+    claimsContractAll[i] = claimsContract[i].setObject()
+  }
+
+  //Получение объекта с требованиями к ФУ
+  let claimsToFuData = {
+    name : "claimsToFuData",
+    claimsContractAll : claimsContractAll
+  }
+
+  let app_type = document.querySelector("#app_type").value
+  let app_name, app_inn, app_passport, app_registration_address, app_post_address, app_registration_date
+
+  app_name = document.querySelector("#app_name")
+  app_inn = document.querySelector("#app_inn_ip")
+  app_registration_date = document.querySelector("#app_registration_date_ip")
+  app_passport = document.querySelector("#app_passport")
+  app_registration_address = document.querySelector("#app_registration_address")
+  app_post_address = document.querySelector("#app_post_address")
+
+  switch (app_type) {
+    case "ФЛ":
+      app_name = document.querySelector("#app_name")
+      app_passport = document.querySelector("#app_passport")
+      app_registration_address = document.querySelector("#app_registration_address")
+      app_post_address = document.querySelector("#app_post_address")
+      break
+    case "ИП":
+      app_name = document.querySelector("#app_name_ip")
+      app_inn = document.querySelector("#app_inn_ip")
+      app_registration_date = document.querySelector("#app_registration_date_ip")
+      app_registration_address = document.querySelector("#app_registration_address_ip")
+      app_post_address = document.querySelector("#app_post_address_ip")
+      break
+    case "ЮЛ":
+      app_name = document.querySelector("#app_name_ul")
+      app_inn = document.querySelector("#app_inn_ul")
+      app_registration_date = document.querySelector("#app_registration_date_ul")
+      app_registration_address = document.querySelector("#app_registration_address_ul")
+      app_post_address = document.querySelector("#app_post_address_ul")
+      break
+    default:
+      break
+  }
+
+  //Получение объекта с данными для преамбулы
+  let preambulaData = {
+    name : "preambulaData",
+    fu_name : document.querySelector("#fu_name").value,
+    date_appeal : document.querySelector("#date_appeal").value,
+    appeal_number : document.querySelector("#appeal_number").value,
+
+    fo_name : document.querySelector("#fo_name").value,
+    fo_inn : document.querySelector("#fo_inn").value,
+    fo_registration_date : document.querySelector("#fo_registration_date").value,
+    fo_registration_address : document.querySelector("#fo_registration_address").value,
+    fo_post_address : document.querySelector("#fo_post_address").value,
+
+    app_type : document.querySelector("#app_type").value,
+    app_status : document.querySelector("#app_status").value,
+    app_name : app_name.value,
+    app_passport : app_passport.value,
+    app_inn : app_inn.value,
+    app_registration_date : app_registration_date.value,
+    app_registration_address : app_registration_address.value,
+    app_post_address : app_post_address.value,
+  }
+
+  let mainRequestData = {
+    name : "mainRequestData",
+    date_main_request : document.querySelector("#date_main_request").value,
+    number_main_request : document.querySelector("#number_main_request").value,
+    main_answer_type : document.querySelector("#main_answer_type").value,
+    date_main_answer : document.querySelector("#date_main_answer").value,
+    number_main_answer : document.querySelector("#number_main_answer").value,
   }
 
   //Получение массива значений всех участников ДТП
@@ -304,7 +381,7 @@ $('#btn_desicion').click(function() {
   var driver_name = $('.driver_names')
   var owner_name = $('.owner_names')
   var is_guilty = $('.is_guilties')
-
+  let dtpParticipantAll = []
   for (var i = 0; i < number_of_dtp_participants; i++) {
     dtpParticipant[i] = new DtpParticipant(i + 1,
                                           car_brand[i],
@@ -317,7 +394,13 @@ $('#btn_desicion').click(function() {
                                           driver_name[i],
                                           owner_name[i],
                                           is_guilty[i])
-    
+      dtpParticipantAll[i] = dtpParticipant[i].setObject()
+  }
+  let dtpData = {
+    name : "dtpData",
+    europrotocol : document.querySelector('#europrotocol').checked,
+    date_dtp : document.querySelector('#date_dtp').value,
+    dtpParticipants : dtpParticipantAll
   }
 
   //Получение массива обращений в ФО
@@ -336,7 +419,7 @@ $('#btn_desicion').click(function() {
   var apps_to_fo_expertise_info = $('.apps_to_fo_expertise_infos')
   var apps_to_fo_answer_fo_infos = $('.apps_to_fo_answer_fo_infos')
   var apps_to_fo_answer_fos = $('.apps_to_fo_answer_fos')
-
+  let appToFoAll = []
   for (let i = 0; i < number_of_apps_to_fo; i++) {
     appToFo[i] = new AppToFo(i + 1,
                              apps_to_fo_date[i],
@@ -353,6 +436,11 @@ $('#btn_desicion').click(function() {
                              apps_to_fo_expertise_info[i],
                              apps_to_fo_answer_fo_infos[i],
                              apps_to_fo_answer_fos[i])
+      appToFoAll[i] = appToFo[i].setObject()
+  }
+  let appToFoData = {
+    name : "appToFoData",
+    appToFoAll : appToFoAll
   }
 
   //Получение массива значений всех переменных добровольных выплат
@@ -364,6 +452,7 @@ $('#btn_desicion').click(function() {
   var penalty_ndfls = $('.penalty_ndfls'); //Получение массива выплат неустойки с НДФЛ
   var penalty_ndfl_summs = $('.penalty_ndfl_summs'); //Получение массива сумм удержанного НДФЛ
   var penalty_ndfl_persents = $('.penalty_ndfl_persents'); //Получение массива процентов НДФЛ
+  let paymentVoluntaryAll = []
   //Создание экземпляров добровольных выплат
   for (var i = 0; i < number_of_payments; i++) {
     paymentVoluntary[i] = new PaymentVoluntary(1,
@@ -374,6 +463,8 @@ $('#btn_desicion').click(function() {
                                                payments_summs[i],
                                                penalty_ndfls[i],
                                                penalty_ndfl_summs[i]);
+    paymentVoluntaryAll[i] = paymentVoluntary[i].setObject()
+
     count_vol_days[i] = paymentVoluntary[i].count_days;
     payment_vol_types[i] = paymentVoluntary[i].type.options.selectedIndex;
     payment_vol_summs[i] = paymentVoluntary[i].summ / 1000;
@@ -383,6 +474,11 @@ $('#btn_desicion').click(function() {
     if (paymentVoluntary[i].days_delay > max_days_delay) {
       max_days_delay = paymentVoluntary[i].count_days; //Получение значения самой большой задержки
     }
+  }
+
+  let paymentVoluntaryData = {
+    name : "paymentVoluntaryData",
+    paymentVoluntaryAll : paymentVoluntaryAll
   }
 
   //Получение массива значений всех переменных решений ФУ
@@ -409,6 +505,8 @@ $('#btn_desicion').click(function() {
   var add_fu_info_suspension_court_date_end_forms = $('.add_fu_info_suspension_court_date_end_forms'); //Получение массива номеров решений ФУ
   var add_fu_info_suspension_court_date_in_forces = $('.add_fu_info_suspension_court_date_in_forces'); //Получение массива номеров решений ФУ
 
+  let paymentFuAll = []
+
   //Создание экземпляров решений ФУ
   for (var i = 0; i < number_of_fus; i++) {
     paymentFu[i] = new PaymentFu(i + 1,
@@ -430,6 +528,7 @@ $('#btn_desicion').click(function() {
                                  add_fu_info_suspension_court_dates[i],
                                  add_fu_info_suspension_court_date_end_forms[i],
                                  add_fu_info_suspension_court_date_in_forces[i]);
+    paymentFuAll[i] = paymentFu[i].setObject()
     count_fu_days[i] = paymentFu[i].count_days;
     // payment_fu_last_days[i] = (paymentFu[i].getLastDayForPayFu() - date_sv.getAppDate()) / DAY;
     payment_fu_summs[i] = [];
@@ -452,6 +551,11 @@ $('#btn_desicion').click(function() {
     }
   }
 
+  let paymentFuData = {
+    name : "paymentFuData",
+    paymentFuAll : paymentFuAll
+  }
+
   //Получение массива значений всех переменных решений судов
   number_of_courts = $('.courts').length; //Получение количества строк с выплатами
   var court_names = $('.court_names'); //Получение массива наименований судов
@@ -462,6 +566,8 @@ $('#btn_desicion').click(function() {
   var court_in_force_dates = $('.court_in_force_dates'); //Получение массива дат решений судов
   var court_pay_dates = $('.court_pay_dates'); //Получение массива дат решений судов
   var court_orders = $('.court_orders'); //Получение массива дат решений судов
+
+  let paymentCourtAll = []
 
   //Создание экземпляров решений судов
   for (var i = 0; i < number_of_courts; i++) {
@@ -474,6 +580,8 @@ $('#btn_desicion').click(function() {
                                  court_in_force_dates[i],
                                  court_pay_dates[i],
                                  court_orders[i])
+    paymentCourtAll[i] = paymentCourt[i].setObject()
+
     count_court_days[i] = paymentCourt[i].count_days;
     // payment_court_in_force_dates[i] = (paymentCourt[i].getInForceDate() - date_sv.getAppDate()) / DAY;
     fu_claim_set = paymentCourt[i].fu_claim_set;
@@ -495,14 +603,18 @@ $('#btn_desicion').click(function() {
     if (paymentCourt[i].count_days > max_days_delay) {
       max_days_delay = paymentCourt[i].count_days; //Получение значения самой большой задержки
     }
+  }
 
+  let paymentCourtData = {
+    name : "paymentCourtData",
+    paymentCourtAll : paymentCourtAll
   }
 
   //Создание экземпляров класса Экспертиз ФУ
   var number_of_fu_expertises = $(`.fu_expertises`).length
   var fu_expertise_dates = $(`.fu_expertise_dates`)
   var fu_expertise_numbers = $(`.fu_expertise_numbers`)
-  var fu_expertise_orgainzations = $(`.fu_expertise_orgainzations`)
+  var fu_expertise_organizations = $(`.fu_expertise_organizations`)
   var fu_expertise_summ_withouts = $(`.fu_expertise_summ_withouts`)
   var fu_expertise_summ_withs = $(`.fu_expertise_summ_withs`)
   var fu_expertise_summ_markets = $(`.fu_expertise_summ_markets`)
@@ -514,11 +626,13 @@ $('#btn_desicion').click(function() {
   var fu_expertise_typical_questions = $(`.fu_expertise_typical_questions`)
   var fu_expertise_questions = $(`.fu_expertise_questions`)
 
+  let fuExpertiseAll = []
+
   for (let i = 0; i < number_of_fu_expertises; i++) {
       fuExpertise[i] = new FuExpertise(i + 1,
                                       fu_expertise_dates[i],
                                       fu_expertise_numbers[i],
-                                      fu_expertise_orgainzations[i],
+                                      fu_expertise_organizations[i],
                                       fu_expertise_summ_withouts[i],
                                       fu_expertise_summ_withs[i],
                                       fu_expertise_summ_markets[i],
@@ -529,8 +643,13 @@ $('#btn_desicion').click(function() {
                                       fu_expertise_technicians[i],
                                       fu_expertise_typical_questions[i],
                                       fu_expertise_questions[i])
+        fuExpertiseAll[i] = fuExpertise[i].setObject()
   }
 
+  let fuExpertiseData = {
+    name : "fuExpertiseData",
+    fuExpertiseAll : fuExpertiseAll
+  }
 
 //Проверка по чек-листу
 document.getElementById('check_list').onclick = function check_list(){
@@ -542,14 +661,12 @@ document.getElementById('check_list').onclick = function check_list(){
     let date_appeal = $('#date_appeal').val()
     date_appeal = changeDateType(date_appeal)
     date_appeal = Date.parse(date_appeal + 'T00:00:00')
-    // console.log("Дата обращения к ФУ " + formatDate(new Date(date_appeal)));
     let last_day_for_pay_fu = new Date(findLastDay(appToFo[0].appDate.value))
     let year = last_day_for_pay_fu.getFullYear()
     let month = last_day_for_pay_fu.getMonth()
     let day = last_day_for_pay_fu.getDate()
     let last_day_for_fu_app = new Date(year + 3, month, day + 1, 0);
     last_day_for_fu_app = Date.parse(last_day_for_fu_app)
-    // console.log("Дата окончания 3летнего срока " + formatDate(new Date(last_day_for_fu_app)));
     if (date_appeal > last_day_for_fu_app) {
       $('#check_three_years .card').html(`Прошло больше 3х лет с момента когда Заявитель узнал о нарушении своего права:<br>
       * дата первоначального обращения в ФО: ${appToFo[0].appDate.value}<br>
@@ -676,7 +793,7 @@ document.getElementById('check_list').onclick = function check_list(){
     total_penalty_summ = total_penalty_summ_accrued;
   }
 
-  total_penalty = total_penalty_summ - total_penalty_summ_paid;
+  total_penalty = total_penalty_summ - total_penalty_summ_paid; 
 
   let total_penalty_row = '<tr>' +
     '<th scope="row" colspan="' + (max_penalty_period * 4 + 2) + '"><span>Общий размер подлежащей взысканию неустойки (' + makeRubText_nominative(total_penalty_summ) + ' - ' + makeRubText_nominative(total_penalty_summ_paid) + ')</span></th>' +
@@ -685,13 +802,25 @@ document.getElementById('check_list').onclick = function check_list(){
 
   $('#str_payment_dataled_footer').append(total_penalty_row);
 
-  // $('#exampleModal').one('shown.bs.modal', function (e) {
-  //   $(this).find(".table_result").freezeTable({
-  //     'container': '.modal-body',
-  //   });
-  // });
-  // $('#scroll_table_body').fixedHeaderTable('show', 1000);
-});
+  let totalData = {
+    preambulaData : preambulaData,
+    claimsToFuData : claimsToFuData,
+    mainRequestData : mainRequestData,
+    dtpData : dtpData,
+    appToFoData : appToFoData,
+    paymentVoluntaryData : paymentVoluntaryData,
+    paymentFuData : paymentFuData,
+    paymentCourtData : paymentCourtData,
+    fuExpertiseData : fuExpertiseData,
+  }
+  console.log(totalData);
+  let promise = objToJSON(totalData)
+  promise.then(result => {
+    data_from_db = result
+    console.log(data_from_db)
+  })
+
+})
 
 function fillHeader(length){
   var str_payment_dataled_header = '';
@@ -773,7 +902,8 @@ document.getElementById('show_decision').onclick = function show_decision(){
                                   fuExpertise,
                                   total_penalty_summ_accrued,
                                   total_penalty_summ_paid,
-                                  max_summ);
+                                  max_summ,
+                                  data_from_db);
     // } catch (error) {
     //   alert("Ошибка в коде, позвоните Анатолию!")
     // }
@@ -822,7 +952,8 @@ document.getElementById('make_decision_file').onclick = function (){
                                   fuExpertise,
                                   total_penalty_summ_accrued,
                                   total_penalty_summ_paid,
-                                  max_summ);
+                                  max_summ,
+                                  data_from_db);
     } catch (error) {
       alert("Ошибка в коде, позвоните Анатолию!")
     }
@@ -914,9 +1045,43 @@ $('#exampleModal').on('hidden.bs.modal', function (event) {
   $('#check_list_div .collapse').collapse('hide')
 })
 
+//Анализ решения ФУ (в работе)
 document.getElementById('btn_fu_decision_analyze').onclick = function (){
     let files = document.getElementById("fu_decision_file").files;
     decision_analize(files);
+}
+
+//Написание имени файла
+$('#fu_motive_file').change(() => {
+  let file = $('#fu_motive_file')[0].files[0];
+  $('#fu_motive_file').next().text(file.name)
+})
+
+//Загрузка таблицы с мотивировками в базу
+document.getElementById('btn_fu_motive_download').onclick = function (){
+  let file = document.getElementById("fu_motive_file").files[0];
+  if (file) {
+    let fileReader = new FileReader()
+    fileReader.readAsBinaryString(file)
+    fileReader.onload = (event) => {
+      let data = event.target.result
+      motive_download(data)
+      alert("Данные успешно загружены")
+    }
+  } else {
+    alert("Необходимо выбрать файл для загрузки")
+  }
+  
+}
+
+//Показать таблицу с мотивировками
+document.getElementById('btn_fu_show_motivations').onclick = function (){
+  show_motivations()
+}
+
+//Удаление таблицы с мотивировками из базы
+document.getElementById('btn_fu_motive_delete').onclick = function (){
+  motive_delete()
 }
 
 //Выбор и копирование текста в буфер обмена
@@ -981,6 +1146,14 @@ fo_data.fo_data.forEach(element => {
 $('.autocomplete input').toArray().forEach(element => {
   autocomplete(element, fo)
 });
+
+
+$('#appeal_number').focusout(function(){
+  let data = {
+    data : $(this).val()
+  }
+  appDataToJSON(data)
+})
 
 //Автопоиск марок ТС
 var car_brands = []

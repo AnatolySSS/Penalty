@@ -73,13 +73,13 @@ export function fu_expertise_paragraph (date_dtp, fuExpertise, expertiseQuestion
         }
         expertises_summ_paragraph_helper = expertises_summ_paragraph_helper.slice(0, -2)
 
-        expertises_summ_paragraph = `<p>Согласно выводам заключения эксперта ${fuExpertise[i].orgainzation.value} от 
+        expertises_summ_paragraph = `<p>Согласно выводам заключения эксперта ${fuExpertise[i].organization.value} от 
         ${fuExpertise[i].getFuExpertiseDateFormatted()} № ${fuExpertise[i].number.value} (далее – Заключение эксперта) 
         ${expertises_summ_paragraph_helper}.</p>`
 
         paragraphs[i + 1] = `<p>Для решения вопросов, связанных с рассмотрением Обращения, Финансовым уполномоченным 
         в соответствии с пунктом 10 статьи 20 Закона № 123-ФЗ назначено проведение независимой транспортно - трасологической экспертизы в 
-        ${fuExpertise[i].orgainzation.value} (эксперт-техник ${fuExpertise[i].technician.value}).</p>
+        ${fuExpertise[i].organization.value} (эксперт-техник ${fuExpertise[i].technician.value}).</p>
         <p>Вопросы, подлежащие разрешению экспертом в рамках проводимого им исследования:</p>
         ${question_paragraph}
         ${expertises_summ_paragraph}`

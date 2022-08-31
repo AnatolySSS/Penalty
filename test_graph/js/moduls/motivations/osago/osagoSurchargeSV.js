@@ -42,7 +42,7 @@ export function osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary,
 
     //Если нет ни тотала, ни превышения над страховой суммой
     if (fuExpertise[0].summ_without <= max_summ && fuExpertise[0].summ_market > fuExpertise[0].summ_without) {
-        console.log("Если нет ни тотала, ни превышения над страховой суммой")
+        // console.log("Если нет ни тотала, ни превышения над страховой суммой")
         main_paragraph = `${conclusive_agreement_paragraph}
                           ${fu_expertise_paragraph (date_dtp, fuExpertise, expertiseQuestions)}
                           ${with_parts_wear_paragraph}
@@ -51,7 +51,7 @@ export function osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary,
                           ${conclusion_paragraph (fuExpertise, percentage, total_summ_payment, main_claim_osago_sv, satisfaction_summ)}`
     //Если превышения над страховой суммой нет, но есть тотал
     } else if (fuExpertise[0].summ_without <= max_summ && fuExpertise[0].summ_market <= fuExpertise[0].summ_without) {
-        console.log("Если превышения над страховой суммой нет, но есть тотал")
+        // console.log("Если превышения над страховой суммой нет, но есть тотал")
         main_paragraph = `${fu_expertise_paragraph (date_dtp, fuExpertise, expertiseQuestions)}
                           ${ten_percent_paragraph (percentage)}
                           ${total_paragraph}
@@ -63,7 +63,7 @@ export function osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary,
                           ${conclusion_paragraph (fuExpertise, percentage, total_summ_payment, main_claim_osago_sv, satisfaction_summ)}`
     //Если есть превышение над страховой суммой, но тотала нет
     } else if (fuExpertise[0].summ_without > max_summ && fuExpertise[0].summ_market > fuExpertise[0].summ_without) {
-        console.log("Если есть превышение над страховой суммой, но тотала нет")
+        // console.log("Если есть превышение над страховой суммой, но тотала нет")
         main_paragraph = `${fu_expertise_paragraph (date_dtp, fuExpertise, expertiseQuestions)}
                           ${with_parts_wear_paragraph}
                           ${ten_percent_paragraph (percentage)}
@@ -75,7 +75,7 @@ export function osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary,
                           ${conclusion_paragraph (fuExpertise, percentage, total_summ_payment, main_claim_osago_sv, satisfaction_summ)}`
     //Если есть превышение над страховой суммой, и тотал тоже
     } else if (fuExpertise[0].summ_without > max_summ && fuExpertise[0].summ_market <= fuExpertise[0].summ_without) {
-        console.log("Если есть превышение над страховой суммой, и тотал тоже")
+        // console.log("Если есть превышение над страховой суммой, и тотал тоже")
         main_paragraph = `${fu_expertise_paragraph (date_dtp, fuExpertise, expertiseQuestions)}
                           ${ten_percent_paragraph (percentage)}
                           ${total_paragraph}

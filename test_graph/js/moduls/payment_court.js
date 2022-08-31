@@ -151,6 +151,17 @@ class ClaimCourt {
         break;
     }
   }
+
+  setObject() {
+    return {
+        name : this.name.value,
+        type : this.type.value,
+        summ : this.summ,
+        from : this.from.value,
+        to : this.to.value,
+        without : this.without.checked,
+    }
+  }
 }
 
 export class PaymentCourt {
@@ -168,6 +179,7 @@ export class PaymentCourt {
   pay_date
 
   claim = [];
+  claimObjects = []
   total_penalty_summ_court
   penalty_court_period = [];
   max_penalty_period
@@ -331,6 +343,7 @@ export class PaymentCourt {
                                   froms[i],
                                   tos[i],
                                   without_periods[i]);
+      this.claimObjects[i] = this.claim[i].setObject()
 
       //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
       this.count_days = (this.getPayDate() - this.claim[i].date_sv.getAppDate()) / DAY;
@@ -558,6 +571,22 @@ export class PaymentCourt {
   getInForceDateFormatted() { return formatDate(new Date(this.getInForceDate())); }
   getPayDate() {return Date.parse(changeDateType(this.pay_date.value) + 'T00:00:00');}
   getPayDateFormatted() { return formatDate(new Date(this.getPayDate())); }
+
+  setObject() {
+    return {
+      court : this.court.value,
+      type : this.type.value,
+      date : this.date.value,
+      number : this.number.value,
+      order : this.order.value,
+
+      pay_date : this.pay_date.value,
+      in_force_date : this.in_force_date.value,
+      date_end_form : this.date_end_form.value,
+
+      claim : this.claimObjects,
+    }
+  }
 
   fillPayments() {
     var str_payment_dataled_helper;

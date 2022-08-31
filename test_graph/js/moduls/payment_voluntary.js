@@ -126,7 +126,7 @@ export class PaymentVoluntary {
       }
     })
     //обработка значения даты выплаты (преобразование в количество миллисекунд)
-    this.date = Date.parse(changeDateType(date.value) + 'T00:00:00');
+    this.date = date
     this.order = order;
     //редактирвоание значений суммы выплаты (удаление пробелов, преобразование к числовому типу)
     this.summ = Number(summ.value.replace(/\s+/g, ''));
@@ -170,9 +170,9 @@ export class PaymentVoluntary {
     }
 
     //количество дней задержки выплаты
-    this.days_delay = (this.date - this.last_day) / DAY;
+    this.days_delay = (this.getDate() - this.last_day) / DAY;
     //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
-    this.count_days = (this.date - this.date_sv.getAppDate()) / DAY;
+    this.count_days = (this.getDate() - this.date_sv.getAppDate()) / DAY;
     //Если выплата была в срок, то изменение отрицательного значения на нулевое
     if (this.days_delay < 0 || isNaN(this.days_delay)) {
       this.days_delay = 0;
@@ -219,13 +219,13 @@ export class PaymentVoluntary {
           }
         }
         //Вычисление второго и последующих периодов невзысканной судом неустойки
-        if (this.penalty_court_period[i].end_date < this.date) {
+        if (this.penalty_court_period[i].end_date < this.getDate()) {
           if (this.penalty_court_period[i].end_date < this.penalty_day) {
             this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_day,
-                                                                          this.date);
+                                                                          this.getDate());
           } else {
             this.penalty_period[numberOfPenaltyPeriod] = new PenaltyPeriod(this.penalty_court_period[i].end_date + DAY,
-                                                                          this.date);
+                                                                          this.getDate());
           }
 
           //Определение самого раннего начала следующего за первым судебного периода взыскания неустойки
@@ -255,7 +255,21 @@ export class PaymentVoluntary {
     }
   }
 
-  getDateFormatted() { return formatDate(new Date(this.date)); }
+  getDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
+  getDateFormatted() { return formatDate(new Date(this.getDate())); }
+
+  setObject() {
+    return {
+        id : this.payment_id,
+        type : this.type.value,
+        date : this.date.value,
+        summ : this.summ,
+        order : this.order.value,
+
+        ndfl : this.ndfl.checked,
+        ndfl_summ : this.ndfl_summ,
+    }
+}
 
   fillPayments() {
     var str_payment_dataled_helper = '';

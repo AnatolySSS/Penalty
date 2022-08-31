@@ -1,6 +1,5 @@
 import { holly_boolen } from './findLastDay.js';
 import { makeRubText_nominative } from './makeRubText_nominative.js';
-import { makeRubText_genitive } from './makeRubText_genitive.js';
 import { declinationDays } from './declinationDays.js';
 import { declensions_by_cases } from './declensions_by_cases.js';
 import { inclineFirstname, inclineLastname, inclineMiddlename, getLastnameGender } from 'lvovich';
@@ -10,6 +9,7 @@ import { DATE_FZ_123_START } from "./variables";
 import { osagoPenaltyParagraph } from "./motivations/osago/osagoPenalty";
 import { osagoSurchargeSV } from "./motivations/osago/osagoSurchargeSV";
 import { osagoRefusalSvTrasa } from "./motivations/osago/osagoRefusalSvTrasa";
+import { make_motivation_paragraph } from "./motivations/motivation";
 
 export var all_paragraphs =[]
 
@@ -23,7 +23,8 @@ export function makeTextDecision(claimsContract,
                                  fuExpertise,
                                  total_penalty_summ_accrued,
                                  total_penalty_summ_paid,
-                                 max_summ) {
+                                 max_summ,
+                                 data_from_db) {
 
   var fo_name;
   var fo_inn, fo_ogrn, fo_registration_date, fo_registration_address, fo_post_address;
@@ -32,7 +33,7 @@ export function makeTextDecision(claimsContract,
   var fo_name_genitive;
   var fo_name_accusative;
   var fo_name_instrumental;
-  let motivation_part = ""
+  let motivation_part = {}
   var make_a_payment, fulfill, keep;
   var osago_penalty_paragraph = ""
   var osago_surcharge_sv = ""
@@ -71,8 +72,6 @@ export function makeTextDecision(claimsContract,
                 </tr>
               <table>
               <br>`
-
-  let decision_name = `<p class='text-center'><b>ОБ УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ</b></p>`
 
   //ФОРМИРОВАНИЕ ПРЕАМБУЛЫ РЕШЕНИЯ
   //Получение значения наименования ФО
@@ -445,7 +444,7 @@ export function makeTextDecision(claimsContract,
   var appToFo_paragraph_no_claim_123 = `<p>Сведений о направлении Заявителем в адрес ${fo_name_genitive} заявления (претензии) 
   о досудебном урегулировании спора в порядке, установленным статьей 16 Закона № 123-ФЗ в материалах обращения не имеется.</p>`
   if ($('#apps-to-fo .fa-2x').css('color') == 'rgb(40, 167, 69)') {
-    for (let i = 0; i < appToFo.length; i++) {
+    for (let i = 1; i < appToFo.length; i++) {
       if (appToFo[i].getAppDate() >= DATE_FZ_123_START &&
           appToFo[i].type.options.selectedIndex == 2) {
             appToFo_paragraph_no_claim_123 = ""
@@ -488,7 +487,28 @@ export function makeTextDecision(claimsContract,
   payment_court_paragraph_all = payment_court_paragraph_all.replaceAll("\r", "")
   payment_court_paragraph_all = payment_court_paragraph_all.replaceAll("\n", "")
   
+  //Вызов функции формирования мотивировочной части решения ФУ
+  motivation_part = make_motivation_paragraph(claimsContract,
+                                              dtpParticipant,
+                                              appToFo,
+                                              paymentVoluntary,
+                                              paymentFu,
+                                              paymentCourt,
+                                              fuExpertise,
+                                              total_penalty_summ_accrued,
+                                              total_penalty_summ_paid,
+                                              max_summ,
+                                              data_from_db)
 
+  console.log(motivation_part.result);
+  let decision_name = ""
+  if (motivation_part.result == "УДОВЛЕТВОРИТЬ") {
+    decision_name = `<p class='text-center'><b>ОБ УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ</b></p>`
+  } else if (motivation_part.result == "ОТКАЗАТЬ") {
+    decision_name = `<p class='text-center'><b>ОБ ОТКАЗЕ В УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ</b></p>`
+  } else if (motivation_part.result == "ПРЕКРАТИТЬ") {
+    decision_name = `<p class='text-center'><b>О ПРЕКРАЩЕНИИ РАССМОТРЕНИЯ ОБРАЩЕНИЯ</b></p>`
+  }
   //Формирование мотивировочной части с неустойкой по ОСАГО
   //Перебор всех договоров, по которым заявлены требования
   for (let i = 0; i < claimsContract.length; i++) {
@@ -513,15 +533,6 @@ export function makeTextDecision(claimsContract,
   osago_penalty_paragraph = osago_penalty_paragraph.replaceAll("\r", "")
   osago_penalty_paragraph = osago_penalty_paragraph.replaceAll("\n", "")
 
-  //Определение общей суммы выплаты ФО
-  let total_summ_payment = 0
-  for (let i = 0; i < paymentVoluntary.length; i++) {
-      if (paymentVoluntary[i].type.options.selectedIndex == 1) {
-          total_summ_payment = total_summ_payment + paymentVoluntary[i].summ
-      }
-  }
-
-
   let transitional_to_motivation_paragraph = `<p>Рассмотрев представленные Заявителем и Финансовой организацией документы, Финансовый уполномоченный 
   приходит к следующим выводам.</p>`
 
@@ -531,36 +542,35 @@ export function makeTextDecision(claimsContract,
 
   //Формирование мотивировочной части с недоплатой по ОСАГО
   //Перебор всех договоров, по которым заявлены требования
-  for (let i = 0; i < claimsContract.length; i++) {
-    //Если есть требования по договору ОСАГО
-    if (claimsContract[i].type.options.selectedIndex == 1) {
-      // Перебор всех требований, заявленных в рамках договора ОСАГО
-      for (let j = 0; j < claimsContract[i].claim.length; j++) {
-        //Если среди заявленных требований есть требование о взыскании страхового возмещения
-        if (claimsContract[i].claim[j].type.options.selectedIndex == 1) {
-          let main_claim_osago_sv = claimsContract[i].claim[j].summ
-          //Если ФО была осуществлена выплата
-          if (total_summ_payment > 0) {
-            osago_surcharge_sv =  osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary, fuExpertise, max_summ, date_dtp)
-          //Если был отказ по трасе в первом обращении
-          } else if (appToFo[0].refusal[0].type.options.selectedIndex == 1) {
-            osago_refusal_sv_trasa = osagoRefusalSvTrasa(fuExpertise, date_dtp)
-          }
-        }
-      }
-    }
-  }
+  // for (let i = 0; i < claimsContract.length; i++) {
+  //   //Если есть требования по договору ОСАГО
+  //   if (claimsContract[i].type.options.selectedIndex == 1) {
+  //     // Перебор всех требований, заявленных в рамках договора ОСАГО
+  //     for (let j = 0; j < claimsContract[i].claim.length; j++) {
+  //       //Если среди заявленных требований есть требование о взыскании страхового возмещения
+  //       if (claimsContract[i].claim[j].type.options.selectedIndex == 1) {
+  //         let main_claim_osago_sv = claimsContract[i].claim[j].summ
+  //         //Если ФО была осуществлена выплата
+  //         if (total_summ_payment > 0) {
+  //           osago_surcharge_sv =  osagoSurchargeSV(main_claim_osago_sv, appToFo, paymentVoluntary, fuExpertise, max_summ, date_dtp)
+  //         //Если был отказ по трасе в первом обращении
+  //         } else if (appToFo[0].refusal[0].type.options.selectedIndex == 1) {
+  //           osago_refusal_sv_trasa = osagoRefusalSvTrasa(fuExpertise, date_dtp)
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
-  osago_surcharge_sv = osago_surcharge_sv.replaceAll("\r\n", "")
-  osago_surcharge_sv = osago_surcharge_sv.replaceAll("\r", "")
-  osago_surcharge_sv = osago_surcharge_sv.replaceAll("\n", "")
+  // osago_surcharge_sv = osago_surcharge_sv.replaceAll("\r\n", "")
+  // osago_surcharge_sv = osago_surcharge_sv.replaceAll("\r", "")
+  // osago_surcharge_sv = osago_surcharge_sv.replaceAll("\n", "")
 
-  osago_refusal_sv_trasa = osago_refusal_sv_trasa.replaceAll("\r\n", "")
-  osago_refusal_sv_trasa = osago_refusal_sv_trasa.replaceAll("\r", "")
-  osago_refusal_sv_trasa = osago_refusal_sv_trasa.replaceAll("\n", "")
-  
+  // osago_refusal_sv_trasa = osago_refusal_sv_trasa.replaceAll("\r\n", "")
+  // osago_refusal_sv_trasa = osago_refusal_sv_trasa.replaceAll("\r", "")
+  // osago_refusal_sv_trasa = osago_refusal_sv_trasa.replaceAll("\n", "")
 
-  motivation_part = osago_surcharge_sv + osago_penalty_paragraph + osago_refusal_sv_trasa
+  motivation_part = motivation_part.motivation_part + osago_penalty_paragraph
 
   return table_fu + 
          decision_name +

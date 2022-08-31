@@ -149,6 +149,17 @@ class ClaimFu {
         break;
     }
   }
+
+  setObject() {
+    return {
+        name : this.name.value,
+        type : this.type.value,
+        summ : this.summ,
+        from : this.from.value,
+        to : this.to.value,
+        without : this.without.checked,
+    }
+  }
 }
 
 export class PaymentFu {
@@ -179,6 +190,7 @@ export class PaymentFu {
   suspension_court_date_in_force
 
   claim = [];
+  claimObjects = []
   total_penalty_summ_fu
   penalty_court_period = [];
   max_penalty_period
@@ -308,6 +320,7 @@ export class PaymentFu {
                                   froms[i],
                                   tos[i],
                                   without_periods[i]);
+      this.claimObjects[i] = this.claim[i].setObject()
 
       //количество дней со дня первоначального обращения с заявлением о страховой выплате (для графика)
       this.count_days = (this.getPayDate() - this.claim[i].date_sv.getAppDate()) / DAY;
@@ -662,6 +675,36 @@ export class PaymentFu {
   getSuspensionCourtDateEndFormDateFormatted() { return formatDate(new Date(this.getSuspensionCourtDateEndFormDate())); }
   getSuspensionCourtDateInForceDate() {return Date.parse(changeDateType(this.suspension_court_date_in_force.value) + 'T00:00:00');}
   getSuspensionCourtDateInForceDateFormatted() { return formatDate(new Date(this.getSuspensionCourtDateInForceDate())); }
+
+  setObject() {
+    return {
+      fu : this.fu.value,
+      type : this.type.value,
+      date : this.date.value,
+      number : this.number.value,
+
+      app_date : this.app_date.value,
+      order : this.order.value,
+
+      pay_date : this.pay_date.value,
+      in_force_date : this.in_force_date.value,
+      last_day_for_pay_date : this.last_day_for_pay_date.value,
+
+      suspension_type : this.suspension_type.value,
+      suspension_date : this.suspension_date.value,
+      suspension_number : this.suspension_number.value,
+
+      suspension_court_name : this.suspension_court_name.value,
+      suspension_court_number : this.suspension_court_number.value,
+      suspension_court_result : this.suspension_court_result.value,
+      suspension_court_date : this.suspension_court_date.value,
+      suspension_court_date_end_form : this.suspension_court_date_end_form.value,
+      suspension_court_date_in_force : this.suspension_court_date_in_force.value,
+
+      claim : this.claimObjects,
+    }
+  }
+  
 
   //Вывод на экран значений дня вступления в силу и последнего дня для исполнения решения ФУ
   fillDates() {

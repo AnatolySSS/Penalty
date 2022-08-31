@@ -26,6 +26,7 @@
     <script type="text/javascript" src="js/fixedheadertable/jquery.fixedheadertable.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/1.3.8/FileSaver.js"></script>
+    <script type="text/javascript" src="https://unpkg.com/ag-grid-community/dist/ag-grid-community.min.js"></script>
     <!-- <script type="text/javascript" src="https://unpkg.com/driver.js/dist/driver.min.js"></script> -->
   </head>
   <body>
@@ -160,7 +161,7 @@
               <div id="headingTwo" class="card-header">
                 <h2 class="mb-0">
                   <a data-toggle="collapse" data-target="#collapse_2" aria-expanded="false" aria-controls="collapse_2">
-                    <span>АНАЛИЗ РЕШЕНИЙ</span>
+                    <span>СЛУЖЕБНЫЕ ФУНКЦИИ</span>
                     <i class="fa fa-chevron-down toggle"></i>
                   </a>
                 </h2>
@@ -168,7 +169,18 @@
               <div id="collapse_2" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion_menu">
                 <div class="card-body">
                   <ul class="list-group">
-                    <li id="menu_fu_decision_analyze" class="list-group-item"><a href="#"><i class="fa fa-gavel"></i> Анализ решений</a></li>
+                    <li id="menu_fu_decision_analyze" class="list-group-item">
+                      <a href="#">
+                        <i class="fa fa-gavel"></i>
+                         Анализ решений
+                      </a>
+                    </li>
+                    <li id="menu_fu_motive_download" class="list-group-item">
+                      <a href="#">
+                        <i class="fa fa-cloud-download"></i>
+                         Загрузка мотивировок
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </div>
@@ -1102,7 +1114,7 @@
                   <!-- BEGIN apps-to-fo-contract -->
                   <div id="apps_to_fo_claims_contract_1">
                     <div class="form-row ">
-                      <div class="form-group col-md-5">
+                      <div class="form-group col-md-8">
                         <h6>Сведения о дополнительных требованиях</h6>
                       </div>
                     </div>
@@ -1228,7 +1240,7 @@
                             <input id = "apps_to_fo_expertise_app_number_1_1" class="apps_to_fo_expertise_app_number_1 apps_to_fo_expertise_app_numbers" placeholder="№ заключения" type="text" size="8" required>
                           </div>
                           <div class="form-group col-md-4">
-                            <input id = "apps_to_fo_expertise_app_orgainzation_1_1" class="apps_to_fo_expertise_app_orgainzation_1 apps_to_fo_expertise_app_orgainzations li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
+                            <input id = "apps_to_fo_expertise_app_organization_1_1" class="apps_to_fo_expertise_app_organization_1 apps_to_fo_expertise_app_organizations li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
                           </div>
                           <div class="form-group col-ms-1">
                             <button id="add_apps_to_fo_expertise_app_info_btn_1_1" class="add_apps_to_fo_expertise_app_info_btn_1 add_apps_to_fo_expertise_app_info_btns btn btn-outline-warning add_info">
@@ -1369,11 +1381,11 @@
                             </small>
                           </div>
                           <div class="form-group col-md-6">
-                            <input id = "apps_to_fo_inspection_orgainzation_1" class="apps_to_fo_inspection_orgainzation_1 apps_to_fo_inspection_orgainzations deactivation li-quotes" aria-describedby="apps_to_fo_inspection_orgainzation_help_block_1_1" placeholder="Наименование экспертной организации" type="text" size="8" required>
-                            <small id="apps_to_fo_inspection_orgainzation_help_block_1_1" class="form-text">
+                            <input id = "apps_to_fo_inspection_organization_1" class="apps_to_fo_inspection_organization_1 apps_to_fo_inspection_organizations deactivation li-quotes" aria-describedby="apps_to_fo_inspection_organization_help_block_1_1" placeholder="Наименование экспертной организации" type="text" size="8" required>
+                            <small id="apps_to_fo_inspection_organization_help_block_1_1" class="form-text">
                               <div class="form-inline">
-                                <input id="apps_to_fo_inspection_orgainzation_deactivate_1_1" class="deactivator" type="checkbox">
-                                <label for="apps_to_fo_inspection_orgainzation_deactivate_1_1" class="ml-2 form-check-label">Сведений не имеется</label>
+                                <input id="apps_to_fo_inspection_organization_deactivate_1_1" class="deactivator" type="checkbox">
+                                <label for="apps_to_fo_inspection_organization_deactivate_1_1" class="ml-2 form-check-label">Сведений не имеется</label>
                               </div>
                             </small>
                           </div>
@@ -1409,7 +1421,7 @@
                             <input id = "apps_to_fo_expertise_number_1_1" class="apps_to_fo_expertise_number_1 apps_to_fo_expertise_numbers" placeholder="№ заключения" type="text" size="8" required>
                           </div>
                           <div class="form-group col-md-4">
-                            <input id = "apps_to_fo_expertise_orgainzation_1_1" class="apps_to_fo_expertise_orgainzation_1 apps_to_fo_expertise_orgainzations li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
+                            <input id = "apps_to_fo_expertise_organization_1_1" class="apps_to_fo_expertise_organization_1 apps_to_fo_expertise_organizations li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
                           </div>
                           <div class="form-group col-ms-1">
                             <button id="add_apps_to_fo_expertise_info_btn_1_1" class="add_apps_to_fo_expertise_info_btn_1 add_apps_to_fo_expertise_info_btns btn btn-outline-warning add_info">
@@ -2618,7 +2630,7 @@
                       <input id = "fu_expertise_number_1" class="fu_expertise_numbers" placeholder="№ заключения" type="text" size="8" required>
                     </div>
                     <div class="form-group col-md-4">
-                      <input id = "fu_expertise_orgainzation_1" class="fu_expertise_orgainzations li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
+                      <input id = "fu_expertise_organization_1" class="fu_expertise_organizations li-quotes" placeholder="Наименование экспертной организации" type="text" size="8" required>
                     </div>
                     <div class="form-group col-ms-1">
                       <button id="fu_expertise_info_btn_1" class="fu_expertise_info_btns btn btn-outline-warning add_info">
@@ -2876,6 +2888,67 @@
               </div>
             </div>
             <!-- END fu-decision-analyze -->
+
+            <!-- BEGIN fu-motive-download -->
+            <div class="fu-motive-download" style="display:none">
+              <h1>Анализ решений ФУ</h1>
+              <div class="custom-file">
+                <input id="fu_motive_file" type="file" class="custom-file-input"  accept=".xls, .xlsx, .numbers" multiple>
+                <label class="custom-file-label" for="fu_motive_file" data-browse="Выбрать файлы">Выбрать файл мотивировок для загрузки</label>
+              </div>
+              <button id="btn_fu_motive_download" class ="btn btn-warning btn-lg btn-block mt-4" anim="ripple" type="button" name="button" data-toggle="modal">
+                Загрузить
+              </button>
+              <button id="btn_fu_show_motivations" class ="btn btn-success btn-lg btn-block mt-4" anim="ripple" type="button" name="button" data-toggle="modal">
+                Показать данные мотивировок
+              </button>
+              <button id="btn_fu_motive_delete" class ="btn btn-danger btn-lg btn-block mt-4" anim="ripple" type="button" name="button" data-toggle="modal">
+                Удалить данные мотивировки
+              </button>
+              <div id="show_motivations" class="modal fade" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-full">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Мотивировки</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <div class="my-auto text-center" style="display:none">
+                        <div class="row">
+                          <div class="col">
+                            <div id="decision_test" style="height: 400px; width: 100%;" class="ag-theme-alpine"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="article_of_the_law" class="modal fade" tabindex="-1">
+                <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title"></h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                      <p></p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- END fu-motive-download -->
           </div>
           <!-- END jumbotron -->
         </div>
@@ -2888,6 +2961,7 @@
     <div class="toast"></div>
 
     <script src="dist/bundle.js"></script>
+    <!-- <script type="text/javascript" src="js/server.js"></script> -->
     <script type="text/javascript" src="js/button.js"></script>
     <script type="text/javascript" src="js/applicant.js"></script>
     <script type="text/javascript" src="js/addMainClaim.js"></script>

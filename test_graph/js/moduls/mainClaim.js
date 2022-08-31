@@ -40,6 +40,17 @@ export class MainClaim {
     getFromDateFormatted() { return formatDate(new Date(this.getFromDate())); }
     getToDate() {return Date.parse(changeDateType(this.to.value) + 'T00:00:00');}
     getToDateFormatted() { return formatDate(new Date(this.getToDate())); }
+
+    setObject() {
+        return {
+            type : this.type.value,
+            summ : this.summ,
+            from : this.from.value,
+            to : this.to.value,
+            without : this.without.checked,
+            pdf : this.pdf.checked,
+        }
+    }
 }
 
 export class ClaimsContract {
@@ -48,6 +59,7 @@ export class ClaimsContract {
 
     type
     claim = []
+    claimObjects = []
     claims_all
 
     constructor (id, type) {
@@ -71,6 +83,7 @@ export class ClaimsContract {
                                           tos[i],
                                           without_periods[i],
                                           pdfs[i])
+            this.claimObjects[i] = this.claim[i].setObject()
             
             var current_claim_summ = ""
             if (this.claim[i].summ != 0) {
@@ -100,6 +113,13 @@ export class ClaimsContract {
                     break;
             }
             this.claims_all = this.claims_all + " " + this.claim[i].type_text_full + ","
+        }
+    }
+
+    setObject() {
+        return {
+            type : this.type.value,
+            claim : this.claimObjects,
         }
     }
 }
