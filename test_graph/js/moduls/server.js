@@ -2,6 +2,8 @@ const XLSX = require('xlsx')
 var enterprise = require("@ag-grid-enterprise/core");
 import { check_signs } from "./motivations/motivation";
 // let data_from_db_main = {}
+
+//Получает данные из таблицы с мотивировками и формирует объект, с полями (все признаки)
 export function objToJSON (totalData) {
     return new Promise(function(resolve, reject) {
         let data_from_db_main = {}
@@ -12,7 +14,7 @@ export function objToJSON (totalData) {
         request.send(JSON.stringify(totalData))
         
         request.addEventListener("load", function () {
-        // получаем и парсим ответ сервера
+            // получаем и парсим ответ сервера
             let result = JSON.parse(request.response);
             
             let signs = {}
@@ -31,24 +33,26 @@ export function objToJSON (totalData) {
     })
 }
 
-export function appDataToJSON (object) {
+//Автозаполнение данных в формах из базы данных (из таблицы preambulaData)
+// export function appDataToJSON (object) {
 
-    let request = new XMLHttpRequest();
-    request.open("POST", "/app_data", true)
-    request.setRequestHeader("Content-Type", "application/json")
+//     let request = new XMLHttpRequest();
+//     request.open("POST", "/app_data", true)
+//     request.setRequestHeader("Content-Type", "application/json")
     
-    request.send(JSON.stringify(object))
-    request.addEventListener("load", function () {
-        // получаем и парсим ответ сервера
-        let receivedData = JSON.parse(request.response);
-        $("#fu_name").val(receivedData.fu_name)
-        $("#date_appeal").val(receivedData.date_appeal)
-        $("#fo_name").val(receivedData.fo_name)
-        $("#app_type").val(receivedData.app_type)
-        $("#app_status").val(receivedData.app_status)
-    });
-}
+//     request.send(JSON.stringify(object))
+//     request.addEventListener("load", function () {
+//         // получаем и парсим ответ сервера
+//         let receivedData = JSON.parse(request.response);
+//         $("#fu_name").val(receivedData.fu_name)
+//         $("#date_appeal").val(receivedData.date_appeal)
+//         $("#fo_name").val(receivedData.fo_name)
+//         $("#app_type").val(receivedData.app_type)
+//         $("#app_status").val(receivedData.app_status)
+//     });
+// }
 
+//Создание, удаление и заполнение таблицы с мотивировками в базе данных
 export function motive_download(data) {
     let request = new XMLHttpRequest();
     request.open("POST", "/motive_download", true)
@@ -62,6 +66,7 @@ export function motive_download(data) {
     request.send(JSON.stringify(worksheet))
 }
 
+//Показать данные motivations в таблице
 export function show_motivations() {
     let request = new XMLHttpRequest();
     request.open("POST", "/show_motivations", true)
@@ -145,6 +150,7 @@ export function show_motivations() {
     })
 }
 
+//Удаление таблицы
 export function motive_delete() {
     let request = new XMLHttpRequest();
     request.open("POST", "/motive_delete", true)

@@ -43,36 +43,6 @@ export function makeTextDecision(claimsContract,
   court_set.clear();
   court_set.add(1); //Добавляестя для того, чтобы первая строка не разбивалась на символы
 
-
-  //Создание таблицы с логотипом
-  let table_fu = ""
-  table_fu = `<table class="table table-borderless">
-                <tr align="center">
-                  <td colspan="2">
-                    <img src="./img/logo_empty.png">
-                    <br><br>
-                    <h5><b>СЛУЖБА ФИНАНСОВОГО УПОЛНОМОЧЕННОГО</b></h5>
-                    <h5><b>Р Е Ш Е Н И Е</b></h5>
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    «_____» _______________20____ г.
-                    <br>
-                    дата подписания
-                  </td>
-                  <td></td>
-                </tr>
-                <tr>
-                  <td>
-                      №<br>
-                      г. Москва
-                  </td>
-                  <td></td>
-                </tr>
-              <table>
-              <br>`
-
   //ФОРМИРОВАНИЕ ПРЕАМБУЛЫ РЕШЕНИЯ
   //Получение значения наименования ФО
   fo_name = document.querySelector("#fo_name").value;
@@ -158,7 +128,6 @@ export function makeTextDecision(claimsContract,
       break
   }
   
-
   var fu_name = document.querySelector("#fu_name").value;
   var fu_post;
   var date_appeal = document.querySelector("#date_appeal").value;
@@ -213,6 +182,37 @@ export function makeTextDecision(claimsContract,
     preambula = preambula.replaceAll("\r", "")
     preambula = preambula.replaceAll("\n", "")
     preambula = `${preambula}${installed}`
+  }
+
+  //Создание таблицы с логотипом
+  let table_fu = ""
+  if (preambula != "") {
+    table_fu = `<table class="table table-borderless">
+                <tr align="center">
+                  <td colspan="2">
+                    <img src="./img/logo_empty.png">
+                    <br><br>
+                    <h5><b>СЛУЖБА ФИНАНСОВОГО УПОЛНОМОЧЕННОГО</b></h5>
+                    <h5><b>Р Е Ш Е Н И Е</b></h5>
+                  </td>
+                </tr>
+                <tr>
+                  <td>
+                    «_____» _______________20____ г.
+                    <br>
+                    дата подписания
+                  </td>
+                  <td></td>
+                </tr>
+                <tr>
+                  <td>
+                      №<br>
+                      г. Москва
+                  </td>
+                  <td></td>
+                </tr>
+              <table>
+              <br>`
   }
 
   // ФОРМИРОВАНИЕ АБЗАЦА С ТРЕБОВАНИЯМИ К ФУ
@@ -533,9 +533,13 @@ export function makeTextDecision(claimsContract,
   osago_penalty_paragraph = osago_penalty_paragraph.replaceAll("\r", "")
   osago_penalty_paragraph = osago_penalty_paragraph.replaceAll("\n", "")
 
-  let transitional_to_motivation_paragraph = `<p>Рассмотрев представленные Заявителем и Финансовой организацией документы, Финансовый уполномоченный 
+  let transitional_to_motivation_paragraph = ""
+  console.log(motivation_part.motivation_part);
+  if (motivation_part.motivation_part != "") {
+    transitional_to_motivation_paragraph = `<p>Рассмотрев представленные Заявителем и Финансовой организацией документы, Финансовый уполномоченный 
   приходит к следующим выводам.</p>`
-
+  }
+  
   transitional_to_motivation_paragraph = transitional_to_motivation_paragraph.replaceAll("\r\n", "")
   transitional_to_motivation_paragraph = transitional_to_motivation_paragraph.replaceAll("\r", "")
   transitional_to_motivation_paragraph = transitional_to_motivation_paragraph.replaceAll("\n", "")

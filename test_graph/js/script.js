@@ -1147,13 +1147,13 @@ $('.autocomplete input').toArray().forEach(element => {
   autocomplete(element, fo)
 });
 
-
-$('#appeal_number').focusout(function(){
-  let data = {
-    data : $(this).val()
-  }
-  appDataToJSON(data)
-})
+//Автозаполнение данных в формах из базы данных (из таблицы preambulaData)
+// $('#appeal_number').focusout(function(){
+//   let data = {
+//     data : $(this).val()
+//   }
+//   appDataToJSON(data)
+// })
 
 //Автопоиск марок ТС
 var car_brands = []

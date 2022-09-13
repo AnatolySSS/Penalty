@@ -4,7 +4,10 @@ app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({limit: '50mb'}));
 var mysqlAdmin = require('node-mysql-admin');
 app.use(mysqlAdmin(app));
-const mysql  = require('mysql2')
+
+const fs = require('fs');
+// const mysql  = require('mysql2')
+const mysql = require('mysql');
 const XLSX = require('xlsx')
 const path = require('path');
 const favicon = require('serve-favicon');      
@@ -16,20 +19,39 @@ app.use(express.static("client"))
 app.use(favicon(path.join(__dirname, 'client', 'img', 'favicon.ico')));
 
 //Подключение к базе данных
+// const connection = mysql.createConnection({
+//     host : "localhost",
+//     user : "root",
+//     database : "payFo",
+//     password : "",
+// })
+
+// connection.connect(function(error) {
+//     if (error) {
+//         return console.error("Ошибка " + error.message)
+//     } else {
+//         console.log("Подключение прошло успешно");
+//     }
+// })
+
 const connection = mysql.createConnection({
-    host : "localhost",
-    user : "root",
-    database : "payFo",
-    password : "",
-})
+    host     : 'rc1a-2i9nuur2auz858ae.mdb.yandexcloud.net',
+    port     : 3306,
+    user     : 'anatoly',
+    password : 'Haimdall',
+    database : 'db',
+    ssl  : {
+      ca : fs.readFileSync('root.crt'),
+    }
+});
 
 connection.connect(function(error) {
-    if (error) {
-        return console.error("Ошибка " + error.message)
-    } else {
-        console.log("Подключение прошло успешно");
-    }
-})
+        if (error) {
+            return console.error("Ошибка " + error.message)
+        } else {
+            console.log("Подключение прошло успешно");
+        }
+    });
 
 const jsonParser = express.json()
 
@@ -59,6 +81,17 @@ app.post("/motive_download", jsonParser, function (request, response) {
         console.log("Table created");
     });
 
+    //Изменяем кодировку
+    let queryChangeCoding = ""
+    for (const key of Object.keys(worksheet[0])) {
+        queryChangeCoding = `ALTER TABLE motivations CHANGE ${key} ${key} TEXT CHARACTER set utf8mb4 COLLATE utf8mb4_unicode_ci;`
+        connection.query(queryChangeCoding, function (error, result) {
+        if (error) throw error;
+            console.log("Table created");
+        });
+    }
+    
+
     //Заполнение таблицы данным из файла excel
     let queryInsertIntoMotivation = ``
     let queryInsertIntoMotivationStr
@@ -87,7 +120,7 @@ app.post("/motive_download", jsonParser, function (request, response) {
 app.post("/show_motivations", function (request, response) {
     //Проверка на наличии таблицы motivations в базе данных
     let hasMotivation
-    connection.query(`SELECT table_name FROM information_schema.tables WHERE table_schema ='payFo'`, function(err, result){ 
+    connection.query(`SELECT table_name FROM information_schema.tables WHERE table_schema ='db'`, function(err, result){ 
         hasMotivation = false
         result.forEach(element => {
             if (Object.values(element) == 'motivations') {
@@ -115,7 +148,7 @@ app.post("/motive_delete", function (request, response) {
     });
 })
 
-//Заполнение данных в таблице preambulaData
+//Получает данные из таблицы с мотивировками и формирует объект, с полями (все признаки)
 app.post("/total_data", jsonParser, function (request, response) {
     if(!request.body) return response.sendStatus(400)
 
@@ -163,6 +196,7 @@ app.get("/", function(request, response){
     response.sendFile(__dirname + "/index.html");
 });
 
-app.listen(PORT, () => {
+app.listen(PORT, "0.0.0.0", () => {
     console.log("Server is runnung");
+    console.log(PORT);
 })
