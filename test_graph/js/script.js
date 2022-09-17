@@ -67,6 +67,7 @@ let date_dtp;
 let max_summ = findMaxSumm()
 let range;
 let data_from_db = {}
+let totalData = {}
 
 // $('#app_date_1').focusout(function(){
 //   date_sv = new AppDate("date_sv")
@@ -802,7 +803,7 @@ document.getElementById('check_list').onclick = function check_list(){
 
   $('#str_payment_dataled_footer').append(total_penalty_row);
 
-  let totalData = {
+  totalData = {
     preambulaData : preambulaData,
     claimsToFuData : claimsToFuData,
     mainRequestData : mainRequestData,
@@ -903,6 +904,7 @@ document.getElementById('show_decision').onclick = function show_decision(){
                                   total_penalty_summ_accrued,
                                   total_penalty_summ_paid,
                                   max_summ,
+                                  totalData,
                                   data_from_db);
     // } catch (error) {
     //   alert("Ошибка в коде, позвоните Анатолию!")
@@ -942,7 +944,7 @@ document.getElementById('make_decision_file').onclick = function (){
 
   if (document.querySelector('#decision').innerHTML == "") {
 
-    try {
+    // try {
       decision = makeTextDecision(claimsContract,
                                   dtpParticipant,
                                   appToFo,
@@ -953,10 +955,11 @@ document.getElementById('make_decision_file').onclick = function (){
                                   total_penalty_summ_accrued,
                                   total_penalty_summ_paid,
                                   max_summ,
+                                  totalData,
                                   data_from_db);
-    } catch (error) {
-      alert("Ошибка в коде, позвоните Анатолию!")
-    }
+    // } catch (error) {
+    //   alert("Ошибка в коде, позвоните Анатолию!")
+    // }
     
     decision = decision.replace("ОСАГО", "обязательного страхования гражданской ответственности владельцев транспортных средств (далее – ОСАГО)")
     decision = decision.replace("Закона № 40-ФЗ", "Федерального закона от 25.04.2002 № 40-ФЗ «Об обязательном страховании гражданской ответственности владельцев транспортных средств» (далее – Закон № 40-ФЗ)")

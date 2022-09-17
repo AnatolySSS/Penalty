@@ -30,19 +30,36 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
       children: [
         new TextRun({
           text: all_paragraphs[i],
-          bold: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? true : false,
+          bold: all_paragraphs[i] == "УСТАНОВИЛ" || 
+                all_paragraphs[i] == "РЕШИЛ" ||
+                all_paragraphs[i] == "ОБ УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ" || 
+                all_paragraphs[i] == "ОБ ОТКАЗЕ В УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ" || 
+                all_paragraphs[i] == "О ПРЕКРАЩЕНИИ РАССМОТРЕНИЯ ОБРАЩЕНИЯ" ? true : false,
           characterSpacing: i == 0 ? 20 : 0,
         }),
       ],
       indent: {
-        firstLine: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? 0 : 711,
+        firstLine: all_paragraphs[i] == "УСТАНОВИЛ" || 
+                   all_paragraphs[i] == "РЕШИЛ" ||
+                   all_paragraphs[i] == "ОБ УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ" || 
+                   all_paragraphs[i] == "ОБ ОТКАЗЕ В УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ" || 
+                   all_paragraphs[i] == "О ПРЕКРАЩЕНИИ РАССМОТРЕНИЯ ОБРАЩЕНИЯ" ? 0 : 711,
       },
-      alignment: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? AlignmentType.CENTER : AlignmentType.JUSTIFIED,
+      alignment: all_paragraphs[i] == "УСТАНОВИЛ" || 
+                 all_paragraphs[i] == "РЕШИЛ" ||
+                 all_paragraphs[i] == "ОБ УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ" || 
+                 all_paragraphs[i] == "ОБ ОТКАЗЕ В УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ" || 
+                 all_paragraphs[i] == "О ПРЕКРАЩЕНИИ РАССМОТРЕНИЯ ОБРАЩЕНИЯ" ? AlignmentType.CENTER : AlignmentType.JUSTIFIED,
       spacing: {
         line: 357,
         lineRule: LineRuleType.AUTO,
-        after: all_paragraphs[i] == "УСТАНОВИЛ" || i == 0 ? 180 : 0,
-        before: all_paragraphs[i] == "УСТАНОВИЛ" ? 180 : 0,
+        after: all_paragraphs[i] == "УСТАНОВИЛ" || 
+               all_paragraphs[i] == "РЕШИЛ" ||
+               all_paragraphs[i] == "ОБ УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ" || 
+               all_paragraphs[i] == "ОБ ОТКАЗЕ В УДОВЛЕТВОРЕНИИ ТРЕБОВАНИЙ" || 
+               all_paragraphs[i] == "О ПРЕКРАЩЕНИИ РАССМОТРЕНИЯ ОБРАЩЕНИЯ" ? 180 : 0,
+        before: all_paragraphs[i] == "УСТАНОВИЛ" ||
+                all_paragraphs[i] == "РЕШИЛ" ? 180 : 0,
       },
     })
   }
@@ -404,6 +421,57 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
         paragraphs[68],
         paragraphs[69],
         paragraphs[70],
+        paragraphs[71],
+        paragraphs[72],
+        paragraphs[73],
+        paragraphs[74],
+        paragraphs[75],
+        paragraphs[76],
+        paragraphs[77],
+        paragraphs[78],
+        paragraphs[79],
+        paragraphs[80],
+        paragraphs[81],
+        paragraphs[82],
+        paragraphs[83],
+        paragraphs[84],
+        paragraphs[85],
+        paragraphs[86],
+        paragraphs[87],
+        paragraphs[88],
+        paragraphs[89],
+        paragraphs[90],
+        paragraphs[91],
+        paragraphs[92],
+        paragraphs[93],
+        paragraphs[94],
+        paragraphs[95],
+        paragraphs[96],
+        paragraphs[97],
+        paragraphs[98],
+        paragraphs[99],
+        paragraphs[100],
+        paragraphs[101],
+        paragraphs[102],
+        paragraphs[103],
+        paragraphs[104],
+        paragraphs[105],
+        paragraphs[106],
+        paragraphs[107],
+        paragraphs[108],
+        paragraphs[109],
+        paragraphs[110],
+        paragraphs[111],
+        paragraphs[112],
+        paragraphs[113],
+        paragraphs[114],
+        paragraphs[115],
+        paragraphs[116],
+        paragraphs[117],
+        paragraphs[118],
+        paragraphs[119],
+        paragraphs[120],
+        paragraphs[121],
         new Paragraph({ 
           style: "myCustomStyle", 
           children: [

@@ -13,7 +13,7 @@ export function osagoPenaltyParagraph(paymentVoluntary,
                                       total_penalty_summ_accrued,
                                       total_penalty_summ_paid,
                                       max_summ) {
-                                        
+    let out_data = {}  
     var total_ndfl = 0;
     var article_193;
     var claim_name = [];
@@ -882,5 +882,10 @@ export function osagoPenaltyParagraph(paymentVoluntary,
     main_penalty_paragraph = main_penalty_paragraph.replaceAll("\r", "")
     main_penalty_paragraph = main_penalty_paragraph.replaceAll("\n", "")
 
-    return main_penalty_paragraph
+    out_data = {
+        main_penalty_paragraph : main_penalty_paragraph,
+        total_penalty_summ : (total_penalty_summ_accrued - total_penalty_summ_paid),
+    }
+    
+    return out_data
 }

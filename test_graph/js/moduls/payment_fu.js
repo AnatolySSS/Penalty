@@ -105,7 +105,7 @@ class ClaimFu {
     allClaims.claims.forEach(element => {
       if (this.name.value == element.claim) {
           this.type_text = element.short
-          this.type_text_nominative = element.res
+          this.type_text_nominative = element.nom
           if (this.name.value == "УТС") {
             this.type_text = "страхового возмещения в части УТС"
             this.type_text_nominative = "страховое возмещение в части УТС"

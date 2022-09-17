@@ -5,6 +5,7 @@ import { findLastDay } from '../findLastDay.js';
 import { expertiseQuestions } from "../objects/allExpertiseQuestions"
 import { makePercentageText_genitive } from "../makePercentageText_genitive"
 import { makeRubText_genitive } from '../makeRubText_genitive.js';
+import { osagoPenaltyParagraph } from "./osago/osagoPenalty";
 
 export function check_signs(totalData, signs) {
     let signs_filled = signs
@@ -102,10 +103,17 @@ export function check_signs(totalData, signs) {
         signs_filled['Проведение осмотра ТС ФО'] = "НЕТ"
     }
     
-    signs_filled['Договор страхования'] = totalData.claimsToFuData.claimsContractAll[0].type
+    signs_filled['Договор страхования'] = []
+    for (const contract of totalData.claimsToFuData.claimsContractAll) {
+        signs_filled['Договор страхования'].push(contract.type)
+    }
+
     signs_filled['Требование к ФУ'] = []
-    for (const claim of totalData.claimsToFuData.claimsContractAll[0].claim) {
-        signs_filled['Требование к ФУ'].push(claim.type)
+    for (let i = 0; i < totalData.claimsToFuData.claimsContractAll.length; i++) {
+        signs_filled['Требование к ФУ'][i] = []
+        for (let j = 0; j < totalData.claimsToFuData.claimsContractAll[i].claim.length; j++) {
+            signs_filled['Требование к ФУ'][i][j] = totalData.claimsToFuData.claimsContractAll[i].claim[j].type
+        }
     }
 
     //Определение общей суммы выплаты ФО
@@ -198,74 +206,124 @@ export function make_motivation_paragraph(claimsContract,
                                           max_summ,
                                           data_from_db) {
     let out_data = {}
+    let all_found_claims = []
+    let all_found_claims_result_helper = []
+    let all_found_claims_helper = {}
+    let osago_penalty_paragraph = {}
+    
+    let total_result = ""
     let motivation_part = ""
     //Алгоритм поиска подходящей мотивировки
     //Получение общего количества признаков, занесенных в таблицу Мотивировки
     let total_sign_count = Object.keys(data_from_db.fact_signs).length
-    
+
     //Текущее значение количества совпадающих признаков
     let right_sign_count
     //Индекс строки, подходящей под все признаки
-    let right_motive_index = 0
-    //Перебор все строк из таблицы Мотивировки (варианты со всеми возможными комбинациями признаков)
-    for (let i = 1; i < data_from_db.total_data.length; i++) {
-        right_sign_count = 0
-        //Перебор всех ключей в таблице Мотивировки
-        for (let j = 0; j < Object.keys(data_from_db.total_data[i]).length; j++) {
-            //Если в ключ является признаком
-            if (Object.keys(data_from_db.total_data[i])[j].indexOf("sign") >= 0) {
-                //Перебор всех данных, заполненных сотрудником
-                for (let k = 0; k < Object.keys(data_from_db.fact_signs).length; k++) {
-                    //Нахождение соответствия между ключами из таблицы Мотивировки и ключами, заполненными сотрудниками
-                    if (Object.values(data_from_db.total_data[0])[j] == Object.keys(data_from_db.fact_signs)[k]) {
-                        //Если соответствуют ключи "Требование к ФУ" (тогда проверяется каждое требование)
-                        if (Object.keys(data_from_db.fact_signs)[k] == 'Требование к ФУ') {
-                            //Перебор всех требований к ФУ
-                            for (let l = 0; l < data_from_db.fact_signs['Требование к ФУ'].length; l++) {
-                                //Проверка значения одинакого ключа
-                                if (Object.values(data_from_db.total_data[i])[j] == Object.values(data_from_db.fact_signs)[k][l]) {
-                                    right_sign_count++
+    let right_motive_index
+    //Перебор договоров
+    for (let contract_number = 0; contract_number < claimsContract.length; contract_number++) {
+        //Перебор требований к ФУ
+        for (let claim_number = 0; claim_number < claimsContract[contract_number].claim.length; claim_number++) {
+            right_motive_index = 0
+            //Перебор все строк из таблицы Мотивировки (варианты со всеми возможными комбинациями признаков)
+            for (let i = 1; i < data_from_db.total_data.length; i++) {
+                right_sign_count = 0
+                //Перебор всех ключей в таблице Мотивировки
+                for (let j = 0; j < Object.keys(data_from_db.total_data[i]).length; j++) {
+                    //Если в ключ является признаком
+                    if (Object.keys(data_from_db.total_data[i])[j].indexOf("sign") >= 0) {
+                        //Перебор всех данных, заполненных сотрудником
+                        for (let k = 0; k < Object.keys(data_from_db.fact_signs).length; k++) {
+                            //Нахождение соответствия между ключами из таблицы Мотивировки и ключами, заполненными сотрудниками
+                            if (Object.values(data_from_db.total_data[0])[j] == Object.keys(data_from_db.fact_signs)[k]) {
+                                //Если соответствуют ключи "Договор страхования" (тогда проверяется каждый договор)
+                                if (Object.keys(data_from_db.fact_signs)[k] == 'Договор страхования') {
+                                    if (Object.values(data_from_db.total_data[i])[j] == claimsContract[contract_number].type.value) {
+                                        right_sign_count++
+                                    }
                                     // console.log("Таблица : " + Object.values(data_from_db.total_data[0])[j] + " : " + Object.values(data_from_db.total_data[i])[j]);
                                     // console.log("Факт : " + Object.keys(data_from_db.fact_signs)[k] + " : " + Object.values(data_from_db.fact_signs)[k][l] + "\n\n");
+                                //Если соответствуют ключи "Требование к ФУ" (тогда проверяется каждое требование)
+                                } else if (Object.keys(data_from_db.fact_signs)[k] == 'Требование к ФУ') {
+                                    if (Object.values(data_from_db.total_data[i])[j] == claimsContract[contract_number].claim[claim_number].type.value) {
+                                        right_sign_count++
+                                    }
+                                    // console.log("Таблица : " + Object.values(data_from_db.total_data[0])[j] + " : " + Object.values(data_from_db.total_data[i])[j]);
+                                    // console.log("Факт : " + Object.keys(data_from_db.fact_signs)[k] + " : " + Object.values(data_from_db.fact_signs)[k][l] + "\n\n");
+                                } else {
+                                    //Проверка значения одинакого ключа
+                                    if (Object.values(data_from_db.total_data[i])[j] == Object.values(data_from_db.fact_signs)[k] ||
+                                        Object.values(data_from_db.total_data[i])[j] == "НЕ ПРИМЕНИМО") {
+                                        right_sign_count++
+                                        // console.log("Таблица : " + Object.values(data_from_db.total_data[0])[j] + " : " + Object.values(data_from_db.total_data[i])[j]);
+                                        // console.log("Факт : " + Object.keys(data_from_db.fact_signs)[k] + " : " + Object.values(data_from_db.fact_signs)[k] + "\n\n");
+                                    }
                                 }
-                            }
-                        } else {
-                            //Проверка значения одинакого ключа
-                            if (Object.values(data_from_db.total_data[i])[j] == Object.values(data_from_db.fact_signs)[k]) {
-                                right_sign_count++
-                                // console.log("Таблица : " + Object.values(data_from_db.total_data[0])[j] + " : " + Object.values(data_from_db.total_data[i])[j]);
-                                // console.log("Факт : " + Object.keys(data_from_db.fact_signs)[k] + " : " + Object.values(data_from_db.fact_signs)[k] + "\n\n");
                             }
                         }
                     }
                 }
-            }
-        }
-        if (total_sign_count == right_sign_count) {
-            right_motive_index = i
-            break
-        }
-    }
-    if (right_motive_index == 0) {
-        console.log("Совпадения не найдены");
-    } else {
-        console.log("Совпадение найдено в строке " + right_motive_index);
-    }
-
-    //Формирование текста мотивировочной части
-    if (right_motive_index != 0) {
-        for (let i = 0; i < Object.values(data_from_db.total_data[right_motive_index]).length; i++) {
-            if (Object.keys(data_from_db.total_data[right_motive_index])[i].indexOf("motiv") >= 0) {
-                if (Object.values(data_from_db.total_data[right_motive_index])[i] != null) {
-                    let paragraphs = Object.values(data_from_db.total_data[right_motive_index])[i].split(String.fromCharCode(10));
-                    for (const iterator of paragraphs) {
-                        motivation_part = `${motivation_part}<p>${iterator}</p>`
-                    }
+                //Определение номера строки совпадения в случае если количество верных ключей совпадает в общим количеством ключей
+                if (total_sign_count == right_sign_count) {
+                    right_motive_index = i
+                    break
                 }
             }
+
+            //Формирование вспомогальных логов
+            if (right_motive_index == 0) {
+                console.log("Договор " + (contract_number + 1) + ". Требование " + (claim_number + 1) + ". Совпадения не найдены");
+            } else {
+                console.log("Договор " + (contract_number + 1) + ". Требование " + (claim_number + 1) + ". Совпадение найдено в строке " + right_motive_index);
+            }
+
+            //Формирование текста мотивировочной части
+            if (right_motive_index != 0) {
+                for (let i = 0; i < Object.values(data_from_db.total_data[right_motive_index]).length; i++) {
+                    if (Object.keys(data_from_db.total_data[right_motive_index])[i].indexOf("motiv") >= 0) {
+                        if (Object.values(data_from_db.total_data[right_motive_index])[i] != null) {
+                            let paragraphs = Object.values(data_from_db.total_data[right_motive_index])[i].split(String.fromCharCode(10));
+                            for (const iterator of paragraphs) {
+                                motivation_part = `${motivation_part}<p>${iterator}</p>`
+                            }
+                        }
+                    }
+                }
+
+                //Формирование мотивировки по неустойке по ОСАГО
+                let osago_penalty_result = ""
+                if (claimsContract[contract_number].type.value == "ОСАГО") {
+                    if (claimsContract[contract_number].claim[claim_number].type.value == "Неустойка") {
+                        osago_penalty_paragraph = osagoPenaltyParagraph(paymentVoluntary,
+                                                                        paymentFu,
+                                                                        paymentCourt,
+                                                                        total_penalty_summ_accrued,
+                                                                        total_penalty_summ_paid,
+                                                                        max_summ)
+
+                        
+                        if (osago_penalty_paragraph.total_penalty_summ > 0) {
+                            osago_penalty_result = "УДОВЛЕТВОРИТЬ"
+                        } else {
+                            osago_penalty_result = "ОТКАЗАТЬ"
+                        }
+
+                        motivation_part = motivation_part + osago_penalty_paragraph.main_penalty_paragraph
+                    }
+                }
+                //Формирование массива объектов найденных требвоаний в таблице Мотивировок
+                all_found_claims.push({
+                    result : osago_penalty_result != "" ? osago_penalty_result : data_from_db.total_data[right_motive_index].Result,
+                    contract : claimsContract[contract_number].type.value,
+                    name : claimsContract[contract_number].claim[claim_number].type.value,
+                    summ: osago_penalty_paragraph.total_penalty_summ,
+                })
+            }
         }
     }
-    
+
+    //Редактирование изменяемых частей мотивировочной части
     //Определение вопросов эксперту ФУ
     let question_paragraph = ""
     expertiseQuestions.questions.forEach(element => {
@@ -273,6 +331,8 @@ export function make_motivation_paragraph(claimsContract,
             question_paragraph = element.question
         }
     })
+    
+    //Изменение данных по НТЭ ФУ
     motivation_part = motivation_part.replaceAll("question", question_paragraph)
     let organization = fuExpertise[0].organization.value
     motivation_part = motivation_part.replaceAll("organization", organization)
@@ -302,7 +362,6 @@ export function make_motivation_paragraph(claimsContract,
             Транспортного средства Заявителя с учетом износа составила ${fuExpertise[0].summ_with_text}, `
         }
     }
-    
     if (fuExpertise[0].summ_market != 0) {
         expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `средняя рыночная стоимость 
         Транспортного средства до повреждения по состоянию на дату ДТП составляла ${fuExpertise[0].summ_market_text}, `
@@ -352,6 +411,29 @@ export function make_motivation_paragraph(claimsContract,
         satisfaction_summ = max_summ
     }
 
+    //Формирование объекта найденных требований и удовлетворенных сумм для рехолютивной части
+    for (let i = 0; i < all_found_claims.length; i++) {
+        if (all_found_claims[i].name == "Страховое возмещение") {
+            if (all_found_claims[i].result == "УДОВЛЕТВОРИТЬ") {
+                all_found_claims[i].summ = (satisfaction_summ - total_summ_payment)
+            } else {
+                all_found_claims[i].summ = 0
+            }
+        }
+        all_found_claims_result_helper.push(all_found_claims[i].result)
+    }
+
+    //Определение общего результата рассмотрения Обращения
+    if (all_found_claims_result_helper.length > 0) {
+        if (all_found_claims_result_helper.includes("УДОВЛЕТВОРИТЬ")) {
+            total_result = "УДОВЛЕТВОРИТЬ"
+        } else if (all_found_claims_result_helper.includes("ОТКАЗАТЬ")) {
+            total_result = "ОТКАЗАТЬ"
+        } else {
+            total_result = "ПРЕКРАТИТЬ"
+        }
+    }
+
     motivation_part = motivation_part.replaceAll("percent", makePercentageText_genitive(percentage))
     motivation_part = motivation_part.replaceAll("satisfaction_summ", makeRubText_genitive(satisfaction_summ))
     motivation_part = motivation_part.replaceAll("total_summ_payment", makeRubText_genitive(total_summ_payment))
@@ -360,10 +442,18 @@ export function make_motivation_paragraph(claimsContract,
 
     motivation_part = motivation_part.replaceAll("<p></p>", "")
     motivation_part = motivation_part.replaceAll("</p></p>", "")
+
+    motivation_part = motivation_part.replaceAll("\r\n", "")
+    motivation_part = motivation_part.replaceAll("\r", "")
+    motivation_part = motivation_part.replaceAll("\n", "")
+    motivation_part = motivation_part.replaceAll("  ", " ")
     
     out_data = {
         motivation_part : motivation_part,
-        result : data_from_db.total_data[right_motive_index].Result,
+        result : total_result,
+        all_found_claims : all_found_claims,
+        osago_penalty_paragraph : osago_penalty_paragraph
     }
+    console.log(out_data);
     return out_data
 }
