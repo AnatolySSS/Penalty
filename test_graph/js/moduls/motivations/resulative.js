@@ -15,44 +15,19 @@ export function make_resulative_paragraph(total_penalty_summ_accrued,
                                           main_claims_all_paragraph) {
 
     let resulative_part = ""
-    let claims_refuse_helper = ""
     let partly = ""
     let partly_boolean = false
-    let claims_refuse_boolean = false
     let all_not_found_claims = []
     let found_claims_boolean
     //Перебор всех договоров, по которым заявлены требования к ФУ
     for (let i = 0; i < totalData.claimsToFuData.claimsContractAll.length; i++) {
         //Перебор всех требований, заявленных к ФУ
         for (let j = 0; j < totalData.claimsToFuData.claimsContractAll[i].claim.length; j++) {
-            found_claims_boolean = false
-            //Перебор всех требований, которые алгоритм смог идентифицировать и прописать мотивировочную часть
-            for (let k = 0; k < all_found_claims.length; k++) {
-                if (totalData.claimsToFuData.claimsContractAll[i].type == all_found_claims[k].contract &&
-                    totalData.claimsToFuData.claimsContractAll[i].claim[j].type == all_found_claims[k].name) {
-                        if (all_found_claims[k].result == "ОТКАЗАТЬ") {
-                            allClaims.claims.forEach(element => {
-                                if (all_found_claims[k].name == element.claim) {
-                                    claims_refuse_helper = claims_refuse_helper + `${element.short}, `
-                                }
-                            })
-                            claims_refuse_boolean = true
-                        }
-                        //Если взыскано больше, чем заявлялось
-                        if (totalData.claimsToFuData.claimsContractAll[i].claim[j].summ > all_found_claims[k].summ) {
-                            partly_boolean = true
-                        }
-                        found_claims_boolean = true
-                        break
-                        // totalData.claimsToFuData.claimsContractAll[i].claim[j].result = all_found_claims[k].result
-                        // totalData.claimsToFuData.claimsContractAll[i].claim[j].summ_satisfied = all_found_claims[k].summ
-                }
-            }
-
             //Проверка на соблюдение досудебного порядка
             totalData.claimsToFuData.claimsContractAll[i].claim[j].order = false
             let count_claim = 0
             let order_boolean = false
+            //Подсчет количества обращений с требованиями о выплате УТС? Эвакуатора и Хранения
             if (totalData.claimsToFuData.claimsContractAll[i].claim[j].type == "УТС" ||
                 totalData.claimsToFuData.claimsContractAll[i].claim[j].type == "Эвакуатор" ||
                 totalData.claimsToFuData.claimsContractAll[i].claim[j].type == "Хранение") {
@@ -69,6 +44,7 @@ export function make_resulative_paragraph(total_penalty_summ_accrued,
                 }
             }
             
+            //Определения обращения с требованием после 01.06.2019
             for (let k = 1; k < totalData.appToFoData.appToFoAll.length; k++) {
                 let date = Date.parse(changeDateType(totalData.appToFoData.appToFoAll[k].appDate) + 'T00:00:00')
                 if (totalData.appToFoData.appToFoAll[k].type == "Претензия" &&
@@ -95,22 +71,67 @@ export function make_resulative_paragraph(total_penalty_summ_accrued,
             } else if (order_boolean) {
                 totalData.claimsToFuData.claimsContractAll[i].claim[j].order = true
             }
-
-            //Создание массива объектов требований, которые не были идентифицированы алгоритмом
-            if (!found_claims_boolean) {
-                all_not_found_claims.push({
-                    result : "unknown",
-                    contract : totalData.claimsToFuData.claimsContractAll[i].type,
-                    name : totalData.claimsToFuData.claimsContractAll[i].claim[j].type,
-                    summ: totalData.claimsToFuData.claimsContractAll[i].claim[j].summ,
-                })
-            }
         }
     }
-    console.log(all_not_found_claims);
-    console.log(totalData.claimsToFuData.claimsContractAll);
+
+    let claims_order_helper = ""
+    let claims_refuse_helper = ""
+    let claims_refuse_boolean = false
+    let claims_order_boolean = false
+    //Перебор всех договоров, по которым заявлены требования к ФУ
+    for (let i = 0; i < totalData.claimsToFuData.claimsContractAll.length; i++) {
+        //Перебор всех требований, заявленных к ФУ
+        for (let j = 0; j < totalData.claimsToFuData.claimsContractAll[i].claim.length; j++) {
+            if (totalData.claimsToFuData.claimsContractAll[i].claim[j].order == false) {
+                for (let k = 0; k < all_found_claims.length; k++) {
+                    if (totalData.claimsToFuData.claimsContractAll[i].type == all_found_claims[k].contract &&
+                        totalData.claimsToFuData.claimsContractAll[i].claim[j].type == all_found_claims[k].name) {
+                            all_found_claims[k].result = "ПРЕКРАТИТЬ"
+                    }
+                }
+                allClaims.claims.forEach(element => {
+                    if (totalData.claimsToFuData.claimsContractAll[i].claim[j].type == element.claim) {
+                        claims_order_helper = claims_order_helper + `${element.short}, `
+                    }
+                })
+                claims_order_boolean = true
+            } else {
+                found_claims_boolean = false
+                //Перебор всех требований, которые алгоритм смог идентифицировать и прописать мотивировочную часть
+                for (let k = 0; k < all_found_claims.length; k++) {
+                    if (totalData.claimsToFuData.claimsContractAll[i].type == all_found_claims[k].contract &&
+                        totalData.claimsToFuData.claimsContractAll[i].claim[j].type == all_found_claims[k].name) {
+                        if (all_found_claims[k].result == "ОТКАЗАТЬ") {
+                            allClaims.claims.forEach(element => {
+                                if (all_found_claims[k].name == element.claim) {
+                                    claims_refuse_helper = claims_refuse_helper + `${element.short}, `
+                                }
+                            })
+                            claims_refuse_boolean = true
+                        }
+                        //Если взыскано больше, чем заявлялось
+                        if (totalData.claimsToFuData.claimsContractAll[i].claim[j].summ > all_found_claims[k].summ) {
+                            partly_boolean = true
+                        }
+                        found_claims_boolean = true
+                        break
+                    }
+                }
+            }
+            //Создание массива объектов требований, которые не были идентифицированы алгоритмом
+            // if (!found_claims_boolean) {
+            //     all_not_found_claims.push({
+            //         result : "unknown",
+            //         contract : totalData.claimsToFuData.claimsContractAll[i].type,
+            //         name : totalData.claimsToFuData.claimsContractAll[i].claim[j].type,
+            //         summ: totalData.claimsToFuData.claimsContractAll[i].claim[j].summ,
+            //     })
+            // }
+        }
+    }
+
     if (result == "УДОВЛЕТВОРИТЬ") {
-        if (claims_refuse_boolean || partly_boolean) {
+        if (claims_refuse_boolean || partly_boolean || claims_order_boolean) {
             partly = " частично"
         }
         resulative_part = resulative_part + `<p>требование ${app_name} о взыскании с Финансовой организации 
@@ -143,6 +164,13 @@ export function make_resulative_paragraph(total_penalty_summ_accrued,
             }
         }
 
+        if (claims_order_boolean) {
+            claims_order_helper = claims_order_helper.slice(0, -2)
+            claims_order_helper = `<p>Требование ${app_name} о взыскании с Финансовой организации 
+            ${claims_order_helper} оставить без рассмотрения.</p>`
+        }
+
+        //Формирование абзаца про отказ в удовлетворении требований
         if (claims_refuse_boolean) {
             claims_refuse_helper = claims_refuse_helper.slice(0, -2)
             claims_refuse_helper = `<p>В удовлетворении требования ${app_name} о взыскании с Финансовой организации 
@@ -154,10 +182,17 @@ export function make_resulative_paragraph(total_penalty_summ_accrued,
         claims_satisfied_helper = claims_satisfied_helper.slice(0, -2)
 
         resulative_part = resulative_part + `<p>Взыскать с Финансовой организации в пользу ${app_name} 
-        ${claims_satisfied_helper}.</p>${claims_refuse_helper}`
+        ${claims_satisfied_helper}.</p>${claims_order_helper}${claims_refuse_helper}`
     } else if (result == "ОТКАЗАТЬ") {
+
+        if (claims_order_boolean) {
+            claims_order_helper = claims_order_helper.slice(0, -2)
+            claims_order_helper = `<p>Требование ${app_name} о взыскании с Финансовой организации 
+            ${claims_order_helper} оставить без рассмотрения.</p>`
+        }
+
         resulative_part = resulative_part + `<p>в удовлетворении требования ${app_name} о взыскании с Финансовой организации 
-        ${main_claims_all_paragraph} отказать.</p>`
+        ${main_claims_all_paragraph} отказать.</p>${claims_order_helper}`
     } else if (result == "ПРЕКРАТИТЬ") {
         resulative_part = resulative_part + `<p>прекратить рассмотрение Обращения ${app_name} на основании пункта 1 части 1 
         статьи 27 Закона № 123-ФЗ.</p>`

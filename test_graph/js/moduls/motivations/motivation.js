@@ -207,6 +207,7 @@ export function make_motivation_paragraph(claimsContract,
                                           data_from_db) {
     let out_data = {}
     let all_found_claims = []
+    let all_not_found_claims = []
     let all_found_claims_result_helper = []
     let all_found_claims_helper = {}
     let osago_penalty_paragraph = {}
@@ -318,6 +319,13 @@ export function make_motivation_paragraph(claimsContract,
                     contract : claimsContract[contract_number].type.value,
                     name : claimsContract[contract_number].claim[claim_number].type.value,
                     summ: osago_penalty_paragraph.total_penalty_summ,
+                })
+            } else {
+                all_not_found_claims.push({
+                    result : "unknown",
+                    contract : claimsContract[contract_number].type.value,
+                    name : claimsContract[contract_number].claim[claim_number].type.value,
+                    summ: claimsContract[contract_number].claim[claim_number].summ,
                 })
             }
         }
@@ -452,6 +460,7 @@ export function make_motivation_paragraph(claimsContract,
         motivation_part : motivation_part,
         result : total_result,
         all_found_claims : all_found_claims,
+        all_not_found_claims : all_not_found_claims,
         osago_penalty_paragraph : osago_penalty_paragraph
     }
     console.log(out_data);

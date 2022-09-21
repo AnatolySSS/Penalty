@@ -1,3 +1,4 @@
+require('dotenv').config()
 const express  = require('express')
 const app  = express()
 app.use(express.json({limit: '50mb'}));
@@ -35,11 +36,11 @@ app.use(favicon(path.join(__dirname, 'client', 'img', 'favicon.ico')));
 // })
 
 const connection = mysql.createConnection({
-    host     : 'rc1a-2i9nuur2auz858ae.mdb.yandexcloud.net',
-    port     : 3306,
-    user     : 'anatoly',
-    password : 'Haimdall',
-    database : 'db',
+    host     : process.env.DB_HOST,
+    port     : process.env.DB_PORT,
+    user     : process.env.DB_USER,
+    password : process.env.DB_PASSWORD,
+    database : process.env.DB_NAME,
     ssl  : {
       ca : fs.readFileSync('root.crt'),
     }
