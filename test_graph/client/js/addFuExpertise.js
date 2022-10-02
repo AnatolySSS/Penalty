@@ -145,7 +145,7 @@ function addFuExpertise() {
   </div>`
 
   	$('#fu_expertises').append(str);
-	(`#fu_expertise_${fuExpertiseId} .datepicker-here`).datepicker()
+	$(`#fu_expertise_${fuExpertiseId} .datepicker-here`).datepicker()
 
 	$('.datepicker-here').toArray().forEach(function(field){
 		new Cleave(field, {

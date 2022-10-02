@@ -69,7 +69,8 @@ function addAppToFo() {
                         <select id="apps_to_fo_form_${appsToFoId}" class="apps_to_fo_forms custom-select form-control col-md-12" required>
                             <option value="">Форма страхового возмещения</option>
                             <option>Выплата денежных средств безналичным расчетом</option>
-                            <option>Направление на ремонт</option>
+                            <option>Направление на СТОА по выбору ФО</option>
+                            <option>Направление на СТОА по выбору Заявителя</option>
                             <option>Не выбрана</option>
                         </select>
                     </div>
@@ -640,7 +641,7 @@ function addAppToFo() {
                                 <input id = "apps_to_fo_stor_confirmation_date_${appsToFoId}" class = "apps_to_fo_stor_confirmation_dates datepicker-here" placeholder="Дата" type="text" size="10" required>
                             </div>
                             <div class="form-group col-md-4">
-                                <input id = "apps_to_fo_stor_number_${appsToFoId}" class="apps_to_fo_stor_numbers" placeholder="трек номер" type="text" size="8" required>
+                                <input id = "apps_to_fo_stor_confirmation_number_${appsToFoId}" class="apps_to_fo_stor_confirmation_numbers" placeholder="трек номер" type="text" size="8" required>
                             </div>
                         </div>
                     </div>
@@ -656,6 +657,7 @@ function addAppToFo() {
                                     <option>Выплата в полном объеме</option>
                                     <option>Немотивированный отказ</option>
                                     <option>Позиция не изменилась</option>
+                                    <option>Иное</option>
                                 </select>
                             </div>
                             <div class="form-group col-md-3">
@@ -668,7 +670,7 @@ function addAppToFo() {
                         <div id="apps_to_fo_refusal_type_trasa_${appsToFoId}" class="apps_to_fo_refusal_type_trasa_${appsToFoId} apps_to_fo_refusal_type_trasas">
                             <div class="form-row">
                                 <div class="form-group col-md-12">
-                                    <textarea id = "apps_to_fo_refusal_type_trasa_text_${appsToFoId}" class="apps_to_fo_refusal_type_trasa_text_${appsToFoId} apps_to_fo_refusal_type_trasa_texts deactivation" aria-describedby="apps_to_fo_refusal_type_trasa_text_help_block_${appsToFoId}" placeholder="Дословный текст мотивированного отказа" type="text" size="8" required></textarea>
+                                    <textarea id = "apps_to_fo_refusal_type_trasa_text_${appsToFoId}" class="apps_to_fo_refusal_type_trasa_text_${appsToFoId} apps_to_fo_refusal_type_trasa_texts deactivation" aria-describedby="apps_to_fo_refusal_type_trasa_text_help_block_${appsToFoId}" placeholder="Дословный текст мотивированного отказа (продолжить фразу: ФО направила Заявителю письмо, в котором сообщалось, что ...)" type="text" size="8" required></textarea>
                                     <small id="apps_to_fo_refusal_type_trasa_text_help_block_${appsToFoId}" class="form-text">
                                         <div class="form-inline">
                                             <input id="apps_to_fo_refusal_type_trasa_text_deactivate_${appsToFoId}" class="deactivator" type="checkbox">
@@ -676,6 +678,52 @@ function addAppToFo() {
                                         </div>
                                     </small>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-9">
+                                <h6>Направление письма подтверждает</h6>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-6">
+                                <select id="apps_to_fo_refusal_confirmation_${appsToFoId}" class="apps_to_fo_refusal_confirmation_${appsToFoId} apps_to_fo_refusal_confirmations custom-select" required>
+                                    <option value="">Выберите вариант</option>
+                                    <option>Почтовая квитанция</option>
+                                    <option>Опись вложения</option>
+                                    <option>Список почтовых отправлений</option>
+                                    <option>Реестр почтовых отправлений</option>
+                                    <option>Почтовый идентификатор</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group col-md-3">
+                                <input id = "apps_to_fo_refusal_confirmation_date_${appsToFoId}" class = "apps_to_fo_refusal_confirmation_date_${appsToFoId} apps_to_fo_refusal_confirmation_dates datepicker-here deactivation" aria-describedby="apps_to_fo_refusal_confirmation_date_help_block_${appsToFoId}" placeholder="Дата" type="text" size="10" required>
+                                <small id="apps_to_fo_refusal_confirmation_date_help_block_${appsToFoId}" class="form-text">
+                                    <div class="form-inline">
+                                        <input id="apps_to_fo_refusal_confirmation_date_deactivate_${appsToFoId}" class="deactivator" type="checkbox">
+                                        <label for="apps_to_fo_refusal_confirmation_date_deactivate_${appsToFoId}" class="ml-2 form-check-label">Сведений не имеется</label>
+                                    </div>
+                                </small>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <input id = "apps_to_fo_refusal_confirmation_number_${appsToFoId}" class="apps_to_fo_refusal_confirmation_number_${appsToFoId} apps_to_fo_refusal_confirmation_numbers deactivation" aria-describedby="apps_to_fo_refusal_confirmation_number_help_block_${appsToFoId}" placeholder="№" type="text" size="8" required>
+                                <small id="apps_to_fo_refusal_confirmation_number_help_block_${appsToFoId}" class="form-text">
+                                    <div class="form-inline">
+                                        <input id="apps_to_fo_refusal_confirmation_number_deactivate_${appsToFoId}" class="deactivator" type="checkbox">
+                                        <label for="apps_to_fo_refusal_confirmation_number_deactivate_${appsToFoId}" class="ml-2 form-check-label">Сведений не имеется</label>
+                                    </div>
+                                </small>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <input id = "apps_to_fo_refusal_confirmation_post_number_${appsToFoId}" class="apps_to_fo_refusal_confirmation_post_number_${appsToFoId} apps_to_fo_refusal_confirmation_post_numbers deactivation" aria-describedby="apps_to_fo_refusal_confirmation_post_number_help_block_${appsToFoId}" placeholder="почтовый идентификатор" type="text" size="8" required>
+                                <small id="apps_to_fo_refusal_confirmation_post_number_help_block_${appsToFoId}" class="form-text">
+                                    <div class="form-inline">
+                                        <input id="apps_to_fo_refusal_confirmation_post_number_deactivate_${appsToFoId}" class="deactivator" type="checkbox">
+                                        <label for="apps_to_fo_refusal_confirmation_post_number_deactivate_${appsToFoId}" class="ml-2 form-check-label">Сведений не имеется</label>
+                                    </div>
+                                </small>
                             </div>
                         </div>
                     </div>

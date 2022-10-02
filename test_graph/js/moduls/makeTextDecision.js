@@ -132,44 +132,19 @@ export function makeTextDecision(claimsContract,
       break
   }
   
-  var fu_name = document.querySelector("#fu_name").value;
-  var fu_post;
+  var fu_name
+  var fu_post
   var date_appeal = document.querySelector("#date_appeal").value;
   date_appeal = Date.parse(changeDateType(date_appeal) + 'T00:00:00')
   date_appeal = formatDate(new Date(date_appeal));
   var appeal_number = document.querySelector("#appeal_number").value;
 
-  switch (fu_name) {
-    case "Воронин Ю.В.":
-      fu_name = "Воронин Юрий Викторович"
-      fu_post = "Главный финансовый уполномоченный"
-      break;
-    case "Климов В.В.":
-      fu_name = "Климов Виктор Владимирович"
-      fu_post = "Финансовый уполномоченный в сферах страхования, " +
-      "кредитной кооперации, деятельности кредитных организаций, " +
-      "ломбардов и негосударственных пенсионных фондов"
-      break;
-    case "Максимова С.В.":
-      fu_name = "Максимова Светлана Васильевна"
-      fu_post = "Финансовый уполномоченный в сферах " +
-      "страхования, микрофинансирования, кредитной кооперации " +
-      "и деятельности кредитных организаций"
-      break;
-    case "Новак Д.В.":
-      fu_name = "Новак Денис Васильевич"
-      fu_post = "Финансовый уполномоченный в сферах страхования, микрофинансирования, " +
-      "кредитной кооперации, деятельности кредитных организаций"
-      break;
-    case "Савицкая Т.М.":
-      fu_name = "Савицкая Татьяна Михайловна"
-      fu_post = "Финансовый уполномоченный в сферах кредитной " +
-      "кооперации, деятельности кредитных организаций, " +
-      "ломбардов и негосударственных пенсионных фондов"
-      break;
-    default:
-      break;
-  }
+  fu_data.fu_data.forEach(element => {
+    if (document.querySelector("#fu_name").value == element.fu_name_select) {
+      fu_name = element.fu_name
+      fu_post = element.fu_post
+    }
+  })
 
   var installed = ""
   var preambula = ""

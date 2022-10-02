@@ -1103,7 +1103,8 @@
                         <select id="apps_to_fo_form_1" class="apps_to_fo_forms custom-select form-control col-md-12" required>
                           <option value="">Форма страхового возмещения</option>
                           <option>Выплата денежных средств безналичным расчетом</option>
-                          <option>Направление на ремонт</option>
+                          <option>Направление на СТОА по выбору ФО</option>
+                          <option>Направление на СТОА по выбору Заявителя</option>
                           <option>Не выбрана</option>
                         </select>
                       </div>
@@ -1552,6 +1553,7 @@
                           </select>
                         </div>
                       </div>
+
                       <!-- BEGIN payments -->
                       <div id="payment_1" style="display:none">
                         <div class="payments_colunm_names form-row">
@@ -1673,7 +1675,7 @@
                             <input id = "apps_to_fo_stor_confirmation_date_1" class = "apps_to_fo_stor_confirmation_dates datepicker-here" placeholder="Дата" type="text" size="10" required>
                           </div>
                           <div class="form-group col-md-4">
-                            <input id = "apps_to_fo_stor_number_1" class="apps_to_fo_stor_numbers" placeholder="трек номер" type="text" size="8" required>
+                            <input id = "apps_to_fo_stor_confirmation_number_1" class="apps_to_fo_stor_confirmation_numbers" placeholder="трек номер" type="text" size="8" required>
                           </div>
                         </div>
                       </div>
@@ -1689,6 +1691,7 @@
                               <option>Выплата в полном объеме</option>
                               <option>Немотивированный отказ</option>
                               <option>Позиция не изменилась</option>
+                              <option>Иное</option>
                             </select>
                           </div>
                           <div class="form-group col-md-3">
@@ -1701,7 +1704,7 @@
                         <div id="apps_to_fo_refusal_type_trasa_1" class="apps_to_fo_refusal_type_trasa_1 apps_to_fo_refusal_type_trasas">
                           <div class="form-row">
                             <div class="form-group col-md-12">
-                              <textarea id = "apps_to_fo_refusal_type_trasa_text_1" class="apps_to_fo_refusal_type_trasa_text_1 apps_to_fo_refusal_type_trasa_texts deactivation" aria-describedby="apps_to_fo_refusal_type_trasa_text_help_block_1" placeholder="Дословный текст мотивированного отказа" type="text" size="8" required></textarea>
+                              <textarea id = "apps_to_fo_refusal_type_trasa_text_1" class="apps_to_fo_refusal_type_trasa_text_1 apps_to_fo_refusal_type_trasa_texts deactivation" aria-describedby="apps_to_fo_refusal_type_trasa_text_help_block_1" placeholder="Дословный текст мотивированного отказа (продолжить фразу: ФО направила Заявителю письмо, в котором сообщалось, что ...)" type="text" size="8" required></textarea>
                               <small id="apps_to_fo_refusal_type_trasa_text_help_block_1" class="form-text">
                                 <div class="form-inline">
                                   <input id="apps_to_fo_refusal_type_trasa_text_deactivate_1" class="deactivator" type="checkbox">
@@ -1709,6 +1712,52 @@
                                 </div>
                               </small>
                             </div>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col-md-9">
+                            <h6>Направление письма подтверждает</h6>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col-md-6">
+                            <select id="apps_to_fo_refusal_confirmation_1" class="apps_to_fo_refusal_confirmation_1 apps_to_fo_refusal_confirmations custom-select" required>
+                              <option value="">Выберите вариант</option>
+                              <option>Почтовая квитанция</option>
+                              <option>Опись вложения</option>
+                              <option>Список почтовых отправлений</option>
+                              <option>Реестр почтовых отправлений</option>
+                              <option>Почтовый идентификатор</option>
+                            </select>
+                          </div>
+                        </div>
+                        <div class="form-row">
+                          <div class="form-group col-md-3">
+                            <input id = "apps_to_fo_refusal_confirmation_date_1" class = "apps_to_fo_refusal_confirmation_date_1 apps_to_fo_refusal_confirmation_dates datepicker-here deactivation" aria-describedby="apps_to_fo_refusal_confirmation_date_help_block_1" placeholder="Дата" type="text" size="10" required>
+                            <small id="apps_to_fo_refusal_confirmation_date_help_block_1" class="form-text">
+                              <div class="form-inline">
+                                <input id="apps_to_fo_refusal_confirmation_date_deactivate_1" class="deactivator" type="checkbox">
+                                <label for="apps_to_fo_refusal_confirmation_date_deactivate_1" class="ml-2 form-check-label">Сведений не имеется</label>
+                              </div>
+                            </small>
+                          </div>
+                          <div class="form-group col-md-3">
+                            <input id = "apps_to_fo_refusal_confirmation_number_1" class="apps_to_fo_refusal_confirmation_number_1 apps_to_fo_refusal_confirmation_numbers deactivation" aria-describedby="apps_to_fo_refusal_confirmation_number_help_block_1" placeholder="№" type="text" size="8" required>
+                            <small id="apps_to_fo_refusal_confirmation_number_help_block_1" class="form-text">
+                              <div class="form-inline">
+                                <input id="apps_to_fo_refusal_confirmation_number_deactivate_1" class="deactivator" type="checkbox">
+                                <label for="apps_to_fo_refusal_confirmation_number_deactivate_1" class="ml-2 form-check-label">Сведений не имеется</label>
+                              </div>
+                            </small>
+                          </div>
+                          <div class="form-group col-md-6">
+                            <input id = "apps_to_fo_refusal_confirmation_post_number_1" class="apps_to_fo_refusal_confirmation_post_number_1 apps_to_fo_refusal_confirmation_post_numbers deactivation" aria-describedby="apps_to_fo_refusal_confirmation_post_number_help_block_1" placeholder="почтовый идентификатор" type="text" size="8" required>
+                            <small id="apps_to_fo_refusal_confirmation_post_number_help_block_1" class="form-text">
+                              <div class="form-inline">
+                                <input id="apps_to_fo_refusal_confirmation_post_number_deactivate_1" class="deactivator" type="checkbox">
+                                <label for="apps_to_fo_refusal_confirmation_post_number_deactivate_1" class="ml-2 form-check-label">Сведений не имеется</label>
+                              </div>
+                            </small>
                           </div>
                         </div>
                       </div>

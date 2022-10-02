@@ -7,6 +7,7 @@ import { allClaims } from './objects/allClaims';
 import { ClaimsContract } from "./mainClaim";
 import { DATE_FZ_123_START } from "./variables";
 import { findLastClaimFoDay } from "./findLastClaimFoDay";
+import { confirmation_type_helper } from "./objects/helpers";
 
 class ClaimToFo {
 
@@ -328,17 +329,27 @@ class Refusal {
     date
     number
     text
+    confirmation_type
+    confirmation_date
+    confirmation_number
+    confirmation_post_number
 
-    constructor (app_id, type, date, number, text) {
+    constructor (app_id, type, date, number, text, confirmation_type, confirmation_date, confirmation_number, confirmation_post_number) {
         this.app_id = app_id
         this.type = type
         this.date = date
         this.number = number
         this.text = text
+        this.confirmation_type = confirmation_type
+        this.confirmation_date = confirmation_date
+        this.confirmation_number = confirmation_number
+        this.confirmation_post_number = confirmation_post_number
     }
 
     getRefusalDate() {return Date.parse(changeDateType(this.date.value) + 'T00:00:00');}
     getRefusalDateFormatted() { return formatDate(new Date(this.getRefusalDate())); }
+    getRefusalConfirmationDate() {return Date.parse(changeDateType(this.confirmation_date.value) + 'T00:00:00');}
+    getRefusalConfirmationDateFormatted() { return formatDate(new Date(this.getRefusalConfirmationDate())); }
 
     setObject() {
         return {
@@ -346,6 +357,10 @@ class Refusal {
             date : this.date.value,
             number : this.number.value,
             text : this.text.value,
+            confirmation_type : this.confirmation_type.value,
+            confirmation_date : this.confirmation_date.value,
+            confirmation_number : this.confirmation_number.value,
+            confirmation_post_number : this.confirmation_post_number.value,
         }
     }
 }
@@ -582,15 +597,23 @@ export class AppToFo {
         var apps_to_fo_refusal_date = $(`.apps_to_fo_refusal_date_${id}`)
         var apps_to_fo_refusal_number = $(`.apps_to_fo_refusal_number_${id}`)
         var apps_to_fo_refusal_type_trasa_text = $(`.apps_to_fo_refusal_type_trasa_text_${id}`)
+        var apps_to_fo_refusal_confirmation = $(`.apps_to_fo_refusal_confirmation_${id}`)
+        var apps_to_fo_refusal_confirmation_date = $(`.apps_to_fo_refusal_confirmation_date_${id}`)
+        var apps_to_fo_refusal_confirmation_number = $(`.apps_to_fo_refusal_confirmation_number_${id}`)
+        var apps_to_fo_refusal_confirmation_post_number = $(`.apps_to_fo_refusal_confirmation_post_number_${id}`)
 
         for (var i = 0; i < number_of_apps_to_fo_refusals; i++) {
             this.refusal[i] = new Refusal(id,
                                     apps_to_fo_refusal_type[i],
                                     apps_to_fo_refusal_date[i],
                                     apps_to_fo_refusal_number[i],
-                                    apps_to_fo_refusal_type_trasa_text[i])
+                                    apps_to_fo_refusal_type_trasa_text[i],
+                                    apps_to_fo_refusal_confirmation[i],
+                                    apps_to_fo_refusal_confirmation_date[i],
+                                    apps_to_fo_refusal_confirmation_number[i],
+                                    apps_to_fo_refusal_confirmation_post_number[i])
             this.refusalObjects[i] = this.refusal[i].setObject()
-            }
+        }
 
         //Получение массива значений всех требований к ФУ
         var number_of_main_claims_contracts = $('.main_claims_contracts').length
@@ -617,7 +640,7 @@ export class AppToFo {
 
         //Если ФУ заявлено требований только по одному договору
         if (number_of_main_claims_contracts == 1) {
-            //Если ФУ заявлено требований по договору ОСАГО
+            //Если ФУ заявлено требование по договору ОСАГО
             if (this.claimsContract[0].type.options.selectedIndex == 1) {
                 //Если заявитель обратился с заявлением о страховом возмещении
                 if (this.type.options.selectedIndex == 1) {
@@ -638,9 +661,18 @@ export class AppToFo {
 
                     //Формирование абзаца с формой страхового возмещения
                     if (this.form.options.selectedIndex == 1) {
-                        this.form_paragraph = `<p>В Заявлении указано о выплате безналичным расчетом на банковские реквизиты при 
-                        наличии условий, предусмотренных пунктом 16.1 статьи 12 Закона № 40-ФЗ. К Заявлению приложены банковские 
-                        реквизиты Заявителя.</p>`
+                        // this.form_paragraph = `<p>В Заявлении указано о выплате безналичным расчетом на банковские реквизиты при 
+                        // наличии условий, предусмотренных пунктом 16.1 статьи 12 Закона № 40-ФЗ. К Заявлению приложены банковские 
+                        // реквизиты Заявителя.</p>`
+                        this.form_paragraph = `<p>В заявлении Заявителем выбрана форма выплаты страхового возмещения – путем 
+                        перечисления денежных средств безналичным расчетом.</p>`
+                    } else if (this.form.options.selectedIndex == 2) {
+                        this.form_paragraph = `<p>В заявлении Заявителем выбрана форма выплаты страхового возмещения – путем 
+                        организации и оплаты стоимости восстановительного ремонта на СТОА, с которой у Финансовой организации 
+                        заключен договор на проведение восстановительного ремонта.</p>`
+                    } else if (this.form.options.selectedIndex == 3) {
+                        this.form_paragraph = `<p>В заявлении Заявителем выбрана форма выплаты страхового возмещения – путем 
+                        организации и оплаты стоимости восстановительного ремонта на СТОА, выбранной Заявителем.</p>`
                     }
 
                     //Формирование параграфа с согласием на уведомление по СМС
@@ -808,20 +840,59 @@ export class AppToFo {
                         } else if (this.answerFo.options.selectedIndex == 3) {
                             
                         } else if (this.answerFo.options.selectedIndex == 4) {
+
+                            let confirmation_type = ""
+                            let confirmation_date_helper = ""
+                            let confirmation_number_helper = ""
+                            let confirmation_post_number_helper = ""
+
+                            let text_helper = ""
+
+                            if (this.refusal[0].text.value != "") {
+                                text_helper = this.refusal[0].text.value
+                            }
+
+                            confirmation_type_helper.confirmation_type_helper.forEach(element => {
+                                if (this.refusal[0].confirmation_type.value == element.confirmation_type) {
+                                    confirmation_type = element.confirmation_type_genitive
+                                }
+                            })
+                            if (this.refusal[0].confirmation_date.value != "" && this.refusal[0].confirmation_type.value != "Почтовый идентификатор") {
+                                confirmation_date_helper = ` от ${this.refusal[0].getRefusalConfirmationDateFormatted()}`
+                            }
+                            if (this.refusal[0].confirmation_number.value != "" && this.refusal[0].confirmation_type.value != "Почтовый идентификатор") {
+                                confirmation_number_helper = ` № ${this.refusal[0].confirmation_number.value}`
+                            } else if (this.refusal[0].confirmation_type.value == "Почтовый идентификатор") {
+                                confirmation_number_helper = ` № ${this.refusal[0].confirmation_post_number.value}`
+                            }
+                            if (this.refusal[0].confirmation_post_number.value != "" && this.refusal[0].confirmation_type.value != "Почтовый идентификатор") {
+                                confirmation_post_number_helper = `. Номер почтового идентификатора ${this.refusal[0].confirmation_post_number.value}`
+                            }
+
                             if (this.refusal[0].type.options.selectedIndex == 1) {
+                                if (text_helper == "") {
+                                    text_helper = `согласно выводам проведенной экспертизы, все повреждения Транспортного средства Заявителя 
+                                    не могли образоваться при заявленных обстоятельствах ДТП, в связи с чем, правовых оснований 
+                                    для урегулирования данного убытка у ${fo_name_genitive} не имеется.`
+                                }
                                 this.answerFo_paragraph = `<p>${fo_name_nominative} ${send} Заявителю письмо от 
                                 ${this.refusal[0].getRefusalDateFormatted()} № ${this.refusal[0].number.value}, в котором сообщалось 
-                                что согласно выводам проведенной экспертизы, все повреждения Транспортного средства Заявителя 
-                                не могли образоваться при заявленных обстоятельствах ДТП, в связи с чем, правовых оснований 
-                                для урегулирования данного убытка у ${fo_name_genitive} не имеется.</p>`
+                                что ${text_helper} Направление письма подтверждается 
+                                ${confirmation_type}${confirmation_date_helper}${confirmation_number_helper}${confirmation_post_number_helper}.</p>`
                             } else if (this.refusal[0].type.options.selectedIndex == 2) {
                                 
                             } else if (this.refusal[0].type.options.selectedIndex == 3) {
                                 this.answerFo_paragraph = `<p>${this.refusal[0].getRefusalDateFormatted()} ${fo_name_nominative} 
                                 в ответ на заявление от ${this.getAppDateFormatted()} письмом № ${this.refusal[0].number.value} 
-                                ${deny} Заявителю в удовлетворении заявленных требований.</p>`
+                                ${deny} Заявителю в удовлетворении заявленных требований. Направление письма подтверждается 
+                                ${confirmation_type}${confirmation_date_helper}${confirmation_number_helper}${confirmation_post_number_helper}.</p>`
                             } else if (this.refusal[0].type.options.selectedIndex == 4) {
                                 
+                            } else if (this.refusal[0].type.options.selectedIndex == 5) {
+                                this.answerFo_paragraph = `<p>${fo_name_nominative} ${send} Заявителю письмо от 
+                                ${this.refusal[0].getRefusalDateFormatted()} № ${this.refusal[0].number.value}, в котором сообщалось 
+                                что ${text_helper} Направление письма подтверждается 
+                                ${confirmation_type}${confirmation_date_helper}${confirmation_number_helper}${confirmation_post_number_helper}.</p>`
                             }
                         }
                     } else if (this.answerFoInfo.options.selectedIndex == 2) {
@@ -859,6 +930,7 @@ export class AppToFo {
                         app_claims_paragraph_helper = app_claims_paragraph_helper + this.claimsContractToFo[i].claims_all
                     }
                     app_claims_paragraph_helper = app_claims_paragraph_helper.slice(0, -1)
+
                     //Формирование первого параграфа заявления в ФО
                     this.app_paragraph = `<p>${this.getAppDateFormatted()} Заявитель обратился в ${fo_name_accusative} с 
                     ${procedure_helper} о несогласии с ${type_of_claim_helper_1} страхового возмещения, ${procedure_helper_2} требование о 
@@ -950,23 +1022,63 @@ export class AppToFo {
                         } else if (this.answerFo.options.selectedIndex == 3) {
                             
                         } else if (this.answerFo.options.selectedIndex == 4) {
+
+                            let confirmation_type = ""
+                            let confirmation_date_helper = ""
+                            let confirmation_number_helper = ""
+                            let confirmation_post_number_helper = ""
+
+                            let text_helper = ""
+
+                            if (this.refusal[0].text.value != "") {
+                                text_helper = this.refusal[0].text.value
+                            }
+
+                            confirmation_type_helper.confirmation_type_helper.forEach(element => {
+                                if (this.refusal[0].confirmation_type.value == element.confirmation_type) {
+                                    confirmation_type = element.confirmation_type_genitive
+                                }
+                            })
+                            if (this.refusal[0].confirmation_date.value != "" && this.refusal[0].confirmation_type.value != "Почтовый идентификатор") {
+                                confirmation_date_helper = ` от ${this.refusal[0].getRefusalConfirmationDateFormatted()}`
+                            }
+                            if (this.refusal[0].confirmation_number.value != "" && this.refusal[0].confirmation_type.value != "Почтовый идентификатор") {
+                                confirmation_number_helper = ` № ${this.refusal[0].confirmation_number.value}`
+                            } else if (this.refusal[0].confirmation_type.value == "Почтовый идентификатор") {
+                                confirmation_number_helper = ` № ${this.refusal[0].confirmation_post_number.value}`
+                            }
+                            if (this.refusal[0].confirmation_post_number.value != "" && this.refusal[0].confirmation_type.value != "Почтовый идентификатор") {
+                                confirmation_post_number_helper = `. Номер почтового идентификатора ${this.refusal[0].confirmation_post_number.value}`
+                            }
+
                             if (this.refusal[0].type.options.selectedIndex == 1) {
+                                if (text_helper == "") {
+                                    text_helper = `согласно выводам проведенной экспертизы, все повреждения Транспортного средства Заявителя 
+                                    не могли образоваться при заявленных обстоятельствах ДТП, в связи с чем, правовых оснований 
+                                    для урегулирования данного убытка у ${fo_name_genitive} не имеется.`
+                                }
                                 this.answerFo_paragraph = `<p>${fo_name_nominative} ${send} Заявителю письмо от 
                                 ${this.refusal[0].getRefusalDateFormatted()} № ${this.refusal[0].number.value}, в котором сообщалось 
-                                что согласно выводам проведенной экспертизы, все повреждения Транспортного средства Заявителя 
-                                не могли образоваться при заявленных обстоятельствах ДТП, в связи с чем, правовых оснований 
-                                для урегулирования данного убытка у ${fo_name_genitive} не имеется.</p>`
+                                что ${text_helper} Направление письма подтверждается 
+                                ${confirmation_type}${confirmation_date_helper}${confirmation_number_helper}${confirmation_post_number_helper}.</p>`
                             } else if (this.refusal[0].type.options.selectedIndex == 2) {
                                 
                             } else if (this.refusal[0].type.options.selectedIndex == 3) {
                                 this.answerFo_paragraph = `<p>${this.refusal[0].getRefusalDateFormatted()} ${fo_name_nominative} 
-                                в ответ на ${procedure_helper_3} от ${this.getAppDateFormatted()} письмом № ${this.refusal[0].number.value} 
-                                ${deny} Заявителю в удовлетворении заявленных требований.</p>`
+                                в ответ на заявление от ${this.getAppDateFormatted()} письмом № ${this.refusal[0].number.value} 
+                                ${deny} Заявителю в удовлетворении заявленных требований. Направление письма подтверждается 
+                                ${confirmation_type}${confirmation_date_helper}${confirmation_number_helper}${confirmation_post_number_helper}.</p>`
                             } else if (this.refusal[0].type.options.selectedIndex == 4) {
                                 this.answerFo_paragraph = `<p>${fo_name_nominative} в ответ на ${procedure_helper_3} от 
                                 ${this.getAppDateFormatted()} письмом от ${this.refusal[0].getRefusalDateFormatted()} № 
                                 ${this.refusal[0].number.value} ${notify} Заявителя о том, что позиция ${fo_name_genitive} по 
-                                данному вопросу не изменилась.</p>`
+                                данному вопросу не изменилась. Направление письма подтверждается 
+                                ${confirmation_type}${confirmation_date_helper}${confirmation_number_helper}${confirmation_post_number_helper}.</p>`
+                            } else if (this.refusal[0].type.options.selectedIndex == 5) {
+                                this.answerFo_paragraph = `<p>${fo_name_nominative} ${send} Заявителю письмо от 
+                                ${this.refusal[0].getRefusalDateFormatted()} № ${this.refusal[0].number.value}, в котором сообщалось 
+                                что ${text_helper} Направление письма подтверждается 
+                                ${confirmation_type}${confirmation_date_helper}${confirmation_number_helper}${confirmation_post_number_helper}.</p>`
                             }
                         }
                     } else if (this.answerFoInfo.options.selectedIndex == 2) {
