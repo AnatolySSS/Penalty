@@ -30,7 +30,7 @@ import { changeQuotes } from "./moduls/changeQuotes.js";
 import { dragAndDrop } from "./moduls/drag&Drop.js";
 import { findLastDay } from './moduls/findLastDay.js';
 import { formatDate } from "./moduls/formatDate.js";
-import { objToJSON, appDataToJSON, motive_download, motive_delete, show_motivations } from "./moduls/server.js";
+import { objToJSON, objToJSON2, appDataToJSON, motive_download, motive_delete, show_motivations, show_data } from "./moduls/server.js";
 import { findMaxSumm } from "./moduls/findMaxSumm.js";
 // import { reader } from "xlsx";
 
@@ -652,91 +652,91 @@ $('#btn_desicion').click(function() {
     fuExpertiseAll : fuExpertiseAll
   }
 
-//Проверка по чек-листу
-document.getElementById('check_list').onclick = function check_list(){
-  if ($('#check_list').html() == "Показать чек-лист") {
-    $('#check_list_div').show()
-    $('#check_list').html("Скрыть чек-лист");
+  //Проверка по чек-листу
+  document.getElementById('check_list').onclick = function check_list(){
+    if ($('#check_list').html() == "Показать чек-лист") {
+      $('#check_list_div').show()
+      $('#check_list').html("Скрыть чек-лист");
 
-    //Проверка 3-летнего срока на обращения к ФУ
-    let date_appeal = $('#date_appeal').val()
-    date_appeal = changeDateType(date_appeal)
-    date_appeal = Date.parse(date_appeal + 'T00:00:00')
-    let last_day_for_pay_fu = new Date(findLastDay(appToFo[0].appDate.value))
-    let year = last_day_for_pay_fu.getFullYear()
-    let month = last_day_for_pay_fu.getMonth()
-    let day = last_day_for_pay_fu.getDate()
-    let last_day_for_fu_app = new Date(year + 3, month, day + 1, 0);
-    last_day_for_fu_app = Date.parse(last_day_for_fu_app)
-    if (date_appeal > last_day_for_fu_app) {
-      $('#check_three_years .card').html(`Прошло больше 3х лет с момента когда Заявитель узнал о нарушении своего права:<br>
-      * дата первоначального обращения в ФО: ${appToFo[0].appDate.value}<br>
-      * дата окончания 20-дневного срока: ${formatDate(last_day_for_pay_fu)}<br>
-      * дата истечения 3-летнего срока для обращения к ФУ: ${formatDate(new Date(last_day_for_fu_app))}<br>
-      * дата обращения к ФУ: ${formatDate(new Date(date_appeal))}`)
+      //Проверка 3-летнего срока на обращения к ФУ
+      let date_appeal = $('#date_appeal').val()
+      date_appeal = changeDateType(date_appeal)
+      date_appeal = Date.parse(date_appeal + 'T00:00:00')
+      let last_day_for_pay_fu = new Date(findLastDay(appToFo[0].appDate.value))
+      let year = last_day_for_pay_fu.getFullYear()
+      let month = last_day_for_pay_fu.getMonth()
+      let day = last_day_for_pay_fu.getDate()
+      let last_day_for_fu_app = new Date(year + 3, month, day + 1, 0);
+      last_day_for_fu_app = Date.parse(last_day_for_fu_app)
+      if (date_appeal > last_day_for_fu_app) {
+        $('#check_three_years .card').html(`Прошло больше 3х лет с момента когда Заявитель узнал о нарушении своего права:<br>
+        * дата первоначального обращения в ФО: ${appToFo[0].appDate.value}<br>
+        * дата окончания 20-дневного срока: ${formatDate(last_day_for_pay_fu)}<br>
+        * дата истечения 3-летнего срока для обращения к ФУ: ${formatDate(new Date(last_day_for_fu_app))}<br>
+        * дата обращения к ФУ: ${formatDate(new Date(date_appeal))}`)
+        
+        $('#check_three_years').find('i').removeClass('fa-check-square-o')
+        $('#check_three_years').find('i').removeClass('fa-question-circle-o')
+        $('#check_three_years').find('i').addClass('fa-exclamation-circle')
+        $('#check_three_years').find('i').css("color", "#dc3545")
+
+      } else if (date_appeal <= last_day_for_fu_app) {
+        $('#check_three_years .card').html(`Прошло менее 3х лет с момента когда Заявитель узнал о нарушении своего права:<br>
+        * дата первоначального обращения в ФО: ${appToFo[0].appDate.value}<br>
+        * дата окончания 20-дневного срока: ${formatDate(last_day_for_pay_fu)}<br>
+        * дата истечения 3-летнего срока для обращения к ФУ: ${formatDate(new Date(last_day_for_fu_app))}\<br>
+        * дата обращения к ФУ: ${formatDate(new Date(date_appeal))}`)
+        
+        $('#check_three_years').find('i').removeClass('fa-exclamation-circle')
+        $('#check_three_years').find('i').removeClass('fa-question-circle-o')
+        $('#check_three_years').find('i').addClass('fa-check-square-o')
+        $('#check_three_years').find('i').css("color", "#28a745")
+
+      } else {
+        $('#check_three_years .card').html(`Необходимо заполнить следующие данные:<br>
+        * дата первоначального обращения в ФО<br>
+        * дата обращения к ФУ`)
+        
+        $('#check_three_years').find('i').removeClass('fa-exclamation-circle')
+        $('#check_three_years').find('i').removeClass('fa-check-square-o')
+        $('#check_three_years').find('i').addClass('fa-question-circle-o')
+        $('#check_three_years').find('i').css("color", "#ffc107")
+      }
+
+      //Проверка статуса Заявителя
+      if ($('#app_name').val() != "" && $('#owner_name_deactivate_1').is(':checked')) {
+        $('#check_app_owner .card').html(`Заявитель является собственником ТС`)
+
+        $('#check_app_owner').find('i').removeClass('fa-exclamation-circle')
+        $('#check_app_owner').find('i').removeClass('fa-question-circle-o')
+        $('#check_app_owner').find('i').addClass('fa-check-square-o')
+        $('#check_app_owner').find('i').css("color", "#28a745")
+
+      } else if ($('#app_name').val() != "" && !$('#owner_name_deactivate_1').is(':checked')) {
+        $('#check_app_owner .card').html(`Заявитель не является собственником ТС<br>
+        * Заявитель - ${$('#app_name').val()}<br>
+        * Собственник ТС - ${$('#owner_name_1').val()}`)
+
+        $('#check_app_owner').find('i').removeClass('fa-check-square-o')
+        $('#check_app_owner').find('i').removeClass('fa-question-circle-o')
+        $('#check_app_owner').find('i').addClass('fa-exclamation-circle')
+        $('#check_app_owner').find('i').css("color", "#dc3545")
+
+      } else {
+        $('#check_app_owner .card').html(`Необходимо заполнить данные:<br>
+        * ФИО Заявителя<br>
+        * ФИО Собственника ТС`)
+        $('#check_app_owner').find('i').removeClass('fa-exclamation-circle')
+        $('#check_app_owner').find('i').removeClass('fa-check-square-o')
+        $('#check_app_owner').find('i').addClass('fa-question-circle-o')
+        $('#check_app_owner').find('i').css("color", "#ffc107")
+      }
       
-      $('#check_three_years').find('i').removeClass('fa-check-square-o')
-      $('#check_three_years').find('i').removeClass('fa-question-circle-o')
-      $('#check_three_years').find('i').addClass('fa-exclamation-circle')
-      $('#check_three_years').find('i').css("color", "#dc3545")
-
-    } else if (date_appeal <= last_day_for_fu_app) {
-      $('#check_three_years .card').html(`Прошло менее 3х лет с момента когда Заявитель узнал о нарушении своего права:<br>
-      * дата первоначального обращения в ФО: ${appToFo[0].appDate.value}<br>
-      * дата окончания 20-дневного срока: ${formatDate(last_day_for_pay_fu)}<br>
-      * дата истечения 3-летнего срока для обращения к ФУ: ${formatDate(new Date(last_day_for_fu_app))}\<br>
-      * дата обращения к ФУ: ${formatDate(new Date(date_appeal))}`)
-      
-      $('#check_three_years').find('i').removeClass('fa-exclamation-circle')
-      $('#check_three_years').find('i').removeClass('fa-question-circle-o')
-      $('#check_three_years').find('i').addClass('fa-check-square-o')
-      $('#check_three_years').find('i').css("color", "#28a745")
-
     } else {
-      $('#check_three_years .card').html(`Необходимо заполнить следующие данные:<br>
-      * дата первоначального обращения в ФО<br>
-      * дата обращения к ФУ`)
-      
-      $('#check_three_years').find('i').removeClass('fa-exclamation-circle')
-      $('#check_three_years').find('i').removeClass('fa-check-square-o')
-      $('#check_three_years').find('i').addClass('fa-question-circle-o')
-      $('#check_three_years').find('i').css("color", "#ffc107")
+      $('#check_list_div').hide();
+      $('#check_list').html("Показать чек-лист");
     }
-
-    //Проверка статуса Заявителя
-    if ($('#app_name').val() != "" && $('#owner_name_deactivate_1').is(':checked')) {
-      $('#check_app_owner .card').html(`Заявитель является собственником ТС`)
-
-      $('#check_app_owner').find('i').removeClass('fa-exclamation-circle')
-      $('#check_app_owner').find('i').removeClass('fa-question-circle-o')
-      $('#check_app_owner').find('i').addClass('fa-check-square-o')
-      $('#check_app_owner').find('i').css("color", "#28a745")
-
-    } else if ($('#app_name').val() != "" && !$('#owner_name_deactivate_1').is(':checked')) {
-      $('#check_app_owner .card').html(`Заявитель не является собственником ТС<br>
-      * Заявитель - ${$('#app_name').val()}<br>
-      * Собственник ТС - ${$('#owner_name_1').val()}`)
-
-      $('#check_app_owner').find('i').removeClass('fa-check-square-o')
-      $('#check_app_owner').find('i').removeClass('fa-question-circle-o')
-      $('#check_app_owner').find('i').addClass('fa-exclamation-circle')
-      $('#check_app_owner').find('i').css("color", "#dc3545")
-
-    } else {
-      $('#check_app_owner .card').html(`Необходимо заполнить данные:<br>
-      * ФИО Заявителя<br>
-      * ФИО Собственника ТС`)
-      $('#check_app_owner').find('i').removeClass('fa-exclamation-circle')
-      $('#check_app_owner').find('i').removeClass('fa-check-square-o')
-      $('#check_app_owner').find('i').addClass('fa-question-circle-o')
-      $('#check_app_owner').find('i').css("color", "#ffc107")
-    }
-    
-  } else {
-    $('#check_list_div').hide();
-    $('#check_list').html("Показать чек-лист");
   }
-}
 
   //Выведение заголовка таблицы на экран
   if (max_penalty_period > 0) {
@@ -814,13 +814,20 @@ document.getElementById('check_list').onclick = function check_list(){
     paymentCourtData : paymentCourtData,
     fuExpertiseData : fuExpertiseData,
   }
+  
   console.log(totalData);
+  //Получение данных из таблицы motivations
   let promise = objToJSON(totalData)
   promise.then(result => {
     data_from_db = result
+    // console.log(data_from_db)
+  })
+  //Получение данных из таблицы data
+  let promise2 = objToJSON2(totalData)
+  promise2.then(result => {
+    data_from_db.data = result
     console.log(data_from_db)
   })
-
 })
 
 function fillHeader(length){
@@ -1080,6 +1087,11 @@ document.getElementById('btn_fu_motive_download').onclick = function (){
 //Показать таблицу с мотивировками
 document.getElementById('btn_fu_show_motivations').onclick = function (){
   show_motivations()
+}
+
+//Показать таблицу с абзацами
+document.getElementById('btn_fu_show_data').onclick = function (){
+  show_data()
 }
 
 //Удаление таблицы с мотивировками из базы

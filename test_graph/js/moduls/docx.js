@@ -588,4 +588,3 @@ export function makeDecisionFile(decision_number, all_paragraphs) {
       saveAs(blob, `Решение ${decision_number} вер.1.docx`);
   });
 }
-

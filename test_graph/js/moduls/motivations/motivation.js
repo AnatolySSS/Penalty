@@ -97,6 +97,8 @@ export function check_signs(totalData, signs) {
 
     signs_filled['Ответ ФО на первоначальное заявление'] = totalData.appToFoData.appToFoAll[0].answerFo
 
+    signs_filled['Основание для отказа'] = totalData.appToFoData.appToFoAll[0].refusalObjects[0].type
+
     if (totalData.appToFoData.appToFoAll[0].inspectionInfo == "Сведения имеются") {
         signs_filled['Проведение осмотра ТС ФО'] = "ДА"
     } else {
@@ -137,7 +139,19 @@ export function check_signs(totalData, signs) {
             signs_filled['Контруктивная гибель ТС Заявителя наступила'] = "ДА"
         }
     }
-    
+
+    //Определение результатов трасологической экспертизы на основании НТЭ ФУ
+    if (totalData.fuExpertiseData.fuExpertiseAll[0].date != "") {
+        if (totalData.fuExpertiseData.fuExpertiseAll[0].trasa_results == "Повреждения ТС полностью соответствуют ДТП" ||
+            totalData.fuExpertiseData.fuExpertiseAll[0].trasa_results == "Повреждения ТС частично соответствуют ДТП") {
+            signs_filled['По НТЭ ФУ повреждения ТС соответствуют ДТП'] = "ДА"
+        } else if (totalData.fuExpertiseData.fuExpertiseAll[0].trasa_results == "Повреждения ТС не соответствуют ДТП") {
+            signs_filled['По НТЭ ФУ повреждения ТС соответствуют ДТП'] = "НЕТ"
+        }
+    }
+
+    //Определение наличия у ФО договоров со СТОА
+        signs_filled['У Финансовой организации имеются договоры со СТОА'] = "НЕТ"
 
     //Определение процента
     let percentage = 0
@@ -188,8 +202,7 @@ export function check_signs(totalData, signs) {
         signs_filled['Срок для обращения к ФУ пропущен'] = "НЕТ"
     }
 
-    // console.log(totalData);
-    // console.log(signs_filled);
+
 
     return signs_filled
 }
@@ -284,7 +297,22 @@ export function make_motivation_paragraph(claimsContract,
                 for (let i = 0; i < Object.values(data_from_db.total_data[right_motive_index]).length; i++) {
                     if (Object.keys(data_from_db.total_data[right_motive_index])[i].indexOf("motiv") >= 0) {
                         if (Object.values(data_from_db.total_data[right_motive_index])[i] != null) {
-                            let paragraphs = Object.values(data_from_db.total_data[right_motive_index])[i].split(String.fromCharCode(10));
+                            let paragraphs = Object.values(data_from_db.total_data[right_motive_index])[i]
+                            paragraphs = fillMotiveParagraph(claimsContract,
+                                                             dtpParticipant,
+                                                             appToFo,
+                                                             paymentVoluntary,
+                                                             paymentFu,
+                                                             paymentCourt,
+                                                             fuExpertise,
+                                                             total_penalty_summ_accrued,
+                                                             total_penalty_summ_paid,
+                                                             max_summ,
+                                                             data_from_db,
+                                                             Object.values(data_from_db.total_data[0])[i],
+                                                             paragraphs)
+
+                                paragraphs = paragraphs.split(String.fromCharCode(10))
                             for (const iterator of paragraphs) {
                                 motivation_part = `${motivation_part}<p>${iterator}</p>`
                             }
@@ -313,7 +341,7 @@ export function make_motivation_paragraph(claimsContract,
                         motivation_part = motivation_part + osago_penalty_paragraph.main_penalty_paragraph
                     }
                 }
-                //Формирование массива объектов найденных требвоаний в таблице Мотивировок
+                //Формирование массива объектов найденных требований в таблице Мотивировок
                 all_found_claims.push({
                     result : osago_penalty_result != "" ? osago_penalty_result : data_from_db.total_data[right_motive_index].Result,
                     contract : claimsContract[contract_number].type.value,
@@ -332,62 +360,14 @@ export function make_motivation_paragraph(claimsContract,
     }
 
     //Редактирование изменяемых частей мотивировочной части
-    //Определение вопросов эксперту ФУ
-    let question_paragraph = ""
-    expertiseQuestions.questions.forEach(element => {
-        if (fuExpertise[0].typical_question.value == element.type) {
-            question_paragraph = element.question
-        }
-    })
+    motivation_part = motivation_part.replaceAll("<p></p>", "")
+    motivation_part = motivation_part.replaceAll("</p></p>", "")
+
+    motivation_part = motivation_part.replaceAll("\r\n", "")
+    motivation_part = motivation_part.replaceAll("\r", "")
+    motivation_part = motivation_part.replaceAll("\n", "")
+    motivation_part = motivation_part.replaceAll("  ", " ")
     
-    //Изменение данных по НТЭ ФУ
-    motivation_part = motivation_part.replaceAll("question", question_paragraph)
-    let organization = fuExpertise[0].organization.value
-    motivation_part = motivation_part.replaceAll("organization", organization)
-    let technician = fuExpertise[0].technician.value
-    motivation_part = motivation_part.replaceAll("technician", technician)
-    let date = fuExpertise[0].date.value
-    motivation_part = motivation_part.replaceAll("date", date)
-    let number = fuExpertise[0].number.value
-    motivation_part = motivation_part.replaceAll("number", number)
-
-    //Определение выводов эксперта ФУ
-    let expertises_summ_paragraph_helper = ""
-    if (fuExpertise[0].trasa.value != "") {
-        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `${fuExpertise[0].trasa.value}, `
-    }
-    if (fuExpertise[0].summ_without != 0) {
-        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость восстановительного ремонта 
-        Транспортного средства Заявителя без учета износа составила ${fuExpertise[0].summ_without_text}, `
-    }
-    if (fuExpertise[0].summ_without != 0) {
-        if (fuExpertise[0].summ_with != 0) {
-            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `c учетом износа – ${fuExpertise[0].summ_with_text}, `
-        }
-    } else {
-        if (fuExpertise[0].summ_with != 0) {
-            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость восстановительного ремонта 
-            Транспортного средства Заявителя с учетом износа составила ${fuExpertise[0].summ_with_text}, `
-        }
-    }
-    if (fuExpertise[0].summ_market != 0) {
-        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `средняя рыночная стоимость 
-        Транспортного средства до повреждения по состоянию на дату ДТП составляла ${fuExpertise[0].summ_market_text}, `
-    }
-    if (fuExpertise[0].summ_leftovers != 0) {
-        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость годных остатков – ${fuExpertise[0].summ_leftovers_text}, `
-    }
-    if (fuExpertise[0].summ_uts != 0) {
-        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `сумма УТС составила ${fuExpertise[0].summ_uts_text}, `
-    }
-    expertises_summ_paragraph_helper = expertises_summ_paragraph_helper.slice(0, -2)
-    expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + "."
-    motivation_part = motivation_part.replaceAll("result", expertises_summ_paragraph_helper)
-    let summ_market_text = fuExpertise[0].summ_market_text
-    motivation_part = motivation_part.replaceAll("summ_market", summ_market_text)
-    let summ_leftovers_text = fuExpertise[0].summ_leftovers_text
-    motivation_part = motivation_part.replaceAll("summ_leftovers", summ_leftovers_text)
-
     //Определение общей суммы выплаты ФО
     let total_summ_payment = 0
     for (let i = 0; i < paymentVoluntary.length; i++) {
@@ -398,29 +378,25 @@ export function make_motivation_paragraph(claimsContract,
 
     //Определение суммы страхового возмещения на основании НТЭ ФУ
     let satisfaction_summ = 0
-    if (fuExpertise[0].date.value != "") {
-        //Если полной гибели не было
-        satisfaction_summ = fuExpertise[0].summ_with
-        //Если произошла тотальная гибель ТС
-        if (fuExpertise[0].summ_without > fuExpertise[0].summ_market && 
-            fuExpertise[0].summ_market != 0) {
-                satisfaction_summ = fuExpertise[0].summ_market - fuExpertise[0].summ_leftovers
+    for (let i = 0; i < fuExpertise.length; i++) {
+        if (fuExpertise[i].summ_without != "") {
+            //Если полной гибели не было
+            satisfaction_summ = fuExpertise[i].summ_with
+            //Если произошла тотальная гибель ТС
+            if (fuExpertise[i].summ_without > fuExpertise[i].summ_market && 
+                fuExpertise[i].summ_market != 0) {
+                    satisfaction_summ = fuExpertise[i].summ_market - fuExpertise[i].summ_leftovers
+            }
         }
     }
 
-    //Определение процентов
-    let percentage = 0
-    percentage = Math.round((satisfaction_summ - total_summ_payment) / total_summ_payment * 100)
-    if (percentage < 0) {
-        percentage = 0
-    }
-    //Если размер ущерба превышает страховую сумму
-    if (satisfaction_summ > max_summ) {
+     //Если размер ущерба превышает страховую сумму
+     if (satisfaction_summ > max_summ) {
         satisfaction_summ = max_summ
     }
 
-    //Формирование объекта найденных требований и удовлетворенных сумм для рехолютивной части
-    for (let i = 0; i < all_found_claims.length; i++) {
+     //Формирование объекта найденных требований и удовлетворенных сумм для резолютивной части
+     for (let i = 0; i < all_found_claims.length; i++) {
         if (all_found_claims[i].name == "Страховое возмещение") {
             if (all_found_claims[i].result == "УДОВЛЕТВОРИТЬ") {
                 all_found_claims[i].summ = (satisfaction_summ - total_summ_payment)
@@ -442,20 +418,6 @@ export function make_motivation_paragraph(claimsContract,
         }
     }
 
-    motivation_part = motivation_part.replaceAll("percent", makePercentageText_genitive(percentage))
-    motivation_part = motivation_part.replaceAll("satisfaction_summ", makeRubText_genitive(satisfaction_summ))
-    motivation_part = motivation_part.replaceAll("total_summ_payment", makeRubText_genitive(total_summ_payment))
-    let total_summ = satisfaction_summ - total_summ_payment
-    motivation_part = motivation_part.replaceAll("total_summ", makeRubText_genitive(total_summ))
-
-    motivation_part = motivation_part.replaceAll("<p></p>", "")
-    motivation_part = motivation_part.replaceAll("</p></p>", "")
-
-    motivation_part = motivation_part.replaceAll("\r\n", "")
-    motivation_part = motivation_part.replaceAll("\r", "")
-    motivation_part = motivation_part.replaceAll("\n", "")
-    motivation_part = motivation_part.replaceAll("  ", " ")
-    
     out_data = {
         motivation_part : motivation_part,
         result : total_result,
@@ -465,4 +427,414 @@ export function make_motivation_paragraph(claimsContract,
     }
     console.log(out_data);
     return out_data
+}
+
+//Редактирование изменяемых частей мотивировочной части
+function fillMotiveParagraph(claimsContract,
+                             dtpParticipant,
+                             appToFo,
+                             paymentVoluntary,
+                             paymentFu,
+                             paymentCourt,
+                             fuExpertise,
+                             total_penalty_summ_accrued,
+                             total_penalty_summ_paid,
+                             max_summ,
+                             data_from_db,
+                             total_data_keys,
+                             paragraph) {
+
+    let result_paragraph = ""
+    
+    //Определение суммы страхового возмещения на основании НТЭ ФУ
+    let satisfaction_summ = 0
+    for (let i = 0; i < fuExpertise.length; i++) {
+        if (fuExpertise[i].summ_without != "") {
+            //Если полной гибели не было
+            satisfaction_summ = fuExpertise[i].summ_with
+            //Если произошла тотальная гибель ТС
+            if (fuExpertise[i].summ_without > fuExpertise[i].summ_market && 
+                fuExpertise[i].summ_market != 0) {
+                    satisfaction_summ = fuExpertise[i].summ_market - fuExpertise[i].summ_leftovers
+            }
+        }
+    }
+
+     //Определение общей суммы выплаты ФО
+     let total_summ_payment = 0
+     for (let i = 0; i < paymentVoluntary.length; i++) {
+         if (paymentVoluntary[i].type.options.selectedIndex == 1) {
+             total_summ_payment = total_summ_payment + paymentVoluntary[i].summ
+         }
+     }
+
+    //Определение размера требования страхового возмещения
+    //Перебор всех договоров, по которым заявлены требования
+    let claim_to_fu_summ = 0
+    for (let i = 0; i < claimsContract.length; i++) {
+      //Если есть требования по договору ОСАГО
+      if (claimsContract[i].type.options.selectedIndex == 1) {
+        // Перебор всех требований, заявленных в рамках договора ОСАГО
+        for (let j = 0; j < claimsContract[i].claim.length; j++) {
+          //Если среди заявленных требований есть требование о взыскании страхового возмещения
+          if (claimsContract[i].claim[j].type.options.selectedIndex == 1) {
+            claim_to_fu_summ = claimsContract[i].claim[j].summ
+          }
+        }
+      }
+    }
+
+    //Определение процентов
+    let percentage = 0
+    percentage = Math.round((satisfaction_summ - total_summ_payment) / total_summ_payment * 100)
+    if (percentage < 0) {
+        percentage = 0
+    }
+
+
+    //Изменение текста параграфа из таблицы motivations на соответствующий текст из таблицы data
+    for (let i = 0; i < data_from_db.data.length; i++) {
+        if (data_from_db.data[i]['Наименование'] == paragraph) {
+            total_data_keys = data_from_db.data[i]['Наименование']
+            paragraph = data_from_db.data[i]['Текст']
+            break
+        }
+    }
+
+    if (total_data_keys == "Для решения вопросов, связанных с рассмотрением Обращения, Финансовым уполномоченным назначена экспертиза 1 (Комплекс)") {
+
+        let organization = fuExpertise[0].organization.value
+        result_paragraph = paragraph.replaceAll("organization", organization)
+        let technician = fuExpertise[0].technician.value
+        result_paragraph = result_paragraph.replaceAll("technician", technician)
+    
+    } else if (total_data_keys == "Для решения вопросов, связанных с рассмотрением Обращения, Финансовым уполномоченным назначена экспертиза 1 (Траса)") {
+        
+        let organization = fuExpertise[0].organization.value
+        result_paragraph = paragraph.replaceAll("organization", organization)
+        let technician = fuExpertise[0].technician.value
+        result_paragraph = result_paragraph.replaceAll("technician", technician)
+    
+    } else if (total_data_keys == "Для решения вопросов, связанных с рассмотрением Обращения, Финансовым уполномоченным назначена экспертиза 2") {
+
+        let organization = fuExpertise[1].organization.value
+        result_paragraph = paragraph.replaceAll("organization", organization)
+        let technician = fuExpertise[1].technician.value
+        result_paragraph = result_paragraph.replaceAll("technician", technician)
+
+    } else if (total_data_keys == "Вопросы для эксперта ФУ 1 (Комплекс)") {
+        
+        let question_paragraph = ""
+        expertiseQuestions.questions.forEach(element => {
+            if (fuExpertise[0].typical_question.value == element.type) {
+                question_paragraph = element.question
+            }
+        })
+        result_paragraph = paragraph.replaceAll("question", question_paragraph)
+
+        result_paragraph = result_paragraph.replaceAll("<p></p>", "")
+        result_paragraph = result_paragraph.replaceAll("</p></p>", "")
+
+        result_paragraph = result_paragraph.replaceAll("\r\n", "")
+        result_paragraph = result_paragraph.replaceAll("\r", "")
+        result_paragraph = result_paragraph.replaceAll("\n", "")
+    
+    } else if (total_data_keys == "Вопросы для эксперта ФУ 1 (Траса)") {
+        
+        let question_paragraph = ""
+        expertiseQuestions.questions.forEach(element => {
+            if (fuExpertise[0].typical_question.value == element.type) {
+                question_paragraph = element.question
+            }
+        })
+        result_paragraph = paragraph.replaceAll("question", question_paragraph)
+
+        result_paragraph = result_paragraph.replaceAll("<p></p>", "")
+        result_paragraph = result_paragraph.replaceAll("</p></p>", "")
+
+        result_paragraph = result_paragraph.replaceAll("\r\n", "")
+        result_paragraph = result_paragraph.replaceAll("\r", "")
+        result_paragraph = result_paragraph.replaceAll("\n", "")
+    
+    } else if (total_data_keys == "Вопросы для эксперта ФУ 2") {
+
+        let question_paragraph = ""
+        expertiseQuestions.questions.forEach(element => {
+            if (fuExpertise[1].typical_question.value == element.type) {
+                question_paragraph = element.question
+            }
+        })
+        result_paragraph = paragraph.replaceAll("question", question_paragraph)
+
+        result_paragraph = result_paragraph.replaceAll("<p></p>", "")
+        result_paragraph = result_paragraph.replaceAll("</p></p>", "")
+
+        result_paragraph = result_paragraph.replaceAll("\r\n", "")
+        result_paragraph = result_paragraph.replaceAll("\r", "")
+        result_paragraph = result_paragraph.replaceAll("\n", "")
+
+    } else if (total_data_keys == "Выводы эксперта ФУ 1 (Комплекс)") {
+        
+        let expertises_summ_paragraph_helper = ""
+        if (fuExpertise[0].trasa.value != "") {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `${fuExpertise[0].trasa.value}, `
+        }
+        if (fuExpertise[0].summ_without != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость восстановительного ремонта 
+            Транспортного средства Заявителя без учета износа составила ${fuExpertise[0].summ_without_text}, `
+        }
+        if (fuExpertise[0].summ_without != 0) {
+            if (fuExpertise[0].summ_with != 0) {
+                expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `c учетом износа – ${fuExpertise[0].summ_with_text}, `
+            }
+        } else {
+            if (fuExpertise[0].summ_with != 0) {
+                expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость восстановительного ремонта 
+                Транспортного средства Заявителя с учетом износа составила ${fuExpertise[0].summ_with_text}, `
+            }
+        }
+        if (fuExpertise[0].summ_market != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `средняя рыночная стоимость 
+            Транспортного средства до повреждения по состоянию на дату ДТП составляла ${fuExpertise[0].summ_market_text}, `
+        }
+        if (fuExpertise[0].summ_leftovers != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость годных остатков – ${fuExpertise[0].summ_leftovers_text}, `
+        }
+        if (fuExpertise[0].summ_uts != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `сумма УТС составила ${fuExpertise[0].summ_uts_text}, `
+        }
+        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper.slice(0, -2)
+        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + "."
+        result_paragraph = paragraph.replaceAll("result", expertises_summ_paragraph_helper)
+
+        let organization = fuExpertise[0].organization.value
+        result_paragraph = result_paragraph.replaceAll("organization", organization)
+        let date_nte = fuExpertise[0].date.value
+        result_paragraph = result_paragraph.replaceAll("date_nte", date_nte)
+        let number = fuExpertise[0].number.value
+        result_paragraph = result_paragraph.replaceAll("number", number)
+
+        result_paragraph = result_paragraph.replaceAll("\r\n", "")
+        result_paragraph = result_paragraph.replaceAll("\r", "")
+        result_paragraph = result_paragraph.replaceAll("\n", "")
+    
+    } else if (total_data_keys == "Выводы эксперта ФУ 1 (Траса)") {
+        
+        let expertises_summ_paragraph_helper = ""
+        if (fuExpertise[0].trasa.value != "") {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `${fuExpertise[0].trasa.value}, `
+        }
+        if (fuExpertise[0].summ_without != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость восстановительного ремонта 
+            Транспортного средства Заявителя без учета износа составила ${fuExpertise[0].summ_without_text}, `
+        }
+        if (fuExpertise[0].summ_without != 0) {
+            if (fuExpertise[0].summ_with != 0) {
+                expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `c учетом износа – ${fuExpertise[0].summ_with_text}, `
+            }
+        } else {
+            if (fuExpertise[0].summ_with != 0) {
+                expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость восстановительного ремонта 
+                Транспортного средства Заявителя с учетом износа составила ${fuExpertise[0].summ_with_text}, `
+            }
+        }
+        if (fuExpertise[0].summ_market != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `средняя рыночная стоимость 
+            Транспортного средства до повреждения по состоянию на дату ДТП составляла ${fuExpertise[0].summ_market_text}, `
+        }
+        if (fuExpertise[0].summ_leftovers != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость годных остатков – ${fuExpertise[0].summ_leftovers_text}, `
+        }
+        if (fuExpertise[0].summ_uts != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `сумма УТС составила ${fuExpertise[0].summ_uts_text}, `
+        }
+        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper.slice(0, -2)
+        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + "."
+        result_paragraph = paragraph.replaceAll("result", expertises_summ_paragraph_helper)
+
+        let organization = fuExpertise[0].organization.value
+        result_paragraph = result_paragraph.replaceAll("organization", organization)
+        let date_nte = fuExpertise[0].date.value
+        result_paragraph = result_paragraph.replaceAll("date_nte", date_nte)
+        let number = fuExpertise[0].number.value
+        result_paragraph = result_paragraph.replaceAll("number", number)
+
+        result_paragraph = result_paragraph.replaceAll("\r\n", "")
+        result_paragraph = result_paragraph.replaceAll("\r", "")
+        result_paragraph = result_paragraph.replaceAll("\n", "")
+    
+    } else if (total_data_keys == "Выводы эксперта ФУ 2") {
+
+        let expertises_summ_paragraph_helper = ""
+        if (fuExpertise[1].trasa.value != "") {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `${fuExpertise[1].trasa.value}, `
+        }
+        if (fuExpertise[1].summ_without != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость восстановительного ремонта 
+            Транспортного средства Заявителя без учета износа составила ${fuExpertise[1].summ_without_text}, `
+        }
+        if (fuExpertise[1].summ_without != 0) {
+            if (fuExpertise[1].summ_with != 0) {
+                expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `c учетом износа – ${fuExpertise[1].summ_with_text}, `
+            }
+        } else {
+            if (fuExpertise[1].summ_with != 0) {
+                expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость восстановительного ремонта 
+                Транспортного средства Заявителя с учетом износа составила ${fuExpertise[1].summ_with_text}, `
+            }
+        }
+        if (fuExpertise[1].summ_market != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `средняя рыночная стоимость 
+            Транспортного средства до повреждения по состоянию на дату ДТП составляла ${fuExpertise[1].summ_market_text}, `
+        }
+        if (fuExpertise[1].summ_leftovers != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `стоимость годных остатков – ${fuExpertise[1].summ_leftovers_text}, `
+        }
+        if (fuExpertise[1].summ_uts != 0) {
+            expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + `сумма УТС составила ${fuExpertise[1].summ_uts_text}, `
+        }
+        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper.slice(0, -2)
+        expertises_summ_paragraph_helper = expertises_summ_paragraph_helper + "."
+        result_paragraph = paragraph.replaceAll("result", expertises_summ_paragraph_helper)
+
+        let organization = fuExpertise[1].organization.value
+        result_paragraph = result_paragraph.replaceAll("organization", organization)
+        let date_nte = fuExpertise[1].date.value
+        result_paragraph = result_paragraph.replaceAll("date_nte", date_nte)
+        let number = fuExpertise[1].number.value
+        result_paragraph = result_paragraph.replaceAll("number", number)
+
+        result_paragraph = result_paragraph.replaceAll("\r\n", "")
+        result_paragraph = result_paragraph.replaceAll("\r", "")
+        result_paragraph = result_paragraph.replaceAll("\n", "")
+
+    } else if (total_data_keys == "Таким образом, сумма страхового возмещения при полной гибели ТС составляет") {
+
+        let summ_market_text = fuExpertise[0].summ_market_text
+        result_paragraph = paragraph.replaceAll("summ_market", summ_market_text)
+        let summ_leftovers_text = fuExpertise[0].summ_leftovers_text
+        result_paragraph = result_paragraph.replaceAll("summ_leftovers", summ_leftovers_text)
+        result_paragraph = result_paragraph.replaceAll("satisfaction_summ", makeRubText_genitive(satisfaction_summ))
+
+    } else if (total_data_keys == "Стоимость ремонта по экспертизе ФУ превышает размер страхового возмещения, выплаченного ФО, на") {
+
+        result_paragraph = paragraph.replaceAll("percent", makePercentageText_genitive(percentage))
+
+    } else if (total_data_keys == "Сумма страхового возмещения при полной гибели по экспертизе ФУ превышает размер страхового возмещения, выплаченного ФО, на") {
+
+        result_paragraph = paragraph.replaceAll("percent", makePercentageText_genitive(percentage))
+
+    } else if (total_data_keys == "Поскольку указанное расхождение превышает 10%") {
+        
+        //Если размер ущерба превышает страховую сумму
+        if (satisfaction_summ > max_summ) {
+            satisfaction_summ = max_summ
+        }
+        result_paragraph = paragraph.replaceAll("satisfaction_summ", makeRubText_genitive(satisfaction_summ))
+
+    } else if (total_data_keys == "Поскольку указанное расхождение не превышает 10%") {
+        
+        //Если размер ущерба превышает страховую сумму
+        if (satisfaction_summ > max_summ) {
+            satisfaction_summ = max_summ
+        }
+        result_paragraph = paragraph.replaceAll("satisfaction_summ", makeRubText_genitive(satisfaction_summ))
+
+    } else if (total_data_keys == "Таким образом, Финансовый уполномоченный приходит к выводу о наступлении страхового случая") {
+        
+        //Определение даты ДТП
+        let date_dtp = $('#date_dtp').val()
+        result_paragraph = paragraph.replaceAll("date_dtp", date_dtp)
+
+    } else if (total_data_keys == "Таким образом, Финансовый уполномоченный приходит к выводу о ненаступлении страхового случая") {
+        
+        //Определение даты ДТП
+        let date_dtp = $('#date_dtp').val()
+        result_paragraph = paragraph.replaceAll("date_dtp", date_dtp)
+
+    } else if (total_data_keys == "Таким образом, требование Заявителя подлежит удовлетворению (недоплата)") {
+        
+        //Если размер ущерба превышает страховую сумму
+        if (satisfaction_summ > max_summ) {
+            satisfaction_summ = max_summ
+        }
+
+        //Определение суммы, подлежащей ко взысканию
+        let total_summ = satisfaction_summ - total_summ_payment
+
+        let partly_helper = ""
+        if (claim_to_fu_summ > total_summ) {
+            partly_helper = " частичному"
+        }
+
+        result_paragraph = paragraph.replaceAll("partly_helper", partly_helper)
+        result_paragraph = result_paragraph.replaceAll("total_summ_payment", makeRubText_genitive(total_summ_payment))
+        result_paragraph = result_paragraph.replaceAll("satisfaction_summ", makeRubText_genitive(satisfaction_summ))
+        result_paragraph = result_paragraph.replaceAll("total_summ", makeRubText_genitive(total_summ))
+
+    } else if (total_data_keys == "Таким образом, требование Заявителя не подлежит удовлетворению (выплата в надлежащем размере)") {
+
+        result_paragraph = paragraph.replaceAll("total_summ_payment", makeRubText_genitive(total_summ_payment))
+
+    } else if (total_data_keys == "Таким образом, требование Заявителя не подлежит удовлетворению (выплата в полном объеме)") {
+
+        result_paragraph = paragraph.replaceAll("total_summ_payment", makeRubText_genitive(total_summ_payment))
+
+    } else if (total_data_keys == "Учитывая вышеизложенное, требование Заявителя подлежит удовлетворению (недоплата)") {
+        
+        //Если размер ущерба превышает страховую сумму
+        if (satisfaction_summ > max_summ) {
+            satisfaction_summ = max_summ
+        }
+
+        //Определение суммы, подлежащей ко взысканию
+        let total_summ = satisfaction_summ - total_summ_payment
+
+        let partly_helper = ""
+        if (claim_to_fu_summ > total_summ) {
+            partly_helper = " частичному"
+        }
+
+        result_paragraph = paragraph.replaceAll("partly_helper", partly_helper)
+        result_paragraph = result_paragraph.replaceAll("total_summ_payment", makeRubText_genitive(total_summ_payment))
+        result_paragraph = result_paragraph.replaceAll("satisfaction_summ", makeRubText_genitive(satisfaction_summ))
+        result_paragraph = result_paragraph.replaceAll("total_summ", makeRubText_genitive(total_summ))
+
+    } else if (total_data_keys == "Учитывая вышеизложенное, требование Заявителя подлежит удовлетворению (траса)") {
+        
+        //Если размер ущерба превышает страховую сумму
+        if (satisfaction_summ > max_summ) {
+            satisfaction_summ = max_summ
+        }
+
+        //Определение суммы, подлежащей ко взысканию
+        let total_summ = satisfaction_summ - total_summ_payment
+
+        let partly_helper = ""
+        if (claim_to_fu_summ > total_summ) {
+            partly_helper = " частичному"
+        }
+
+        result_paragraph = paragraph.replaceAll("partly_helper", partly_helper)
+        result_paragraph = result_paragraph.replaceAll("total_summ", makeRubText_genitive(total_summ))
+
+    } else if (total_data_keys == "Финансовая организация уведомила Заявителя об отсутствии оснований для признания заявленного случая страховым") {
+
+        let date = appToFo[0].refusal[0].date.value
+        result_paragraph = paragraph.replaceAll("date", date)
+        let number = appToFo[0].refusal[0].number.value
+        result_paragraph = result_paragraph.replaceAll("number", number)
+
+    } else if (total_data_keys == "Согласно сведениям с официального сайта Финансовой организации") {
+
+        let site = $('#fo_site').val()
+        result_paragraph = paragraph.replaceAll("site", site)
+
+    } else {
+        result_paragraph = paragraph
+    }
+
+    result_paragraph = result_paragraph.replaceAll("  ", " ")
+
+    return result_paragraph
 }

@@ -265,6 +265,17 @@
                     <input id = "fo_post_address" class="form-control input-lg" placeholder="Почтовый адрес" type="text" size="8" required>
                   </div>
                 </div>
+                <div class="form-row">
+                  <div class="form-group col-md-12">
+                    <input id = "fo_site" class="form-control input-lg deactivation" aria-describedby="fo_site_help_block" placeholder="Сайт" type="text" size="8" required>
+                    <small id="fo_site_help_block" class="form-text">
+                      <div class="form-inline">
+                        <input id="fo_site_deactivate" class="deactivator" type="checkbox">
+                        <label for="fo_site_deactivate" class="ml-2 form-check-label">сведений не имеется</label>
+                      </div>
+                    </small>
+                  </div>
+                </div>
                 <div id="fo_site_check_div" class="form-row" style="display:none">
                   <div class="form-group col-md-12 text-center">
                     <a id="fo_site_check" href="" target="_blank"></a>
@@ -2951,6 +2962,9 @@
               <button id="btn_fu_show_motivations" class ="btn btn-success btn-lg btn-block mt-4" anim="ripple" type="button" name="button" data-toggle="modal">
                 Показать данные мотивировок
               </button>
+              <button id="btn_fu_show_data" class ="btn btn-primary btn-lg btn-block mt-4" anim="ripple" type="button" name="button" data-toggle="modal">
+                Показать абзацы
+              </button>
               <button id="btn_fu_motive_delete" class ="btn btn-danger btn-lg btn-block mt-4" anim="ripple" type="button" name="button" data-toggle="modal">
                 Удалить данные мотивировки
               </button>
@@ -2967,7 +2981,8 @@
                       <div class="my-auto text-center" style="display:none">
                         <div class="row">
                           <div class="col">
-                            <div id="decision_test" style="height: 400px; width: 100%;" class="ag-theme-alpine"></div>
+                            <div id="decision_motivations" style="height: 400px; width: 100%;" class="ag-theme-alpine"></div>
+                            <div id="decision_data" style="height: 400px; width: 100%;" class="ag-theme-alpine"></div>
                           </div>
                         </div>
                       </div>
