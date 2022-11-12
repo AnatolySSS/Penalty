@@ -151,7 +151,13 @@ export function check_signs(totalData, signs) {
     }
 
     //Определение наличия у ФО договоров со СТОА
-        signs_filled['У Финансовой организации имеются договоры со СТОА'] = "НЕТ"
+    if (totalData.fuExpertiseData.fuExpertiseAll[0].date != "") {
+        if (totalData.appToFoData.appToFoAll[0].refusalObjects[0].stor_posibility == "Договоры имеются") {
+            signs_filled['У Финансовой организации имеются договоры со СТОА'] = "ДА"
+        } else if (totalData.appToFoData.appToFoAll[0].refusalObjects[0].stor_posibility == "Договоров не имеется") {
+            signs_filled['У Финансовой организации имеются договоры со СТОА'] = "НЕТ"
+        }
+    } 
 
     //Определение процента
     let percentage = 0
