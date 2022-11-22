@@ -12,7 +12,7 @@ const fs = require('fs');
 const mysql = require('mysql');
 const XLSX = require('xlsx')
 const path = require('path');
-const favicon = require('serve-favicon');      
+const favicon = require('serve-favicon');   
  
 const PORT = process.env.PORT || 80
 

@@ -495,7 +495,7 @@ function addAppToFo() {
             <div class="apps-to-fo-answer-fo">
                 <div class="form-row ">
                     <div class="form-group col-md-8">
-                        <h6>Сведения об ответе ФО на первоначальное обращение</h6>
+                        <h6>Сведения об ответе ФО на обращение</h6>
                     </div>
                 </div>
                 <div class="form-row">
