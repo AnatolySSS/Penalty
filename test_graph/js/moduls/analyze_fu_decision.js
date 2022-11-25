@@ -198,9 +198,6 @@ function decision_analize (i, paragraphs) {
 
     //Определение абзаца с ответом описание ДТП (6)
     if (!paragraphs_found.has("Описание ДТП")) {
-
-      
-
       if ((current_paragraph.indexOf("результате") >= 0 &&
           (current_paragraph.indexOf("происшествия") >= 0 || current_paragraph.indexOf("ДТП") >= 0 || current_paragraph.indexOf("наезда на") >= 0) &&
           current_paragraph.indexOf("произошедшего") >= 0 &&
@@ -211,15 +208,9 @@ function decision_analize (i, paragraphs) {
           current_paragraph.indexOf("трансп") >= 0) ||
 
           (current_paragraph.indexOf("повреждено") >= 0 &&
-          current_paragraph.indexOf("имущество") >= 0 || current_paragraph.indexOf("ранспортное средство") >= 0)) {
+          (current_paragraph.indexOf("имущество") >= 0 || current_paragraph.indexOf("ранспортное средство") >= 0))) {
         decisions[i].paragraphs[j].type = "Описание ДТП"
         paragraphs_found.add("Описание ДТП")
-      //   let dsdfsdf = current_paragraph.indexOf("результате")
-      // dsdfsdf = current_paragraph.indexOf("происшествия")
-      // dsdfsdf = current_paragraph.indexOf("ДТП")
-      // dsdfsdf = current_paragraph.indexOf("произошедшего")
-      // dsdfsdf = current_paragraph.indexOf("произошло")
-      // dsdfsdf = current_paragraph.indexOf("происшествие")
         continue
       }
     }
