@@ -133,7 +133,7 @@ export function makeTextDecision(paymentVoluntary,
   'которыми определено его начало.'+'<br>';
 
   if (holly_boolen) {
-    article_193 = 'В соответствии со статьей 193 ГК РФ если последний день срока ' +
+    article_193 = 'В соответствии со статьей 193 ГК РФ, если последний день срока ' +
     'приходится на нерабочий день, днем окончания срока считается ближайший следующий за ним рабочий день.' + '<br>';
   } else {
     article_193 = '';
@@ -264,7 +264,7 @@ export function makeTextDecision(paymentVoluntary,
           paymentVoluntary[i].penalty_day_form + ' по ' + paymentVoluntary[i].getDateFormatted() + ' (' + declinationDays(paymentVoluntary[i].days_delay) + ').' + '<br>' +
           'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, '+
           'размер неустойки, подлежащий выплате за период с ' + paymentVoluntary[i].penalty_day_form + ' по ' + paymentVoluntary[i].getDateFormatted() +
-          ' составляет ' + makeRubText_nominative(paymentVoluntary[i].penalty_summ) + ' (' + makeRubText_nominative(paymentVoluntary[i].summ) + ' × ' + declinationDays(paymentVoluntary[i].days_delay) +' × 1%).' + '<br>';
+          ', составляет ' + makeRubText_nominative(paymentVoluntary[i].penalty_summ) + ' (' + makeRubText_nominative(paymentVoluntary[i].summ) + ' × ' + declinationDays(paymentVoluntary[i].days_delay) +' × 1%).' + '<br>';
         }
         payment_penalty_paragraf[i] = "";
       } else {
@@ -457,7 +457,7 @@ export function makeTextDecision(paymentVoluntary,
                   paymentFu[i].claim[j].penalty_day_form + ' по ' + paymentFu[i].getPayDateFormatted() + ' (' + declinationDays(paymentFu[i].claim[j].days_delay) + ').' + '<br>' +
                   'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, '+
                   'размер неустойки, подлежащий выплате за период с ' + paymentFu[i].claim[j].penalty_day_form + ' по ' + paymentFu[i].getPayDateFormatted() +
-                  ' составляет ' + makeRubText_nominative(paymentFu[i].claim[j].penalty_summ) + ' (' + makeRubText_nominative(paymentFu[i].claim[j].summ) + ' × ' +
+                  ', составляет ' + makeRubText_nominative(paymentFu[i].claim[j].penalty_summ) + ' (' + makeRubText_nominative(paymentFu[i].claim[j].summ) + ' × ' +
                   declinationDays(paymentFu[i].claim[j].days_delay) +' × 1%).' + '<br>';
 
                   payment_fu_claims_paragraf[i] = payment_fu_claims_paragraf[i] + analize_fu_period_paragraf[i][j] + payment_fu_execution_paragraf[i][j] + payment_fu_conclusion_paragraf[i][j];
@@ -605,7 +605,7 @@ export function makeTextDecision(paymentVoluntary,
               paymentCourt[i].claim[j].penalty_day_form + ' по ' + paymentCourt[i].getPayDateFormatted() + ' (' + declinationDays(paymentCourt[i].claim[j].days_delay) + ').' + '<br>' +
               'В соответствии с требованиями, установленными пунктом 21 статьи 12 Закона № 40-ФЗ, '+
               'размер неустойки, подлежащий выплате за период с ' + paymentCourt[i].claim[j].penalty_day_form + ' по ' + paymentCourt[i].getPayDateFormatted() +
-              ' составляет ' + makeRubText_nominative(paymentCourt[i].claim[j].penalty_summ) + ' (' + makeRubText_nominative(paymentCourt[i].claim[j].summ) + ' × ' +
+              ', составляет ' + makeRubText_nominative(paymentCourt[i].claim[j].penalty_summ) + ' (' + makeRubText_nominative(paymentCourt[i].claim[j].summ) + ' × ' +
               declinationDays(paymentCourt[i].claim[j].days_delay) +' × 1%).' + '<br>';
 
               payment_court_claims_paragraf[i] = payment_court_claims_paragraf[i] + analize_court_period_paragraf[i][j] + payment_court_execution_paragraf[i][j] + payment_court_conclusion_paragraf[i][j];
