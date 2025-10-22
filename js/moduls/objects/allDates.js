@@ -242,6 +242,23 @@ export let holidays = [
   Date.parse(new Date(2025, 10, 3, 0)),
   Date.parse(new Date(2025, 10, 4, 0)),
   Date.parse(new Date(2025, 11, 31, 0)),
+
+  Date.parse(new Date(2026, 0, 1, 0)),
+  Date.parse(new Date(2026, 0, 2, 0)),
+  Date.parse(new Date(2026, 0, 3, 0)),
+  Date.parse(new Date(2026, 0, 4, 0)),
+  Date.parse(new Date(2026, 0, 5, 0)),
+  Date.parse(new Date(2026, 0, 6, 0)),
+  Date.parse(new Date(2026, 0, 7, 0)),
+  Date.parse(new Date(2026, 0, 8, 0)),
+  Date.parse(new Date(2026, 0, 9, 0)),
+  Date.parse(new Date(2026, 1, 23, 0)),
+  Date.parse(new Date(2026, 2, 9, 0)),
+  Date.parse(new Date(2026, 4, 1, 0)),
+  Date.parse(new Date(2026, 4, 11, 0)),
+  Date.parse(new Date(2026, 5, 12, 0)),
+  Date.parse(new Date(2026, 10, 4, 0)),
+  Date.parse(new Date(2026, 11, 31, 0)),
 ];
 
 //Рабочие субботы
@@ -424,4 +441,19 @@ export let holidays_for_20 = [
   Date.parse(new Date(2025, 4, 9, 0)),
   Date.parse(new Date(2025, 5, 12, 0)),
   Date.parse(new Date(2025, 10, 4, 0)),
+
+  Date.parse(new Date(2026, 0, 1, 0)),
+  Date.parse(new Date(2026, 0, 2, 0)),
+  Date.parse(new Date(2026, 0, 3, 0)),
+  Date.parse(new Date(2026, 0, 4, 0)),
+  Date.parse(new Date(2026, 0, 5, 0)),
+  Date.parse(new Date(2026, 0, 6, 0)),
+  Date.parse(new Date(2026, 0, 7, 0)),
+  Date.parse(new Date(2026, 0, 8, 0)),
+  Date.parse(new Date(2026, 1, 23, 0)),
+  Date.parse(new Date(2026, 2, 8, 0)),
+  Date.parse(new Date(2026, 4, 1, 0)),
+  Date.parse(new Date(2026, 4, 9, 0)),
+  Date.parse(new Date(2026, 5, 12, 0)),
+  Date.parse(new Date(2026, 10, 4, 0)),
 ];
